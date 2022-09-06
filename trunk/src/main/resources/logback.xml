@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/sample_log/sample.log</file>
+		<encoder>
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg %n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/sample_log/sample.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+
+	<logger name="jdbc" level="OFF" />
+
+	<logger name="jdbc.sqlonly" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="jdbc.resultsettable" level="INFO"
+		additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
