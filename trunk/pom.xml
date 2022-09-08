@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.iyoons</groupId>
-	<artifactId>sample</artifactId>
+	<artifactId>world</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>sample</name>
-	<description>sample</description>
+	<name>world</name>
+	<description>world</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>

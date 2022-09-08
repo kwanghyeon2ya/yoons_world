@@ -7,12 +7,12 @@
 	</appender>
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>../logs/sample_log/sample.log</file>
+		<file>../logs/world_log/world.log</file>
 		<encoder>
 			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level [%logger{0}:%line] - %msg %n</pattern>
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>../logs/sample_log/sample.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<fileNamePattern>../logs/world_log/world.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
 			<maxHistory>30</maxHistory>
 			<totalSizeCap>5GB</totalSizeCap>
 		</rollingPolicy>

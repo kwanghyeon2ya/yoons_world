@@ -3,10 +3,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iyoons.sample.dao.DemoDAO">
+<mapper namespace="com.iyoons.world.dao.DemoDAO">
 
 
-	<select id="getDemoList" resultType="com.iyoons.sample.vo.DemoVO">
+	<select id="getDemoList" resultType="com.iyoons.world.vo.DemoVO">
 		/*getStdAttend*/
 		SELECT DEMO_NO, DEMO_TITLE, REG_DATE, MOD_DATE, REG_NO, MOD_NO 
 		FROM ROOKIE.TB_DEMO ORDER BY DEMO_NO
