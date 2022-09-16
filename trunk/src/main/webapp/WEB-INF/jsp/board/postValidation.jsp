@@ -10,37 +10,38 @@
 function WriteCheck(){
 
 	var rtn = false;
+	var param = $("#frm").serialize();
+	
 	
 	if($("#subject").val() == ""){
-		alert("내용을 입력해주세요")
+		alert("제목을 입력해주세요")
 		return false;
 	}
 	if($("#content").val() == ""){
 		alert("내용을 입력해주세요")
 		return false;
 	}
+
 $.ajax({
-	url : "/member/free/writePro",
-	type : "POST",
+	url : '/board/free/writePro',
+	type : 'POST',
+	data : $("#frm").serialize(),
 	dataType : "json",
 	async : false,
-	data : $("#frm").serialize(),
+	processData: false,
+	contentType: false,
 	success : function(data){
-		document.getElementsByName("writeCheck").value = data;
-			if($("#writeCheck").val() == 0){
+		document.frm.writeCheck.value = data;
+			if(document.frm.writeCheck.value == 0){
 				alert("글이 등록되지않았습니다")
-				return rtn;
-			}else{
+			}
+			if(document.frm.writeCheck.value == 1){
 				alert("글이 등록되었습니다")
 				rtn = true;
-				<c:redirect url="/board/free/list"/>
 			}	
 			
 		}
-	}
-	
-)
-
+	})
+	return rtn;
 };
-
 </script>
