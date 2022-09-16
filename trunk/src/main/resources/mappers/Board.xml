@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.BoardDAO">
+
+	<insert id="AddBoard">
+		
+		insert into post_board values(	
+										post_seq.nextval,
+										#{writerName},
+										#{subject},
+										to_clob(#{content}),
+										0,	
+										0,
+										#{boardType},
+										#{fileAttachYn},
+										'N',
+										#{regrSeq},
+										sysdate,
+										0,
+										sysdate
+										)
+	</insert>
+	
+</mapper>
