@@ -19,4 +19,6 @@ server:
   servlet:
     session:
       timeout: 180m
+    encoding:      charset: EUC-KR
+      force: true
 

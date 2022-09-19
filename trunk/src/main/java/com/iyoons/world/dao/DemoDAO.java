@@ -10,4 +10,9 @@ import com.iyoons.world.vo.DemoVO;
 public interface DemoDAO {
 	public List<DemoVO> getDemoList();
 
+	public DemoVO getDemoInfo(DemoVO param);
+	
+	public void regDemoProc(DemoVO param);
+	
+	public void modDemoProc(DemoVO param);
 }

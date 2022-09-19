@@ -21,4 +21,15 @@ public class DemoServiceImpl implements DemoService{
 		return demoDao.getDemoList();
 	}
 	
+	public DemoVO getDemoInfo(DemoVO param) {
+		return demoDao.getDemoInfo(param);
+	}
+	
+	public void regDemoProc(DemoVO param) {
+		demoDao.regDemoProc(param);
+	}
+	
+	public void modDemoProc(DemoVO param) {
+		demoDao.modDemoProc(param);
+	}
 }

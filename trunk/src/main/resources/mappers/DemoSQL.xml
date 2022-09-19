@@ -7,9 +7,35 @@
 
 
 	<select id="getDemoList" resultType="com.iyoons.world.vo.DemoVO">
-		/*getStdAttend*/
+		/*getDemoList*/
 		SELECT DEMO_NO, DEMO_TITLE, REG_DATE, MOD_DATE, REG_NO, MOD_NO 
 		FROM ROOKIE.TB_DEMO ORDER BY DEMO_NO
 	</select>
+
+	<select id="getDemoInfo" parameterType="com.iyoons.world.vo.DemoVO" resultType="com.iyoons.world.vo.DemoVO">
+		/*getDemoInfo*/
+		SELECT DEMO_NO, DEMO_TITLE, REG_DATE, MOD_DATE, REG_NO, MOD_NO 
+		FROM ROOKIE.TB_DEMO
+		WHERE DEMO_NO = #{demoNo}
+	</select>
 	
+	<select id="regDemoProc" statementType="CALLABLE" parameterType="com.iyoons.world.vo.DemoVO">
+		/*regDemoProc*/
+		CALL ROO_PKG_DEMO.SP_REG_DEMO(
+			#{demoTitle},
+			#{regNo},
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=Integer}
+		)
+	</select>
+	
+	<select id="modDemoProc" statementType="CALLABLE" parameterType="com.iyoons.world.vo.DemoVO">
+		/*modDemoProc*/
+		CALL ROO_PKG_DEMO.SP_MOD_DEMO(
+			#{demoNo},
+			#{demoTitle},
+			#{modNo},
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=Integer}
+		)
+	</select>
+		
 </mapper>

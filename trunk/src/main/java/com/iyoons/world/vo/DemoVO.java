@@ -1,19 +1,13 @@
 package com.iyoons.world.vo;
 
+import lombok.Data;
+
+@Data
 public class DemoVO {
 	private int demoNo;
 	private String demoTitle;
+	private int regNo;
+	private int modNo;
+	private int result;
 	
-	public int getDemoNo() {
-		return demoNo;
-	}
-	public void setDemoNo(int demoNo) {
-		this.demoNo = demoNo;
-	}
-	public String getDemoTitle() {
-		return demoTitle;
-	}
-	public void setDemoTitle(String demoTitle) {
-		this.demoTitle = demoTitle;
-	}
 }
