@@ -1,7 +1,11 @@
 package com.iyoons.world.dao;
 
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.iyoons.world.vo.BoardVO;
 
@@ -9,5 +13,6 @@ import com.iyoons.world.vo.BoardVO;
 public interface BoardDAO {
 	
 	public int AddBoard(BoardVO vo); 
-	
+	public int boardCount(String boardType);
+	public List<BoardVO> getBoardList(HashMap<String, Object> map);
 }

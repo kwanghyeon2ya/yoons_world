@@ -1,9 +1,12 @@
 package com.iyoons.world.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,9 +24,38 @@ public class BoardController {
 	@Autowired
 	public BoardService service;
 	
-	@RequestMapping("free/list")
-	public String FreeList() {
+	
+	public void boardList(String search,String keyword,String searchCheck,String boardType , String pageNum,Model model) {
 		
+		if(searchCheck == null) searchCheck = "0"; search = ""; keyword="";
+		if(pageNum == null) pageNum = "1";
+		if(boardType == null) boardType = "0";
+		int pageSize = 10;
+		int currentPage = Integer.parseInt(pageNum);
+		int startRow = (currentPage - 1) * pageSize + 1;
+		int endRow = pageSize * currentPage;
+		int count = 0;
+		System.out.println(boardType);
+		count = service.boardCount(boardType);
+		
+		List<BoardVO> boardList = null;
+		
+		if(count != 0) boardList = service.getBoardList(search,keyword,searchCheck,startRow, endRow, boardType);
+		System.out.println(count+" "+boardType);
+		
+		model.addAttribute("boardType",boardType);
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("currentPage",currentPage);
+		model.addAttribute("startRow",startRow);
+		model.addAttribute("endRow",endRow);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		model.addAttribute("pageNum",pageNum);
+	}
+	
+	@RequestMapping("free/list")
+	public String FreeList(String search,String keyword,String searchCheck,String boardType,String pageNum,Model model) {
+		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/free/list";
 	}
 	
@@ -97,20 +129,18 @@ public class BoardController {
 	public String FreeWrite() {
 		return "board/free/write";
 	}
-	@RequestMapping("free/writePro")
-	public String FreeWritePro() {
-		return "board/free/list";
-	}
 	
-	@RequestMapping(value= "free/writePro" , method=RequestMethod.POST)
-	@ResponseBody public String FreeWriteCheck(BoardVO vo,
-			@RequestParam("file") MultipartFile files) throws Exception {
+	@RequestMapping(value= "writePro" , method=RequestMethod.POST)
+	@ResponseBody public String FreeWriteCheck(BoardVO vo,HttpServletRequest request
+			) throws Exception {
+		
+//		String file = request.getParameter("file");
+		
 		
 		vo.setFileAttachYn("N");
-		if(files != null){
-			vo.setFileAttachYn("Y");
-		}
-		System.out.println(vo.getFileAttachYn());
+//		if(file != null){
+//			vo.setFileAttachYn("Y");
+//		}
 		int result = service.AddBoard(vo);
 		
 		return result+"";
@@ -120,24 +150,11 @@ public class BoardController {
 	public String NoticeWrite() {
 		return "board/notice/write";
 	}
-	@RequestMapping("notice/writePro")
-	@ResponseBody public String NoticeWritePro() {
-		
-		return "";
-	}
-	
+
 	@RequestMapping("pds/write")
 	public String PdsWrite() {
 	
 		return "board/pds/write";
 	}
-	
-	@RequestMapping("pds/writePro")
-	@ResponseBody public String PdsWritePro() {
-		
-		return "";
-	}
-	
-
 	
 }

@@ -5,6 +5,23 @@
 
 <mapper namespace="com.iyoons.world.dao.BoardDAO">
 
+<resultMap id="BoardList" type="com.iyoons.world.vo.BoardVO">
+	<result property="postNum" column="POST_NUM"/>
+	<result property="postSeq" column="POST_SEQ" />
+	<result property="writerName" column="WRITER_NAME" />
+	<result property="subject" column="SUBJECT" />
+	<result property="content" column="CONTENT" />
+	<result property="status" column="STATUS" />
+	<result property="readCnt" column="READ_CNT" />
+	<result property="boardType" column="BOARD_TYPE" />
+	<result property="fileAttachYn" column="FILE_ATTACH_YN" />
+	<result property="boardFixYn" column="BOARD_FIX_YN" />
+	<result property="regrSeq" column="REGR_SEQ" />
+	<result property="firstInsertDt" column="FIRST_INSERT_DT" />
+	<result property="updrSeq" column="UPDR_SEQ" />
+	<result property="lastUpdateDt" column="LAST_UPDATE_DT" />
+</resultMap>
+
 	<insert id="AddBoard">
 		
 		insert into post_board values(	
@@ -23,5 +40,16 @@
 										sysdate
 										)
 	</insert>
+	
+	<select id="getBoardList" resultMap="BoardList">
+	SELECT IT.* FROM (select ROW_NUMBER() OVER (ORDER BY PD.FIRST_INSERT_DT DESC) AS "POST_NUM", PD.*
+      from post_board PD where PD.BOARD_TYPE = #{boardType} and PD.STATUS = 0
+      order by PD.FIRST_INSERT_DT desc) IT
+	  where <![CDATA[IT.POST_NUM >= #{startRow} and IT.POST_NUM <= #{endRow}]]>
+	</select>
+	
+	<select id="boardCount" resultType="int">
+		select count(*) from post_board where board_type=#{boardType} and status=0
+	</select>
 	
 </mapper>
