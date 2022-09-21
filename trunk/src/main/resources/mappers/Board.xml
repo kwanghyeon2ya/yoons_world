@@ -42,10 +42,35 @@
 	</insert>
 	
 	<select id="getBoardList" resultMap="BoardList">
-	SELECT IT.* FROM (select ROW_NUMBER() OVER (ORDER BY PD.FIRST_INSERT_DT DESC) AS "POST_NUM", PD.*
-      from post_board PD where PD.BOARD_TYPE = #{boardType} and PD.STATUS = 0
-      order by PD.FIRST_INSERT_DT desc) IT
-	  where <![CDATA[IT.POST_NUM >= #{startRow} and IT.POST_NUM <= #{endRow}]]>
+	
+	select cd.* from(
+		select
+            pb.post_seq,
+            pb.writer_name,
+            pb.subject,
+            pb.content,
+            pb.status,
+            pb.read_cnt,
+            pb.board_type,
+           <if test="search != null and search.equals('comments')">c.comm_seq,</if>
+           <if test="search != null and search.equals('comments')">c.comm_content,</if>
+            pb.first_insert_dt,
+            rownum as POST_NUM
+        from
+			post_board pb 
+			<if test="search != null and search.equals('comments')">inner join comments c on pb.post_seq = c.post_seq</if>
+		where 
+			pb.board_type=#{boardType} and pb.status=0 
+		<if test="searchCheck != null">
+			<if test="search != null and search.equals('subject_content')">
+			and pb.subject like '%${keyword}%' or pb.content like '%${keyword}%' 
+			</if>
+			<if test="search != null and search.equals('comments')">
+			and c.comm_content like '%${keyword}%'
+			</if>
+		</if>
+			order by pb.first_insert_dt desc)cd
+			where <![CDATA[ cd.POST_NUM >= #{startRow} and cd.POST_NUM <= #{endRow}]]>
 	</select>
 	
 	<select id="boardCount" resultType="int">

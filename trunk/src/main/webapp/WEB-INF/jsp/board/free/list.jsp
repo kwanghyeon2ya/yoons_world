@@ -42,7 +42,7 @@
 	<select name="search">
 		<option value="">==검색==</option>
 		<option value="subject_content">제목+내용</option>
-		<option value="coments">댓글</option>
+		<option value="comments">댓글</option>
 	</select>
 	<input type="text" name="keyword"/>
 	<input type="submit" value="검색"/>
@@ -63,15 +63,15 @@
 	</c:if>
 	
 	<c:if test="${startPage > 10}">
-		<a href="/board/free/list?boardType=0&pageNum=${startPage - 10}">[이전]</a>
+		<a href="/board/free/list?boardType=0&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">[이전]</a>
 	</c:if>
 	
 	<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-		<a href="/board/free/list?boardType=0&pageNum=${i}">[${i}]</a>
+		<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">[${i}]</a>
 	</c:forEach> 
 	
 	<c:if test="${endPage < pageCount}">
-		<a href="/board/free/list?boardType=0&pageNum=${startPage + 10}">[다음]</a>
+		<a href="/board/free/list?boardType=0&pageNum=${startPage + 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">[다음]</a>
 	</c:if>
 </c:if>
 

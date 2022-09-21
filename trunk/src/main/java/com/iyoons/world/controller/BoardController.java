@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardVO;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @RequestMapping("/board/*")
 @Controller
 public class BoardController {
@@ -25,9 +27,14 @@ public class BoardController {
 	public BoardService service;
 	
 	
-	public void boardList(String search,String keyword,String searchCheck,String boardType , String pageNum,Model model) {
+	public void boardList(String search,String keyword,String searchCheck,String boardType,String pageNum,Model model) {
+		System.out.println(searchCheck);
+		System.out.println(search+"gd");
+		System.out.println(keyword+"zsa");
+		if(searchCheck == null) searchCheck = "";
+		if(search == null) search = ""; 
+		if(keyword == null) keyword= "";
 		
-		if(searchCheck == null) searchCheck = "0"; search = ""; keyword="";
 		if(pageNum == null) pageNum = "1";
 		if(boardType == null) boardType = "0";
 		int pageSize = 10;
@@ -42,6 +49,7 @@ public class BoardController {
 		
 		if(count != 0) boardList = service.getBoardList(search,keyword,searchCheck,startRow, endRow, boardType);
 		System.out.println(count+" "+boardType);
+		System.out.println(searchCheck+""+search+""+keyword);
 		
 		model.addAttribute("boardType",boardType);
 		model.addAttribute("pageSize",pageSize);
