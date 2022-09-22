@@ -26,17 +26,13 @@ public class BoardController {
 	@Autowired
 	public BoardService service;
 	
-	
-	public void boardList(String search,String keyword,String searchCheck,String boardType,String pageNum,Model model) {
-		System.out.println(searchCheck);
-		System.out.println(search+"gd");
-		System.out.println(keyword+"zsa");
-		if(searchCheck == null) searchCheck = "";
-		if(search == null) search = ""; 
-		if(keyword == null) keyword= "";
+	public void boardList(
+					String search,
+					String keyword,
+					String searchCheck,
+					String boardType,
+					String pageNum,Model model) {
 		
-		if(pageNum == null) pageNum = "1";
-		if(boardType == null) boardType = "0";
 		int pageSize = 10;
 		int currentPage = Integer.parseInt(pageNum);
 		int startRow = (currentPage - 1) * pageSize + 1;
@@ -45,11 +41,13 @@ public class BoardController {
 		System.out.println(boardType);
 		count = service.boardCount(boardType);
 		
+		if(searchCheck != null && search != null && keyword != null) {
+			count = service.searchCount(search, keyword, searchCheck, startRow, endRow, boardType);
+		}
+		
 		List<BoardVO> boardList = null;
 		
 		if(count != 0) boardList = service.getBoardList(search,keyword,searchCheck,startRow, endRow, boardType);
-		System.out.println(count+" "+boardType);
-		System.out.println(searchCheck+""+search+""+keyword);
 		
 		model.addAttribute("boardType",boardType);
 		model.addAttribute("pageSize",pageSize);
@@ -59,10 +57,21 @@ public class BoardController {
 		model.addAttribute("count",count);
 		model.addAttribute("boardList",boardList);
 		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("searchCheck",searchCheck);
+		model.addAttribute("search",search);
+	}
+	
+	public void getComments() {
+		
 	}
 	
 	@RequestMapping("free/list")
-	public String FreeList(String search,String keyword,String searchCheck,String boardType,String pageNum,Model model) {
+	public String FreeList(@RequestParam(value="search",required=false)String search,
+			@RequestParam(value="keyword",required=false)String keyword,
+			@RequestParam(value="searchCheck",required=false)String searchCheck,
+			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/free/list";
 	}
@@ -116,8 +125,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/view")
-	public String FreeView() {
-	
+	public String FreeView(@RequestParam(value="postSeq",required=false)String postSeq,Model model) {
+			 
+			 int postSeq2 = Integer.parseInt(postSeq);
+			 BoardVO vo = service.getView(postSeq2);
+			 model.addAttribute("vo",vo);
 		return "board/free/view";
 	}
 	
@@ -152,6 +164,12 @@ public class BoardController {
 		int result = service.AddBoard(vo);
 		
 		return result+"";
+	}
+	
+	@RequestMapping(value="modifyPro",method=RequestMethod.POST)
+	@ResponseBody public String modifyPro(BoardVO vo) {
+		int result = service.modView(vo);
+		return ""+result;
 	}
 	
 	@RequestMapping("notice/write")

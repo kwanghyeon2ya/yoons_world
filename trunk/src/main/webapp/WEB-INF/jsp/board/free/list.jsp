@@ -14,9 +14,16 @@
 
 <c:if test="${count == 0}">
 	<h1>작성된 글이 없습니다</h1>
+	<button type="button" onclick="history.go(-1)">되돌아가기</button> &nbsp 
+	<button type="button" onclick="window.location='/board/free/write'">글쓰기</button> &nbsp 
+	<button type="button" onclick="window.location='/member/login/main'">메인메뉴</button>
 </c:if>
 <c:if test="${count > 0}">
+<c:if test="${searchCheck != null && searchCheck != ''}">
+검색된 키워드 "${keyword}"<br/>
+</c:if>
 글 갯수 : ${count}
+
 
 <table border=1>
 	<tr>
@@ -31,10 +38,10 @@
 		<tr>
 			<td>${list.postNum}</td>
 			<td>${list.writerName}</td>
-			<td><a href="/board/free/view?pageSeq=${pageSeq}">${list.subject}</a></td>
+			<td><a href="/board/free/view?postSeq=${list.postSeq}">${list.subject}</a></td>
 			<td><fmt:formatDate value="${list.firstInsertDt}" type="date"/></td>
 			<td>${list.readCnt}</td>
-			</tr>
+		</tr>
 		</c:forEach>
 </table>
 	<form action="/board/free/list" method="get">
