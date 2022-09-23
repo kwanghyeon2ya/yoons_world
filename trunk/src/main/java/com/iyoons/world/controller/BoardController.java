@@ -26,6 +26,7 @@ public class BoardController {
 	@Autowired
 	public BoardService service;
 	
+	
 	public void boardList(
 					String search,
 					String keyword,
@@ -67,7 +68,8 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/list")
-	public String FreeList(@RequestParam(value="search",required=false)String search,
+	public String FreeList(
+			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
@@ -89,15 +91,9 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/modify")
-	public String FreeModify() {
-	
+	public String FreeModify(BoardVO vo,Model model) {
+		model.addAttribute("vo",vo);
 		return "board/free/modify";
-	}
-	
-	@RequestMapping("free/modifyPro")
-	public @ResponseBody String FreeModifyPro() {
-		
-		return "";
 	}
 	
 	@RequestMapping("notice/modify")
@@ -106,22 +102,16 @@ public class BoardController {
 		return "board/notice/modify";
 	}
 	
-	@RequestMapping("notice/modifyPro")
-	public @ResponseBody String noticeModifyPro() {
-		
-		return "";
-	}
-	
 	@RequestMapping("pds/modify")
 	public String PdsModify() {
 	
 		return "board/pds/modify";
 	}
 	
-	@RequestMapping("pds/modifyPro")
-	@ResponseBody public String PdsModifyPro() {
-		
-		return "";
+	@RequestMapping(value="modifyProc",method=RequestMethod.POST)
+	@ResponseBody public String modifyProc(BoardVO vo) {
+		int result = service.modView(vo);
+		return ""+result;
 	}
 	
 	@RequestMapping("free/view")
@@ -150,13 +140,11 @@ public class BoardController {
 		return "board/free/write";
 	}
 	
-	@RequestMapping(value= "writePro" , method=RequestMethod.POST)
+	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
 	@ResponseBody public String FreeWriteCheck(BoardVO vo,HttpServletRequest request
 			) throws Exception {
 		
 //		String file = request.getParameter("file");
-		
-		
 		vo.setFileAttachYn("N");
 //		if(file != null){
 //			vo.setFileAttachYn("Y");
@@ -164,12 +152,6 @@ public class BoardController {
 		int result = service.AddBoard(vo);
 		
 		return result+"";
-	}
-	
-	@RequestMapping(value="modifyPro",method=RequestMethod.POST)
-	@ResponseBody public String modifyPro(BoardVO vo) {
-		int result = service.modView(vo);
-		return ""+result;
 	}
 	
 	@RequestMapping("notice/write")

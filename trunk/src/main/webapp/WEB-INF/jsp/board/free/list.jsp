@@ -78,7 +78,7 @@
 	</c:forEach> 
 	
 	<c:if test="${endPage < pageCount}">
-		<a href="/board/free/list?boardType=0&pageNum=${startPage + 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">[다음]</a>
+		<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${startPage + 10}">[다음]</a>
 	</c:if>
 </c:if>
 

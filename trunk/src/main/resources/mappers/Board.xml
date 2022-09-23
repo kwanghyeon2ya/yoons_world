@@ -22,23 +22,27 @@
 	<result property="lastUpdateDt" column="LAST_UPDATE_DT" />
 </resultMap>
 
-	<insert id="AddBoard">
+	<insert id="AddBoard" statementType="CALLABLE">
+		{CALL ROO_PKG_BOARD
+			(
+			#{POST_SEQ},
+			#{WRITER_NAME},
+			#{SUBJECT},
+			#{CONTENT},
+			#{SUBJECT},
+			0,
+			0,
+			#{BOARD_TYPE},	
+			#{FILE_ATTACH_YN},
+			'N',
+			#{REGR_SEQ},
+			sysdate,
+			0,
+			sysdate)
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=Integer}
+			)
+		}		
 		
-		insert into post_board values(	
-										post_seq.nextval,
-										#{writerName},
-										#{subject},
-										to_clob(#{content}),
-										0,	
-										0,
-										#{boardType},
-										#{fileAttachYn},
-										'N',
-										#{regrSeq},
-										sysdate,
-										0,
-										sysdate
-										)
 	</insert>
 	
 	<select id="getBoardList" resultMap="BoardList">
@@ -52,56 +56,82 @@
             pb.status,
             pb.read_cnt,
             pb.board_type,
-           <if test="search != null and search.equals('comments')">c.comm_seq,</if>
-           <if test="search != null and search.equals('comments')">c.comm_content,</if>
             pb.first_insert_dt,
             row_number() over(order by pb.first_insert_dt desc) as POST_NUM
         from
 			post_board pb 
-			<if test="search != null and search.equals('comments')">inner join comments c on pb.post_seq = c.post_seq</if>
+			<if test="search != null and search.equals('comments')">
+		inner join 
+		(select 
+			c1.post_seq from comments c1 
 		where 
-			pb.board_type=#{boardType} and pb.status=0 
+			c1.comm_content like '%${keyword}%')ic 
+				on pb.post_seq = ic.post_seq
+			</if>
+		where 
+			pb.board_type=#{boardType} and 
+			pb.status=0 
 		<if test="searchCheck != null">
 			<if test="search != null and search.equals('subject_content')">
-			and (pb.subject like '%${keyword}%' or pb.content like '%${keyword}%') 
-			</if>
-			<if test="search != null and search.equals('comments')">
-			and c.comm_content like '%${keyword}%'
+			and (pb.subject like '%${keyword}%' or 
+			pb.content like '%${keyword}%') 
 			</if>
 		</if>
-			order by pb.first_insert_dt desc)cd
+			)cd
 			where <![CDATA[ cd.POST_NUM >= #{startRow} and cd.POST_NUM <= #{endRow}]]>
 	</select>
 	
 	<select id="boardCount" resultType="int">
-		select count(*) from post_board where board_type=#{boardType} and status=0
+		select 
+			count(*) 
+		from 
+			post_board
+		where 
+			board_type=#{boardType} and 
+			 status=0
 	</select>
 	<select id="searchCount" resultType="int">
-		select count(*) from
-		(select pb.*
-		<if test="searchCheck != null and search.equals('comments')">,c.comm_content,c.comm_seq</if> 
-		from post_board pb
-		 <if test="searchCheck != null and search.equals('comments')">inner join comments c</if> 
-		 <if test="searchCheck != null and search.equals('comments')">on pb.post_seq = c.post_seq</if> 
+		select 
+			count(*) 
+		from
+		(select 
+			pb.*
+		from 
+			post_board pb
+		 <if test="searchCheck != null and search.equals('comments')">
+		 inner join 
+		 (select
+		  	c1.post_seq 
+		  from 
+		  	comments c1
+		  where 
+		  	c1.comm_content like '%${keyword}%')ic		 
+		 on 
+		 	pb.post_seq = ic.post_seq</if> 
 		 where pb.status = 0 and pb.board_type=#{boardType}
 		 <if test="searchCheck != null and search != null and search.equals('subject_content')">
-			and (pb.subject like '%${keyword}%' or pb.content like '%${keyword}%') 		 
-		 </if>
-		 <if test="searchCheck != null and search != null and search.equals('comments')">
-		 	and c.comm_content like '%{keyword}%'
+			and (pb.subject like '%${keyword}%' or 
+			pb.content like '%${keyword}%') 		 
 		 </if>
 		 )
 	</select>
 	<select id="getView" resultType="com.iyoons.world.vo.BoardVO">
-		select * from post_board where post_seq = #{post_seq} and status = 0
+		select 
+			* 
+		from 
+			post_board 
+		where 
+			post_seq = #{post_seq} and 
+			status = 0
 	</select>
 	<update id="modView">
 		update 
-		post_board 
+			post_board 
 		set 
-		subject = ${subject} and
-		content = to_clob(#{content})
-		where post_seq=${postSeq}
+			subject = ${subject} and
+			content = to_clob(#{content})
+		where 
+			post_seq=${postSeq}
 	</update>
 	
 </mapper>

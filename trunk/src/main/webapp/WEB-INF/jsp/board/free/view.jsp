@@ -17,8 +17,8 @@
 		<h3 align="right">작성자 : ${vo.writerName}</h3>
 			<c:if test="${sessionScope.sseq == vo.regrSeq}">
 				<div align="right">
-				<button type="button" onclick="window.location='/board/free/modify.jsp?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}'">[수정]</button> &nbsp
-				<button type="button" onclick="window.location='/board/free/delete.jsp?postSeq=${vo.postSeq}'">[삭제]</button>
+				<button type="button" onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}'">[수정]</button> &nbsp
+				<button type="button" onclick="window.location='/board/free/delete?postSeq=${vo.postSeq}'">[삭제]</button>
 				</div>
 			</c:if>
 	</div>
