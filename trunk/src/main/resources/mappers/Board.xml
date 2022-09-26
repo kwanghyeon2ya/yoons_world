@@ -62,7 +62,7 @@
 			post_board pb 
 			<if test="search != null and search.equals('comments')">
 		inner join 
-		(select 
+		(select DISTINCT
 			c1.post_seq from comments c1 
 		where 
 			c1.comm_content like '%${keyword}%')ic 
@@ -124,14 +124,15 @@
 			post_seq = #{post_seq} and 
 			status = 0
 	</select>
+	
 	<update id="modView">
 		update 
 			post_board 
 		set 
-			subject = ${subject} and
-			content = to_clob(#{content})
+			subject = #{subject} ,
+			content = #{content}
 		where 
-			post_seq=${postSeq}
+			post_seq=#{postSeq} and status = 0
 	</update>
 	
 </mapper>

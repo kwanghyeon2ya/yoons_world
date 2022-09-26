@@ -8,9 +8,7 @@
 <h1>write.jsp</h1>
 	
 
-<form id="frm" name="frm" action="/board/free/list" method="post" onSubmit="return WriteCheck()">
-	<%-- <input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
-	<input type="hidden" name="writerName" value="${sessionScope.sid}"/> --%>
+<form id="frm" name="frm" action="/board/free/list" method="post" enctype="multipart/form-data" onSubmit="return WriteCheck()">
 	<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
 	<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
 	<input type="hidden" name="boardType" value="0"/>
@@ -20,7 +18,7 @@
 		<table border=1 style="background-color:powderblue;">
 					
 			<tr><td>제목 : <input type="text" name="subject" id="subject"/></td></tr>
-			<!-- <tr><td>이미지 : <input type="file" name="file" id="file"/> -->
+			<tr><td>이미지 : <input type="file" name="file" id="file" multiple="multiple"/></td></tr>
 			<tr><td>내용 : <textarea name="content" id="content" style="width:500px;height:500px"></textarea></td></tr>
 				
 		</table>

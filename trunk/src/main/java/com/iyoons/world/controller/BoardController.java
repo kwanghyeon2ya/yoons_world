@@ -141,16 +141,14 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
-	@ResponseBody public String FreeWriteCheck(BoardVO vo,HttpServletRequest request
-			) throws Exception {
+	@ResponseBody public String FreeWriteCheck(BoardVO vo,HttpServletRequest request,
+			@RequestParam("file")MultipartFile[] files) throws Exception {
 		
-//		String file = request.getParameter("file");
+		String[] file = request.getParameterValues("files");
 		vo.setFileAttachYn("N");
-//		if(file != null){
-//			vo.setFileAttachYn("Y");
-//		}
-		int result = service.AddBoard(vo);
+		if(file != null) vo.setFileAttachYn("Y");
 		
+		int result = service.AddBoard(vo,files);
 		return result+"";
 	}
 	
