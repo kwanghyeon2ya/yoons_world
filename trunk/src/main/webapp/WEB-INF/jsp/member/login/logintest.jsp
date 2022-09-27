@@ -7,41 +7,36 @@
 
 <script>
 
-function LoginCheck(){
-
-	var rtn = false;
-	
-	if($("#userId").val() == ""){
-		alert("아이디를 입력해주세요")
-		return false;
-	}
-	if($("#userPw").val() == ""){
-		alert("비밀번호를 입력해주세요")
-		return false;
-	}
-
-$.ajax({
-	url : '/member/loginPro',
-	type : 'POST',
-	data : $("#frm").serialize(),
-	dataType : "json",
-	async : false,
-/* processData: false, */
-	/* contentType: false, */
- 	success : function(data){
-		document.frm.loginCheck.value = data;
-			if(document.frm.loginCheck.value == 0){
-				alert("아이디 혹은 비밀번호가 일치하지 않습니다.")
-			}
-			if(document.frm.loginCheck.value == 1){
-				alert("로그인 성공")
-				rtn = true;
-			}	
+$(document).ready(function() {
+	$("#loginSubmit").click(function() {
+		var form_data = {
+			user_id : $("#user_id").val(),
+			user_pwd: $("#user_pwd").val()
+		};
+		$.ajax({
+			type: "POST",
+			url: "/login/loginCheck",
+			data: form_data,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("AJAX", "true"); 
+				xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			},
 			
-		}
-	})
-	return rtn;
-};
+			success: function(msg, textStatus, xhr) {
+				if(msg == 'true') {
+					alert("로그인이 성공하였습니다!!");
+					window.location.replace("로그인 후 url");
+				} else {
+					alert("아이디 또는 비밀번호가 잘못되었습니다!!");
+				}
+			},
+			error:function(request, status, error){
+				alert("code:" + request.status + "\n" + "error:" + error);
+			}
+		});
+		return false;
+	});
+});
 </script>
 
 

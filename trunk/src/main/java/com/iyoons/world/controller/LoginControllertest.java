@@ -21,61 +21,63 @@ import com.pcwk.ehr.user.service.UserService;
 
 
 @Controller("longinController")
-@RequestMapping("login")
-public class LoginController {
-        final Logger LOG = LogManager.getLogger(getClass());
+@RequestMapping(value="/login/login")
+public String loginForm(){
+    return "login/loginForm";
+}
+ 
+
+@RequestMapping(value="/login/loginCheck")
+public void loginCheck(HttpSession session, @ModelAttribute("usersVO") UsersVO usersVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+	
+    String beforeUrl=request.getHeader("Referer");
+    session.setAttribute("Referer",beforeUrl);
+    
+    	System.out.println("==============BEFORE==============="+beforeUrl+"==========================");
+    	
+	if("true".equals(request.getHeader("AJAX"))) {
+		System.out.println("==============AJAX==============="+request.getHeader("AJAX")+"========================");
+	}
+	
+	String reqUrl = request.getRequestURL().toString();
+	System.out.println("-----------------> Url check Interceptor , reqUrl : " +reqUrl );
+	
+	
+    usersVO.setId(request.getParameter("user_id"));
+    usersVO.setPw(request.getParameter("user_pwd"));
+    
+    UsersVO loginUser = usersService.getUser(usersVO);
+    
+    if (loginUser != null) {
+    	System.out.println("============test===========∑Œ±◊¿Œº∫∞¯=============================");
+        session.setAttribute("loginInfo", loginUser);
         
-        @Autowired
-        UserService  userService;
+        //returnURL = "redirect:/index";
         
-        public LoginController() {
-                LOG.debug("===========================");
-                LOG.debug("=LonginController()=");
-                LOG.debug("===========================");
+        try {
+            response.getWriter().write("true");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        @RequestMapping(value="/doLogin.do"
-                        , method = RequestMethod.POST 
-                        ,produces = "application/json;charset=UTF-8")
-        @ResponseBody
-        public String doLogin(UserVO  inVO, HttpSession session)throws SQLException{
-                String jsonString = "";
-                LOG.debug("===========================");
-                LOG.debug("=inVO="+inVO);
-                LOG.debug("===========================");
-                
-                
-                MessageVO message = userService.idPassCheck(inVO);
-                   
-                
-                if(null !=message && "30".equals(message.getMsgId())){
-                        UserVO loginUser = userService.doSelectOne(inVO);
-                        if(null !=loginUser) {
-                                session.setAttribute("user", loginUser);
-                                
-                                message.setMsgContents(loginUser.getName()+"ÎãòÏù¥  Î°úÍ∑∏Ïù∏ ÎêòÏóàÏäµÎãàÎã§.");
-                        }
-                }
-                
-                jsonString = new Gson().toJson(message);
-                
-                LOG.debug("===========================");
-                LOG.debug("=jsonString="+jsonString);
-                LOG.debug("===========================");               
-                return jsonString;
+    }else {
+    	
+        //returnURL = "redirect:/login/loginForm";
+    	
+        try {
+            response.getWriter().write("false");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        
-        
-        @RequestMapping(value="/loginView.do", method=RequestMethod.GET)
-        public String loginView()throws SQLException{
-                LOG.debug("===========================");
-                LOG.debug("=loginView()=");
-                LOG.debug("===========================");
-                
-                return "login/login";
-        }
-        
-        
+    }
+
+    //return returnURL;
 }
 
+//∑Œ±◊æ∆øÙ«œ¥¬ ∫Œ∫–
+@RequestMapping(value="/login/logout")
+public String logout(HttpSession session) {    	
+    session.invalidate();        
+    return "redirect:/login/login.do";
+}
+}
