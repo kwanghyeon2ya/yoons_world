@@ -7,17 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardVO;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @RequestMapping("/board/*")
 @Controller
@@ -141,12 +141,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
-	@ResponseBody public String FreeWriteCheck(BoardVO vo,HttpServletRequest request,
-			@RequestParam("file")MultipartFile[] files) throws Exception {
+	@ResponseBody public String FreeWriteCheck(
+			@RequestParam(value="file",required=false) MultipartFile[] files,
+			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request
+			) throws Exception {
 		
-		String[] file = request.getParameterValues("files");
-		vo.setFileAttachYn("N");
-		if(file != null) vo.setFileAttachYn("Y");
+		vo.setFileAttachYn("N");;
+		if(files != null) vo.setFileAttachYn("Y");
 		
 		int result = service.AddBoard(vo,files);
 		return result+"";

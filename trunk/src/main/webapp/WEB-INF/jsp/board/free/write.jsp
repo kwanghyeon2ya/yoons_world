@@ -8,12 +8,11 @@
 <h1>write.jsp</h1>
 	
 
-<form id="frm" name="frm" action="/board/free/list" method="post" enctype="multipart/form-data" onSubmit="return WriteCheck()">
+<form id="frm" name="frm"  method="POST" action="/board/free/list" enctype="multipart/form-data" onSubmit="return WriteCheck()">
 	<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
 	<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
 	<input type="hidden" name="boardType" value="0"/>
 	<input type="hidden" name="writeCheck" id="writeCheck" value="0"/>
-	<input type="hidden" name="modCheck" id="modCheck" value="0"/>
 	
 		<table border=1 style="background-color:powderblue;">
 					
@@ -22,5 +21,5 @@
 			<tr><td>내용 : <textarea name="content" id="content" style="width:500px;height:500px"></textarea></td></tr>
 				
 		</table>
-		<input type="submit" value="작성완료"/>
+		<input type="submit" id="btnSubmit" value="작성완료"/>
 </form>
