@@ -1,42 +1,82 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<h1>view.jsp</h1>
-<c:if test="${sessionScope.sid == null}">
-	<script>
-		alert("ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤")
-	</script>
-	<c:redirect url="/member/login/login.jsp"/>
-</c:if>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+	response.setHeader("Cache-Control","no-store");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	if (request.getProtocol().equals("HTTP/1.1"))
+		response.setHeader("Cache-Control", "no-cache");
+%>
+<!-- Header -->
+<jsp:useBean id="today" class="java.util.Date" />
+<jsp:include page="../../common/header.jsp" flush="false"/>
 
-<table border=1>
-	<tr>
-	<td>
-	<div id="header">
-		<h1>ì œëª© : ${vo.subject}</h1>	
-		<h3 align="right">ìž‘ì„±ìž : ${vo.writerName}</h3>
-			<c:if test="${sessionScope.sseq == vo.regrSeq}">
-				<div align="right">
-				<button type="button" onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}'">[ìˆ˜ì •]</button> &nbsp
-				<button type="button" onclick="window.location='/board/free/delete?postSeq=${vo.postSeq}'">[ì‚­ì œ]</button>
+
+<!-- Main -->
+<div id="main">
+	<div class="container">
+		<div class="col-12">
+		
+			<div class="title-page">
+				<h3>°øÁö»çÇ×</h3>
+			</div>
+			
+			<div class="board_write">
+                             
+				<div class="area-board-title">
+                    <span>${vo.subject}</span>				
+                </div>
+
+				<div class="area-board-info">
+                    <p>ÀÛ¼ºÀÚ : ${vo.writerName}</p>
+					<p>2022.09.07 15:50 &nbsp;&nbsp; Á¶È¸ 3</p>
+                </div>
+				
+				<div class="area-board-btn">
+					<c:if test="${sessionScope.sseq == vo.regrSeq}">
+                        <button type="button" onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}'">¼öÁ¤</button>
+						<button type="button" onclick="window.location='/board/free/delete?postSeq=${vo.postSeq}'">»èÁ¦</button>
+                   	</c:if>         
+                </div>
+				
+				<div class="area-board-cont">
+                  	${vo.content}
 				</div>
-			</c:if>
+
+				<div class="area-board-comm">
+                    <p>´ñ±Û 2 ></p>
+					<div class="area-board-comm-info">
+						<p>ÀÛ¼ºÀÚ : À±¼ö¿ùµå</p>
+						<p>À¯ÀÍÇÑ Á¤º¸ °¨»çÇÕ´Ï´Ù. Á¤¸»·Î °¨»çÇØ¿ä.</p>
+						<p>2022.09.07 16:50</p>
+					</div>
+					<div class="area-board-comm-info">
+						<p>ÀÛ¼ºÀÚ : À±¼ö¿ùµå</p>
+						<p>À¯ÀÍÇÑ Á¤º¸ °¨»çÇÕ´Ï´Ù. Á¤¸»·Î °¨»çÇØ¿ä.</p>
+						<p>2022.09.07 16:50</p>
+					</div>
+					<div class="area-board-comm-btn">
+						<button type="button">´ñ±Û</button>
+					</div>
+				</div>
+
+				<div class="area-board-comm">
+                    <input type="text" placeholder="»õ·Î¿î ´ñ±ÛÀ» µî·ÏÇØº¸¼¼¿ä"/>
+					<div class="area-board-comm-btn">
+						<button type="button">µî·Ï</button>
+					</div>
+				</div>
+				
+				<div class="area-button">
+					<button onclick="window.location='/board/free/list'">¸ñ·Ï</button>
+				</div>
+				
+			</div>
+		</div>
 	</div>
-	</td>
-	</tr>
-	<tr>
-	<td>
-	<div id="body" style="color:skyblue;width:500px;height:500px">
-		${vo.content}
-	</div>
-	</td>
-	</tr>
-	<tr>
-	<td>
-	<div id="footer">
-		ëŒ“ê¸€ì°½
-	</div>
-	</td>
-	</tr>
-	
-</table>
+</div>
+
+
+<!-- Footer -->
+<jsp:include page="../../common/footer.jsp" flush="false"/>

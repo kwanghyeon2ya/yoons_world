@@ -1,86 +1,117 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<h1>ììœ ê²Œì‹œíŒ</h1>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+	response.setHeader("Cache-Control","no-store");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	if (request.getProtocol().equals("HTTP/1.1"))
+		response.setHeader("Cache-Control", "no-cache");
+%>
 
 <c:if test="${sessionScope.sid == null}">
 	<script>
-		alert("ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤")
+		alert("·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù")
 	</script>
 	<c:redirect url="/member/login/login"/>	
 </c:if>
-<title>ììœ ê²Œì‹œíŒ</title>
-
-<c:if test="${count == 0}">
-	<h1>ì‘ì„±ëœ ê¸€ì´ ì—†ìŠµë‹ˆë‹¤</h1>
-	<button type="button" onclick="history.go(-1)">ë˜ëŒì•„ê°€ê¸°</button> &nbsp 
-	<button type="button" onclick="window.location='/board/free/write'">ê¸€ì“°ê¸°</button> &nbsp 
-	<button type="button" onclick="window.location='/member/login/main'">ë©”ì¸ë©”ë‰´</button>
-</c:if>
-<c:if test="${count > 0}">
-<c:if test="${searchCheck != null && searchCheck != ''}">
-ê²€ìƒ‰ëœ í‚¤ì›Œë“œ "${keyword}"<br/>
-</c:if>
-ê¸€ ê°¯ìˆ˜ : ${count}
-
-
-<table border=1>
-	<tr>
-		<th>ê¸€ë²ˆí˜¸</th>
-		<th>ì‘ì„±ì</th>
-		<th>ì œëª©</th>
-		<th>ì‘ì„±ì¼</th>
-		<th>ì¡°íšŒìˆ˜</th>
-	</tr>
-	
-		<c:forEach var="list" items="${boardList}">
-		<tr>
-			<td>${list.postNum}</td>
-			<td>${list.writerName}</td>
-			<td><a href="/board/free/view?postSeq=${list.postSeq}">${list.subject}</a></td>
-			<td><fmt:formatDate value="${list.firstInsertDt}" type="date"/></td>
-			<td>${list.readCnt}</td>
-		</tr>
-		</c:forEach>
-</table>
-	<form action="/board/free/list" method="get">
-	<input type="hidden" name="searchCheck" value="1"/>
-	<select name="search">
-		<option value="">==ê²€ìƒ‰==</option>
-		<option value="subject_content">ì œëª©+ë‚´ìš©</option>
-		<option value="comments">ëŒ“ê¸€</option>
-	</select>
-	<input type="text" name="keyword"/>
-	<input type="submit" value="ê²€ìƒ‰"/>
-</form>
-<button type="button" onclick="window.location='/board/free/write'">ê¸€ì“°ê¸°</button> &nbsp 
-<button type="button" onclick="window.location='/member/login/main'">ë©”ì¸ë©”ë‰´</button>
-</c:if>	<br/>
 
 <c:if test="${count > 0}">
-	<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
-	<fmt:parseNumber var="result" value="${(currentPage/10)}" integerOnly="true" />
-	<c:set var="startPage" value="${result*10+1}"/>
-	<c:set var="pageBlock" value="${10}"/>
-	<c:set var="endPage" value="${startPage + pageBlock - 1}"/>
-	
-	<c:if test="${endPage > pageCount}">
-		<c:set var="endPage" value="${pageCount}"/>
-	</c:if>
-	
-	<c:if test="${startPage > 10}">
-		<a href="/board/free/list?boardType=0&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">[ì´ì „]</a>
-	</c:if>
-	
-	<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-		<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">[${i}]</a>
-	</c:forEach> 
-	
-	<c:if test="${endPage < pageCount}">
-		<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${startPage + 10}">[ë‹¤ìŒ]</a>
-	</c:if>
+    <c:if test="${searchCheck != null && searchCheck != ''}">
+    °Ë»öµÈ Å°¿öµå "${keyword}"<br/>
+    </c:if>
 </c:if>
 
+<!-- Header -->
+<jsp:include page="../../common/header.jsp" flush="false"/>
+
+<!-- Main -->
+<div id="main">
+	<div class="container">
+		<div class="col-12">
+		
+			<div class="title-page">
+				<h3>°øÁö»çÇ×</h3>
+			</div>
+			
+			<form action="/board/free/list" method="get">
+			<input type="hidden" name="searchCheck" value="1"/>
+				<div class="area-search">
+					<select name="search">
+						<option value="">¼±ÅÃ</option>
+						<option value="subject_content">Á¦¸ñ+³»¿ë</option>
+						<option value="comments">´ñ±Û</option>
+					</select>
+					<input type="text" name="keyword"></input>
+					<button type="submit">°Ë»ö</button>
+				</div>					
+			</form>
+				
+			
+			<div class="board_list">
+				<div class="top">
+					<div class="num">¹øÈ£</div>
+					<div class="title">Á¦¸ñ</div>
+					<div class="writer">±Û¾´ÀÌ</div>
+					<div class="date">ÀÛ¼ºÀÏ</div>
+					<div class="count">Á¶È¸</div>
+				</div>
+				
+				<c:if test="${count == 0}">
+					<div style="width:100%; text-align:center;">
+						<div>ÀÛ¼ºµÈ ±ÛÀÌ ¾ø½À´Ï´Ù</div>
+					</div>
+				</c:if>
+				
+				<c:if test="${count > 0}">
+					<c:forEach var="list" items="${boardList}">
+						<div>
+							<div class="num">${list.postNum}</div>
+							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}">${list.subject}</a></div>
+							<div class="writer">${list.writerName}</div>
+							<div class="date"><fmt:formatDate value="${list.firstInsertDt}" type="date"/></div>
+							<div class="count">${list.readCnt}</div>
+						</div>
+					</c:forEach>
+				</c:if>
+			</div>
+							
+			<div class="area-button">
+				<button onclick="window.location='/board/free/write'">±Û¾²±â</button>
+			</div>
+			
+			
+			<div class="board_page">
+				<c:if test="${count > 0}">
+					<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
+					<fmt:parseNumber var="result" value="${(currentPage/10)}" integerOnly="true" />
+					<c:set var="startPage" value="${result*10+1}"/>
+					<c:set var="pageBlock" value="${10}"/>
+					<c:set var="endPage" value="${startPage + pageBlock - 1}"/>
+					
+					<c:if test="${endPage > pageCount}">
+						<c:set var="endPage" value="${pageCount}"/>
+					</c:if>
+					
+					<c:if test="${startPage > 10}">
+						<a class="num" href="/board/free/list?boardType=0&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}"> < </a>
+					</c:if>
+					
+					<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+						<a class="num" href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">${i}</a>
+					</c:forEach> 
+					
+					<c:if test="${endPage < pageCount}">
+						<a class="num" href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${startPage + 10}"> > </a>
+					</c:if>
+				</c:if>
+			</div>
+						
+		</div>
+	</div>
+</div>
+
+<!-- Footer -->
+<jsp:include page="../../common/footer.jsp" flush="false"/>
 
 

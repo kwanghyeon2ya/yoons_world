@@ -1,22 +1,87 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<h1>modify.jsp</h1>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+	response.setHeader("Cache-Control","no-store");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	if (request.getProtocol().equals("HTTP/1.1"))
+		response.setHeader("Cache-Control", "no-cache");
+%>
+
+<jsp:include page="../postValidation.jsp"/>
+
+<!-- Header -->
+<jsp:include page="../../common/header.jsp" flush="false"/>
 
 
-<jsp:include page="/WEB-INF/jsp/board/postValidation.jsp"/>
-
-<form id="frm" name="frm" action="/board/free/list" method="post" onSubmit="return ModCheck()">
-	<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
-	<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
-	<input type="hidden" name="boardType" value="0"/>
-	<input type="hidden" name="modCheck" id="modCheck" value="0"/>
-	
-		<table border=1 style="background-color:powderblue;">
+<!-- Main -->
+<div id="main">
+	<div class="container">
+		<div class="col-12">
+		
+			<div class="title-page">
+				<h3>°øÁö»çÇ×</h3>
+			</div>
+			
+			<div class="board_write">
+				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return ModCheck()" class="board-inline">
 					
-			<tr><td>ì œëª© : <input type="text" name="subject" id="subject" value="${vo.subject}"/></td></tr>
-			<!-- <tr><td>ì´ë¯¸ì§€ : <input type="file" name="file" id="file"/> -->
-			<tr><td>ë‚´ìš© : <textarea name="content" id="content" style="width:500px;height:500px">${vo.content}</textarea></td></tr>
-				
-		</table>
-		<input type="submit" value="ì‘ì„±ì™„ë£Œ"/>
-</form>
+					<input type="hidden" name="regrSeq" value="${sessionScope.sid}"/>
+					<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
+					<input type="hidden" name="boardType" value="0"/>
+					<input type="hidden" name="modCheck" id="modCheck" value="0"/>
+					
+					<div class="area-board">
+                    	<span>ÀÛ¼ºÀÚ : À±ÇÙ°ü</span>
+						<div class="area-board-n">
+							<input type="checkbox" id="hidename" name="hidename" />
+							<label for="hidename">ÀÍ¸í</label>
+						</div>								
+                    </div>
+
+					<div class="area-board">
+                        <input type="text" id="subject" name="subject" value="${vo.subject}"/>
+                    </div>
+
+					<div class="area-board">
+                       	<textarea id="summernote" name="editordata">${vo.content}</textarea>
+					</div>
+					
+					<div class="area-button">
+						<button type="submit">¼öÁ¤</button>
+						<button type="button" onclick="history.go(-1)">Ãë¼Ò</button>
+					</div>
+					
+                </form>
+                
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<script>
+	$('#summernote').summernote({
+	  /*placeholder: '³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä',*/
+	  tabsize: 2,
+	  height: 300,
+	  lang: 'ko-KR',
+	  toolbar: [
+	  	['style', ['style']],
+		['font', ['bold', 'underline', 'clear']],
+	 	['insert', ['link', 'picture', 'video']]
+		/*['style', ['style']],
+		['font', ['bold', 'underline', 'clear']],
+		['color', ['color']],
+		['para', ['ul', 'ol', 'paragraph']],
+		['table', ['table']],								
+		['view', ['fullscreen', 'codeview', 'help']]*/
+		]
+	});
+</script>
+
+
+<!-- Footer -->
+<jsp:include page="../../common/footer.jsp" flush="false"/>
+
