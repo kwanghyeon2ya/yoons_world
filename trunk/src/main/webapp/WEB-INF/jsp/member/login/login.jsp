@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
 <h1>login</h1>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -12,11 +12,11 @@ function LoginCheck(){
 	var rtn = false;
 	
 	if($("#userId").val() == ""){
-		alert("ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”")
+		alert("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä")
 		return false;
 	}
 	if($("#userPw").val() == ""){
-		alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”")
+		alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä")
 		return false;
 	}
 
@@ -31,10 +31,10 @@ $.ajax({
  	success : function(data){
 		document.frm.loginCheck.value = data;
 			if(document.frm.loginCheck.value == 0){
-				alert("ë¡œê·¸ì¸ ì‹¤íŒ¨")
+				alert("·Î±×ÀÎ ½ÇÆĞ")
 			}
 			if(document.frm.loginCheck.value == 1){
-				alert("ë¡œê·¸ì¸ ì„±ê³µ")
+				alert("·Î±×ÀÎ ¼º°ø")
 				rtn = true;
 			}	
 			
@@ -46,8 +46,8 @@ $.ajax({
 
 
 <form name="frm" id="frm" action="/member/login/main" onSubmit="return LoginCheck()">
-	ì•„ì´ë”” : <input type="text" name="userId" id="userId"/><br/>
-	ë¹„ë°€ë²ˆí˜¸ : <input type="password" name="userPw" id="userPw"/><br/>
+	¾ÆÀÌµğ : <input type="text" name="userId" id="userId"/><br/>
+	ºñ¹Ğ¹øÈ£ : <input type="password" name="userPw" id="userPw"/><br/>
 	<input type="hidden" name="loginCheck"/>
-	<input type="submit" value="ë¡œê·¸ì¸"/>
+	<input type="submit" value="·Î±×ÀÎ"/>
 </form>

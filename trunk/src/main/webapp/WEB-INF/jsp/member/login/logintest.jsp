@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
 <h1>login</h1>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,10 +24,10 @@ $(document).ready(function() {
 			
 			success: function(msg, textStatus, xhr) {
 				if(msg == 'true') {
-					alert("ë¡œê·¸ì¸ì´ ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤!!");
-					window.location.replace("ë¡œê·¸ì¸ í›„ url");
+					alert("·Î±×ÀÎÀÌ ¼º°øÇÏ¿´½À´Ï´Ù!!");
+					window.location.replace("·Î±×ÀÎ ÈÄ url");
 				} else {
-					alert("ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤!!");
+					alert("¾ÆÀÌµğ ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù!!");
 				}
 			},
 			error:function(request, status, error){
@@ -41,8 +41,8 @@ $(document).ready(function() {
 
 
 <form name="frm" id="frm" action="/member/login/main" onSubmit="return LoginCheck()">
-	ì•„ì´ë”” : <input type="text" name="userId" id="userId"/><br/>
-	ë¹„ë°€ë²ˆí˜¸ : <input type="password" name="userPw" id="userPw"/><br/>
+	¾ÆÀÌµğ : <input type="text" name="userId" id="userId"/><br/>
+	ºñ¹Ğ¹øÈ£ : <input type="password" name="userPw" id="userPw"/><br/>
 	<input type="hidden" name="loginCheck"/>
-	<input type="submit" value="ë¡œê·¸ì¸"/>
+	<input type="submit" value="·Î±×ÀÎ"/>
 </form>
