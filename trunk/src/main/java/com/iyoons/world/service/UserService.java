@@ -1,9 +1,7 @@
 package com.iyoons.world.service;
 
-import java.util.List;
-
-import com.iyoons.world.vo.DemoVO;
+import com.iyoons.world.vo.UserVO;
 
 public interface UserService {
-	public UserVO getUser(UsersVO  usersVO) throws Exception;     
+	public UserVO getUser(UserVO  userVO) throws Exception;     
 }
