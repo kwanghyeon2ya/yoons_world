@@ -8,17 +8,29 @@ spring:
       enabled: true
   datasource:
     jndi-name: jdbc/rookie
+  servlet:
+    multipart:
+      enabled: true
+      location: /resources/uploadFile 
+      max-file-size: 10MB
+      max-request-size: 30MB
+              
+ 
     
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations:  - classpath:mappers/*.xml
+  mapper-locations:
+  - classpath:mappers/*.xml
   
   
 server:
   servlet:
     session:
       timeout: 180m
-    encoding:      charset: EUC-KR
+
+    encoding:
+      charset: EUC-KR
       force: true
+      
 
