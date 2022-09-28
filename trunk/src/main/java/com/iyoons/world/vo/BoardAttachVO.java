@@ -1,6 +1,7 @@
 package com.iyoons.world.vo;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +11,7 @@ import lombok.Data;
 public class BoardAttachVO {
 	private int postSeq;
 	private String filePath;
-	private int fileSize;
+	private long fileSize;
 	private String fileName;
 	private String fileUuid;
 	private String fileType;

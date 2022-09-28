@@ -22,26 +22,38 @@
 	<result property="lastUpdateDt" column="LAST_UPDATE_DT" />
 </resultMap>
 
-	<insert id="AddBoard" statementType="CALLABLE">
-		{CALL ROO_PKG_BOARD
-			(
-			#{POST_SEQ},
-			#{WRITER_NAME},
-			#{SUBJECT},
-			#{CONTENT},
-			#{SUBJECT},
-			0,
-			0,
-			#{BOARD_TYPE},	
-			#{FILE_ATTACH_YN},
-			'N',
-			#{REGR_SEQ},
-			sysdate,
-			0,
-			sysdate)
-			#{result, mode=OUT, jdbcType=INTEGER, javaType=Integer}
-			)
-		}		
+	<insert id="AddBoard">
+		insert into post_board( post_seq,
+								writer_name,
+								subject,
+								content,
+								status,
+								read_cnt,
+								board_type,			
+								file_attach_yn,
+								board_fix_yn,
+								regr_seq,
+								first_insert_dt,
+								updr_seq
+									)
+			 			values(	
+								post_seq.nextval,
+								#{writerName},
+								#{subject},
+								#{content},
+								0,	
+								0,
+								#{boardType},
+								#{fileAttachYn},
+								'N',
+								#{regrSeq},
+								sysdate,
+								0,
+								sysdate
+								)
+	<selectKey  resultType="int" keyProperty="Pnum" order="AFTER">
+		select post_seq from post_board
+	</selectKey>	
 		
 	</insert>
 	

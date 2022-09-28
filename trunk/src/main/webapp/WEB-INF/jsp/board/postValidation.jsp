@@ -7,7 +7,6 @@
 
 
 <script>
-//TODO : kgh  ajax call 
 function WriteCheck(){
 	
 	var form = $('#frm')[0];
