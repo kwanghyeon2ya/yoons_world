@@ -3,15 +3,56 @@
 <!-- Header -->
 <jsp:include page="../common/header.jsp" flush="false"/>
 
+
+<script>
+$(document).ready(function(){
+	$("#loginbtn").click(function(){
+		var json = {
+			userId : $("#userID").val(),
+			userPw : $("#password").val()
+		};
+		
+		for(var str in json){
+			if(json[str].length == 0){
+				alert($("#" + str).attr("placeholder") + "를 입력해주세요.");
+				$("#" + str).focus();
+				return;
+			}
+		}
+		
+		 $.ajax({
+			type : "post",
+			url : "/login/login",
+			data : json,
+			success : function(data) {
+				switch (Number(data)) {
+				case 0:
+					alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+					break;
+				case 1:
+					window.location.href = "/demo/index";
+
+				default:
+					break;
+				}
+			},
+			error : function(error) {
+				alert("다시시도해주세요"+ error);
+			}
+		});
+	});
+});
+</script>
+
 <!-- Content -->
 <div id="main">
 	<div class="container">
 		<div class="input-wrap">
-                  <form action="" method="POST">
+<!--                   <form action="" method="POST"> -->
                   
                       <div class="area-login">
-                          <label for="username">ID</label>
-                          <input id="username" type="text" name="username" placeholder="ID를 입력해주세요">                      
+                          <label for="userID">ID</label>
+                          <input id="userID" type="text" name="userID" placeholder="ID를 입력해주세요">                      
                       </div>
                       
                       <div class="area-login">
@@ -19,9 +60,9 @@
                           <input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요">
                       </div>
                       
-                      <input type="submit" class="input-button" value="Login">
+                      <input type="button" id="loginbtn" class="input-button" value="Login">
                       
-                  </form>	
+<!--                   </form>	 -->
                </div>
            </div>
       </div>
