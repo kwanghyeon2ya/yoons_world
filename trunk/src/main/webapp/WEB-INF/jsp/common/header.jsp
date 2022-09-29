@@ -22,6 +22,7 @@
 	<script src="/js/breakpoints.min.js"></script>	
 	<script src="/js/summernote-lite.js"></script>
 	<script src="/js/summernote-ko-KR.js"></script>
+	
 </head>
 <body>
 	<div id="page-wrapper">
@@ -48,7 +49,7 @@
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/free/list">자료실</a>
 									<a href="mypage.html" class="a-login">마이페이지</a> <!--로그인 시에만 노출-->
-		                            <a class="a-login">Logout</a> <!--로그인 시에만 노출-->
+		                            <a href="/login/logout" class="a-login">Logout</a> <!--로그인 시에만 노출-->
 		                        </c:if>
 							</nav>
 						</header>

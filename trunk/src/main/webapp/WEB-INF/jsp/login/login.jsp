@@ -6,19 +6,20 @@
 
 <script>
 $(document).ready(function(){
-	$("#loginbtn").click(function(){
+	$("#loginbtn").click(function(){	
+		if($("#userID").val() == '' || $("#userID").val() == null) {
+			alert("id를 입력하세요.");
+			return;
+		}
+		
+		if($("#password").val() == '' || $("#password").val() == null) {
+			alert("비밀번호를 입력하세요.");
+			return;
+		}
 		var json = {
 			userId : $("#userID").val(),
 			userPw : $("#password").val()
 		};
-		
-		for(var str in json){
-			if(json[str].length == 0){
-				alert($("#" + str).attr("placeholder") + "를 입력해주세요.");
-				$("#" + str).focus();
-				return;
-			}
-		}
 		
 		 $.ajax({
 			type : "post",
@@ -30,14 +31,14 @@ $(document).ready(function(){
 					alert("아이디 또는 비밀번호가 일치하지 않습니다.");
 					break;
 				case 1:
-					window.location.href = "/demo/index";
+					window.location.href = "/main";
 
 				default:
 					break;
 				}
 			},
 			error : function(error) {
-				alert("다시시도해주세요"+ error);
+				alert("다시 시도해주세요"+ error);
 			}
 		});
 	});
@@ -48,7 +49,7 @@ $(document).ready(function(){
 <div id="main">
 	<div class="container">
 		<div class="input-wrap">
-<!--                   <form action="" method="POST"> -->
+                   <form action="/main" method="POST">
                   
                       <div class="area-login">
                           <label for="userID">ID</label>
@@ -62,7 +63,8 @@ $(document).ready(function(){
                       
                       <input type="button" id="loginbtn" class="input-button" value="Login">
                       
-<!--                   </form>	 -->
+                      
+                  </form>
                </div>
            </div>
       </div>

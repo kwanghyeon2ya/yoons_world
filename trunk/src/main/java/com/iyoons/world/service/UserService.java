@@ -3,5 +3,6 @@ package com.iyoons.world.service;
 import com.iyoons.world.vo.UserVO;
 
 public interface UserService {
-	public UserVO getUser(UserVO  userVO);     
+	public int checkUser(UserVO userVO);
+	public UserVO findUser(UserVO userVO);
 }
