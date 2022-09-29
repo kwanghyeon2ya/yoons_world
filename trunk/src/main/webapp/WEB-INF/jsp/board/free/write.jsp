@@ -9,8 +9,6 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<jsp:include page="../postValidation.jsp"/>
-
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
@@ -24,13 +22,13 @@
 			</div>
 			
 			<div class="board_write">
-				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return WriteCheck()" class="board-inline">
+				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return WriteCheck()" enctype="multipart/form-data" class="board-inline">
 					
 					<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
 					<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
 					<input type="hidden" name="boardType" value="0"/>
 					<input type="hidden" name="writeCheck" id="writeCheck" value="0"/>
-					<input type="hidden" name="modCheck" id="modCheck" value="0"/>
+					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
                     	<span>ÀÛ¼ºÀÚ : À±ÇÙ°ü</span>
@@ -47,6 +45,7 @@
 					<div class="area-board">
                        	<textarea id="summernote" name="editordata"></textarea>
 					</div>
+					<input type="file" name="file" id="file" multiple="multiple"/>
 					
 					<div class="area-button">
 						<button type="submit">µî·Ï</button>
@@ -69,8 +68,8 @@
 	  lang: 'ko-KR',
 	  toolbar: [
 	  	['style', ['style']],
-		['font', ['bold', 'underline', 'clear']],
-	 	['insert', ['link', 'picture', 'video']]
+		['font', ['bold', 'underline', 'clear']]
+	 	/* ['insert', ['link', 'picture', 'video']] */
 		/*['style', ['style']],
 		['font', ['bold', 'underline', 'clear']],
 		['color', ['color']],

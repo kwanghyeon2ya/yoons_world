@@ -5,7 +5,43 @@
 
 <mapper namespace="com.iyoons.world.dao.CommentsDAO">
 
+	<select id="getComments" resultType="com.iyoons.world.vo.CommentsVO">
+		select cd.* from
+		(select
+			c.*,rownum r 
+		from
+			(select * from comments order by first_insert_dt desc)c
+		where 
+			post_seq = #{postSeq} and status = 0)cd 
+		where	
+			<![CDATA[ cd.r >= #{startRow} and cd.r <= #{endRow}]]>
+	</select>
 	
-	
-	
+	<insert id="AddComments">
+			insert into comments(comm_seq,
+								 comm_content,
+								 comm_group,
+								 comm_level,
+								 post_seq,
+								 regr_seq,
+								 first_insert_dt,
+								 updr_seq,
+								 last_update_dt,
+								 status
+								 	)
+				 		  values(comm_seq.nextval,
+				 		  		 #{commContent},
+				 		  		 0,
+				 		  		 0,
+				 		  		 #{postSeq},
+				 		  		 #{regrSeq},
+				 		  		 sysdate,
+				 		  		 #{updrSeq},
+				 		  		 sysdate,
+				 		  		 0
+				 					)
+		</insert>
+	<select id="CommentsCount" resultType="int">
+		select count(*) from comments where post_seq = #{postSeq} and status = 0
+	</select>
 </mapper>

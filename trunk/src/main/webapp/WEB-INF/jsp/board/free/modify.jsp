@@ -9,8 +9,6 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<jsp:include page="../postValidation.jsp"/>
-
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
@@ -26,12 +24,13 @@
 			
 			<div class="board_write">
 				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return ModCheck()" class="board-inline">
-					
-					<input type="hidden" name="regrSeq" value="${sessionScope.sid}"/>
+					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
+					<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
 					<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
 					<input type="hidden" name="boardType" value="0"/>
 					<input type="hidden" name="modCheck" id="modCheck" value="0"/>
 					
+					<textarea name="content" id="content" style="display:none;"></textarea>
 					<div class="area-board">
                     	<span>ÀÛ¼ºÀÚ : À±ÇÙ°ü</span>
 						<div class="area-board-n">
@@ -70,7 +69,7 @@
 	  toolbar: [
 	  	['style', ['style']],
 		['font', ['bold', 'underline', 'clear']],
-	 	['insert', ['link', 'picture', 'video']]
+	 	/* ['insert', ['link', 'picture', 'video']] */
 		/*['style', ['style']],
 		['font', ['bold', 'underline', 'clear']],
 		['color', ['color']],

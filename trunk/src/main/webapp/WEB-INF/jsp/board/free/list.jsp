@@ -16,11 +16,11 @@
 	<c:redirect url="/member/login/login"/>	
 </c:if>
 
-<c:if test="${count > 0}">
+<%-- <c:if test="${count > 0}">
     <c:if test="${searchCheck != null && searchCheck != ''}">
     검색된 키워드 "${keyword}"<br/>
     </c:if>
-</c:if>
+</c:if> --%>
 
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
@@ -38,11 +38,10 @@
 			<input type="hidden" name="searchCheck" value="1"/>
 				<div class="area-search">
 					<select name="search">
-						<option value="">선택</option>
 						<option value="subject_content">제목+내용</option>
 						<option value="comments">댓글</option>
 					</select>
-					<input type="text" name="keyword"></input>
+					<input type="text" name="keyword" value="${keyword}"></input>
 					<button type="submit">검색</button>
 				</div>					
 			</form>
@@ -69,7 +68,14 @@
 							<div class="num">${list.postNum}</div>
 							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}">${list.subject}</a></div>
 							<div class="writer">${list.writerName}</div>
-							<div class="date"><fmt:formatDate value="${list.firstInsertDt}" type="date"/></div>
+							<div class="date">
+								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
+									<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
+								</c:if>
+								<c:if test="${list.firstInsertDt < list.lastUpdateDt}">
+									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />
+								</c:if>
+							</div>
 							<div class="count">${list.readCnt}</div>
 						</div>
 					</c:forEach>
@@ -84,7 +90,7 @@
 			<div class="board_page">
 				<c:if test="${count > 0}">
 					<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
-					<fmt:parseNumber var="result" value="${(currentPage/10)}" integerOnly="true" />
+					<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
 					<c:set var="startPage" value="${result*10+1}"/>
 					<c:set var="pageBlock" value="${10}"/>
 					<c:set var="endPage" value="${startPage + pageBlock - 1}"/>

@@ -23,84 +23,82 @@
 </resultMap>
 
 	<insert id="AddBoard">
-		insert into post_board( post_seq,
-								writer_name,
-								subject,
-								content,
-								status,
-								read_cnt,
-								board_type,			
-								file_attach_yn,
-								board_fix_yn,
-								regr_seq,
-								first_insert_dt,
-								updr_seq
-									)
-			 			values(	
-								post_seq.nextval,
-								#{writerName},
-								#{subject},
-								#{content},
-								0,	
-								0,
-								#{boardType},
-								#{fileAttachYn},
-								'N',
-								#{regrSeq},
-								sysdate,
-								0,
-								sysdate
-								)
-	<selectKey  resultType="int" keyProperty="Pnum" order="AFTER">
-		select post_seq from post_board
-	</selectKey>	
-		
+			insert into post_board( post_seq,
+									writer_name,
+									subject,
+									content,
+									status,
+									read_cnt,
+									board_type,			
+									file_attach_yn,
+									board_fix_yn,
+									regr_seq,
+									first_insert_dt,
+									updr_seq,
+									last_update_dt)
+				 			values( #{postSeq},
+									#{writerName},
+									#{subject},
+									#{content},
+									0,	
+									0,
+									#{boardType},
+									#{fileAttachYn},
+									'N',
+									#{regrSeq},
+									sysdate,
+									0,
+									sysdate)
+		<selectKey  resultType="int" keyProperty="postSeq" order="BEFORE" keyColumn="int">
+			select post_seq.nextval from dual
+		</selectKey>
 	</insert>
 	
 	<select id="getBoardList" resultMap="BoardList">
 	
-	select cd.* from(
-		select
-            pb.post_seq,
-            pb.writer_name,
-            pb.subject,
-            pb.content,
-            pb.status,
-            pb.read_cnt,
-            pb.board_type,
-            pb.first_insert_dt,
-            row_number() over(order by pb.first_insert_dt desc) as POST_NUM
-        from
-			post_board pb 
-			<if test="search != null and search.equals('comments')">
-		inner join 
-		(select DISTINCT
-			c1.post_seq from comments c1 
-		where 
-			c1.comm_content like '%${keyword}%')ic 
-				on pb.post_seq = ic.post_seq
+		select cd.* from(
+			select
+	            pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            row_number() over(order by pb.first_insert_dt desc) as POST_NUM
+	        from
+				post_board pb
+				<if test="search != null and search.equals('comments')">
+			inner join 
+			(select DISTINCT
+				c1.post_seq from comments c1 
+			where 
+				c1.comm_content like '%${keyword}%')ic 
+					on pb.post_seq = ic.post_seq
+				</if>
+			where 
+				pb.board_type=#{boardType} and 
+				pb.status=0 
+			<if test="searchCheck != null">
+				<if test="search != null and search.equals('subject_content')">
+				and (pb.subject like '%${keyword}%' or 
+				pb.content like '%${keyword}%') 
+				</if>
 			</if>
-		where 
-			pb.board_type=#{boardType} and 
-			pb.status=0 
-		<if test="searchCheck != null">
-			<if test="search != null and search.equals('subject_content')">
-			and (pb.subject like '%${keyword}%' or 
-			pb.content like '%${keyword}%') 
-			</if>
-		</if>
-			)cd
-			where <![CDATA[ cd.POST_NUM >= #{startRow} and cd.POST_NUM <= #{endRow}]]>
-	</select>
-	
-	<select id="boardCount" resultType="int">
-		select 
-			count(*) 
-		from 
-			post_board
-		where 
-			board_type=#{boardType} and 
-			 status=0
+				)cd
+				where <![CDATA[ cd.POST_NUM >= #{startRow} and cd.POST_NUM <= #{endRow}]]>
+		</select>
+		
+		<select id="boardCount" resultType="int">
+			select 
+				count(*) 
+			from 
+				post_board
+			where 
+				board_type=#{boardType} and 
+				 status=0
 	</select>
 	<select id="searchCount" resultType="int">
 		select 
@@ -131,9 +129,9 @@
 		select 
 			* 
 		from 
-			post_board 
+			post_board
 		where 
-			post_seq = #{post_seq} and 
+			post_seq = #{postSeq} and 
 			status = 0
 	</select>
 	
@@ -142,9 +140,25 @@
 			post_board 
 		set 
 			subject = #{subject} ,
-			content = #{content}
+			content = #{content} ,
+			last_update_dt = sysdate
 		where 
 			post_seq=#{postSeq} and status = 0
 	</update>
-	
+	<update id="cntUpdate">
+		update
+			post_board
+		set
+			read_cnt = read_cnt + 1
+		where
+			post_seq = #{postSeq}
+	</update>
+	<update id="viewDelete">
+		update
+			post_board
+		set
+			status = 1
+		where
+			post_seq = #{postSeq}
+	</update>
 </mapper>

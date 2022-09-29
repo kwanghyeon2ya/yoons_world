@@ -1,28 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-
-
-<script>
+/**
+ * 
+ */
 function WriteCheck(){
-	
+	$("#content").val($(".note-editable p").text());
 	var form = $('#frm')[0];
 	var rtn = false;
 	var formData = new FormData(form);
 	var file = document.getElementById('file').files[0];
 	
 	var rtn = false;
-	$("#content").val() = $(".note-editable p").text();
+	//ì„ì‹œ ì‚¬ìš©
+	
 
 	if($("#subject").val() == ""){
-		alert("Á¦¸ñÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä!!")
+		alert("ì œëª©ì´ ì—†ìŠµë‹ˆë‹¤");
 		return false;
 	}
 	if($("#content").val() == ""){
-		alert("³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+		alert("ë‚´ìš©ì„ ì…ë ¥í•´ì£¼ì„¸ìš”");
 		return false;
 	}
 	
@@ -39,11 +34,11 @@ function WriteCheck(){
 	 	success : function(data){
 			document.frm.writeCheck.value = data;
 				if(document.frm.writeCheck.value == 0){
-					alert("±ÛÀÌ µî·ÏµÇÁö¾Ê¾Ò½À´Ï´Ù")
+					alert("0")
 					rtn = false;
 				}
 				if(document.frm.writeCheck.value == 1){
-					alert("±ÛÀÌ µî·ÏµÇ¾ú½À´Ï´Ù")
+					alert("1")
 					rtn = true;
 				}
 				
@@ -76,11 +71,11 @@ function WriteCheck(){
 	 	success : function(data){
 			document.frm.writeCheck.value = data;
 				if(document.frm.writeCheck.value == 0){
-					alert("±ÛÀÌ µî·ÏµÇÁö¾Ê¾Ò½À´Ï´Ù")
+					alert("æ¹²ï¿½ï¿½ï¿½ ï¿½ê¹…ï¿½ï¿½ï¿½ï§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë“¬ï¿½ï¿½ï¿½ï¿½")
 					rtn = false;
 				}
 				if(document.frm.writeCheck.value == 1){
-					alert("±ÛÀÌ µî·ÏµÇ¾ú½À´Ï´Ù")
+					alert("æ¹²ï¿½ï¿½ï¿½ ï¿½ê¹…ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë“¬ï¿½ï¿½ï¿½ï¿½")
 					rtn = true;
 				}
 				
@@ -91,17 +86,16 @@ function WriteCheck(){
 
 
 function ModCheck(){
-	
+	$("#content").val($(".note-editable").text());
 	var rtn = false;
 	var param = $("#frm").serialize();
 	
-	
 	if($("#subject").val() == ""){
-		alert("Á¦¸ñÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+		alert("write subject");
 		return false;
 	}
 	if($("#content").val() == ""){
-		alert("³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+		alert("write content");
 		return false;
 	}
 	$.ajax({
@@ -115,15 +109,14 @@ function ModCheck(){
 	 	success : function(data){
 			document.frm.modCheck.value = data;
 				if(document.frm.modCheck.value == 0){
-					alert("±ÛÀÌ ¼öÁ¤ µÇÁö¾Ê¾Ò½À´Ï´Ù")
+					alert("0")
 					rtn = false;
 				}
 				if(document.frm.modCheck.value == 1){
-					alert("±ÛÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù")
+					alert("1")
 					rtn = true;
 				}
 			}
 	})
 		return rtn;
 }
-</script>

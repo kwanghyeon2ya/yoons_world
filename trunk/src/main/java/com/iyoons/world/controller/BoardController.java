@@ -17,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import com.iyoons.world.service.BoardService;
+import com.iyoons.world.service.CommentsService;
 import com.iyoons.world.vo.BoardVO;
+import com.iyoons.world.vo.CommentsVO;
 
 @RequestMapping("/board/*")
 @Controller
@@ -26,6 +28,28 @@ public class BoardController {
 	@Autowired
 	public BoardService service;
 	
+	@Autowired
+	public CommentsService cservice;
+
+	public void CommentsList(String pageNum,int postSeq,Model model) {
+		
+		int pageSize = 10;
+		int currentPage = Integer.parseInt(pageNum);
+		int startRow = (currentPage - 1) * pageSize + 1;
+		int endRow = pageSize * currentPage;
+		int count = 0;
+		
+		count = cservice.CommentsCount(postSeq);
+		List<CommentsVO> clist = cservice.getComments(postSeq,startRow,endRow);
+		
+		model.addAttribute("clist",clist);
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("currentPage",currentPage);
+		model.addAttribute("startRow",startRow);
+		model.addAttribute("endRow",endRow);
+		model.addAttribute("count",count);
+		model.addAttribute("pageNum",pageNum);
+	}
 	
 	public void boardList(
 					String search,
@@ -39,9 +63,8 @@ public class BoardController {
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = pageSize * currentPage;
 		int count = 0;
-		System.out.println(boardType);
 		count = service.boardCount(boardType);
-		
+		System.out.println(keyword);
 		if(searchCheck != null && search != null && keyword != null) {
 			count = service.searchCount(search, keyword, searchCheck, startRow, endRow, boardType);
 		}
@@ -74,6 +97,7 @@ public class BoardController {
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
+		
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/free/list";
 	}
@@ -115,10 +139,16 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/view")
-	public String FreeView(@RequestParam(value="postSeq",required=false)String postSeq,Model model) {
+	public String FreeView(@RequestParam(value="postSeq",required=false)String postSeq,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+						Model model) {
 			 
 			 int postSeq2 = Integer.parseInt(postSeq);
 			 BoardVO vo = service.getView(postSeq2);
+			 
+			 service.cntUpdate(postSeq2);
+			 
+			 CommentsList(pageNum,postSeq2,model);
 			 model.addAttribute("vo",vo);
 		return "board/free/view";
 	}
@@ -146,7 +176,7 @@ public class BoardController {
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request
 			) throws Exception {
 		
-		vo.setFileAttachYn("N");;
+		vo.setFileAttachYn("N");
 		if(files != null) vo.setFileAttachYn("Y");
 		
 		int result = service.AddBoard(vo,files);
@@ -162,6 +192,21 @@ public class BoardController {
 	public String PdsWrite() {
 	
 		return "board/pds/write";
+	}
+	@RequestMapping("deleteProc")
+	public String deletePro(String postSeq) {
+			
+			int postSeq2 = Integer.parseInt(postSeq);
+			int result = service.viewDelete(postSeq2);
+	
+		return "";
+	}
+	@RequestMapping("commentsProc")
+	@ResponseBody public String CommentsProc(CommentsVO vo) {
+		
+			int result = cservice.addInsert(vo);
+		
+		return ""+result;
 	}
 	
 }

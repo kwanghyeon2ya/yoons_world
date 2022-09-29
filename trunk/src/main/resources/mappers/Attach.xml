@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.AttachDAO">
+
+	<insert id="insertAttach">
+		insert into board_attach(post_seq,
+								 file_path,
+								 file_size,
+								 file_name,
+								 file_uuid,
+								 file_type,
+								 regr_seq,
+								 first_insert_dt,
+								 updr_seq,
+								 last_update_dt
+									)
+						  values(#{postSeq},
+						  		 #{filePath},
+						  		 #{fileSize},
+						  		 #{fileName},
+						  		 #{fileUuid},
+								 #{fileType},
+								 #{regrSeq},
+								 sysdate,
+								 0,
+								 sysdate
+									)
+	</insert>
+	<delete id="attachDelete">
+		delete from board_attach where post_seq = ${postSeq}
+	</delete>
+	<select id="getAttach" resultType="com.iyoons.world.vo.BoardAttachVO">
+		select
+		 	* 
+		from 
+			board_attach 
+		where 
+			post_seq = #{postSeq}
+	</select>
+	
+</mapper>

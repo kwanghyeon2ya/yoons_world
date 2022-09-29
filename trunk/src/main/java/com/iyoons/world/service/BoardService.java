@@ -14,4 +14,6 @@ public interface BoardService {
 	public int searchCount(String search,String keyword,String searchCheck,int startRow, int endRow, String boardType);
 	public BoardVO getView(int postSeq);
 	public int modView(BoardVO vo);
+	public void cntUpdate(int postSeq);
+	public int viewDelete(int postSeq);
 }

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%
 	response.setHeader("Cache-Control","no-store");
 	response.setHeader("Pragma","no-cache");
@@ -17,12 +16,13 @@
 	<link rel="stylesheet" type="text/css" href="/css/main.css?time=${today}">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">	
 	<script src="/js/browser.min.js"></script>
 	<script src="/js/breakpoints.min.js"></script>	
 	<script src="/js/summernote-lite.js"></script>
 	<script src="/js/summernote-ko-KR.js"></script>
-	
+	<script src="/js/write.js"></script>
+	<script src="/js/Comments.js"></script>
 </head>
 <body>
 	<div id="page-wrapper">
