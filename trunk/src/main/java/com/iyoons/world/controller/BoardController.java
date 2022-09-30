@@ -33,7 +33,7 @@ public class BoardController {
 
 	public void CommentsList(String pageNum,int postSeq,Model model) {
 		
-		int pageSize = 10;
+		int pageSize = 4;
 		int currentPage = Integer.parseInt(pageNum);
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = pageSize * currentPage;
@@ -193,13 +193,14 @@ public class BoardController {
 	
 		return "board/pds/write";
 	}
-	@RequestMapping("deleteProc")
-	public String deletePro(String postSeq) {
+	
+	@RequestMapping(value="deleteProc",method=RequestMethod.POST)
+	public String deleteProc(String postSeq) {
 			
 			int postSeq2 = Integer.parseInt(postSeq);
 			int result = service.viewDelete(postSeq2);
 	
-		return "";
+		return ""+result;
 	}
 	@RequestMapping("commentsProc")
 	@ResponseBody public String CommentsProc(CommentsVO vo) {

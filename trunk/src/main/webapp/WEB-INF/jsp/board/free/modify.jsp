@@ -32,7 +32,7 @@
 					
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					<div class="area-board">
-                    	<span>작성자 : 윤핵관</span>
+                    	<span>작성자 : ${vo.writerName}</span>
 						<div class="area-board-n">
 							<input type="checkbox" id="hidename" name="hidename" />
 							<label for="hidename">익명</label>

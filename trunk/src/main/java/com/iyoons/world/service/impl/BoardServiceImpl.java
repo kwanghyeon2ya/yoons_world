@@ -36,12 +36,12 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private ServletContext sc;
 
-	private String getFolder() {
+	/*private String getFolder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String str = sdf.format(date);
 		return str;
-	}
+	}*/
 	
 	@Transactional
 	@Override
@@ -61,10 +61,10 @@ public class BoardServiceImpl implements BoardService {
 				String uploadFileName = f.getOriginalFilename();
 				String FileType = f.getContentType();
 				bavo.setFileName(uploadFileName.substring(0,f.getOriginalFilename().lastIndexOf(".")));
-				bavo.setFileType(FileType.split("/")[0]);
+				bavo.setFileType(FileType.split("/")[1]);
 				String uuid = UUID.randomUUID().toString();
 				
-				uploadFileName = File.separator + uuid + "_" + getFolder() + uploadFileName;
+				uploadFileName = File.separator + uuid + uploadFileName;
 				
 				bavo.setPostSeq(vo.getPostSeq());
 				bavo.setFileUuid(uuid);
@@ -155,13 +155,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 	@Override
 	public int viewDelete(int postSeq) { //작업중
-		List<BoardAttachVO> list = new ArrayList<>();
+		List<BoardAttachVO> list = adao.getAttach(postSeq);
 		
 		for(BoardAttachVO vo : list) {
-			/*String path = vo.getFilePath+File.separator+vo.getFileUuid()+vo.get*/
+			String path = vo.getFilePath()+File.separator+vo.getFileUuid()+vo.getFileName();
+			File f = new File(path);
+			f.delete();
 		}
-		
-		adao.getAttach(postSeq);
 		
 		adao.deleteAttach(postSeq);
 			

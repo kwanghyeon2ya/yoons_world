@@ -73,7 +73,7 @@
 									<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 								</c:if>
 								<c:if test="${list.firstInsertDt < list.lastUpdateDt}">
-									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />
+									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />&nbsp οτ
 								</c:if>
 							</div>
 							<div class="count">${list.readCnt}</div>
