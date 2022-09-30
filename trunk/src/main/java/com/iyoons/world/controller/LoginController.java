@@ -32,14 +32,14 @@ public class LoginController {
         @ResponseBody 
      	@RequestMapping(value = "/login", method = RequestMethod.POST)
     	public int login(UserVO userVO,HttpSession session) {
-    		
-    		int result = userService.checkUser(userVO);
-    		userVO = userService.findUser(userVO);
-    		if(result != 0) {
-    			session.setAttribute("sid", userVO.getUserId());
-    			session.setAttribute("sname",userVO.getUserName());
-    			session.setAttribute("sseq", userVO.getUserSeq());
-    			session.setMaxInactiveInterval(60*60*72);
+
+    		UserVO userInfo = userService.findUser(userVO);
+    		if(userVO != null ) {
+    			
+    			session.setAttribute("sid", userInfo.getUserId());
+    			session.setAttribute("sname",userInfo.getUserName());
+    			session.setAttribute("sseq", userInfo.getUserSeq());
+    			session.setMaxInactiveInterval(60*60);
     			
     			return 1;
     		}else{
@@ -49,9 +49,6 @@ public class LoginController {
      	
     	@RequestMapping(value = "/logout", method = RequestMethod.GET)
     	public String logout(HttpSession session) {
-    		session.removeAttribute("sid");
-    		session.removeAttribute("sname");
-    		session.removeAttribute("sseq");
     		
     		session.invalidate();
     		return "redirect:/login/loginView";

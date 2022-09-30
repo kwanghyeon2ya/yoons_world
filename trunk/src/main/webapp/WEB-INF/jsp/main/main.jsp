@@ -31,7 +31,7 @@
 						<h1><a href="index.html" id="logo">YOONS WoRLD</a></h1>
 							<nav id="nav">
 								<c:if test="${sessionScope.sid == null}">
-		                            <a class="a-login">로그인하세요</a>
+		                            <a href="/login/loginView" class="a-login">로그인하세요</a>
 									<a href="/main" class="current-page-item">Home</a>
 									<a href="/board/free/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
