@@ -19,6 +19,10 @@ public interface UserDAO {
 	public int checkUser(UserVO userVO);
 	
 	public UserVO findUser(UserVO userVO);
+
+	public List<UserVO> userList();
+
+	public UserVO viewUser(UserVO userVO);
 	
 	
 }
