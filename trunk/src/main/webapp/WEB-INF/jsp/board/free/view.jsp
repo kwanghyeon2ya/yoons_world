@@ -26,25 +26,27 @@
 			<div class="board_write">
 
 				<div class="area-board-title">
-					<span>${vo.subject}</span>
+					제목 : <span>${vo.subject}</span>
 				</div>
 
 				<div class="area-board-info">
 					<input type="hidden" name="wregrSeq" id="wregrSeq" value="${vo.regrSeq}"/>
 					<p>작성자 : ${vo.writerName}</p>
-					<p>
+					
 						<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
 							<fmt:formatDate value="${vo.firstInsertDt}" type="date"
-								pattern="yyyy-MM-dd HH:mm:ss" />
+								pattern="yyyy-MM-dd HH:mm" />
+								&nbsp;&nbsp; 조회 ${vo.readCnt}
 						</c:if>
 						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
 							원글작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
-								pattern="yyyy-MM-dd HH:mm:ss" /><br/>
-							수정된 작성일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
-								pattern="yyyy-MM-dd HH:mm:ss" /> &nbsp;
+								pattern="yyyy-MM-dd" /> &nbsp; /
+							<p>수정된 작성일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
+								pattern="yyyy-MM-dd" /></p>
+								&nbsp;&nbsp; 조회 ${vo.readCnt}
 						</c:if>
-						&nbsp;&nbsp; 조회 ${vo.readCnt}
-					</p>
+							</div>
+						
 				</div>
 
 				<div class="area-board-btn">
@@ -70,7 +72,19 @@
 								작성시간 :
 								<fmt:formatDate value="${clist.firstInsertDt}" type="date"
 									pattern="yyyy-MM-dd" />
-							</h5>
+							</h5><a href="javascript:void(0)" onclick="CocoBox()">ㄴ</a>
+							
+								<div class="area-board-comm">
+									<form id="frm" method="get" style="display:none">
+											<input type="text" name="commContent2" id="commContent2"
+											placeholder="새로운 댓글을 등록해보세요" />
+										<div class="area-board-comm-btn">
+											<input type="hidden" name="postSeq2" id="postSeq2" value="${vo.postSeq}" />
+											<button type="button" onClick="CocoCheck()">등록</button>
+										</div> 
+									</form>
+								</div>
+							
 							<br />
 						</c:forEach>
 					</c:if>
@@ -120,13 +134,10 @@
 						<input type="text" name="commContent" id="commContent"
 							placeholder="새로운 댓글을 등록해보세요" />
 						<div class="area-board-comm-btn">
-							<input type="hidden" name="regrSeq" id="regrSeq" value="${sessionScope.sseq}" />
 							<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />
 							<button type="button" onClick="CommentsCheck()">등록</button>
 						</div>
 					</form>
-
-
 				</div>
 
 				<div class="area-button">

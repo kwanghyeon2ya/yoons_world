@@ -24,10 +24,7 @@
 			<div class="board_write">
 				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return WriteCheck()" enctype="multipart/form-data" class="board-inline">
 					
-					<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
-					<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
 					<input type="hidden" name="boardType" value="0"/>
-					<input type="hidden" name="writeCheck" id="writeCheck" value="0"/>
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">

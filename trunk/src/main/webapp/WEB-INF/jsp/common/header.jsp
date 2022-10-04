@@ -23,7 +23,8 @@
 	<script src="/js/summernote-ko-KR.js"></script>
 	<script src="/js/write.js"></script>
 	<script src="/js/comments.js"></script>
-	<script src="/js/delView.js"></script>
+	<script src="/js/delview.js"></script>
+	<script src="/js/nestedcomm"></script>
 	
 	
 </head>
