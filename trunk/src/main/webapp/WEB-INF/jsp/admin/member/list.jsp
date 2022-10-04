@@ -12,6 +12,21 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
+<script>
+	$("#chkAll").click(function() {
+		if($("#chkAll").is(":checked")) $("input[name=chkMember]").prop("checked", true);
+		else $("input[name=chkMember]").prop("checked", false);
+	});
+	
+	$("input[name=chkMember]").click(function() {
+		var total = $("input[name=chkMember]").length;
+		var checked = $("input[name=chkMember]:checked").length;
+	
+		if(total != checked) $("#chkAll").prop("checked", false);
+		else $("#chkAll").prop("checked", true); 
+	});
+</script>
+
 
 <!-- Main -->
 <div id="main">
@@ -22,6 +37,103 @@
 				<h3>회원리스트</h3>
 			</div>
 			
+			<div class="area-search">
+				<div class="area-search-form">
+					<form action="" method="POST">
+						<select name="search">
+							<option value="member_name">이름</option>
+							<option value="member_id">아이디</option>
+						</select>
+						<input type="text" name="keyword" value=""></input>
+						<button type="submit">검색</button>			
+					</form>
+				</div>
+				
+				<div class="area-button-chk">
+					<button type="button">삭제</button>
+				</div>	
+			</div>
+					
+			
+			<div class="board_member_list">
+				<div class="top">
+					<div class="m_num">번호</div>
+					<div class="m_name">이름</div>
+					<div class="m_id">ID</div>
+					<div class="m_dep">부서</div>
+					<div class="m_status">상태</div>
+					<div class="m_type">구분</div>
+					<div class="m_check"><input type="checkbox" id="chkAll"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+				<div>
+					<div class="m_num">10</div>
+					<div class="m_name">윤선생</div>
+					<div class="m_id">yoons</div>
+					<div class="m_dep">기술개발팀</div>
+					<div class="m_status">활동</div>
+					<div class="m_type">일반</div>
+					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+				</div>
+			</div>
+			
+			<div class="area-button">
+				<button onclick="location.href='/member/regist'">회원등록</button>
+			</div>
+			
+			<div class="board_page">
+				<a href="#" class="num"><</a>
+				<a href="#" class="num on">1</a>
+				<a href="#" class="num">2</a>
+				<a href="#" class="num">3</a>
+				<a href="#" class="num">4</a>
+				<a href="#" class="num">5</a>
+				<a href="#" class="num">></a>
+			</div>			
 			
 		</div>
 	</div>

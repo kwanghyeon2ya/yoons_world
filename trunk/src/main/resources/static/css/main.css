@@ -1590,7 +1590,7 @@ p, span {
 		line-height:30pt;
 		font-size: 1rem;
 	}
-	.area-search button,.area-button button {
+	.area-search button, .area-button button{
 		background-image: -moz-linear-gradient(top, #5b3c88, #5b3c88);
 		background-image: -webkit-linear-gradient(top, #5b3c88, #5b3c88);
 		background-image: -ms-linear-gradient(top, #5b3c88, #5b3c88);
@@ -1609,8 +1609,11 @@ p, span {
 
 	.area-search {
 		margin-bottom: 0.5em;
+		width:100%;
+		display:inline-flex;
 	}
-
+	
+	
 	.area-button {
 		margin-top: 2rem;
 		text-align:center;
@@ -1619,6 +1622,21 @@ p, span {
 		width:auto;
 		padding:0 1.5em;
 	}
+	
+	.area-search-member {
+		width:100%;	
+	}
+	
+	.area-search > div.area-search-form{
+		width:90%;
+		text-align:left;	
+	}
+	
+	.area-search > div.area-button-chk {
+		width:10%;
+		text-align:center;	
+	}
+	
 	.area-img {
 		margin : 2.0em 0;
 		display: block;
@@ -1926,6 +1944,8 @@ p, span {
     color: #fff;
 }
 
+/* 게시판 */
+
 .board_list {
     width: 100%;
     border-top: 0.5px solid #a1a1a1;
@@ -1993,6 +2013,95 @@ p, span {
     width: 10%;
 	text-align: center;
 }
+
+
+/* 회원 리스트*/
+
+.board_member_list {
+    width: 100%;
+    border-top: 0.5px solid #a1a1a1;
+}
+
+.board_member_list > div {
+    border-bottom: 0.5px solid #ddd;
+    font-size: 0;
+    text-align: center;
+}
+
+
+.board_member_list > div.top {
+    text-align : center;
+}
+
+.board_member_list > div.none {
+    width: 100%;
+    text-align:center;
+}
+
+.board_member_list > div:last-child {
+    border-bottom: 0.5px solid #a1a1a1;
+    width: 100%;
+    text-align:center;
+}
+
+.board_member_list > div:last-child.none{
+    width: 100%;
+    text-align:center;
+}
+
+
+.board_member_list > div > div {
+    display: inline-block;
+    padding: 0.8em 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+
+
+.board_member_list .m_num {
+    width: 7%;
+}
+
+.board_member_list .m_name {
+    width: 13%;
+    
+}
+
+.board_member_list .top .title {
+    text-align: center;
+}
+
+.board_member_list .m_id {
+    width: 25%;
+	
+}
+
+.board_member_list .m_dep {
+    width: 25%;
+	
+}
+
+.board_member_list .m_status {
+    width: 10%;
+	
+}
+
+.board_member_list .m_type {
+    width: 10%;
+	
+}
+
+.board_member_list .m_check {
+    width: 10%;
+	
+}
+
+.board_member_list .m_check input[type="checkbox"] {
+    height:auto;
+}
+
+
 
 .board_page {
     margin-top: 1rem;
