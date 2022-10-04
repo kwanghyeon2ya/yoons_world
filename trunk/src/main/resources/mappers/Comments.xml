@@ -17,7 +17,7 @@
 			cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
 	</select>
 	
-	<insert id="AddComments">
+	<insert id="insertComments">
 			insert into comments(comm_seq,
 								 comm_content,
 								 comm_group,
