@@ -25,7 +25,7 @@ import com.iyoons.world.vo.BoardVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	final String realPath = "C:/yoons_world/files";
+	final String REAL_PATH= "C:/yoons_world/files";
 	
 	@Autowired
 	private BoardDAO dao;
@@ -45,19 +45,20 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	@Override
-	public int AddBoard(BoardVO vo,MultipartFile[] files) {
+	public int insertBoard(BoardVO vo,MultipartFile[] files) { // 메서드네이밍
 		List<BoardAttachVO> blist = new ArrayList<>();
-		int result = dao.AddBoard(vo);
+		int result = dao.insertBoard(vo);
 		
 		for(MultipartFile f : files) {
 			if(!f.isEmpty()) {
 				BoardAttachVO bavo = new BoardAttachVO();
 				
-				File uploadPath = new File(realPath);
+				File uploadPath = new File(REAL_PATH);
 				if(!uploadPath.exists()) {
 					uploadPath.mkdir();
 				}
 					
+				System.out.println(f.getName());
 				String uploadFileName = f.getOriginalFilename();
 				String FileType = f.getContentType();
 				bavo.setFileName(uploadFileName.substring(0,f.getOriginalFilename().lastIndexOf(".")));
@@ -69,10 +70,10 @@ public class BoardServiceImpl implements BoardService {
 				bavo.setPostSeq(vo.getPostSeq());
 				bavo.setFileUuid(uuid);
 				bavo.setFileSize(f.getSize());
-				bavo.setFilePath(realPath);
+				bavo.setFilePath(REAL_PATH);
 				bavo.setRegrSeq(vo.getRegrSeq());
 				
-				String savePath = realPath + uploadFileName;
+				String savePath = REAL_PATH + uploadFileName;
 				
 				try {
 					
@@ -117,12 +118,12 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int boardCount(String boardType) {
-		return dao.boardCount(boardType);
+	public int getBoardCount(String boardType) {
+		return dao.getBoardCount(boardType);
 	}
 
 	@Override
-	public int searchCount(String search, 
+	public int getSearchCount(String search, 
 			String keyword, 
 			String searchCheck, 
 			int startRow, 
@@ -136,7 +137,7 @@ public class BoardServiceImpl implements BoardService {
 		map.put("startRow",startRow);
 		map.put("endRow",endRow);
 		map.put("boardType",boardType);
-		return dao.searchCount(map);
+		return dao.getSearchCount(map);
 	}
 
 	@Override
@@ -150,11 +151,11 @@ public class BoardServiceImpl implements BoardService {
 		return dao.modView(vo);
 	}
 	@Override
-	public void cntUpdate(int postSeq) {
-		dao.cntUpdate(postSeq);
+	public void updateCnt(int postSeq) {
+		dao.updateCnt(postSeq);
 	}
 	@Override
-	public int viewDelete(int postSeq) { //작업중
+	public int delView(int postSeq) { //작업중
 		List<BoardAttachVO> list = adao.getAttach(postSeq);
 		
 		for(BoardAttachVO vo : list) {
@@ -165,7 +166,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		adao.deleteAttach(postSeq);
 			
-		return dao.viewDelete(postSeq);
+		return dao.delView(postSeq);
 	}
 	
 }

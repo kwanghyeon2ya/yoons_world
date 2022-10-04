@@ -31,7 +31,7 @@ public class BoardController {
 	@Autowired
 	public CommentsService cservice;
 
-	public void CommentsList(String pageNum,int postSeq,Model model) {
+	public void commentsList(String pageNum,int postSeq,Model model) {
 		
 		int pageSize = 4;
 		int currentPage = Integer.parseInt(pageNum);
@@ -63,10 +63,10 @@ public class BoardController {
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = pageSize * currentPage;
 		int count = 0;
-		count = service.boardCount(boardType);
+		count = service.getBoardCount(boardType);
 		System.out.println(keyword);
 		if(searchCheck != null && search != null && keyword != null) {
-			count = service.searchCount(search, keyword, searchCheck, startRow, endRow, boardType);
+			count = service.getSearchCount(search, keyword, searchCheck, startRow, endRow, boardType);
 		}
 		
 		List<BoardVO> boardList = null;
@@ -91,7 +91,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/list")
-	public String FreeList(
+	public String getFreeList(
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
@@ -133,22 +133,22 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="modifyProc",method=RequestMethod.POST)
-	@ResponseBody public String modifyProc(BoardVO vo) {
+	@ResponseBody public String modViewProc(BoardVO vo) {
 		int result = service.modView(vo);
 		return ""+result;
 	}
 	
 	@RequestMapping("free/view")
-	public String FreeView(@RequestParam(value="postSeq",required=false)String postSeq,
+	public String getFreeView(@RequestParam(value="postSeq",required=false)String postSeq,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
 						Model model) {
 			 
 			 int postSeq2 = Integer.parseInt(postSeq);
 			 BoardVO vo = service.getView(postSeq2);
 			 
-			 service.cntUpdate(postSeq2);
+			 service.updateCnt(postSeq2);
 			 
-			 CommentsList(pageNum,postSeq2,model);
+			 commentsList(pageNum,postSeq2,model);
 			 model.addAttribute("vo",vo);
 		return "board/free/view";
 	}
@@ -177,9 +177,9 @@ public class BoardController {
 			) throws Exception {
 		
 		vo.setFileAttachYn("N");
-		if(files != null) vo.setFileAttachYn("Y");
+		if(files.equals(null)) vo.setFileAttachYn("Y");
 		
-		int result = service.AddBoard(vo,files);
+		int result = service.insertBoard(vo,files);
 		return result+"";
 	}
 	
@@ -198,15 +198,15 @@ public class BoardController {
 	public String deleteProc(String postSeq) {
 			
 			int postSeq2 = Integer.parseInt(postSeq);
-			int result = service.viewDelete(postSeq2);
+			int result = service.delView(postSeq2);
 	
 		return ""+result;
 	}
-	@RequestMapping("commentsProc")
+	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
 	@ResponseBody public String CommentsProc(CommentsVO vo) {
-		
+	
 			int result = cservice.addInsert(vo);
-		
+			System.out.println(result);
 		return ""+result;
 	}
 	

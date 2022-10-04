@@ -12,7 +12,7 @@ function CommentsCheck(){
 	}
 	$.ajax({
 		url : '/board/commentsProc',
-		type : 'GET',
+		type : 'POST',
 		data : $("#frm").serialize(),
 		dataType : "json",
 		async : false,
@@ -36,8 +36,9 @@ function CommentsCheck(){
 
 function DeleteCheck(){
 	var rtn = false;
-	var regrSeq = document.getElementById("regrSeq").value
-	var wregrSeq = document.getElementById("wregrSeq").value
+	var regrSeq = document.getElementById("regrSeq").value;
+	var wregrSeq = document.getElementById("wregrSeq").value;
+	
 	if(window.confirm("정말로 삭제하시겠습니까?")){
 		if(regrSeq == wregrSeq){
 				$.ajax({

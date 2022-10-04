@@ -22,7 +22,7 @@
 	<result property="lastUpdateDt" column="LAST_UPDATE_DT" />
 </resultMap>
 
-	<insert id="AddBoard">
+	<insert id="insertBoard">
 			insert into post_board( post_seq,
 									writer_name,
 									subject,
@@ -72,7 +72,7 @@
 				post_board pb
 				<if test="search != null and search.equals('comments')">
 			inner join 
-			(select DISTINCT
+				(select DISTINCT
 				c1.post_seq from comments c1 
 			where 
 				c1.comm_content like '%${keyword}%')ic 
@@ -88,51 +88,62 @@
 				</if>
 			</if>
 				)cd
-				where <![CDATA[ cd.POST_NUM >= #{startRow} and cd.POST_NUM <= #{endRow}]]>
+			where 
+				cd.POST_NUM &gt;= #{startRow} and cd.POST_NUM &lt;= #{endRow}
 		</select>
 		
-		<select id="boardCount" resultType="int">
-			select 
-				count(*) 
-			from 
-				post_board
-			where 
-				board_type=#{boardType} and 
-				 status=0
+	<select id="getBoardCount" resultType="int">
+		select 
+			count(post_seq) 
+		from 
+			post_board
+		where 
+			board_type=#{boardType} and 
+			 status=0
 	</select>
-	<select id="searchCount" resultType="int">
+	<select id="getSearchCount" resultType="int">
 		select 
 			count(*) 
-		from
-		(select 
+		from (select 
 			pb.*
 		from 
 			post_board pb
 		 <if test="searchCheck != null and search.equals('comments')">
-		 inner join 
-		 (select
-		  	c1.post_seq 
-		  from 
-		  	comments c1
-		  where 
-		  	c1.comm_content like '%${keyword}%')ic		 
-		 on 
-		 	pb.post_seq = ic.post_seq</if> 
+		inner join (
+			select
+			  c1.post_seq 
+			from 
+			  comments c1
+			where 
+			  c1.comm_content like '%${keyword}%')ic		 
+		 	on 
+		 	  pb.post_seq = ic.post_seq</if> 
 		 where pb.status = 0 and pb.board_type=#{boardType}
 		 <if test="searchCheck != null and search != null and search.equals('subject_content')">
-			and (pb.subject like '%${keyword}%' or 
-			pb.content like '%${keyword}%') 		 
+			and (pb.subject like '%${keyword}%' 
+				or pb.content like '%${keyword}%') 		 
 		 </if>
 		 )
 	</select>
 	<select id="getView" resultType="com.iyoons.world.vo.BoardVO">
 		select 
-			* 
+			post_seq,
+			writer_name,
+			subject,
+			content,
+			read_cnt,
+			board_type,
+			file_attach_yn,
+			board_fix_yn,
+			regr_seq,
+			first_insert_dt,
+			updr_seq,
+			last_update_dt
 		from 
 			post_board
 		where 
-			post_seq = #{postSeq} and 
-			status = 0
+			post_seq = #{postSeq} 
+			and status = 0
 	</select>
 	
 	<update id="modView">
@@ -145,7 +156,7 @@
 		where 
 			post_seq=#{postSeq} and status = 0
 	</update>
-	<update id="cntUpdate">
+	<update id="updateCnt">
 		update
 			post_board
 		set
@@ -153,12 +164,12 @@
 		where
 			post_seq = #{postSeq}
 	</update>
-	<update id="viewDelete">
+	<update id="delView">
 		update
 			post_board
 		set
 			status = 1
 		where
-			post_seq = #{postSeq}
+			ost_seq = #{postSeq} and regrSeq = ${regrSeq}
 	</update>
 </mapper>

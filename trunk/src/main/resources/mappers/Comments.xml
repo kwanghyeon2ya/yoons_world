@@ -14,7 +14,7 @@
 		where 
 			post_seq = #{postSeq} and status = 0)cd 
 		where	
-			<![CDATA[ cd.r >= #{startRow} and cd.r <= #{endRow}]]>
+			cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
 	</select>
 	
 	<insert id="AddComments">

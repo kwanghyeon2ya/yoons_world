@@ -13,12 +13,13 @@ import com.iyoons.world.vo.BoardVO;
 @Mapper
 public interface BoardDAO {
 	
-	public int AddBoard(BoardVO vo); 
-	public int boardCount(String boardType);
+	public int insertBoard(BoardVO vo); 
+	public int getBoardCount(String boardType);
 	public List<BoardVO> getBoardList(HashMap<String, Object> map);
-	public int searchCount(HashMap<String,Object> map);
+	public int getSearchCount(HashMap<String,Object> map);
 	public BoardVO getView(int postSeq);
 	public int modView(BoardVO vo);
-	public void cntUpdate(int postSeq);
-	public int viewDelete(int postSeq);
+	public void updateCnt(int postSeq);
+	public int delView(int postSeq);
+	
 }

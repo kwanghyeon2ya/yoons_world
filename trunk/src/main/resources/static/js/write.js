@@ -6,8 +6,6 @@ function WriteCheck(){
 	var form = $('#frm')[0];
 	var rtn = false;
 	var formData = new FormData(form);
-	var file = document.getElementById('file').files[0];
-	
 	var rtn = false;
 	//임시 사용
 	
@@ -99,7 +97,7 @@ function ModCheck(){
 		return false;
 	}
 	$.ajax({
-		url : '/board/modifyProc',
+		url : '/board/modViewProc',
 		type : 'POST',
 		data : $("#frm").serialize(),
 		dataType : "json",
