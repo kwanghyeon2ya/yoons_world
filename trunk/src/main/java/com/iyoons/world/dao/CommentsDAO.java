@@ -12,8 +12,8 @@ import com.iyoons.world.vo.CommentsVO;
 @Mapper
 public interface CommentsDAO {
 
-	public int AddComments(CommentsVO vo);
+	public int insertComments(CommentsVO vo);
 	public List<CommentsVO> getComments(@Param("postSeq") int postSeq,@Param("startRow") int startRow,@Param("endRow") int endRow);
-	public int CommentsCount(int postSeq);
+	public int getCommentsCount(int postSeq);
 	
 }

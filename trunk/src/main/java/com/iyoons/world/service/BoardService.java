@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.vo.BoardVO;
+import com.iyoons.world.vo.CommentsVO;
 
 public interface BoardService {
 	
@@ -15,5 +16,5 @@ public interface BoardService {
 	public BoardVO getView(int postSeq);
 	public int modView(BoardVO vo);
 	public void updateCnt(int postSeq);
-	public int delView(int postSeq);
+	public int delView(BoardVO vo);
 }

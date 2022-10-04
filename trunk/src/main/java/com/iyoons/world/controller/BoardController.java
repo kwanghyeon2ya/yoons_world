@@ -3,6 +3,7 @@ package com.iyoons.world.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +40,7 @@ public class BoardController {
 		int endRow = pageSize * currentPage;
 		int count = 0;
 		
-		count = cservice.CommentsCount(postSeq);
+		count = cservice.getCommentsCount(postSeq);
 		List<CommentsVO> clist = cservice.getComments(postSeq,startRow,endRow);
 		
 		model.addAttribute("clist",clist);
@@ -173,11 +174,16 @@ public class BoardController {
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
 	@ResponseBody public String FreeWriteCheck(
 			@RequestParam(value="file",required=false) MultipartFile[] files,
-			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request
+			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
+			HttpSession session
 			) throws Exception {
 		
+		String name = (String)session.getAttribute("sname");
+		int sseq = (Integer)session.getAttribute("sseq");
+		
+		vo.setWriterName(name);
+		vo.setRegrSeq(sseq);
 		vo.setFileAttachYn("N");
-		if(files.equals(null)) vo.setFileAttachYn("Y");
 		
 		int result = service.insertBoard(vo,files);
 		return result+"";
@@ -195,18 +201,25 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="deleteProc",method=RequestMethod.POST)
-	public int deleteProc(String postSeq) {
+	@ResponseBody public int deleteProc(BoardVO vo,HttpSession session) {
 			
-			int postSeq2 = Integer.parseInt(postSeq);
-			int result = service.delView(postSeq2);
-	
-		return result;
+			int sseq = (Integer)session.getAttribute("sseq");
+			if(sseq == vo.getRegrSeq()) { 
+				service.delView(vo);
+				return 1;
+			}
+		return 0;
 	}
 	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
-	@ResponseBody public int CommentsProc(CommentsVO vo) {
-	
-			int result = cservice.addInsert(vo);
-			System.out.println(result);
+	@ResponseBody public int CommentsProc(CommentsVO vo,HttpSession session) {
+		
+		int sseq = (Integer) session.getAttribute("sseq");
+		System.out.println(sseq);
+		System.out.println(vo.getCommContent());
+		vo.setRegrSeq(sseq);
+		
+		int result = cservice.insertComments(vo);
+		System.out.println(result);
 		return result;
 	}
 	

@@ -103,19 +103,19 @@
 	</select>
 	<select id="getSearchCount" resultType="int">
 		select 
-			count(*) 
+			count(post_seq) 
 		from (select 
-			pb.*
+			pb.post_seq
 		from 
 			post_board pb
 		 <if test="searchCheck != null and search.equals('comments')">
 		inner join (
-			select
-			  c1.post_seq 
+			select DISTINCT
+			  	c1.post_seq 
 			from 
-			  comments c1
+			 	comments c1
 			where 
-			  c1.comm_content like '%${keyword}%')ic		 
+				c1.comm_content like '%${keyword}%')ic		 
 		 	on 
 		 	  pb.post_seq = ic.post_seq</if> 
 		 where pb.status = 0 and pb.board_type=#{boardType}
@@ -170,6 +170,6 @@
 		set
 			status = 1
 		where
-			ost_seq = #{postSeq} and regrSeq = ${regrSeq}
+			post_seq = #{postSeq} and regr_seq = #{regrSeq}
 	</update>
 </mapper>

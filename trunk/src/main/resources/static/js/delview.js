@@ -12,11 +12,12 @@ function DeleteCheck(){
 					regrSeq : wregrSeq
 					};
 	
-	if(window.confirm("정말로 삭제하시겠습니까?")){
+	if(window.confirm("delete Confirm")){
+		console.log(seqParam);
+		console.log("asdasd"+JSON.stringify(seqParam));
 				$.ajax({
-					url : '/board/deleteProc,
-					contentType: "application/json; charset=EUC-KR",
-					data : JSON.stringify(seqParam),
+					url : '/board/deleteProc',
+					data : seqParam,
 					type : 'POST',
 					async : false,
 				/* processData: false, */
@@ -35,6 +36,6 @@ function DeleteCheck(){
 								break;
 							}
 				 		}
-				)}
+				})
 	}
 }

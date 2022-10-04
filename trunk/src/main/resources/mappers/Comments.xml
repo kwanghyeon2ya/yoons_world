@@ -8,7 +8,17 @@
 	<select id="getComments" resultType="com.iyoons.world.vo.CommentsVO">
 		select cd.* from
 		(select
-			c.*,rownum r 
+			c.comm_seq,
+			c.comm_content,
+			c.comm_group,
+			c.comm_level,
+			c.post_seq,
+			c.regr_seq,
+			c.first_insert_dt,
+			c.updr_seq,
+			c.last_update_dt,
+			c.status,
+			rownum r 
 		from
 			(select * from comments order by first_insert_dt desc)c
 		where 
@@ -36,12 +46,12 @@
 				 		  		 #{postSeq},
 				 		  		 #{regrSeq},
 				 		  		 sysdate,
-				 		  		 #{updrSeq},
+				 		  		 0,
 				 		  		 sysdate,
 				 		  		 0
 				 					)
 		</insert>
-	<select id="CommentsCount" resultType="int">
+	<select id="getCommentsCount" resultType="int">
 		select count(*) from comments where post_seq = #{postSeq} and status = 0
 	</select>
 </mapper>

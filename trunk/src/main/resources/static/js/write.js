@@ -11,11 +11,11 @@ function WriteCheck(){
 	
 
 	if($("#subject").val() == ""){
-		alert("제목이 없습니다");
+		alert("write title!!");
 		return false;
 	}
 	if($("#content").val() == ""){
-		alert("내용을 입력해주세요");
+		alert("write content!!");
 		return false;
 	}
 	
@@ -30,23 +30,23 @@ function WriteCheck(){
 		processData: false,
 		contentType: false,
 	 	success : function(data){
-			document.frm.writeCheck.value = data;
-				if(document.frm.writeCheck.value == 0){
-					alert("0")
-					rtn = false;
-				}
-				if(document.frm.writeCheck.value == 1){
-					alert("1")
-					rtn = true;
-				}
-				
-			},
+		 		switch(Number(data)){
+		 		case 0:
+		 			alert("not written post");
+		 			break;
+		 		case 1:
+	 				alert("written post");
+	 				rtn = true;
+		 		default:
+		 			break;
+	 			}
+	 		},
 			error : function (a1, a2, a3){
 				console.log(a1, a2, a3);
 			}
 		});  
 		console.log("form :"+form)
-	return rtn;	
+		return rtn;
 }
 
 /* $("#btnSubmit").click(function (event) {

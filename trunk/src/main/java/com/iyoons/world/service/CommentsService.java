@@ -7,7 +7,7 @@ import com.iyoons.world.vo.CommentsVO;
 public interface CommentsService {
 	
 	public List<CommentsVO> getComments(int postSeq, int startRow, int endRow);
-	public int addInsert(CommentsVO vo);
-	public int CommentsCount(int postSeq);
+	public int insertComments(CommentsVO vo);
+	public int getCommentsCount(int postSeq);
 	
 }

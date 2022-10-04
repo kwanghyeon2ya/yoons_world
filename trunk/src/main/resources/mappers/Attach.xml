@@ -29,8 +29,13 @@
 								 sysdate
 									)
 	</insert>
-	<delete id="attachDelete">
-		delete from board_attach where post_seq = ${postSeq}
+	<delete id="delAttach">
+		delete
+		from 
+			board_attach 
+		where 
+			post_seq = #{postSeq} 
+			and regr_seq = #{regrSeq}
 	</delete>
 	<select id="getAttach" resultType="com.iyoons.world.vo.BoardAttachVO">
 		select
@@ -43,7 +48,7 @@
 		 	regr_seq,
 		 	first_insert_dt,
 		 	updr_seq,
-		 	last_update,dt
+		 	last_update_dt
 		from 
 			board_attach 
 		where 

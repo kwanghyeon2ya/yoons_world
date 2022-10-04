@@ -21,13 +21,13 @@ public class CommentsServicveImpl implements CommentsService {
 	}
 
 	@Override
-	public int addInsert(CommentsVO vo) {
-		return dao.AddComments(vo);
+	public int insertComments(CommentsVO vo) {
+		return dao.insertComments(vo);
 	}
 
 	@Override
-	public int CommentsCount(int postSeq) {
-			return dao.CommentsCount(postSeq);
+	public int getCommentsCount(int postSeq) {
+			return dao.getCommentsCount(postSeq);
 	}
 
 	

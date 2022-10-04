@@ -21,6 +21,7 @@ import com.iyoons.world.dao.BoardDAO;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
+import com.iyoons.world.vo.CommentsVO;
 
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
@@ -45,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	@Override
-	public int insertBoard(BoardVO vo,MultipartFile[] files) { // 메서드네이밍
+	public int insertBoard(BoardVO vo,MultipartFile[] files) { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
 		int result = dao.insertBoard(vo);
 		
@@ -98,7 +99,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> getBoardList(
+	public List<BoardVO> getBoardList( //게시글 리스트 불러오기
 			String search,
 			String keyword,
 			String searchCheck,
@@ -117,7 +118,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getBoardCount(String boardType) {
+	public int getBoardCount(String boardType) { //게시글의 총 갯수
 		return dao.getBoardCount(boardType);
 	}
 
@@ -127,7 +128,7 @@ public class BoardServiceImpl implements BoardService {
 			String searchCheck, 
 			int startRow, 
 			int endRow,
-			String boardType) {
+			String boardType) { //글 검색 후 검색된 글의 총 갯수
 		
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("search",search);
@@ -140,33 +141,35 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardVO getView(int postSeq) {
-		
+	public BoardVO getView(int postSeq) { //게시글 읽기
 		return dao.getView(postSeq);
 	}
 
 	@Override
-	public int modView(BoardVO vo) {
+	public int modView(BoardVO vo) { //게시글 수정
 		return dao.modView(vo);
 	}
 	@Override
-	public void updateCnt(int postSeq) {
+	public void updateCnt(int postSeq) { //게시글 조회수 업데이트
 		dao.updateCnt(postSeq);
 	}
 	
+	/**
+	 * tdstszgsszd
+	 */
 	@Transactional
 	@Override
-	public int delView(int postSeq) { //작업중
-		List<BoardAttachVO> list = adao.getAttach(postSeq);
-		
-		for(BoardAttachVO vo : list) {
-			String path = vo.getFilePath()+File.separator+vo.getFileUuid()+vo.getFileName()+"."+vo.getFileType();
+	public int delView(BoardVO vo) { //게시글 삭제
+		List<BoardAttachVO> list = adao.getAttach(vo.getPostSeq());
+		System.out.println(vo);
+		for(BoardAttachVO avo : list) {
+			String path = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 			File f = new File(path);
 			f.delete();
 		}
-		adao.deleteAttach(postSeq);
-			
-		return dao.delView(postSeq);
+		adao.delAttach(vo.getPostSeq(),vo.getRegrSeq());
+		
+		return dao.delView(vo);
 	}
 	
 }

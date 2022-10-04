@@ -12,8 +12,8 @@ function CommentsCheck(){
 	$.ajax({
 		url : '/board/commentsProc',
 		type : 'POST',
-		data : $("#frm").serialize(),
-		contentType: "application/json; charset=EUC-KR",
+		data : param,
+		contentType: 'application/x-www-form-urlencoded; charset=euc-kr',
 		dataType : "json",
 		async : false,
 	/* processData: false, */
@@ -26,7 +26,7 @@ function CommentsCheck(){
 				case 1:
 					alert("written complete")
 					location.reload(true);
-	
+					
 				default:
 					break;
 				}
