@@ -58,7 +58,6 @@ public class BoardServiceImpl implements BoardService {
 					uploadPath.mkdir();
 				}
 					
-				System.out.println(f.getName());
 				String uploadFileName = f.getOriginalFilename();
 				String FileType = f.getContentType();
 				bavo.setFileName(uploadFileName.substring(0,f.getOriginalFilename().lastIndexOf(".")));
@@ -154,16 +153,17 @@ public class BoardServiceImpl implements BoardService {
 	public void updateCnt(int postSeq) {
 		dao.updateCnt(postSeq);
 	}
+	
+	@Transactional
 	@Override
 	public int delView(int postSeq) { //작업중
 		List<BoardAttachVO> list = adao.getAttach(postSeq);
 		
 		for(BoardAttachVO vo : list) {
-			String path = vo.getFilePath()+File.separator+vo.getFileUuid()+vo.getFileName();
+			String path = vo.getFilePath()+File.separator+vo.getFileUuid()+vo.getFileName()+"."+vo.getFileType();
 			File f = new File(path);
 			f.delete();
 		}
-		
 		adao.deleteAttach(postSeq);
 			
 		return dao.delView(postSeq);

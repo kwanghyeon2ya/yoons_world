@@ -22,7 +22,10 @@
 	<script src="/js/summernote-lite.js"></script>
 	<script src="/js/summernote-ko-KR.js"></script>
 	<script src="/js/write.js"></script>
-	<script src="/js/Comments.js"></script>
+	<script src="/js/comments.js"></script>
+	<script src="/js/delView.js"></script>
+	
+	
 </head>
 <body>
 	<div id="page-wrapper">

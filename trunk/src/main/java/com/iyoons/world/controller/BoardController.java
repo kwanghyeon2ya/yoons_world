@@ -195,19 +195,19 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="deleteProc",method=RequestMethod.POST)
-	public String deleteProc(String postSeq) {
+	public int deleteProc(String postSeq) {
 			
 			int postSeq2 = Integer.parseInt(postSeq);
 			int result = service.delView(postSeq2);
 	
-		return ""+result;
+		return result;
 	}
 	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
-	@ResponseBody public String CommentsProc(CommentsVO vo) {
+	@ResponseBody public int CommentsProc(CommentsVO vo) {
 	
 			int result = cservice.addInsert(vo);
 			System.out.println(result);
-		return ""+result;
+		return result;
 	}
 	
 }

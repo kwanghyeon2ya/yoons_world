@@ -38,8 +38,10 @@
 								pattern="yyyy-MM-dd HH:mm:ss" />
 						</c:if>
 						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
-							<fmt:formatDate value="${vo.lastUpdateDt}" type="date"
-								pattern="yyyy-MM-dd HH:mm:ss" /> &nbsp; 訂
+							원글작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
+								pattern="yyyy-MM-dd HH:mm:ss" /><br/>
+							수정된 작성일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
+								pattern="yyyy-MM-dd HH:mm:ss" /> &nbsp;
 						</c:if>
 						&nbsp;&nbsp; 조회 ${vo.readCnt}
 					</p>
@@ -73,9 +75,8 @@
 						</c:forEach>
 					</c:if>
 					<div class="area-board-comm-btn">
-						<!-- <button type="button">댓글</button> -->
+						<button type="button">댓글</button>
 					</div>
-
 
 
 					<c:if test="${count > 0}">
@@ -114,8 +115,6 @@
 
 
 
-
-
 				<div class="area-board-comm">
 					<form id="frm" method="get">
 						<input type="text" name="commContent" id="commContent"
@@ -123,8 +122,6 @@
 						<div class="area-board-comm-btn">
 							<input type="hidden" name="regrSeq" id="regrSeq" value="${sessionScope.sseq}" />
 							<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />
-							 
-								<input type="hidden" name="comCheck" id="comCheck" value="0" />
 							<button type="button" onClick="CommentsCheck()">등록</button>
 						</div>
 					</form>

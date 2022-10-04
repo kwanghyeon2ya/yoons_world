@@ -12,8 +12,8 @@
 <c:if test="${sessionScope.sid == null}">
 	<script>
 		alert("로그인이 필요합니다")
+		window.location.href="/login/loginView";
 	</script>
-	<c:redirect url="/member/login/login"/>	
 </c:if>
 
 <%-- <c:if test="${count > 0}">
@@ -31,7 +31,7 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>공지사항</h3>
+				<h3>자유게시판</h3>
 			</div>
 			
 			<form action="/board/free/list" method="get">
@@ -73,7 +73,7 @@
 									<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 								</c:if>
 								<c:if test="${list.firstInsertDt < list.lastUpdateDt}">
-									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />&nbsp 訂
+									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />&nbsp <!--수정필요-->
 								</c:if>
 							</div>
 							<div class="count">${list.readCnt}</div>
