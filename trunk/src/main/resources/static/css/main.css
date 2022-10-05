@@ -1,4 +1,4 @@
-@charset "euc-kr";
+@charset "utf-8";
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR");
 
@@ -1900,7 +1900,7 @@ p, span {
 			color: #A6A88F;
 		}
 
-/*°Ô½ÃÆÇ*/
+/*ê²Œì‹œíŒ*/
 .board_wrap {
     width: 1000px;
     margin: 100px auto;
@@ -1944,7 +1944,7 @@ p, span {
     color: #fff;
 }
 
-/* °Ô½ÃÆÇ */
+/* ê²Œì‹œíŒ */
 
 .board_list {
     width: 100%;
@@ -2015,7 +2015,7 @@ p, span {
 }
 
 
-/* È¸¿ø ¸®½ºÆ®*/
+/* íšŒì› ë¦¬ìŠ¤íŠ¸*/
 
 .board_member_list {
     width: 100%;

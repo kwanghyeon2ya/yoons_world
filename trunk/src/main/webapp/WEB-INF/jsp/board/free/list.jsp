@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
@@ -11,14 +11,14 @@
 
 <c:if test="${sessionScope.sid == null}">
 	<script>
-		alert("·Î±×ÀÎÀÌ ÇÊ¿äÇÕ´Ï´Ù")
+		alert("ë¡œê·¸ì¸ì´ í•„ìš”í•©ë‹ˆë‹¤")
 		window.location.href="/login/loginView";
 	</script>
 </c:if>
 
 <%-- <c:if test="${count > 0}">
     <c:if test="${searchCheck != null && searchCheck != ''}">
-    °Ë»öµÈ Å°¿öµå "${keyword}"<br/>
+    ê²€ìƒ‰ëœ í‚¤ì›Œë“œ "${keyword}"<br/>
     </c:if>
 </c:if> --%>
 
@@ -31,34 +31,34 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>ÀÚÀ¯°Ô½ÃÆÇ</h3>
+				<h3>ìžìœ ê²Œì‹œíŒ</h3>
 			</div>
 			
 			<form action="/board/free/list" method="get">
 			<input type="hidden" name="searchCheck" value="1"/>
 				<div class="area-search">
 					<select name="search">
-						<option value="subject_content">Á¦¸ñ+³»¿ë</option>
-						<option value="comments">´ñ±Û</option>
+						<option value="subject_content">ì œëª©+ë‚´ìš©</option>
+						<option value="comments">ëŒ“ê¸€</option>
 					</select>
 					<input type="text" name="keyword" value="${keyword}"></input>
-					<button type="submit">°Ë»ö</button>
+					<button type="submit">ê²€ìƒ‰</button>
 				</div>					
 			</form>
 				
 			
 			<div class="board_list">
 				<div class="top">
-					<div class="num">¹øÈ£</div>
-					<div class="title">Á¦¸ñ</div>
-					<div class="writer">±Û¾´ÀÌ</div>
-					<div class="date">ÀÛ¼ºÀÏ</div>
-					<div class="count">Á¶È¸</div>
+					<div class="num">ë²ˆí˜¸</div>
+					<div class="title">ì œëª©</div>
+					<div class="writer">ê¸€ì“´ì´</div>
+					<div class="date">ìž‘ì„±ì¼</div>
+					<div class="count">ì¡°íšŒ</div>
 				</div>
 				
 				<c:if test="${count == 0}">
 					<div style="width:100%; text-align:center;">
-						<div>ÀÛ¼ºµÈ ±ÛÀÌ ¾ø½À´Ï´Ù</div>
+						<div>ìž‘ì„±ëœ ê¸€ì´ ì—†ìŠµë‹ˆë‹¤</div>
 					</div>
 				</c:if>
 				
@@ -73,7 +73,7 @@
 									<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 								</c:if>
 								<c:if test="${list.firstInsertDt < list.lastUpdateDt}">
-									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />&nbsp <!--¼öÁ¤ÇÊ¿ä-->
+									<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />&nbsp <!--ìˆ˜ì •í•„ìš”-->
 								</c:if>
 							</div>
 							<div class="count">${list.readCnt}</div>
@@ -83,7 +83,7 @@
 			</div>
 							
 			<div class="area-button">
-				<button onclick="window.location='/board/free/write'">±Û¾²±â</button>
+				<button onclick="window.location='/board/free/write'">ê¸€ì“°ê¸°</button>
 			</div>
 			
 			

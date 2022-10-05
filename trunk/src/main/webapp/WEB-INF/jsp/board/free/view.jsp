@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="java.util.List"%>
@@ -21,36 +21,36 @@
 		<div class="col-12">
 
 			<div class="title-page">
-				<h3>ÀÚÀ¯°Ô½ÃÆÇ</h3>
+				<h3>ììœ ê²Œì‹œíŒ</h3>
 			</div>
 
 			<div class="board_write">
 
 				<div class="area-board-title">
-					Á¦¸ñ : <span>${vo.subject}</span>
+					ì œëª© : <span>${vo.subject}</span>
 				</div>
 
 				<div class="area-board-info">
 					<input type="hidden" name="wregrSeq" id="wregrSeq" value="${vo.regrSeq}"/>
-					<p>ÀÛ¼ºÀÚ : ${vo.writerName}</p>
+					<p>ì‘ì„±ì : ${vo.writerName}</p>
 					
 						<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
 							<fmt:formatDate value="${vo.firstInsertDt}" type="date"
 								pattern="yyyy-MM-dd HH:mm" />
-								&nbsp;&nbsp; Á¶È¸ ${vo.readCnt}
+								&nbsp;&nbsp; ì¡°íšŒ ${vo.readCnt}
 						</c:if>
 						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
-							¿ø±ÛÀÛ¼ºÀÏ : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
+							ì›ê¸€ì‘ì„±ì¼ : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
 								pattern="yyyy-MM-dd" /> &nbsp; /
-							<p>¼öÁ¤µÈ ÀÛ¼ºÀÏ : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
+							<p>ìˆ˜ì •ëœ ì‘ì„±ì¼ : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
 								pattern="yyyy-MM-dd" /></p>
-								&nbsp;&nbsp; Á¶È¸ ${vo.readCnt}
+								&nbsp;&nbsp; ì¡°íšŒ ${vo.readCnt}
 						</c:if>
 							</div>
 							
 						<c:if test="${!empty anlist}">
 							<details open>
-							    <summary>Ã·ºÎÆÄÀÏ</summary>
+							    <summary>ì²¨ë¶€íŒŒì¼</summary>
 								<c:forEach var="dlist" items="${anlist}">
 									<a href="http://localhost:8080/files/${dlist.fullPath}" download>${dlist.fileName}.${dlist.fileType}</a><br/>			
 								</c:forEach> 
@@ -62,38 +62,38 @@
 				<div class="area-board-btn">
 					<c:if test="${sessionScope.sseq == vo.regrSeq}">
 						<button type="button"
-							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">¼öÁ¤</button>
+							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">ìˆ˜ì •</button>
 						<button type="button"
-							onclick="DeleteCheck()">»èÁ¦</button>
+							onclick="DeleteCheck()">ì‚­ì œ</button>
 					</c:if>
 				</div>
 				
 				<div class="area-board-cont">${vo.content}</div>
 
-				<h4>´ñ±Û ¼ö : ${count}</h4>
+				<h4>ëŒ“ê¸€ ìˆ˜ : ${count}</h4>
 
 				<div class="area-board-comm">
 					<c:if test="${count > 0}">
 						<c:forEach var="clist" items="${clist}">
 						<hr align="left" style="border:solid 1px black; width:150px;">
 							
-							[ÀÛ¼ºÀÚ] : ${clist.regrSeq}<br/>
+							[ì‘ì„±ì] : ${clist.regrSeq}<br/>
 							${clist.commContent}<br/>
 							<h5>
-								ÀÛ¼º½Ã°£ :
+								ì‘ì„±ì‹œê°„ :
 								<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 							</h5>
-								<a href="javascript:void(0)" onclick="CocoBox()">´ñ±Û ³²±â±â</a>
+								<a href="javascript:void(0)" onclick="CocoBox()">ëŒ“ê¸€ ë‚¨ê¸°ê¸°</a>
 							<br />
 						
 						<div class="area-board-comm">
 									<form id="frm2" method="get" style="display:none">
 											<input type="hidden" id="commSeq" value="${clist.commSeq}"/>
 											<input type="text" name="commContent2" id="commContent2"
-											placeholder="´ñ±ÛÀÇ ÀÇ°ßÀ» ³²°Üº¸¼¼¿ä" />
+											placeholder="ëŒ“ê¸€ì˜ ì˜ê²¬ì„ ë‚¨ê²¨ë³´ì„¸ìš”" />
 										<div class="area-board-comm-btn">
 											<input type="hidden" name="postSeq2" id="postSeq2" value="${vo.postSeq}" />
-											<button type="button" onClick="CocoCheck()">µî·Ï</button>
+											<button type="button" onClick="CocoCheck()">ë“±ë¡</button>
 										</div> 
 									</form>
 								</div>
@@ -102,7 +102,7 @@
 					
 					
 					<div class="area-board-comm-btn">
-						<button type="button">´ñ±Û</button>
+						<button type="button">ëŒ“ê¸€</button>
 					</div>
 
 
@@ -145,16 +145,16 @@
 				<div class="area-board-comm">
 					<form id="frm" method="get">
 						<input type="text" name="commContent" id="commContent"
-							placeholder="»õ·Î¿î ´ñ±ÛÀ» µî·ÏÇØº¸¼¼¿ä" />
+							placeholder="ìƒˆë¡œìš´ ëŒ“ê¸€ì„ ë“±ë¡í•´ë³´ì„¸ìš”" />
 						<div class="area-board-comm-btn">
 							<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />
-							<button type="button" onClick="CommentsCheck()">µî·Ï</button>
+							<button type="button" onClick="CommentsCheck()">ë“±ë¡</button>
 						</div>
 					</form>
 				</div>
 
 				<div class="area-button">
-					<button onclick="window.location='/board/free/list'">¸ñ·Ï</button>
+					<button onclick="window.location='/board/free/list'">ëª©ë¡</button>
 				</div>
 			</div>
 		</div>

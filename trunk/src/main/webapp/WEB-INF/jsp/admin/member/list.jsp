@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
@@ -11,7 +11,7 @@
 
 <c:if test="${sessionScope.sid == null}">
 	<script>
-		alert("�α����� �ʿ��մϴ�")
+		alert("로그인이 필요합니다")
 		window.location.href="/login/loginView";
 	</script>
 </c:if>
@@ -41,35 +41,35 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>ȸ������Ʈ</h3>
+				<h3>회원리스트</h3>
 			</div>
 			
 			<div class="area-search">
 				<div class="area-search-form">
 					<form action="" method="POST">
 						<select name="search">
-							<option value="member_name">�̸�</option>
-							<option value="member_id">���̵�</option>
+							<option value="member_name">이름</option>
+							<option value="member_id">아이디</option>
 						</select>
 						<input type="text" name="keyword" value=""></input>
-						<button type="submit">�˻�</button>			
+						<button type="submit">검색</button>			
 					</form>
 				</div>
 				
 				<div class="area-button-chk">
-					<button type="button">����</button>
+					<button type="button">삭제</button>
 				</div>	
 			</div>
 					
 			
 			<div class="board_member_list">
 				<div class="top">
-					<div class="m_num">��ȣ</div>
-					<div class="m_name">�̸�</div>
+					<div class="m_num">번호</div>
+					<div class="m_name">이름</div>
 					<div class="m_id">ID</div>
-					<div class="m_dep">�μ�</div>
-					<div class="m_status">����</div>
-					<div class="m_type">����</div>
+					<div class="m_dep">부서</div>
+					<div class="m_status">상태</div>
+					<div class="m_type">구분</div>
 					<div class="m_check"><input type="checkbox" id="chkAll"/></div>
 				</div>
 				
@@ -90,7 +90,7 @@
 			</div>
 			
 			<div class="area-button">
-				<button onclick="location.href='/member/regist'">ȸ�����</button>
+				<button onclick="location.href='/member/regist'">회원등록</button>
 			</div>
 			
 			<div class="board_page">

@@ -13,7 +13,7 @@ function CommentsCheck(){
 		url : '/board/commentsProc',
 		type : 'POST',
 		data : param,
-		contentType: 'application/x-www-form-urlencoded; charset=euc-kr',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dataType : "json",
 		async : false,
 	/* processData: false, */

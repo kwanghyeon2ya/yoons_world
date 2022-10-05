@@ -30,7 +30,7 @@ server:
       timeout: 180m
 
     encoding:
-      charset: EUC-KR
+      charset: UTF-8
       force: true
       
 

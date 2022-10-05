@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
@@ -19,7 +19,7 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>°øÁö»çÇ×</h3>
+				<h3>ê³µì§€ì‚¬í•­</h3>
 			</div>
 			
 			<div class="board_write">
@@ -32,10 +32,10 @@
 					
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					<div class="area-board">
-                    	<span>ÀÛ¼ºÀÚ : ${vo.writerName}</span>
+                    	<span>ì‘ì„±ì : ${vo.writerName}</span>
 						<div class="area-board-n">
 							<input type="checkbox" id="hidename" name="hidename" />
-							<label for="hidename">ÀÍ¸í</label>
+							<label for="hidename">ìµëª…</label>
 						</div>								
                     </div>
 
@@ -48,8 +48,8 @@
 					</div>
 					
 					<div class="area-button">
-						<button type="submit">¼öÁ¤</button>
-						<button type="button" onclick="history.go(-1)">Ãë¼Ò</button>
+						<button type="submit">ìˆ˜ì •</button>
+						<button type="button" onclick="history.go(-1)">ì·¨ì†Œ</button>
 					</div>
 					
                 </form>
@@ -62,7 +62,7 @@
 
 <script>
 	$('#summernote').summernote({
-	  /*placeholder: '³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä',*/
+	  /*placeholder: 'ë‚´ìš©ì„ ì…ë ¥í•´ì£¼ì„¸ìš”',*/
 	  tabsize: 2,
 	  height: 300,
 	  lang: 'ko-KR',

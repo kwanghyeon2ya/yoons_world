@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
@@ -14,9 +14,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="EUC-KR">
+	<meta charset="UTF-8">
     
-	<title>À±¼±»ý</title>
+	<title>ìœ¤ì„ ìƒ</title>
 	
 	<link rel="stylesheet" type="text/css" href="css/demo.css?time=${now}">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -61,7 +61,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<button type="submit">ÀúÀå</button>
+			<button type="submit">ì €ìž¥</button>
 		</form>		
 	</div>
 </body>

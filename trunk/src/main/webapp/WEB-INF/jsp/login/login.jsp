@@ -1,4 +1,4 @@
- <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!-- Header -->
 <jsp:include page="../common/header.jsp" flush="false"/>
@@ -8,12 +8,12 @@
 $(document).ready(function(){
 	$("#loginbtn").click(function(){	
 		if($("#userID").val() == '' || $("#userID").val() == null) {
-			alert("id¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+			alert("idë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 			return;
 		}
 		
 		if($("#password").val() == '' || $("#password").val() == null) {
-			alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+			alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 			return;
 		}
 		var json = {
@@ -28,7 +28,7 @@ $(document).ready(function(){
 			success : function(data) {
 				switch (Number(data)) {
 				case 0:
-					alert("¾ÆÀÌµğ ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+					alert("ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 					break;
 				case 1:
 					window.location.href = "/main";
@@ -38,7 +38,7 @@ $(document).ready(function(){
 				}
 			},
 			error : function(error) {
-				alert("´Ù½Ã ½ÃµµÇØÁÖ¼¼¿ä"+ error);
+				alert("ë‹¤ì‹œ ì‹œë„í•´ì£¼ì„¸ìš”"+ error);
 			}
 		});
 	});
@@ -53,12 +53,12 @@ $(document).ready(function(){
                   
                       <div class="area-login">
                           <label for="userID">ID</label>
-                          <input id="userID" type="text" name="userID" placeholder="ID¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä">                      
+                          <input id="userID" type="text" name="userID" placeholder="IDë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”">                      
                       </div>
                       
                       <div class="area-login">
                           <label for="password">Password</label>
-                          <input id="password" type="password" name="password" placeholder="ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä">
+                          <input id="password" type="password" name="password" placeholder="ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”">
                       </div>
                       
                       <input type="button" id="loginbtn" class="input-button" value="Login">

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	response.setHeader("Cache-Control","no-store");
@@ -31,21 +31,21 @@
 						<h1><a href="index.html" id="logo">YOONS WoRLD</a></h1>
 							<nav id="nav">
 								<c:if test="${sessionScope.sid == null}">
-		                            <a href="/login/loginView" class="a-login">·Î±×ÀÎÇÏ¼¼¿ä</a>
+		                            <a href="/login/loginView" class="a-login">ë¡œê·¸ì¸í•˜ì„¸ìš”</a>
 									<a href="/main" class="current-page-item">Home</a>
-									<a href="/board/free/list">°øÁö»çÇ× </a>
-									<a href="/board/free/list">ÀÚÀ¯°Ô½ÃÆÇ</a>
-									<a href="/board/free/list">ÀÚ·á½Ç</a>
+									<a href="/board/free/list">ê³µì§€ì‚¬í•­ </a>
+									<a href="/board/free/list">ìžìœ ê²Œì‹œíŒ</a>
+									<a href="/board/free/list">ìžë£Œì‹¤</a>
 		                            <a class="a-login"></a>
 		                        </c:if>
 		                        <c:if test="${sessionScope.sid != null}">
-		                            <a class="a-login">Hello, ${sessionScope.sname} ´Ô</a> <!--·Î±×ÀÎ ½Ã¿¡¸¸ ³ëÃâ-->
+		                            <a class="a-login">Hello, ${sessionScope.sname} ë‹˜</a> <!--ë¡œê·¸ì¸ ì‹œì—ë§Œ ë…¸ì¶œ-->
 									<a href="index.html" class="current-page-item">Home</a>
-									<a href="/board/free/list">°øÁö»çÇ× </a>
-									<a href="/board/free/list">ÀÚÀ¯°Ô½ÃÆÇ</a>
-									<a href="/board/free/list">ÀÚ·á½Ç</a>
-									<a href="mypage.html" class="a-login">¸¶ÀÌÆäÀÌÁö</a> <!--·Î±×ÀÎ ½Ã¿¡¸¸ ³ëÃâ-->
-		                            <a href="/login/logout" class="a-login">Logout</a> <!--·Î±×ÀÎ ½Ã¿¡¸¸ ³ëÃâ-->
+									<a href="/board/free/list">ê³µì§€ì‚¬í•­ </a>
+									<a href="/board/free/list">ìžìœ ê²Œì‹œíŒ</a>
+									<a href="/board/free/list">ìžë£Œì‹¤</a>
+									<a href="mypage.html" class="a-login">ë§ˆì´íŽ˜ì´ì§€</a> <!--ë¡œê·¸ì¸ ì‹œì—ë§Œ ë…¸ì¶œ-->
+		                            <a href="/login/logout" class="a-login">Logout</a> <!--ë¡œê·¸ì¸ ì‹œì—ë§Œ ë…¸ì¶œ-->
 		                        </c:if>
 							</nav>
 					</header>

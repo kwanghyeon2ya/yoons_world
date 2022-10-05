@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="EUC-KR"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
@@ -18,13 +18,13 @@
 		</rollingPolicy>
 	</appender>
 
-	<!-- log4jdbc ¿É¼Ç ¼³Á¤ -->
-	<logger name="jdbc" level="OFF" /> <!-- Ä¿³Ø¼Ç open close ÀÌº¥Æ®¸¦ ·Î±×·Î ³²±ä´Ù. -->
-	<logger name="jdbc.connection" level="DEBUG" /> <!-- SQL¹®¸¸À» ·Î±×·Î ³²±â¸ç, PreparedStatementÀÏ °æ¿ì °ü·ÃµÈ argument °ªÀ¸·Î ´ëÃ¼µÈ SQL¹®ÀÌ º¸¿©Áø´Ù. -->
-	<logger name="jdbc.sqlonly" level="OFF" /> <!-- SQL¹®°ú ÇØ´ç SQLÀ» ½ÇÇà½ÃÅ°´Âµ¥ ¼öÇàµÈ ½Ã°£ Á¤º¸(milliseconds)¸¦ Æ÷ÇÔÇÑ´Ù. -->
-	<logger name="jdbc.sqltiming" level="OFF" /> <!-- ResultSetÀ» Á¦¿ÜÇÑ ¸ðµç JDBC È£Ãâ Á¤º¸¸¦ ·Î±×·Î ³²±ä´Ù. ¸¹Àº ¾çÀÇ ·Î±×°¡ »ý¼ºµÇ¹Ç·Î Æ¯º°È÷ JDBC ¹®Á¦¸¦ ÃßÀûÇØ¾ß ÇÒ ÇÊ¿ä°¡ ÀÖ´Â °æ¿ì¸¦ Á¦¿ÜÇÏ°í´Â »ç¿ëÀ» ±ÇÀåÇÏÁö ¾Ê´Â´Ù. -->
-	<logger name="jdbc.audit" level="OFF" /> <!-- ResultSetÀ» Æ÷ÇÔÇÑ ¸ðµç JDBC È£Ãâ Á¤º¸¸¦ ·Î±×·Î ³²±â¹Ç·Î ¸Å¿ì ¹æ´ëÇÑ ¾çÀÇ ·Î±×°¡ »ý¼ºµÈ´Ù. -->
-	<logger name="jdbc.resultset" level="OFF" /> <!-- SQL °á°ú Á¶È¸µÈ µ¥ÀÌÅÍÀÇ tableÀ» ·Î±×·Î ³²±ä´Ù. -->
+	<!-- log4jdbc ì˜µì…˜ ì„¤ì • -->
+	<logger name="jdbc" level="OFF" /> <!-- ì»¤ë„¥ì…˜ open close ì´ë²¤íŠ¸ë¥¼ ë¡œê·¸ë¡œ ë‚¨ê¸´ë‹¤. -->
+	<logger name="jdbc.connection" level="DEBUG" /> <!-- SQLë¬¸ë§Œì„ ë¡œê·¸ë¡œ ë‚¨ê¸°ë©°, PreparedStatementì¼ ê²½ìš° ê´€ë ¨ëœ argument ê°’ìœ¼ë¡œ ëŒ€ì²´ëœ SQLë¬¸ì´ ë³´ì—¬ì§„ë‹¤. -->
+	<logger name="jdbc.sqlonly" level="OFF" /> <!-- SQLë¬¸ê³¼ í•´ë‹¹ SQLì„ ì‹¤í–‰ì‹œí‚¤ëŠ”ë° ìˆ˜í–‰ëœ ì‹œê°„ ì •ë³´(milliseconds)ë¥¼ í¬í•¨í•œë‹¤. -->
+	<logger name="jdbc.sqltiming" level="OFF" /> <!-- ResultSetì„ ì œì™¸í•œ ëª¨ë“  JDBC í˜¸ì¶œ ì •ë³´ë¥¼ ë¡œê·¸ë¡œ ë‚¨ê¸´ë‹¤. ë§Žì€ ì–‘ì˜ ë¡œê·¸ê°€ ìƒì„±ë˜ë¯€ë¡œ íŠ¹ë³„ížˆ JDBC ë¬¸ì œë¥¼ ì¶”ì í•´ì•¼ í•  í•„ìš”ê°€ ìžˆëŠ” ê²½ìš°ë¥¼ ì œì™¸í•˜ê³ ëŠ” ì‚¬ìš©ì„ ê¶Œìž¥í•˜ì§€ ì•ŠëŠ”ë‹¤. -->
+	<logger name="jdbc.audit" level="OFF" /> <!-- ResultSetì„ í¬í•¨í•œ ëª¨ë“  JDBC í˜¸ì¶œ ì •ë³´ë¥¼ ë¡œê·¸ë¡œ ë‚¨ê¸°ë¯€ë¡œ ë§¤ìš° ë°©ëŒ€í•œ ì–‘ì˜ ë¡œê·¸ê°€ ìƒì„±ëœë‹¤. -->
+	<logger name="jdbc.resultset" level="OFF" /> <!-- SQL ê²°ê³¼ ì¡°íšŒëœ ë°ì´í„°ì˜ tableì„ ë¡œê·¸ë¡œ ë‚¨ê¸´ë‹¤. -->
 	<logger name="jdbc.resultsettable" level="OFF" />
 
 	<root level="DEBUG">

@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<h1>MainÆäÀÌÁö</h1>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<h1>Mainí˜ì´ì§€</h1>
 
 <hr align="left" style="border:solid 2px green; width:300px;">
-¾î¼­¿À¼¼¿ä "${sessionScope.sid}"´Ô<br/>
+ì–´ì„œì˜¤ì„¸ìš” "${sessionScope.sid}"ë‹˜<br/>
 <hr align="left" style="border:solid 2px green; width:300px;">
 
-<button type="button" onclick="window.location.href='/board/free/list'">ÀÚÀ¯°Ô½ÃÆÇ</button>&nbsp
-<button type="button" onclick="window.location.href='/board/notice/list'">°øÁö»çÇ×</button>&nbsp
-<button type="button" onclick="window.location.href='/board/pds/list'">ÀÚ·á½Ç</button>
+<button type="button" onclick="window.location.href='/board/free/list'">ììœ ê²Œì‹œíŒ</button>&nbsp
+<button type="button" onclick="window.location.href='/board/notice/list'">ê³µì§€ì‚¬í•­</button>&nbsp
+<button type="button" onclick="window.location.href='/board/pds/list'">ìë£Œì‹¤</button>
