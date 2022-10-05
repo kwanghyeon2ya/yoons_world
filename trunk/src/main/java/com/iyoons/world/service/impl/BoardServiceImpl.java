@@ -154,9 +154,7 @@ public class BoardServiceImpl implements BoardService {
 		dao.updateCnt(postSeq);
 	}
 	
-	/**
-	 * tdstszgsszd
-	 */
+	
 	@Transactional
 	@Override
 	public int delView(BoardVO vo) { //게시글 삭제

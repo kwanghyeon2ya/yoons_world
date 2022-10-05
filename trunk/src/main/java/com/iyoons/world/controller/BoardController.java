@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import com.iyoons.world.service.AttachService;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.service.CommentsService;
+import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
 
@@ -31,6 +33,9 @@ public class BoardController {
 	
 	@Autowired
 	public CommentsService cservice;
+	
+	@Autowired
+	public AttachService aservice;
 
 	public void commentsList(String pageNum,int postSeq,Model model) {
 		
@@ -145,12 +150,14 @@ public class BoardController {
 						Model model) {
 			 
 			 int postSeq2 = Integer.parseInt(postSeq);
+			 List<BoardAttachVO> anlist = aservice.getAttach(postSeq2);
 			 BoardVO vo = service.getView(postSeq2);
 			 
 			 service.updateCnt(postSeq2);
 			 
 			 commentsList(pageNum,postSeq2,model);
 			 model.addAttribute("vo",vo);
+			 model.addAttribute("anlist",anlist);
 		return "board/free/view";
 	}
 	

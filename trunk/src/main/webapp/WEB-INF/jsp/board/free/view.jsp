@@ -2,6 +2,7 @@
 	pageEncoding="EUC-KR"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page import="java.util.List"%>
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -46,6 +47,15 @@
 								&nbsp;&nbsp; 조회 ${vo.readCnt}
 						</c:if>
 							</div>
+							
+						<c:if test="${!empty anlist}">	
+							<details open>
+							    <summary>첨부파일</summary>
+								<c:forEach var="dlist" items="${anlist}">
+									<a href="http://localhost:8080/files/${dlist.fullPath}" download="">${dlist.fileName}.${dlist.fileType}</a><br/>			
+								</c:forEach> 
+							</details>
+						</c:if>
 						
 				</div>
 

@@ -21,4 +21,5 @@ public class BoardAttachVO {
 	private int updrSeq;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDT;
+	private String fullPath;
 }
