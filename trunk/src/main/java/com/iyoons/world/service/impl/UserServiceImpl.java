@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserVO> userList() {
 
-		return null;
+		return userDAO.userList();
 	}
 
 	@Override

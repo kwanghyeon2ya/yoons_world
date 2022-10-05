@@ -13,4 +13,18 @@
 		select count(*) from user_info where user_id=#{userId} and user_pw=#{userPw} 
 	</select>
 	
+	<select id="userList" resultType="com.iyoons.world.vo.UserVO">
+	SELECT
+    	US.user_id,
+    	US.user_name,
+    	US.user_type,
+    	US.user_status,
+    	US.user_seq,
+    	DP.dep_name
+	FROM
+	    user_info US
+    	LEFT JOIN dep DP ON US.user_seq = DP.user_seq
+    	/*WHERE US.user_name LIKE '%${userName}%'*/
+	</select>
+	
 </mapper>

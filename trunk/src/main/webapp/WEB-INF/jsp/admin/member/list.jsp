@@ -9,6 +9,13 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
+<c:if test="${sessionScope.sid == null}">
+	<script>
+		alert("로그인이 필요합니다")
+		window.location.href="/login/loginView";
+	</script>
+</c:if>
+
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
@@ -65,60 +72,21 @@
 					<div class="m_type">구분</div>
 					<div class="m_check"><input type="checkbox" id="chkAll"/></div>
 				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
-				<div>
-					<div class="m_num">10</div>
-					<div class="m_name">윤선생</div>
-					<div class="m_id">yoons</div>
-					<div class="m_dep">기술개발팀</div>
-					<div class="m_status">활동</div>
-					<div class="m_type">일반</div>
-					<div class="m_check"><input type="checkbox" name="chkMember"/></div>
-				</div>
+				
+				<c:forEach var="list" items="${userList}">
+					<div>
+						<div class="m_num">1</div>
+						<div class="m_name"><a href="/main">${list.userName}</a></div>
+						<div class="m_id"><a href="/main">${list.userId}</a></div>
+						<div class="m_dep">${list.depName}</div>
+						<div class="m_status">${list.userStatus}</div>
+						<div class="m_type">${list.userType}</div>
+						<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+					
+					</div>
+				
+				</c:forEach>
+				
 			</div>
 			
 			<div class="area-button">
