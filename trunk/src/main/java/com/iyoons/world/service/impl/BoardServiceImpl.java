@@ -158,16 +158,19 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public int delView(BoardVO vo) { //게시글 삭제
-		List<BoardAttachVO> list = adao.getAttach(vo.getPostSeq());
-		System.out.println(vo);
-		for(BoardAttachVO avo : list) {
-			String path = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
-			File f = new File(path);
-			f.delete();
-		}
-		adao.delAttach(vo.getPostSeq(),vo.getRegrSeq());
+		/*List<BoardAttachVO> list = adao.getAttachList(vo.getPostSeq()); //물리경로 보존위해 주석
+		System.out.println(vo);*/
+//		for(BoardAttachVO avo : list) { 
+//			String path = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+//			File f = new File(path);
+//			f.delete();
+//		}
+		adao.delAttach(vo.getPostSeq(),vo.getRegrSeq(),vo.getUpdrSeq());
 		
 		return dao.delView(vo);
+	}
+	public int findUser(int regrSeq) {//입력받은 유저 db검색
+		return dao.findUser(regrSeq);
 	}
 	
 }

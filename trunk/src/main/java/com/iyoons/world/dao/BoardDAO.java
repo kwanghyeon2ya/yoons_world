@@ -22,4 +22,5 @@ public interface BoardDAO {
 	public int modView(BoardVO vo); //게시글 수정
 	public void updateCnt(int postSeq); //게시글 조회수 업데이트
 	public int delView(BoardVO vo); //게시글 삭제
+	public int findUser(int postSeq); //입력받은 유저 db검색
 }

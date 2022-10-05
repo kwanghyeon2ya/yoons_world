@@ -14,6 +14,7 @@ public interface AttachDAO {
 	
 	public int insertAttach(BoardAttachVO vo);
 	public int delAttach(@Param("postSeq") int postSeq,
-						@Param("regrSeq")int regrSeq);
-	public List<BoardAttachVO> getAttach(int postSeq);
+						@Param("regrSeq")int regrSeq,
+						@Param("updrSeq")int updrSeq);
+	public List<BoardAttachVO> getAttachList(int postSeq);
 }

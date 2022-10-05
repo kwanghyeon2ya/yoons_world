@@ -168,8 +168,18 @@
 		update
 			post_board
 		set
-			status = 1
+			status = 1,
+			updr_seq = #{updrSeq}
 		where
 			post_seq = #{postSeq} and regr_seq = #{regrSeq}
 	</update>
+	<select id="findUser" resultType="int">
+		select 
+			regr_seq
+		from
+			post_board
+		where
+			post_seq = #{postSeq} 
+			and status = 0
+	</select>
 </mapper>

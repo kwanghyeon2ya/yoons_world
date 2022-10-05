@@ -24,7 +24,7 @@
 	<script src="/js/write.js"></script>
 	<script src="/js/comments.js"></script>
 	<script src="/js/delview.js"></script>
-	<script src="/js/nestedcomm"></script>
+	<script src="/js/nestedcomm.js"></script>
 	
 	
 </head>

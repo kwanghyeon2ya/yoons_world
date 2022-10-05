@@ -29,15 +29,17 @@
 								 sysdate
 									)
 	</insert>
-	<delete id="delAttach">
-		delete
-		from 
-			board_attach 
+	<update id="delAttach">
+		update
+			board_attach
+		set
+			status = 1,
+			updr_seq = #{updrSeq}
 		where 
 			post_seq = #{postSeq} 
 			and regr_seq = #{regrSeq}
-	</delete>
-	<select id="getAttach" resultType="com.iyoons.world.vo.BoardAttachVO">
+	</update>
+	<select id="getAttachList" resultType="com.iyoons.world.vo.BoardAttachVO">
 		select
 		 	post_seq,
 		 	file_path,

@@ -16,20 +16,31 @@ public class CommentsServicveImpl implements CommentsService {
 	private CommentsDAO dao;
 	
 	@Override
-	public List<CommentsVO> getComments(int postSeq,int startRow,int endRow) {
-		return dao.getComments(postSeq,startRow,endRow);
+	public List<CommentsVO> getCommentsList(int postSeq,int startRow,int endRow) {
+		return dao.getCommentsList(postSeq,startRow,endRow);
 	}
 
 	@Override
 	public int insertComments(CommentsVO vo) {
-		return dao.insertComments(vo);
+		vo.setCommGroup(0);
+		System.out.println(vo);
+		if(vo.getCommSeq() != 0) {
+			CommentsVO cvo = dao.getComment(vo.getCommSeq(),vo.getPostSeq(),vo.getCommGroup());
+				System.out.println(cvo+"gdgd");
+				vo.setCommGroup(cvo.getCommGroup());
+				vo.setCommStep(cvo.getCommStep()+1);
+				vo.setCommLevel(cvo.getCommLevel()+1);
+				vo.setPostSeq(cvo.getPostSeq());
+				return dao.insertComments(vo);
+		}else{
+			return dao.insertComments(vo);
+		}
+		
 	}
 
 	@Override
 	public int getCommentsCount(int postSeq) {
 			return dao.getCommentsCount(postSeq);
 	}
-
-	
 	
 }

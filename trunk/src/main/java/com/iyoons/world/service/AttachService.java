@@ -6,6 +6,6 @@ import com.iyoons.world.vo.BoardAttachVO;
 
 public interface AttachService {
 
-	public List<BoardAttachVO> getAttach(int postSeq);
+	public List<BoardAttachVO> getAttachList(int postSeq);
 	
 }

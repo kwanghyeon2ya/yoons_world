@@ -5,12 +5,13 @@
 
 <mapper namespace="com.iyoons.world.dao.CommentsDAO">
 
-	<select id="getComments" resultType="com.iyoons.world.vo.CommentsVO">
+	<select id="getCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
 		select cd.* from
 		(select
 			c.comm_seq,
 			c.comm_content,
 			c.comm_group,
+			c.comm_step,
 			c.comm_level,
 			c.post_seq,
 			c.regr_seq,
@@ -32,6 +33,7 @@
 								 comm_content,
 								 comm_group,
 								 comm_level,
+								 comm_step,
 								 post_seq,
 								 regr_seq,
 								 first_insert_dt,
@@ -41,6 +43,8 @@
 								 	)
 				 		  values(comm_seq.nextval,
 				 		  		 #{commContent},
+		<if test="commGroup != 0">#{commGroup}</if>
+		<if test="commGroup == 0">#{commSeq}</if>,
 				 		  		 0,
 				 		  		 0,
 				 		  		 #{postSeq},
@@ -52,6 +56,23 @@
 				 					)
 		</insert>
 	<select id="getCommentsCount" resultType="int">
-		select count(*) from comments where post_seq = #{postSeq} and status = 0
+		select count(comm_seq) from comments where post_seq = #{postSeq} and status = 0
+	</select>
+	<select id="getComment" resultType="com.iyoons.world.vo.CommentsVO">
+		select
+			max(comm_step) comm_step,
+			comm_level,
+			comm_group,
+			post_seq
+		from
+			comments	
+		where
+			comm_seq = #{commSeq} 
+			and post_seq = #{postSeq}
+			and comm_group = #{commGroup}
+		group by
+			comm_level,
+			comm_group,
+			post_seq
 	</select>
 </mapper>

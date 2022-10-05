@@ -17,4 +17,5 @@ public interface BoardService {
 	public int modView(BoardVO vo);
 	public void updateCnt(int postSeq);
 	public int delView(BoardVO vo);
+	public int findUser(int postSeq);
 }

@@ -13,7 +13,10 @@ import com.iyoons.world.vo.CommentsVO;
 public interface CommentsDAO {
 
 	public int insertComments(CommentsVO vo);
-	public List<CommentsVO> getComments(@Param("postSeq") int postSeq,@Param("startRow") int startRow,@Param("endRow") int endRow);
+	public List<CommentsVO> getCommentsList(@Param("postSeq") int postSeq,@Param("startRow") int startRow,@Param("endRow") int endRow);
 	public int getCommentsCount(int postSeq);
+	public CommentsVO getComment(@Param("commSeq")int commSeq,
+								@Param("postSeq")int postSeq,
+								@Param("commGroup")int commGroup);
 	
 }

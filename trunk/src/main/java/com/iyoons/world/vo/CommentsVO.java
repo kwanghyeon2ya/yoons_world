@@ -20,8 +20,7 @@ public class CommentsVO {
 	private int updrSeq;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt;
-	
-	
+	private int commStep;
 	
 	
 }

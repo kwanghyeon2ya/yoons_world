@@ -46,7 +46,7 @@ public class BoardController {
 		int count = 0;
 		
 		count = cservice.getCommentsCount(postSeq);
-		List<CommentsVO> clist = cservice.getComments(postSeq,startRow,endRow);
+		List<CommentsVO> clist = cservice.getCommentsList(postSeq,startRow,endRow);
 		
 		model.addAttribute("clist",clist);
 		model.addAttribute("pageSize",pageSize);
@@ -150,7 +150,7 @@ public class BoardController {
 						Model model) {
 			 
 			 int postSeq2 = Integer.parseInt(postSeq);
-			 List<BoardAttachVO> anlist = aservice.getAttach(postSeq2);
+			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			 BoardVO vo = service.getView(postSeq2);
 			 
 			 service.updateCnt(postSeq2);
@@ -210,23 +210,28 @@ public class BoardController {
 	@RequestMapping(value="deleteProc",method=RequestMethod.POST)
 	@ResponseBody public int deleteProc(BoardVO vo,HttpSession session) {
 			
+			/*int dbRegrSeq = service.findUser(vo.getPostSeq());*/
 			int sseq = (Integer)session.getAttribute("sseq");
-			if(sseq == vo.getRegrSeq()) { 
-				service.delView(vo);
-				return 1;
+			
+			if(sseq == vo.getRegrSeq()) {
+				vo.setUpdrSeq(sseq);
+				return service.delView(vo);
 			}
+			
+			// 세션에 있는 아이디 (= 접속한 사람)랑 
+			
+			// 제거하려고하는 게시판 글의 작성자랑 비교
+				// db select regerSeq from board by post_seq (파라미터로 넘긴)
 		return 0;
 	}
 	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
 	@ResponseBody public int CommentsProc(CommentsVO vo,HttpSession session) {
 		
 		int sseq = (Integer) session.getAttribute("sseq");
-		System.out.println(sseq);
 		System.out.println(vo.getCommContent());
 		vo.setRegrSeq(sseq);
 		
 		int result = cservice.insertComments(vo);
-		System.out.println(result);
 		return result;
 	}
 	

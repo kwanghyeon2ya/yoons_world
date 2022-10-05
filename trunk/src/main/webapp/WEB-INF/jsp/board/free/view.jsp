@@ -48,11 +48,11 @@
 						</c:if>
 							</div>
 							
-						<c:if test="${!empty anlist}">	
+						<c:if test="${!empty anlist}">
 							<details open>
 							    <summary>첨부파일</summary>
 								<c:forEach var="dlist" items="${anlist}">
-									<a href="http://localhost:8080/files/${dlist.fullPath}" download="">${dlist.fileName}.${dlist.fileType}</a><br/>			
+									<a href="http://localhost:8080/files/${dlist.fullPath}" download>${dlist.fileName}.${dlist.fileType}</a><br/>			
 								</c:forEach> 
 							</details>
 						</c:if>
@@ -67,7 +67,7 @@
 							onclick="DeleteCheck()">삭제</button>
 					</c:if>
 				</div>
-
+				
 				<div class="area-board-cont">${vo.content}</div>
 
 				<h4>댓글 수 : ${count}</h4>
@@ -76,28 +76,31 @@
 					<c:if test="${count > 0}">
 						<c:forEach var="clist" items="${clist}">
 						<hr align="left" style="border:solid 1px black; width:150px;">
+							
 							[작성자] : ${clist.regrSeq}<br/>
 							${clist.commContent}<br/>
 							<h5>
 								작성시간 :
-								<fmt:formatDate value="${clist.firstInsertDt}" type="date"
-									pattern="yyyy-MM-dd" />
-							</h5><a href="javascript:void(0)" onclick="CocoBox()">ㄴ</a>
-							
-								<div class="area-board-comm">
-									<form id="frm" method="get" style="display:none">
+								<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
+							</h5>
+								<a href="javascript:void(0)" onclick="CocoBox()">댓글 남기기</a>
+							<br />
+						
+						<div class="area-board-comm">
+									<form id="frm2" method="get" style="display:none">
+											<input type="hidden" id="commSeq" value="${clist.commSeq}"/>
 											<input type="text" name="commContent2" id="commContent2"
-											placeholder="새로운 댓글을 등록해보세요" />
+											placeholder="댓글의 의견을 남겨보세요" />
 										<div class="area-board-comm-btn">
 											<input type="hidden" name="postSeq2" id="postSeq2" value="${vo.postSeq}" />
 											<button type="button" onClick="CocoCheck()">등록</button>
 										</div> 
 									</form>
 								</div>
-							
-							<br />
 						</c:forEach>
 					</c:if>
+					
+					
 					<div class="area-board-comm-btn">
 						<button type="button">댓글</button>
 					</div>
