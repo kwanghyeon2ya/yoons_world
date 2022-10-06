@@ -185,11 +185,11 @@ public class BoardController {
 			HttpSession session
 			) throws Exception {
 		
-		String name = (String)session.getAttribute("sname");
-		int sseq = (Integer)session.getAttribute("sseq");
+		String name = (String)session.getAttribute("sessionNameForUser");
+		int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
 		
 		vo.setWriterName(name);
-		vo.setRegrSeq(sseq);
+		vo.setRegrSeq(sessionSeqForUser);
 		vo.setFileAttachYn("N");
 		
 		int result = service.insertBoard(vo,files);
@@ -211,13 +211,12 @@ public class BoardController {
 	@ResponseBody public int deleteProc(BoardVO vo,HttpSession session) {
 			
 			/*int dbRegrSeq = service.findUser(vo.getPostSeq());*/
-			int sseq = (Integer)session.getAttribute("sseq");
+			int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
 			
-			if(sseq == vo.getRegrSeq()) {
-				vo.setUpdrSeq(sseq);
+			if(sessionSeqForUser == vo.getRegrSeq()) {
+				vo.setUpdrSeq(sessionSeqForUser);
 				return service.delView(vo);
 			}
-			
 			// 세션에 있는 아이디 (= 접속한 사람)랑 
 			
 			// 제거하려고하는 게시판 글의 작성자랑 비교
@@ -227,9 +226,9 @@ public class BoardController {
 	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
 	@ResponseBody public int CommentsProc(CommentsVO vo,HttpSession session) {
 		
-		int sseq = (Integer) session.getAttribute("sseq");
+		int sessionSeqForUser = (Integer) session.getAttribute("sessionSeqForUser");
 		System.out.println(vo.getCommContent());
-		vo.setRegrSeq(sseq);
+		vo.setRegrSeq(sessionSeqForUser);
 		
 		int result = cservice.insertComments(vo);
 		return result;

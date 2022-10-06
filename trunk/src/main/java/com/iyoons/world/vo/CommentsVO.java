@@ -21,6 +21,7 @@ public class CommentsVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt;
 	private int commStep;
+	private int maxCommStep;
 	
 	
 }

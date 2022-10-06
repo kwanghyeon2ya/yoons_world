@@ -28,8 +28,13 @@
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
-                    	<span>작성자 : ${sessionScope.sname}</span>
+                    	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
 						<div class="area-board-n">
+						
+						<div style="display:inline;text-align:right">
+							<!-- script연습예정 -->
+						</div>
+						
 							<input type="checkbox" id="hidename" name="hidename"/>
 							<label for="hidename">익명</label>
 						</div>								

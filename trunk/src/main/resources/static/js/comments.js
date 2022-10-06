@@ -5,8 +5,14 @@
 function CommentsCheck(){
 	var param = $("#frm").serialize();
 	
-	if($("#commContent").val() == ""){
-		alert("write content!!");
+	if($("#commContent").val().length == ""){
+		alert("댓글 내용을 작성해주세요");
+		$("#commContent").focus();
+		return false;
+	}
+	if($("#commContent").val().length > 500){
+		alert("댓글 내용은 500자를 넘길 수 없습니다");
+		$("#commContent").focus();
 		return false;
 	}
 	$.ajax({
@@ -21,10 +27,10 @@ function CommentsCheck(){
 	 	success : function(data){
 				switch (Number(data)) {
 				case 0:
-					alert("comments is not written");
+					alert("댓글이 작성되지 않았습니다");
 					break;
 				case 1:
-					alert("written complete")
+					alert("댓글이 작성되었습니다");
 					location.reload(true);
 					
 				default:

@@ -25,8 +25,8 @@
 			<div class="board_write">
 				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return ModCheck()" class="board-inline">
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
-					<input type="hidden" name="regrSeq" value="${sessionScope.sseq}"/>
-					<input type="hidden" name="writerName" value="${sessionScope.sname}"/>
+					<input type="hidden" name="regrSeq" value="${sessionScope.sessionSeqForUser}"/>
+					<input type="hidden" name="writerName" value="${sessionScope.sessionNameForUser}"/>
 					<input type="hidden" name="boardType" value="0"/>
 					<input type="hidden" name="modCheck" id="modCheck" value="0"/>
 					

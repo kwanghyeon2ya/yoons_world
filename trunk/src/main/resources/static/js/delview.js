@@ -9,9 +9,8 @@ function DeleteCheck(){
 	var postSeq1 = document.getElementById("postSeq").value;
 	var wregrSeq = document.getElementById("wregrSeq").value;
 	var seqParam = {postSeq : postSeq1,	regrSeq : wregrSeq};
-	if(window.confirm("delete Confirm")){
-		console.log(seqParam);
-		console.log("asdasd"+JSON.stringify(seqParam));
+	if(window.confirm("댓글을 삭제하시겠습니까?")){
+		
 		$.ajax({
 			url : '/board/deleteProc',
 			data : seqParam,
@@ -22,14 +21,14 @@ function DeleteCheck(){
 		 	success : function(data){
 	 			switch (Number(data)){
 					case 0 :
-						alert("delete not done");
+						alert("삭제되지않았습니다");
 						break;
 					case 1 :
-						alert("delete complete");
+						alert("삭제되었습니다");
 						window.location.href = "/board/free/list";
-					
+						break;
 					default:
-						alert("delete not done");
+						alert("삭제되지않았습니다");
 						break;
 	 			}
 		 	}

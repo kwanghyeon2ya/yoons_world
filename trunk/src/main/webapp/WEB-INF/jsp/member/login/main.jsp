@@ -3,7 +3,7 @@
 <h1>Main페이지</h1>
 
 <hr align="left" style="border:solid 2px green; width:300px;">
-어서오세요 "${sessionScope.sid}"님<br/>
+어서오세요 "${sessionScope.sessionIdForUser}"님<br/>
 <hr align="left" style="border:solid 2px green; width:300px;">
 
 <button type="button" onclick="window.location.href='/board/free/list'">자유게시판</button>&nbsp

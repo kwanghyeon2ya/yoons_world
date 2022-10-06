@@ -21,7 +21,7 @@
 			c.status,
 			rownum r 
 		from
-			(select * from comments order by first_insert_dt desc)c
+			(select * from comments order by comm_group desc,comm_level,comm_step desc)c
 		where 
 			post_seq = #{postSeq} and status = 0)cd 
 		where	
@@ -41,12 +41,14 @@
 								 last_update_dt,
 								 status
 								 	)
-				 		  values(comm_seq.nextval,
+				 		  values(#{commSeq},
 				 		  		 #{commContent},
-		<if test="commGroup != 0">#{commGroup}</if>
-		<if test="commGroup == 0">#{commSeq}</if>,
-				 		  		 0,
-				 		  		 0,
+	   <if test="commGroup != 1">#{commGroup},</if>
+	   <if test="commGroup == 1">#{commSeq},</if>
+	   <if test="commGroup != 1">#{commLevel},</if>
+	   <if test="commGroup == 1">0,</if>
+	   <if test="commGroup != 1">#{commStep},</if>
+	   <if test="commGroup == 1">0,</if>
 				 		  		 #{postSeq},
 				 		  		 #{regrSeq},
 				 		  		 sysdate,
@@ -54,25 +56,34 @@
 				 		  		 sysdate,
 				 		  		 0
 				 					)
+		<selectKey resultType="int" keyProperty="commSeq" order="BEFORE">
+			select comm_seq.nextval from dual	
+		</selectKey>
 		</insert>
 	<select id="getCommentsCount" resultType="int">
 		select count(comm_seq) from comments where post_seq = #{postSeq} and status = 0
 	</select>
 	<select id="getComment" resultType="com.iyoons.world.vo.CommentsVO">
 		select
-			max(comm_step) comm_step,
+			max(comm_step) maxCommStep,
 			comm_level,
-			comm_group,
-			post_seq
+			comm_group
 		from
-			comments	
+			comments
 		where
 			comm_seq = #{commSeq} 
 			and post_seq = #{postSeq}
-			and comm_group = #{commGroup}
 		group by
 			comm_level,
-			comm_group,
-			post_seq
+			comm_group
 	</select>
+	<update id="incrementOriginalCommStep">
+		update
+			comments
+		set 
+			comm_step = comm_step + 1 
+		where
+			comm_group = #{commGroup} 
+			and comm_step &gt; #{commStep} 
+	</update>
 </mapper>

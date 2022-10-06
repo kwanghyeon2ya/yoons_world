@@ -36,9 +36,9 @@ public class LoginController {
     		UserVO userInfo = userService.findUser(userVO);
     		if(userVO != null ) {
     			
-    			session.setAttribute("sid", userInfo.getUserId());
-    			session.setAttribute("sname",userInfo.getUserName());
-    			session.setAttribute("sseq", userInfo.getUserSeq());
+    			session.setAttribute("sessionIdForUser", userInfo.getUserId());
+    			session.setAttribute("sessionNameForUser",userInfo.getUserName());
+    			session.setAttribute("sessionSeqForUser", userInfo.getUserSeq());
     			session.setMaxInactiveInterval(60*60);
     			
     			return 1;

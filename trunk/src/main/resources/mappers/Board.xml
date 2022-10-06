@@ -179,7 +179,7 @@
 		from
 			post_board
 		where
-			post_seq = #{postSeq} 
+			post_seq = #{postSeq}
 			and status = 0
 	</select>
 </mapper>

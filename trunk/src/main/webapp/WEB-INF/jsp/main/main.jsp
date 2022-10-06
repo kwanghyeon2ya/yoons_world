@@ -30,7 +30,7 @@
 					<header id="header">
 						<h1><a href="index.html" id="logo">YOONS WoRLD</a></h1>
 							<nav id="nav">
-								<c:if test="${sessionScope.sid == null}">
+								<c:if test="${sessionScope.sessionIdForUser == null}">
 		                            <a href="/login/loginView" class="a-login">로그인하세요</a>
 									<a href="/main" class="current-page-item">Home</a>
 									<a href="/board/free/list">공지사항 </a>
@@ -38,8 +38,8 @@
 									<a href="/board/free/list">자료실</a>
 		                            <a class="a-login"></a>
 		                        </c:if>
-		                        <c:if test="${sessionScope.sid != null}">
-		                            <a class="a-login">Hello, ${sessionScope.sname} 님</a> <!--로그인 시에만 노출-->
+		                        <c:if test="${sessionScope.sessionIdForUser != null}">
+		                            <a class="a-login">Hello, ${sessionScope.sessionNameForUser} 님</a> <!--로그인 시에만 노출-->
 									<a href="index.html" class="current-page-item">Home</a>
 									<a href="/board/free/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>

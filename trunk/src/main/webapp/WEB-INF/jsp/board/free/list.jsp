@@ -9,7 +9,7 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<c:if test="${sessionScope.sid == null}">
+<c:if test="${sessionScope.sessionIdForUser == null}">
 	<script>
 		alert("로그인이 필요합니다")
 		window.location.href="/login/loginView";
@@ -33,7 +33,7 @@
 			<div class="title-page">
 				<h3>자유게시판</h3>
 			</div>
-			
+						
 			<form action="/board/free/list" method="get">
 			<input type="hidden" name="searchCheck" value="1"/>
 				<div class="area-search">

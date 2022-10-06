@@ -74,36 +74,36 @@
 
 				<div class="area-board-comm">
 					<c:if test="${count > 0}">
-						<c:forEach var="clist" items="${clist}">
+						<c:forEach var="clist" items="${clist}" varStatus="loop">
 						<hr align="left" style="border:solid 1px black; width:150px;">
-							
+						<c:forEach var="level" begin="1" end="${clist.commLevel }" step="1"><span style="padding-left:5px">ㄴ</span></c:forEach>
+							<div style="width:100px; display:inline-block;">
 							[작성자] : ${clist.regrSeq}<br/>
-							${clist.commContent}<br/>
+							${clist.commContent}
 							<h5>
 								작성시간 :
 								<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 							</h5>
-								<a href="javascript:void(0)" onclick="CocoBox()">댓글 남기기</a>
+								<a href="javascript:void(0)" class="showhide" id="showHideButton_${loop.index}" onclick="CocoShowHide(${loop.index})">댓글 남기기</a>
 							<br />
-						
+							</div>
 						<div class="area-board-comm">
-									<form id="frm2" method="get" style="display:none">
-											<input type="hidden" id="commSeq" value="${clist.commSeq}"/>
-											<input type="text" name="commContent2" id="commContent2"
-											placeholder="댓글의 의견을 남겨보세요" />
+									<form id="frm2_${loop.index}" method="post" style="display:none">
+											<input type="hidden" id="commSeq_${loop.index}" value="${clist.commSeq}"/>
+											<input type="hidden" id="commGroup_${loop.index}" name="commGroup" value="${clist.commGroup}"/>
+											<input type="text" id="commContent2_${loop.index}" name="commContent2"
+											placeholder="댓글에 대한 의견을 남겨보세요" />
 										<div class="area-board-comm-btn">
-											<input type="hidden" name="postSeq2" id="postSeq2" value="${vo.postSeq}" />
-											<button type="button" onClick="CocoCheck()">등록</button>
+											<input type="hidden" name="postSeq2" id="postSeq2_${loop.index}" value="${vo.postSeq}" />
+											<button type="button" id="insertCoco_${loop.index}" onclick="CocoCheck(${loop.index})">등록</button>
 										</div> 
 									</form>
 								</div>
 						</c:forEach>
 					</c:if>
-					
-					
-					<div class="area-board-comm-btn">
+				<!-- 	<div class="area-board-comm-btn">
 						<button type="button">댓글</button>
-					</div>
+					</div> -->
 
 
 					<c:if test="${count > 0}">

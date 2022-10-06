@@ -11,11 +11,23 @@ function WriteCheck(){
 	
 
 	if($("#subject").val() == ""){
-		alert("write title!!");
+		alert("제목을 작성해주세요");
+		$("#subject").focus();
+		return false;
+	}
+	if($("#subject").val().length >= 50){
+		alert("제목은 50자를 넘길 수 없습니다");
+		$("#subject").focus();
 		return false;
 	}
 	if($("#content").val() == ""){
-		alert("write content!!");
+		alert("본문을 작성해주세요");
+		$("#content").focus();
+		return false;
+	}
+	if($("#content").val().length > 4000){
+		alert("본문은 4000자 이상 작성할 수 없습니다");
+		$("#content").focus();
 		return false;
 	}
 	
@@ -32,10 +44,10 @@ function WriteCheck(){
 	 	success : function(data){
 		 		switch(Number(data)){
 		 		case 0:
-		 			alert("not written post");
+		 			alert("게시글이 작성되지 않았습니다");
 		 			break;
 		 		case 1:
-	 				alert("written post");
+	 				alert("게시글이 작성되었습니다");
 	 				rtn = true;
 		 		default:
 		 			break;
