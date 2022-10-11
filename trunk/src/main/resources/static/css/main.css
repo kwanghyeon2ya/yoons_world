@@ -1750,6 +1750,36 @@ p, span {
 		background-color: #e2e2e2;
 		border: none;
 	}
+	
+	.area-input-info {
+		margin: 0 auto;
+		padding: 0.5em 0;
+		max-width: 100%;
+		width: 350px;
+		
+	}
+	
+	.area-input-info label {
+		display: inline-block;
+		padding:0;
+		font-size: 0.9em;
+		text-align:left;
+		width:30%;
+		float:left;
+		
+	}
+	.area-input-info input {
+		display: inline-block;
+		font-size: 0.9em;
+		padding:0 0.3em;
+		width:70%;
+	}
+	.area-input-info select {
+		display: inline-block;
+		font-size: 0.9em;
+		width:70%;
+		text-align:center;
+	}
 
 /* Header */
 
@@ -2059,11 +2089,11 @@ p, span {
 
 
 
-.board_member_list .m_num {
+.board_member_list .mem-num {
     width: 7%;
 }
 
-.board_member_list .m_name {
+.board_member_list .mem-name {
     width: 13%;
     
 }
@@ -2072,32 +2102,32 @@ p, span {
     text-align: center;
 }
 
-.board_member_list .m_id {
+.board_member_list .mem-id {
     width: 25%;
 	
 }
 
-.board_member_list .m_dep {
+.board_member_list .mem-dep {
     width: 25%;
 	
 }
 
-.board_member_list .m_status {
+.board_member_list .mem-status {
     width: 10%;
 	
 }
 
-.board_member_list .m_type {
+.board_member_list .mem-type {
     width: 10%;
 	
 }
 
-.board_member_list .m_check {
+.board_member_list .mem-check {
     width: 10%;
 	
 }
 
-.board_member_list .m_check input[type="checkbox"] {
+.board_member_list .mem-check input[type="checkbox"] {
     height:auto;
 }
 
@@ -2705,6 +2735,12 @@ p, span {
 				.board_write .info input[type="password"] {
 					width: 100%;
 				}
+				
+				
+				.area-input-info {
+				width: 280px;
+		
+	}
 
 	}
 

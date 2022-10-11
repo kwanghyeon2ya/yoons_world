@@ -64,24 +64,24 @@
 			
 			<div class="board_member_list">
 				<div class="top">
-					<div class="m_num">번호</div>
-					<div class="m_name">이름</div>
-					<div class="m_id">ID</div>
-					<div class="m_dep">부서</div>
-					<div class="m_status">상태</div>
-					<div class="m_type">구분</div>
-					<div class="m_check"><input type="checkbox" id="chkAll"/></div>
+					<div class="mem-num">번호</div>
+					<div class="mem-name">이름</div>
+					<div class="mem-id">ID</div>
+					<div class="mem-dep">부서</div>
+					<div class="mem-status">상태</div>
+					<div class="mem-type">구분</div>
+					<div class="mem-check"><input type="checkbox" id="chkAll"/></div>
 				</div>
 				
 				<c:forEach var="list" items="${userList}">
 					<div>
-						<div class="m_num">1</div>
-						<div class="m_name"><a href="/admin/member/createUserForm">${list.userName}</a></div>
-						<div class="m_id"><a href="/admin/member/createUserForm">${list.userId}</a></div>
-						<div class="m_dep">${list.depName}</div>
-						<div class="m_status">${list.userStatus}</div>
-						<div class="m_type">${list.userType}</div>
-						<div class="m_check"><input type="checkbox" name="chkMember"/></div>
+						<div class="mem-num">1</div>
+						<div class="mem-name"><a href="/admin/member/createUserForm">${list.userName}</a></div>
+						<div class="mem-id"><a href="/admin/member/createUserForm">${list.userId}</a></div>
+						<div class="mem-dep">${list.depName}</div>
+						<div class="mem-status">${list.userStatus}</div>
+						<div class="mem-type">${list.userType}</div>
+						<div class="mem-check"><input type="checkbox" name="chkMember"/></div>
 					
 					</div>
 				
