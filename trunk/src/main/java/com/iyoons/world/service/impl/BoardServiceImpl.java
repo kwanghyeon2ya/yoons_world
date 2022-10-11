@@ -165,7 +165,7 @@ public class BoardServiceImpl implements BoardService {
 //			File f = new File(path);
 //			f.delete();
 //		}
-		adao.delAttach(vo.getPostSeq(),vo.getRegrSeq(),vo.getUpdrSeq());
+		adao.delAttach(vo);
 		
 		return dao.delView(vo);
 	}

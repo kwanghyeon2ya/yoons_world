@@ -125,7 +125,9 @@ public class BoardController {
 	
 	@RequestMapping("free/modify")
 	public String FreeModify(BoardVO vo,Model model) {
+		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
 		model.addAttribute("vo",vo);
+		model.addAttribute("anlist",anlist);
 		return "board/free/modify";
 	}
 	
@@ -142,10 +144,18 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
-	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session) {
-		vo.setUpdrSeq((int)session.getAttribute("sessionSeqForUser"));
+	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session,MultipartFile file) {
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
+		System.out.println();
+		System.out.println(vo.getRegrSeq());
+		System.out.println(sessionSeqForUser);
+		if(vo.getRegrSeq() == sessionSeqForUser) {
+		vo.setUpdrSeq(sessionSeqForUser);
 		return service.modView(vo);
+		}
+		
+		return 0;
 	}
 	@RequestMapping(value="modifyCommentProc",method=RequestMethod.POST)
 	@ResponseBody public int modCommentProc(CommentsVO vo,HttpSession session) {
@@ -166,13 +176,16 @@ public class BoardController {
 	@RequestMapping("free/view")
 	public String getFreeView(@RequestParam(value="postSeq",required=false)String postSeq,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
-						Model model) {
+						Model model,HttpSession session) {
 			 
 			 int postSeq2 = Integer.parseInt(postSeq);
 			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			 BoardVO vo = service.getView(postSeq2);
+			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 			 
-			 service.updateCnt(postSeq2);
+			 if(vo.getRegrSeq() != sessionSeqForUser) {
+				 service.updateCnt(postSeq2);	 
+			 }
 			 
 			 commentsList(pageNum,postSeq2,model);
 			 model.addAttribute("vo",vo);

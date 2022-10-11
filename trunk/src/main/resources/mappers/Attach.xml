@@ -53,11 +53,13 @@
 		 	regr_seq,
 		 	first_insert_dt,
 		 	updr_seq,
-		 	last_update_dt
+		 	last_update_dt,
+			status		 	
 		from 
 			board_attach 
 		where 
 			post_seq = #{postSeq}
+			and status = 1
 	</select>
 	
 </mapper>

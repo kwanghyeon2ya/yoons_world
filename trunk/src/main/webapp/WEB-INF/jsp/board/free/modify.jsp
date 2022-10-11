@@ -23,29 +23,40 @@
 			</div>
 			
 			<div class="board_write">
-				<form id="modifyForm" name="modifyForm" action="/board/free/list" method="POST" onSubmit="return modBoardCheck()" class="board-inline">
+				<form id="modifyForm" name="modifyForm" action="/board/free/list" method="POST" onSubmit="return modBoardCheck()" class="board-inline" enctype="multipart/form-data">
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
-					<input type="hidden" name="regrSeq" value="${sessionScope.sessionSeqForUser}"/>
-					<input type="hidden" name="writerName" value="${sessionScope.sessionNameForUser}"/>
+					<input type="hidden" name="regrSeq" value="${vo.regrSeq}"/>
 					<input type="hidden" name="boardType" value="0"/>
-					
+						
 					<textarea name="content" id="content" style="display:none;"></textarea>
+									
 					<div class="area-board">
                     	<span>작성자 : ${vo.writerName}</span>
 						<div class="area-board-n">
+							
 							<input type="checkbox" id="hidename" name="hidename" />
 							<label for="hidename">익명</label>
+							
 						</div>								
                     </div>
 
 					<div class="area-board">
                         <input type="text" id="subject" name="subject" value="${vo.subject}"/>
+                        
                     </div>
-
+                    <div style="width:100px;display:inline-block;">
+                    	<details open>
+								<summary>첨부파일 목록</summary>
+							<c:forEach var="anlist" items="${anlist}">
+								⊙${anlist.fileName}.${anlist.fileType}
+							</c:forEach>	
+						</details>
+							<input type="file" id="files" name="files"/>				
+					</div>
 					<div class="area-board">
                        	<textarea id="summernote" name="editordata">${vo.content}</textarea>
 					</div>
-					
+						
 					<div class="area-button">
 						<button type="submit">수정</button>
 						<button type="button" onclick="history.go(-1)">취소</button>

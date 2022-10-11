@@ -154,9 +154,10 @@
 			subject = #{subject} ,
 			content = #{content} ,
 			last_update_dt = sysdate,
-			updr_seq = #{updr_seq}
+			updr_seq = #{updrSeq}
 		where 
-			post_seq=#{postSeq} and status = 1
+			post_seq=#{postSeq} 
+			and status = 1
 	</update>
 	<update id="updateCnt">
 		update

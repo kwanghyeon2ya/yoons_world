@@ -9,6 +9,7 @@ function WriteBoardCheck(){
 	var rtn = false;
 	//임시 사용
 	
+	alert(insertBoardForm);
 
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
