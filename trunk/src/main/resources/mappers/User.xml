@@ -6,7 +6,7 @@
 <mapper namespace="com.iyoons.world.dao.UserDAO">
 	
 	<select id="findUser" resultType="com.iyoons.world.vo.UserVO">
-		select * from user_info where user_id=#{userId} and user_pw=#{userPw} and user_status = 0
+		select * from user_info where user_id=#{userId} and user_pw=#{userPw} and user_status = 1
 	</select>
 	
 	<select id="checkUser" resultType="int">
