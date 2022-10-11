@@ -15,7 +15,7 @@ public class BoardVO {
 	private String writerName; //글 작성자(Client가 보는 작성자이름)
 	private String subject; //글 제목
 	private String content; //글 내용
-	private int status; // 글 상태(일반/삭제)
+	private int status; // 글 상태(일반1/삭제0)
 	private int readCnt; //조회수
 	private int boardType; //게시판 타입
 	private String fileAttachYn; //첨부파일 여부

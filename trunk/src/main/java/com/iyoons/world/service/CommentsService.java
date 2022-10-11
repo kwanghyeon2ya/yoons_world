@@ -8,6 +8,8 @@ public interface CommentsService {
 	
 	public List<CommentsVO> getCommentsList(int postSeq, int startRow, int endRow);
 	public int insertComments(CommentsVO vo);
-	public int getCommentsCount(int postSeq);
-	
+	public int getExistCommentsCount(int postSeq);
+	public int delComment(CommentsVO vo);
+	public int getALLCommentsCount(int postSeq);
+	public int modComment(CommentsVO vo);
 }

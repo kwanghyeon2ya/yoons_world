@@ -40,7 +40,7 @@
 									#{writerName},
 									#{subject},
 									#{content},
-									0,	
+									1,	
 									0,
 									#{boardType},
 									#{fileAttachYn},
@@ -67,7 +67,8 @@
 	            pb.board_type,
 	            pb.first_insert_dt,
 	            pb.last_update_dt,
-	            row_number() over(order by pb.first_insert_dt desc) as POST_NUM
+	            row_number() over(order by pb.first_insert_dt desc) as r,
+	            row_number() over(order by pb.first_insert_dt asc) as post_num
 	        from
 				post_board pb
 				<if test="search != null and search.equals('comments')">
@@ -80,7 +81,7 @@
 				</if>
 			where 
 				pb.board_type=#{boardType} and 
-				pb.status=0 
+				pb.status=1 
 			<if test="searchCheck != null">
 				<if test="search != null and search.equals('subject_content')">
 				and (pb.subject like '%${keyword}%' or 
@@ -89,7 +90,7 @@
 			</if>
 				)cd
 			where 
-				cd.POST_NUM &gt;= #{startRow} and cd.POST_NUM &lt;= #{endRow}
+				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
 		</select>
 		
 	<select id="getBoardCount" resultType="int">
@@ -99,7 +100,7 @@
 			post_board
 		where 
 			board_type=#{boardType} and 
-			 status=0
+			status=1
 	</select>
 	<select id="getSearchCount" resultType="int">
 		select 
@@ -118,7 +119,7 @@
 				c1.comm_content like '%${keyword}%')ic		 
 		 	on 
 		 	  pb.post_seq = ic.post_seq</if> 
-		 where pb.status = 0 and pb.board_type=#{boardType}
+		 where pb.status = 1 and pb.board_type=#{boardType}
 		 <if test="searchCheck != null and search != null and search.equals('subject_content')">
 			and (pb.subject like '%${keyword}%' 
 				or pb.content like '%${keyword}%') 		 
@@ -143,7 +144,7 @@
 			post_board
 		where 
 			post_seq = #{postSeq} 
-			and status = 0
+			and status = 1
 	</select>
 	
 	<update id="modView">
@@ -152,9 +153,10 @@
 		set 
 			subject = #{subject} ,
 			content = #{content} ,
-			last_update_dt = sysdate
+			last_update_dt = sysdate,
+			updr_seq = #{updr_seq}
 		where 
-			post_seq=#{postSeq} and status = 0
+			post_seq=#{postSeq} and status = 1
 	</update>
 	<update id="updateCnt">
 		update
@@ -168,10 +170,12 @@
 		update
 			post_board
 		set
-			status = 1,
+			status = 0,
 			updr_seq = #{updrSeq}
 		where
-			post_seq = #{postSeq} and regr_seq = #{regrSeq}
+			post_seq = #{postSeq} 
+			and regr_seq = #{regrSeq}
+			 
 	</update>
 	<select id="findUser" resultType="int">
 		select 
@@ -180,6 +184,6 @@
 			post_board
 		where
 			post_seq = #{postSeq}
-			and status = 0
+			and status = 1
 	</select>
 </mapper>

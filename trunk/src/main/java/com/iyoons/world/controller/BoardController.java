@@ -43,9 +43,11 @@ public class BoardController {
 		int currentPage = Integer.parseInt(pageNum);
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = pageSize * currentPage;
-		int count = 0;
+		int allCount = 0;
 		
-		count = cservice.getCommentsCount(postSeq);
+		int existCount = cservice.getExistCommentsCount(postSeq); //존재하는 댓글의 카운트-status가 1인글
+		
+		allCount = cservice.getALLCommentsCount(postSeq);//모든 댓글의 카운트 -status가 0,1인글
 		List<CommentsVO> clist = cservice.getCommentsList(postSeq,startRow,endRow);
 		
 		model.addAttribute("clist",clist);
@@ -53,7 +55,8 @@ public class BoardController {
 		model.addAttribute("currentPage",currentPage);
 		model.addAttribute("startRow",startRow);
 		model.addAttribute("endRow",endRow);
-		model.addAttribute("count",count);
+		model.addAttribute("allCount",allCount);
+		model.addAttribute("existCount",existCount);
 		model.addAttribute("pageNum",pageNum);
 	}
 	
@@ -138,10 +141,26 @@ public class BoardController {
 		return "board/pds/modify";
 	}
 	
-	@RequestMapping(value="modifyProc",method=RequestMethod.POST)
-	@ResponseBody public String modViewProc(BoardVO vo) {
-		int result = service.modView(vo);
-		return ""+result;
+	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
+	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session) {
+		vo.setUpdrSeq((int)session.getAttribute("sessionSeqForUser"));
+		
+		return service.modView(vo);
+	}
+	@RequestMapping(value="modifyCommentProc",method=RequestMethod.POST)
+	@ResponseBody public int modCommentProc(CommentsVO vo,HttpSession session) {
+		
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		System.out.println(vo.getPostSeq());
+		System.out.println(vo.getCommContent());
+		System.out.println(vo.getCommSeq());
+		
+		if(sessionSeqForUser == vo.getRegrSeq()) {
+		vo.setUpdrSeq(sessionSeqForUser);
+		
+		return cservice.modComment(vo);
+		}
+		return 0;
 	}
 	
 	@RequestMapping("free/view")
@@ -207,8 +226,8 @@ public class BoardController {
 		return "board/pds/write";
 	}
 	
-	@RequestMapping(value="deleteProc",method=RequestMethod.POST)
-	@ResponseBody public int deleteProc(BoardVO vo,HttpSession session) {
+	@RequestMapping(value="deleteViewProc",method=RequestMethod.POST)
+	@ResponseBody public int deleteViewProc(BoardVO vo,HttpSession session) { //게시판 글 삭제
 			
 			/*int dbRegrSeq = service.findUser(vo.getPostSeq());*/
 			int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
@@ -223,15 +242,27 @@ public class BoardController {
 				// db select regerSeq from board by post_seq (파라미터로 넘긴)
 		return 0;
 	}
-	@RequestMapping(value="commentsProc",method=RequestMethod.POST)
-	@ResponseBody public int CommentsProc(CommentsVO vo,HttpSession session) {
+	@RequestMapping(value="insertCommentsProc",method=RequestMethod.POST)
+	@ResponseBody public int insertCommentsProc(CommentsVO vo,HttpSession session) {
 		
 		int sessionSeqForUser = (Integer) session.getAttribute("sessionSeqForUser");
-		System.out.println(vo.getCommContent());
+		String sessionIdForUser = (String) session.getAttribute("sessionIdForUser");
+		System.out.println(vo.getCommLevel());
 		vo.setRegrSeq(sessionSeqForUser);
-		
+		vo.setCommId(sessionIdForUser);
 		int result = cservice.insertComments(vo);
 		return result;
+	}
+	
+	@RequestMapping(value="deleteCommentsProc",method=RequestMethod.POST)
+	@ResponseBody public int deleteCommentsProc(CommentsVO vo,HttpSession session) {
+		
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		if(sessionSeqForUser == vo.getRegrSeq()) {
+			vo.setUpdrSeq(sessionSeqForUser);
+			return cservice.delComment(vo);
+		}
+		return 0;
 	}
 	
 }

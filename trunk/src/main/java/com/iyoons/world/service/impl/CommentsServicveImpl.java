@@ -22,25 +22,34 @@ public class CommentsServicveImpl implements CommentsService {
 
 	@Override
 	public int insertComments(CommentsVO vo) {
-		vo.setCommGroup(1); // 일단 댓글인지 대댓글인 확인용 숫자 대입
-		System.out.println(vo);
-		if(vo.getCommSeq() != 0) {
-			CommentsVO cvo = dao.getComment(vo);//commentSeq는 대댓글을 통해서만
-				dao.incrementOriginalCommStep(cvo);
-				vo.setCommStep(cvo.getCommStep()+1);
-				vo.setCommLevel(cvo.getCommLevel()+1); //대댓작성시 레벨이 오르는것은 필수
+		if(vo.getCommSeq() != 0) { //댓글 고유번호 확인
+			CommentsVO cvo = dao.getComment(vo); //commentSeq는 대댓글을 통해서만
+				vo.setCommLevel(1); 
 				vo.setCommGroup(cvo.getCommGroup());
-				
 				return dao.insertComments(vo);
 		}else{
 			return dao.insertComments(vo);
 		}
-		
 	}
 
 	@Override
-	public int getCommentsCount(int postSeq) {
-			return dao.getCommentsCount(postSeq);
+	public int getExistCommentsCount(int postSeq) {
+			return dao.getExistCommentsCount(postSeq);
+	}
+
+	@Override
+	public int delComment(CommentsVO vo) {
+		return dao.delComment(vo);
+	}
+
+	@Override
+	public int getALLCommentsCount(int postSeq) {
+		return dao.getALLCommentsCount(postSeq);
+	}
+
+	@Override
+	public int modComment(CommentsVO vo) {
+		return dao.modComment(vo);
 	}
 	
 }

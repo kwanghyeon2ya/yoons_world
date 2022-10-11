@@ -22,7 +22,7 @@
 			</div>
 			
 			<div class="board_write">
-				<form id="frm" name="frm" action="/board/free/list" method="POST" onSubmit="return WriteCheck()" enctype="multipart/form-data" class="board-inline">
+				<form id="insertBoardForm" name="insertBoardForm" action="/board/free/list" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
 					
 					<input type="hidden" name="boardType" value="0"/>
 					<textarea name="content" id="content" style="display:none;"></textarea>

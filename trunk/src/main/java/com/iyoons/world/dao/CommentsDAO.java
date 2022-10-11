@@ -14,7 +14,9 @@ public interface CommentsDAO {
 
 	public int insertComments(CommentsVO vo);
 	public List<CommentsVO> getCommentsList(@Param("postSeq") int postSeq,@Param("startRow") int startRow,@Param("endRow") int endRow);
-	public int getCommentsCount(int postSeq);
-	public void incrementOriginalCommStep(CommentsVO cvo);
+	public int getExistCommentsCount(int postSeq);
+	public int getALLCommentsCount(int postSeq);
 	public CommentsVO getComment(CommentsVO vo);
+	public int delComment(CommentsVO vo);
+	public int modComment(CommentsVO vo);
 }

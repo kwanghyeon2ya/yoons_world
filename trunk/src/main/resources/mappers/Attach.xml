@@ -9,6 +9,7 @@
 		insert into board_attach(post_seq,
 								 file_path,
 								 file_size,
+								 status,
 								 file_name,
 								 file_uuid,
 								 file_type,
@@ -20,6 +21,7 @@
 						  values(#{postSeq},
 						  		 #{filePath},
 						  		 #{fileSize},
+						  		 1,
 						  		 #{fileName},
 						  		 #{fileUuid},
 								 #{fileType},
@@ -33,11 +35,12 @@
 		update
 			board_attach
 		set
-			status = 1,
+			status = 0,
 			updr_seq = #{updrSeq}
 		where 
 			post_seq = #{postSeq} 
 			and regr_seq = #{regrSeq}
+			and status = 1
 	</update>
 	<select id="getAttachList" resultType="com.iyoons.world.vo.BoardAttachVO">
 		select

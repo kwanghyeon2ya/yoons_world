@@ -14,6 +14,12 @@
 <jsp:useBean id="today" class="java.util.Date" />
 <jsp:include page="../../common/header.jsp" flush="false" />
 
+<c:if test="${sessionScope.sessionSeqForUser == null}">
+	<script>
+	alert("로그인화면으로 이동합니다");
+	location.href="/login/loginView";
+	</script>
+</c:if>
 
 <!-- Main -->
 <div id="main">
@@ -60,55 +66,81 @@
 				</div>
 
 				<div class="area-board-btn">
-					<c:if test="${sessionScope.sseq == vo.regrSeq}">
+					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
 						<button type="button"
 							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
 						<button type="button"
-							onclick="DeleteCheck()">삭제</button>
+							onclick="deletVieweCheck()">삭제</button>
 					</c:if>
 				</div>
 				
 				<div class="area-board-cont">${vo.content}</div>
 
-				<h4>댓글 수 : ${count}</h4>
-
-				<div class="area-board-comm">
-					<c:if test="${count > 0}">
+				<h4>댓글 수 : ${existCount}</h4>
+				<div id="reloadDiv" class="area-board-comm">
 						<c:forEach var="clist" items="${clist}" varStatus="loop">
 						<hr align="left" style="border:solid 1px black; width:150px;">
-						<c:forEach var="level" begin="1" end="${clist.commLevel }" step="1"><span style="padding-left:5px">ㄴ</span></c:forEach>
-							<div style="width:100px; display:inline-block;">
-							[작성자] : ${clist.regrSeq}<br/>
-							${clist.commContent}
-							<h5>
-								작성시간 :
-								<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
-							</h5>
-								<a href="javascript:void(0)" class="showhide" id="showHideButton_${loop.index}" onclick="CocoShowHide(${loop.index})">댓글 남기기</a>
-							<br />
-							</div>
-						<div class="area-board-comm">
-									<form id="frm2_${loop.index}" method="post" style="display:none">
-											<input type="hidden" id="commSeq_${loop.index}" value="${clist.commSeq}"/>
-											<input type="hidden" id="commGroup_${loop.index}" name="commGroup" value="${clist.commGroup}"/>
-											<input type="text" id="commContent2_${loop.index}" name="commContent2"
+						
+						<c:if test="${clist.commLevel != 0}">
+						<span style="padding-left:5px">ㄴ</span>
+						</c:if>
+							<c:if test="${clist.status == 0}">
+							[작성자] : ${clist.commId}<br/>
+							<em>삭제된 댓글입니다</em>
+							</c:if>
+							<c:if test="${clist.status == 1}">
+								<div style="width:100px; display:inline-block;">
+								[작성자] : ${clist.commId}<br/>
+								${clist.commContent}
+								<h5>
+									작성시간 :
+									<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
+								</h5>
+									<a href="javascript:void(0)" id="showHideButton_${loop.index}" onclick="showHideCocoForm(${loop.index})">[댓글]</a>
+									&nbsp
+									&nbsp
+									&nbsp
+									<c:if test="${sessionScope.sessionSeqForUser == clist.regrSeq}">
+									<a href="javascript:void(0)" id="modifyCommButton_${loop.index}" onclick="modCommFormShowHide(${loop.index})">[수정]</a>
+									<a href="javascript:void(0)" id="deleteCommButton_${loop.index}" onclick="deleteCommentsCheck(${loop.index})">[삭제]</a>
+									</c:if>
+								<br />
+								</div>
+							
+								<div class="area-board-comm">
+									<form id="coco_insert_form_${loop.index}" method="post" style="display:none">
+											<input type="hidden" id="coco_comm_seq_${loop.index}" value="${clist.commSeq}"/>
+											<input type="hidden" id="coco_comm_group_${loop.index}" name="coco_comm_group" value="${clist.commGroup}"/>
+											<input type="text" id="coco_comm_content_${loop.index}" name="coco_comm_content"
 											placeholder="댓글에 대한 의견을 남겨보세요" />
 										<div class="area-board-comm-btn">
-											<input type="hidden" name="postSeq2" id="postSeq2_${loop.index}" value="${vo.postSeq}" />
-											<button type="button" id="insertCoco_${loop.index}" onclick="CocoCheck(${loop.index})">등록</button>
+											<input type="hidden" name="coco_post_seq" id="coco_post_seq_${loop.index}" value="${vo.postSeq}" />
+											<button type="button" id="insert_coco_${loop.index}" onclick="insertCocoCheck(${loop.index})">등록</button>
+										</div> 
+									</form>
+									
+									<form id="commentModForm_${loop.index}" method="post" style="display:none">
+											<input type="hidden" id="modRegrSeq_${loop.index}" value="${clist.regrSeq}"/>
+											<input type="hidden" id="modCommSeq_${loop.index}" value="${clist.commSeq}"/>
+											<input type="hidden" id="modCommGroup_${loop.index}" name="modCommGroup" value="${clist.commGroup}"/>
+											<textarea id="modCommContent_${loop.index}" placeholder="수정할 댓글 내용을 작성해주세요" style="width:300px;height:200px;resize:vertical;">${clist.commContent}</textarea>
+										<div class="area-board-comm-btn">
+											<input type="hidden" id="modPostSeq_${loop.index}" value="${vo.postSeq}"/>
+											<button type="button" id="modifyCommentsCheck_${loop.index}" onclick="modifyCommentsCheck(${loop.index})">등록</button>
 										</div> 
 									</form>
 								</div>
+							</c:if>
 						</c:forEach>
-					</c:if>
+						<br/>
+						
 				<!-- 	<div class="area-board-comm-btn">
 						<button type="button">댓글</button>
 					</div> -->
-
-
-					<c:if test="${count > 0}">
+					<c:if test="${allCount != 0}">
+					
 						<c:set var="pageCount"
-							value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
+							value="${allCount / pageSize + (allCount % pageSize == 0 ? 0 : 1)}" />
 						<fmt:parseNumber var="result" value="${((currentPage-1)/10)}"
 							integerOnly="true" />
 						<c:set var="startPage" value="${result*10+1}" />
@@ -136,19 +168,17 @@
 								> </a>
 						</c:if>
 					</c:if>
-
-
 				</div>
-
+			
 
 
 				<div class="area-board-comm">
-					<form id="frm" method="get">
+					<form id="commInsertForm" method="get">
 						<input type="text" name="commContent" id="commContent"
 							placeholder="새로운 댓글을 등록해보세요" />
 						<div class="area-board-comm-btn">
 							<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />
-							<button type="button" onClick="CommentsCheck()">등록</button>
+							<button type="button" onClick="writeCommentsCheck()">등록</button>
 						</div>
 					</form>
 				</div>
@@ -159,7 +189,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 
 
 <!-- Footer -->

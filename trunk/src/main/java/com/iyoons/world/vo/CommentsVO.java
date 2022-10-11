@@ -22,6 +22,7 @@ public class CommentsVO {
 	private Date lastUpdateDt;
 	private int commStep;
 	private int maxCommStep;
-	
+	private String commId;
+	private int status;// 댓글 상태(일반1/삭제0)
 	
 }

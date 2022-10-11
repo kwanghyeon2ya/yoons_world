@@ -1,7 +1,7 @@
 /**
  * 
  */
-function WriteCheck(){
+function WriteBoardCheck(){
 	$("#content").val($(".note-editable p").text());
 	var insertBoardForm = $('#insertBoardForm')[0];
 	var rtn = false;
@@ -95,7 +95,7 @@ function WriteCheck(){
 }) */
 
 
-function ModCheck(){
+function modBoardCheck(){
 	$("#content").val($(".note-editable").text());
 	var rtn = false;
 	var modifyForm = $("#modifyForm")[0];
@@ -110,7 +110,7 @@ function ModCheck(){
 		return false;
 	}
 	$.ajax({
-		url : '/board/modifyProc',
+		url : '/board/modifyViewProc',
 		type : 'POST',
 		data : param,
 		dataType : "json",
