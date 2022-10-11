@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int insertUser(UserVO userVO) throws SQLException {
 
-		return 0;
+		return userDAO.insertUser(userVO);
 	}
 
 	@Override
@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO viewUser(UserVO userVO) {
+	public UserVO viewUser() {
 
-		return null;
+		return userDAO.viewUser();
 	}
-	
+
 }

@@ -21,10 +21,10 @@ public class UserVO {
 	private int userStatus; //회원 상태 (0:활동, 1:탈퇴)
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastLoginDt; //마지막 로그인 일자
+	private int regrSeq; //회원정보 등록자
 	private int updrSeq; //회원정보 수정자
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt; //회원정보 수정일자
 	private String depName;
-	
 	
 }

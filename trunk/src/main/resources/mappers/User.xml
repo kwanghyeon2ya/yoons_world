@@ -27,4 +27,56 @@
     	/*WHERE US.user_name LIKE '%${userName}%'*/
 	</select>
 	
+	<select id="viewUser" resultType="com.iyoons.world.vo.UserVO">
+	SELECT
+    	US.user_id,
+    	US.user_name,
+    	US.user_type,
+    	US.user_status,
+    	US.email,
+    	US.hire_dt,
+    	DP.dep_name
+	FROM
+	    user_info US
+    	LEFT JOIN dep DP ON US.user_seq = DP.user_seq
+	</select>
+	
+	<!-- 회원 등록  -->
+	<insert id="insertUser" parameterType="com.iyoons.world.vo.UserVO">
+		INSERT INTO user_info (
+        	user_id,
+        	user_pw,
+        	user_name,
+        	email,
+        	user_seq
+    	)
+		VALUES (
+    		#{userId},
+ 			#{userPw},
+    		#{userName},
+    		#{email},
+    		#{userSeq}
+    	 )
+	</insert>
+	
+	<!-- 회원 수정  -->
+	<insert id="modifyUser" parameterType="com.iyoons.world.vo.UserVO">
+		update user_info (
+        	user_id,
+        	user_pw,
+        	user_name,
+        	email,
+        	user_seq
+    	)
+		VALUES (
+    		#{userId},
+ 			#{userPw},
+    		#{userName},
+    		#{email},
+    		#{userSeq}
+    	 )
+	</insert>
+	
+	
+	
 </mapper>

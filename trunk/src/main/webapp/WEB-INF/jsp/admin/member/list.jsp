@@ -76,8 +76,8 @@
 				<c:forEach var="list" items="${userList}">
 					<div>
 						<div class="m_num">1</div>
-						<div class="m_name"><a href="/main">${list.userName}</a></div>
-						<div class="m_id"><a href="/main">${list.userId}</a></div>
+						<div class="m_name"><a href="/admin/member/createUserForm">${list.userName}</a></div>
+						<div class="m_id"><a href="/admin/member/createUserForm">${list.userId}</a></div>
 						<div class="m_dep">${list.depName}</div>
 						<div class="m_status">${list.userStatus}</div>
 						<div class="m_type">${list.userType}</div>
@@ -90,7 +90,7 @@
 			</div>
 			
 			<div class="area-button">
-				<button onclick="location.href='/member/regist'">회원등록</button>
+				<button onclick="location.href='/admin/member/createUserForm'">회원등록</button>
 			</div>
 			
 			<div class="board_page">
@@ -101,7 +101,7 @@
 				<a href="#" class="num">4</a>
 				<a href="#" class="num">5</a>
 				<a href="#" class="num">></a>
-			</div>			
+			</div>
 			
 		</div>
 	</div>

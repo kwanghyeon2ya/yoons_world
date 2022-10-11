@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
@@ -19,7 +19,7 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>íšŒì›ë“±ë¡</h3>
+				<h3>È¸¿ø¸ñ·Ï</h3>
 			</div>
 			
 			

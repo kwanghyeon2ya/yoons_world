@@ -22,7 +22,7 @@ public interface UserDAO {
 
 	public List<UserVO> userList();
 
-	public UserVO viewUser(UserVO userVO);
+	public UserVO viewUser();
 	
 	
 }

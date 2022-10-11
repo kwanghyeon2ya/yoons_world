@@ -18,6 +18,7 @@ public interface UserService {
 	
 	public List<UserVO> userList();
 
-	public UserVO viewUser(UserVO userVO);
+	public UserVO viewUser();
+
 	
 }
