@@ -3,7 +3,7 @@
  */
 
 function writeCommentsCheck(){
-	var param = $("#commInsertForm").serialize();
+	var param = $("#comm_insert_form").serialize();
 	
 	if($("#commContent").val().length == ""){
 		alert("댓글 내용을 작성해주세요");
@@ -31,7 +31,7 @@ function writeCommentsCheck(){
 					break;
 				case 1:
 					alert("댓글이 작성되었습니다");
-					location.reload(true);
+					$("#reloadDivParent").load(' #reloadDiv');
 					break;
 				default:
 					break;
@@ -45,25 +45,25 @@ function writeCommentsCheck(){
 
 function modifyCommentsCheck(index){
 
-	var regrSeqValue = $("#modRegrSeq_"+index).val();
-	var postSeqValue = $("#modPostSeq_"+index).val();
-	var commSeqValue = $("#modCommSeq_"+index).val();
-	var modCommGroupValue = $("#modCommGroup_"+index).val();
-	var commContentValue = $("#modCommContent_"+index).val();
+	var regr_seq_value = $("#mod_regr_seq_"+index).val();
+	var post_seq_value = $("#mod_post_seq_"+index).val();
+	var comm_seq_value = $("#mod_comm_seq_"+index).val();
+	var mod_comm_group_value = $("#mod_comm_group_"+index).val();
+	var mod_comm_content_value = $("#mod_comm_content_"+index).val();
 	
 	
-	var param = {regrSeq : regrSeqValue,postSeq : postSeqValue,
-				 commSeq : commSeqValue,commContent : commContentValue,
-				 commGroup : modCommGroupValue};
+	var param = {regrSeq : regr_seq_value,postSeq : post_seq_value,
+				 commSeq : comm_seq_value,commContent : mod_comm_content_value,
+				 commGroup : mod_comm_group_value};
 	
-	if($("#modCommContent_"+index).val() == ""){
+	if($("#mod_comm_content_"+index).val() == ""){
 		alert("댓글 내용을 작성해주세요");
-		$("#modCommContent_").focus();
+		$("#mod_comm_content_").focus();
 		return false;
 	}
-	if($("#modCommContent_"+index).val().length > 500){
+	if($("#mod_comm_content_"+index).val().length > 500){
 		alert("댓글 내용은 500자를 넘길 수 없습니다");
-		$("#modCommContent_"+index).focus();
+		$("#mod_comm_content_"+index).focus();
 		return false;
 	}
 	$.ajax({
@@ -82,7 +82,7 @@ function modifyCommentsCheck(index){
 					break;
 				case 1:
 					alert("댓글이 수정되었습니다");
-					$("#reloadDiv").load(' #reloadDiv');
+					$("#reloadDivParent").load(' #reloadDiv');
 					break;
 				default:
 					break;

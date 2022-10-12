@@ -1,16 +1,14 @@
 /**
  * 
  */
-function WriteBoardCheck(){
+function WriteBoardCheck(url){
 	$("#content").val($(".note-editable p").text());
-	var insertBoardForm = $('#insertBoardForm')[0];
+	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
-	var formData = new FormData(insertBoardForm);
+	var formData = new FormData(insert_board_form);
 	var rtn = false;
 	//임시 사용
 	
-	alert(insertBoardForm);
-
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
 		$("#subject").focus();
@@ -49,6 +47,7 @@ function WriteBoardCheck(){
 		 			break;
 		 		case 1:
 	 				alert("게시글이 작성되었습니다");
+	 				location.href=url;
 	 				rtn = true;
 		 		default:
 		 			break;
@@ -58,8 +57,7 @@ function WriteBoardCheck(){
 				console.log(a1, a2, a3);
 			}
 		});  
-		console.log("form :"+insertBoardForm)
-		return rtn;
+		console.log("form :"+insert_board_form)
 }
 
 /* $("#btnSubmit").click(function (event) {
@@ -99,7 +97,7 @@ function WriteBoardCheck(){
 function modBoardCheck(){
 	$("#content").val($(".note-editable").text());
 	var rtn = false;
-	var modifyForm = $("#modifyForm")[0];
+	var modify_form = $("#modify_form")[0];
 	var param = $("#modifyForm").serialize();
 	
 	if($("#subject").val() == ""){
@@ -138,6 +136,6 @@ function modBoardCheck(){
 				console.log(a1, a2, a3);
 			}
 		});  
-		console.log("form :"+modifyForm)
+		console.log("form :"+modify_form)
 		return rtn;
 }

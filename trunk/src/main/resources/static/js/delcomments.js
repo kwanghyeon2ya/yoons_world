@@ -4,9 +4,9 @@
 
 function deleteCommentsCheck(index){
 	
-	var commSeqValue = $("#commSeq_"+index).val();
-	var regrSeqValue = $("#cregrSeq_"+index).val();
-	var param = {commSeq : commSeqValue, regrSeq : regrSeqValue};
+	var comm_seq_value = $("#mod_comm_seq_"+index).val();
+	var regr_seq_value = $("#mod_regr_seq_"+index).val();
+	var param = {commSeq : comm_seq_value, regrSeq : regr_seq_value};
 	
 	if(window.confirm("댓글을 삭제하시겠습니까?")){
 		$.ajax({
@@ -21,7 +21,7 @@ function deleteCommentsCheck(index){
 					break;
 				case 1:
 					alert("댓글이 삭제되었습니다");
-					location.reload(true);
+					$("#reloadDivParent").load(' #reloadDiv');
 					break;
 				default:
 					alert("댓글이 삭제되지 않았습니다");

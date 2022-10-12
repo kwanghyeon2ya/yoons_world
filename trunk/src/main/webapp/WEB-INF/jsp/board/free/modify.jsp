@@ -23,7 +23,7 @@
 			</div>
 			
 			<div class="board_write">
-				<form id="modifyForm" name="modifyForm" action="/board/free/list" method="POST" onSubmit="return modBoardCheck()" class="board-inline" enctype="multipart/form-data">
+				<form id="modify_form" name="modify_form" action="/board/free/list" method="POST" onSubmit="return modBoardCheck()" class="board-inline" enctype="multipart/form-data">
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
 					<input type="hidden" name="regrSeq" value="${vo.regrSeq}"/>
 					<input type="hidden" name="boardType" value="0"/>
@@ -51,7 +51,7 @@
 								⊙${anlist.fileName}.${anlist.fileType}
 							</c:forEach>	
 						</details>
-							<input type="file" id="files" name="files"/>				
+							<!-- <input type="file" id="files" name="files"/>	 -->			
 					</div>
 					<div class="area-board">
                        	<textarea id="summernote" name="editordata">${vo.content}</textarea>

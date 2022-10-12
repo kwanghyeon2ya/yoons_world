@@ -45,7 +45,7 @@
 				 		  values(#{commSeq},
 				 		  		 #{commContent},
 	  						 <choose>
-			 		  		 	<when test="commGroup == 0">
+			 		  		 	<when test="commSeq == 0">
 			 		  		 	#{commSeq},
 			 		  		 	</when>
 			 		  		 	<otherwise>

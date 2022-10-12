@@ -4,17 +4,16 @@
 
 function showHideCocoForm(index){ //대댓글폼 보이기 js
 	
-	var cocoDisplayNoneYn = document.getElementById("coco_insert_form_"+index).style.display == "none"; 
 	
-	if(cocoDisplayNoneYn){
+	if(document.getElementById("coco_insert_form_"+index).style.display == "none"){
 		document.getElementById("coco_insert_form_"+index).style.display = "block";
 		document.getElementById("coco_comm_content_"+index).focus();
 	}else{
 		document.getElementById("coco_insert_form_"+index).style.display = "none";
 	}
 	
-	if(document.getElementById('commentModForm_'+index).style.display == "block"){ //댓글수정폼이 열려있다면 true
-		document.getElementById('commentModForm_'+index).style.display = "none"; //수정폼을 닫음
+	if(document.getElementById('comment_mod_form_'+index).style.display == "block"){ //댓글수정폼이 열려있다면 true
+		document.getElementById('comment_mod_form_'+index).style.display = "none"; //수정폼을 닫음
 	}
 	
 	
@@ -22,13 +21,11 @@ function showHideCocoForm(index){ //대댓글폼 보이기 js
 
 function modCommFormShowHide(index){ //댓글 수정폼 보이기 js
 	
-	var modCommDisplayNoneYn = document.getElementById('commentModForm_'+index).style.display == "none";
-	
-	if(modCommDisplayNoneYn){
-		document.getElementById('commentModForm_'+index).style.display = "block";
-		document.getElementById('modCommContent_'+index).focus();
+	if(document.getElementById('comment_mod_form_'+index).style.display == "none"){
+		document.getElementById('comment_mod_form_'+index).style.display = "block";
+		document.getElementById('mod_comm_content_'+index).focus();
 	}else{
-		document.getElementById('commentModForm_'+index).style.display = "none";
+		document.getElementById('comment_mod_form_'+index).style.display = "none";
 	}
 	
 	if(document.getElementById("coco_insert_form_"+index).style.display == "block"){ //대댓글 폼이 열려있다면 true

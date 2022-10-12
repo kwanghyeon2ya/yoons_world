@@ -11,20 +11,26 @@
 
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
-
+<script>
+function MoveAction(){
+	var url = "/board/free/list";
+	WriteBoardCheck(url);
+}
+</script>
 <!-- Main -->
 <div id="main">
 	<div class="container">
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>공지사항</h3>
+				<h3>자유게시판</h3>
 			</div>
 			
 			<div class="board_write">
-				<form id="insertBoardForm" name="insertBoardForm" action="/board/free/list" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
+				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
 					
 					<input type="hidden" name="boardType" value="0"/>
+					<input type="hidden" id="url" value=""/>
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
@@ -50,7 +56,9 @@
 					<input type="file" name="file" id="file" multiple="multiple"/>
 					
 					<div class="area-button">
-						<button type="submit">등록</button>
+						<!--button type="submit">등록</button-->
+						<button type="button" onclick="MoveAction();">등록</button>
+						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
 						<button type="button" onclick="location.href='/board/free/list'">취소</button>
 					</div>
 					

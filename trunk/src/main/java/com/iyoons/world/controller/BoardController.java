@@ -2,10 +2,12 @@ package com.iyoons.world.controller;
 
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -106,20 +108,32 @@ public class BoardController {
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
-		
+		System.out.println(0);
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/free/list";
 	}
 	
 	@RequestMapping("notice/list")
-	public String NoticeList() {
-	
+	public String getNoticeList(
+			@RequestParam(value="search",required=false)String search,
+			@RequestParam(value="keyword",required=false)String keyword,
+			@RequestParam(value="searchCheck",required=false)String searchCheck,
+			@RequestParam(value="boardType",required=false,defaultValue="1")String boardType,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
+		System.out.println(1);
+		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/notice/list";
 	}
 	
 	@RequestMapping("pds/list")
-	public String PdsList() {
-	
+	public String PdsList(
+			@RequestParam(value="search",required=false)String search,
+			@RequestParam(value="keyword",required=false)String keyword,
+			@RequestParam(value="searchCheck",required=false)String searchCheck,
+			@RequestParam(value="boardType",required=false,defaultValue="2")String boardType,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
+		System.out.println(2);
+		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/pds/list";
 	}
 	
@@ -132,19 +146,23 @@ public class BoardController {
 	}
 	
 	@RequestMapping("notice/modify")
-	public String NoticeModify() {
-	
+	public String NoticeModify(BoardVO vo,Model model) {
+		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
+		model.addAttribute("vo",vo);
+		model.addAttribute("anlist",anlist);
 		return "board/notice/modify";
 	}
 	
 	@RequestMapping("pds/modify")
-	public String PdsModify() {
-	
+	public String PdsModify(BoardVO vo,Model model) {
+		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
+		model.addAttribute("vo",vo);
+		model.addAttribute("anlist",anlist);
 		return "board/pds/modify";
 	}
 	
 	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
-	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session,MultipartFile file) {
+	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session/*,MultipartFile file*/) {
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
 		System.out.println();
@@ -161,9 +179,6 @@ public class BoardController {
 	@ResponseBody public int modCommentProc(CommentsVO vo,HttpSession session) {
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		System.out.println(vo.getPostSeq());
-		System.out.println(vo.getCommContent());
-		System.out.println(vo.getCommSeq());
 		
 		if(sessionSeqForUser == vo.getRegrSeq()) {
 		vo.setUpdrSeq(sessionSeqForUser);
@@ -194,15 +209,45 @@ public class BoardController {
 	}
 	
 	@RequestMapping("notice/view")
-	public String NoticeView() {
-	
-		return "board/notice/view";
+	public String getNoticeView(@RequestParam(value="postSeq",required=false)String postSeq,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+						Model model,HttpSession session) {
+			 
+			 int postSeq2 = Integer.parseInt(postSeq);
+			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			 BoardVO vo = service.getView(postSeq2);
+			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			 
+			 if(vo.getRegrSeq() != sessionSeqForUser) {
+				 service.updateCnt(postSeq2);	 
+			 }
+			 
+			 commentsList(pageNum,postSeq2,model);
+			 model.addAttribute("vo",vo);
+			 model.addAttribute("anlist",anlist);
+			 
+			 return "/board/notice/view";
 	}
 	
 	@RequestMapping("pds/view")
-	public String PdsView() {
-		
-		return "board/pds/view";
+	public String getPdsView(@RequestParam(value="postSeq",required=false)String postSeq,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+						Model model,HttpSession session) {
+			 
+			 int postSeq2 = Integer.parseInt(postSeq);
+			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			 BoardVO vo = service.getView(postSeq2);
+			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			 
+			 if(vo.getRegrSeq() != sessionSeqForUser) {
+				 service.updateCnt(postSeq2);	 
+			 }
+			 
+			 commentsList(pageNum,postSeq2,model);
+			 model.addAttribute("vo",vo);
+			 model.addAttribute("anlist",anlist);
+			 
+			 return "/board/pds/view";
 	}
 	
 	@RequestMapping("free/write")
@@ -244,8 +289,8 @@ public class BoardController {
 			
 			/*int dbRegrSeq = service.findUser(vo.getPostSeq());*/
 			int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
-			
-			if(sessionSeqForUser == vo.getRegrSeq()) {
+			BoardVO vo2 = service.getView(vo.getPostSeq());
+			if(sessionSeqForUser == vo2.getRegrSeq()) {
 				vo.setUpdrSeq(sessionSeqForUser);
 				return service.delView(vo);
 			}
@@ -257,10 +302,12 @@ public class BoardController {
 	}
 	@RequestMapping(value="insertCommentsProc",method=RequestMethod.POST)
 	@ResponseBody public int insertCommentsProc(CommentsVO vo,HttpSession session) {
+		/*String version = org.springframework.core.SpringVersion.getVersion();
+		System.out.println(version);*/
+//		5.3.17
 		
 		int sessionSeqForUser = (Integer) session.getAttribute("sessionSeqForUser");
 		String sessionIdForUser = (String) session.getAttribute("sessionIdForUser");
-		System.out.println(vo.getCommLevel());
 		vo.setRegrSeq(sessionSeqForUser);
 		vo.setCommId(sessionIdForUser);
 		int result = cservice.insertComments(vo);
@@ -270,7 +317,9 @@ public class BoardController {
 	@RequestMapping(value="deleteCommentsProc",method=RequestMethod.POST)
 	@ResponseBody public int deleteCommentsProc(CommentsVO vo,HttpSession session) {
 		
+		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		
 		if(sessionSeqForUser == vo.getRegrSeq()) {
 			vo.setUpdrSeq(sessionSeqForUser);
 			return cservice.delComment(vo);

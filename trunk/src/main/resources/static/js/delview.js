@@ -4,16 +4,18 @@
 /**
  * 
  */
-function deletVieweCheck(){ //게시글 삭제
+function deleteViewCheck(url){ //게시글 삭제
+	console.log(url);
+	alert(url);
 	var rtn = false;
-	var postSeq1 = document.getElementById("postSeq").value;
-	var wregrSeq = document.getElementById("wregrSeq").value;
-	var seqParam = {postSeq : postSeq1,	regrSeq : wregrSeq};
+	var post_seq = document.getElementById("post_seq").value;
+	var view_regr_seq = document.getElementById("view_regr_seq").value;
+	var param = {postSeq : post_seq,regrSeq : view_regr_seq};
 	if(window.confirm("게시글을 삭제하시겠습니까?")){
 		
 		$.ajax({
 			url : '/board/deleteViewProc',
-			data : seqParam,
+			data : param,
 			type : 'POST',
 			async : false,
 			/* processData: false, */
@@ -25,7 +27,7 @@ function deletVieweCheck(){ //게시글 삭제
 						break;
 					case 1 :
 						alert("삭제되었습니다");
-						window.location.href = "/board/free/list";
+						location.href = url;
 						break;
 					default:
 						alert("삭제되지않았습니다");
