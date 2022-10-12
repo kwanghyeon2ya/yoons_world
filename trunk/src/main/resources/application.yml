@@ -33,4 +33,6 @@ server:
       charset: UTF-8
       force: true
       
+  error:
+    path: /error 
 
