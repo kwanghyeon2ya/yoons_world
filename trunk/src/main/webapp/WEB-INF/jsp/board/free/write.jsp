@@ -14,8 +14,14 @@
 <script>
 function MoveAction(){
 	var url = "/board/free/list";
+	
+	if(document.getElementById("hide_name_check").checked){
+	makeRandomName();
+	}
 	WriteBoardCheck(url);
 }
+	
+	
 </script>
 <!-- Main -->
 <div id="main">
@@ -30,7 +36,6 @@ function MoveAction(){
 				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
 					
 					<input type="hidden" name="boardType" value="0"/>
-					<input type="hidden" id="url" value=""/>
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
@@ -40,9 +45,9 @@ function MoveAction(){
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->
 						</div>
-						
-							<input type="checkbox" id="hidename" name="hidename"/>
-							<label for="hidename">익명</label>
+							<input type="hidden" id="hide_name" name="hideName"/>
+							<input type="checkbox" id="hide_name_check" name="hideCheck" value="0" onclick="makeRandomName()"/>
+							<label for="hide_name_check">익명</label>
 						</div>								
                     </div>
 

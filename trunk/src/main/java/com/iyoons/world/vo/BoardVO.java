@@ -29,6 +29,8 @@ public class BoardVO {
 	private List<BoardAttachVO> AttachList; //첨부파일 목록
 	private String search; //검색 항목
 	private String keyword; //검색 내용
+	private String hideName;
+	private int hideCheck;
 	
 	
 }

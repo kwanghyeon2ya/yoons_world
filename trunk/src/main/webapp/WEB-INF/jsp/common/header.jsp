@@ -29,6 +29,7 @@
 	<script src="/js/nestedcommWrite.js"></script>
 	<script src="/js/delcomments.js"></script>
 	<script src="/js/commnetsShowHide.js"></script>
+	<script src="/js/randomName.js"></script>
 	
 	
 </head>
