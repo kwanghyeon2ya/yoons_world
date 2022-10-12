@@ -19,54 +19,54 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>회원목록</h3>
+				<h3>회원정보</h3>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_name" >이름</label>
-				<input id="mem_name" type="text"/>
+				<label for="userName" >이름</label>
+				<input id="userName" type="text" readonly/>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_id" >아이디</label>
-				<input id="mem_id" type="text"/>
+				<label for="userID" >아이디</label>
+				<input id="userID" type="text" readonly/>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_pw" >패스워드</label>
-				<input id="mem_pw" type="text"/>
+				<label for="userPw" >패스워드</label>
+				<input id="userPw" type="password" readonly/>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_email" >이메일</label>
-				<input id="mem_email" type="text"/>
+				<label for="email" >이메일</label>
+				<input id="email" type="text" readonly/>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_dep" >부서</label>
-				<input id="mem_dep" type="text"/>
+				<label for="userDep" >부서</label>
+				<input id="userDep" type="text" readonly/>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_status" >상태</label>
-				<select id="mem_status" name="mem_status">
-					<option value="1" selected>활동</option>
-					<option value="0">중단</option>
-					<option value="2">탈퇴</option>
+				<label for="userStatus" >상태</label>
+				<select id="userStatus" name="mem_status" >
+					<option disabled="disabled" value="1" selected>활동</option>
+					<option disabled="disabled" value="0">중단</option>
+					<option disabled="disabled" value="2">탈퇴</option>
 				</select>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_type" >구분</label>
-				<select id="mem_type" name="mem_type">
-					<option value="1" selected>일반회원</option>
-					<option value="2">관리자</option>
+				<label for="userType" >구분</label>
+				<select id="userType" name="mem_type">
+					<option disabled="disabled" value="1" selected>일반회원</option>
+					<option disabled="disabled" value="2">관리자</option>
 				</select>
 			</div>
 			
 			<div class="area-input-info">
-				<label for="mem_hireDt" >입사일</label>
-				<input id="mem_hireDt" type="text"/>
+				<label for="userHireDt" >입사일</label>
+				<input id="userHireDt" type="text"/>
 			</div>
 			
 			<div class="area-button">

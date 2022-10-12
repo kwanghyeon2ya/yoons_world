@@ -9,20 +9,17 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
-	<script>
-		alert("로그인이 필요합니다")
-		window.location.href="/login/loginView";
-	</script>
-</c:if>
 
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
 <script>
+
+$(function(){
 	$("#chkAll").click(function() {
+		console.log("yeah!");
 		if($("#chkAll").is(":checked")) $("input[name=chkMember]").prop("checked", true);
-		else $("input[name=chkMember]").prop("checked", false);
+		else $("input[name=chkMember]").prop("checked", false);		
 	});
 	
 	$("input[name=chkMember]").click(function() {
@@ -32,6 +29,7 @@
 		if(total != checked) $("#chkAll").prop("checked", false);
 		else $("#chkAll").prop("checked", true); 
 	});
+});
 </script>
 
 
@@ -76,8 +74,8 @@
 				<c:forEach var="list" items="${userList}">
 					<div>
 						<div class="mem-num">1</div>
-						<div class="mem-name"><a href="/admin/member/createUserForm">${list.userName}</a></div>
-						<div class="mem-id"><a href="/admin/member/createUserForm">${list.userId}</a></div>
+						<div class="mem-name"><a href="/admin/member/view">${list.userName}</a></div>
+						<div class="mem-id"><a href="/admin/member/view">${list.userId}</a></div>
 						<div class="mem-dep">${list.depName}</div>
 						<div class="mem-status">${list.userStatus}</div>
 						<div class="mem-type">${list.userType}</div>

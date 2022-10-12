@@ -45,6 +45,8 @@
 				}
 			});
 			
+			//DatePicker
+			$("#userHireDt").datepicker();
 		})
 </script>
 
@@ -59,13 +61,60 @@
 			</div>
 			
 			<form action="/admin/member/createUser" method="post">
-       			아이디 : <input type="text" name="userId" id="userId" placeholder="아이디" maxlength="15"/><br> 
-        		암호 : <input type="password" name="userPw" id="userPw" placeholder="암호" maxlength="20"/><br> 
-        		이름 : <input type="text" name="userName" id="userName" placeholder="이름" maxlength="20"/><br>
-        		이메일 : <input type="text" name="email" id="email" placeholder="이메일" /><br>  
-        		회원번호 : <input type="text" name="userSeq" id="userSeq" placeholder="회원번호" /><br>
-       			<input type="submit" id="insertbtn" value="회원 등록"/>
-    		</form>
+    		
+	    		<div class="area-input-info">
+					<label for="userName" >이름</label>
+					<input id="userName" type="text" maxlength="20"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userId" >아이디</label>
+					<input id="userId" type="text" maxlength="15"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userPw" >패스워드</label>
+					<input id="userPw" type="password" maxlength="20"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="email" >이메일</label>
+					<input id="email" type="text"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userDep" >부서</label>
+					<input id="userDep" type="text"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userStatus" >상태</label>
+					<select id="userStatus" name="userStatus" >
+						<option value="1" selected>활동</option>
+						<option value="0">중단</option>
+						<option value="2">탈퇴</option>
+					</select>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userType" >구분</label>
+					<select id="userType" name="userType">
+						<option value="1" selected>일반회원</option>
+						<option value="2">관리자</option>
+					</select>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userHireDt" >입사일</label>
+					<input id="userHireDt" type="text"/>
+				</div>
+				
+				<div class="area-button">
+					<button type="submit" id="insertbtn">저장</button>
+					<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+				</div>
+			
+			</form>
 			
 			
 		</div>
