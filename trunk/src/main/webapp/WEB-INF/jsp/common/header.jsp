@@ -45,17 +45,18 @@
 								<c:if test="${sessionScope.sessionIdForUser == null}">
 		                            <a class="a-login">로그인하세요</a>
 									<a href="/main" class="current-page-item">Home</a>
-									<a href="/board/free/list">공지사항 </a>
-									<a href="/board/free/list">자유게시판</a>
-									<a href="/board/free/list">자료실</a>
+									<a href="/board/notice/list?boardType=1">공지사항 </a>
+									<a href="/board/free/list?boardType=0">자유게시판</a>
+									<a href="/board/pds/list?boardType=2">자료실</a>
 		                            <a class="a-login"></a>
-		                        </c:if>
+								</c:if>
+									
 		                        <c:if test="${sessionScope.sessionIdForUser != null}">
 		                            <a class="a-login">Hello, ${sessionScope.sessionNameForUser} 님</a> <!--로그인 시에만 노출-->
 									<a href="index.html" class="current-page-item">Home</a>
-									<a href="/board/free/list">공지사항 </a>
-									<a href="/board/free/list">자유게시판</a>
-									<a href="/board/free/list">자료실</a>
+									<a href="/board/notice/list?boardType=1">공지사항 </a>
+									<a href="/board/free/list?boardType=0">자유게시판</a>
+									<a href="/board/pds/list?boardType=2">자료실</a>
 									<a href="mypage.html" class="a-login">마이페이지</a> <!--로그인 시에만 노출-->
 		                            <a href="/login/logout" class="a-login">Logout</a> <!--로그인 시에만 노출-->
 		                        </c:if>
