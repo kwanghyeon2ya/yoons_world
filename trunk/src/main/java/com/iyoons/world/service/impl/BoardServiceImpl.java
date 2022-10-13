@@ -172,5 +172,10 @@ public class BoardServiceImpl implements BoardService {
 	public int findUser(int regrSeq) {//입력받은 유저 db검색
 		return dao.findUser(regrSeq);
 	}
+
+	@Override
+	public List<BoardVO> getNoticeFixedBoard() {
+		return dao.getNoticeFixedBoard();
+	}
 	
 }

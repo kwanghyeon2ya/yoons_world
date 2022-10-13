@@ -7,5 +7,6 @@ import com.iyoons.world.vo.BoardAttachVO;
 public interface AttachService {
 
 	public List<BoardAttachVO> getAttachList(int postSeq);
+	public int getAttachCount(int postSeq);
 	
 }

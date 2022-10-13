@@ -61,5 +61,14 @@
 			post_seq = #{postSeq}
 			and status = 1
 	</select>
+	<select id="getAttachCount" resultType="int">
+		select
+			count(1)
+		from
+			board_attach
+		where
+			post_seq = #{postSeq}
+			and status = 1; 
+	</select>
 	
 </mapper>

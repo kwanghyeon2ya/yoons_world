@@ -18,10 +18,7 @@ public class AllErrorController implements ErrorController{
 	public String error(HttpServletRequest request,Model model) {
 		
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-		System.out.println(status);
 		HttpStatus httpstatus = HttpStatus.valueOf(Integer.valueOf(status.toString()));//httpstatus enum의 값으로
-		System.out.println(httpstatus);
-		System.out.println(httpstatus.getReasonPhrase());
 		model.addAttribute("code",status.toString());
 		model.addAttribute("msg",httpstatus.getReasonPhrase());
 		model.addAttribute("timestamp", new Date());

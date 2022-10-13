@@ -2,15 +2,24 @@
  * 
  */
 function WriteBoardCheck(url){
+
+	
 	$("#content").val($(".note-editable p").text());
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
-	var formData = new FormData(insert_board_form);
+	var form_data = new FormData(insert_board_form);
 	var rtn = false;
 	//임시 사용
 	
+	
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
+		$("#subject").focus();
+		return false;
+	}
+	
+	if($("#subject").val().trim().length == 0){
+		alert("공백만으로 제목을 작성할 수 없습니다");
 		$("#subject").focus();
 		return false;
 	}
@@ -24,6 +33,10 @@ function WriteBoardCheck(url){
 		$("#content").focus();
 		return false;
 	}
+	if($("#summernote").val().trim().length == 0){
+		alert("공백만으로 내용을 작성할 수 없습니다.");
+		return false;
+	}
 	if($("#summernote").val().length > 4000){
 		alert("본문은 4000자 이상 작성할 수 없습니다");
 		$("#content").focus();
@@ -34,7 +47,7 @@ function WriteBoardCheck(url){
 		url : '/board/writeProc',
 		type : 'POST',
 		enctype : 'multipart/form-data',
-		data : formData,
+		data : form_data,
 		dataType : "json",
 		cache : false,
 		async : false,
@@ -94,11 +107,12 @@ function WriteBoardCheck(url){
 }) */
 
 
-function modBoardCheck(){
+function modBoardCheck(url){
+	console.log($("#regrSeq"));
 	$("#content").val($(".note-editable").text());
 	var rtn = false;
 	var modify_form = $("#modify_form")[0];
-	var param = $("#modifyForm").serialize();
+	var param = $("#modify_form").serialize();
 	
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
@@ -106,6 +120,10 @@ function modBoardCheck(){
 	}
 	if($("#summernote").val() == ""){
 		alert("본문 내용을 작성해주세요");
+		return false;
+	}
+	if($("#summernote").val().trim().length == 0){
+		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
 	$.ajax({
@@ -124,7 +142,7 @@ function modBoardCheck(){
 					break;
 		 		case 1:
 		 			alert("수정되었습니다");
-		 			location.href="/board/free/list"; //url도 각 게시판의 글마다 hidden으로 가져와서 넣어야함 수정필요
+		 			location.href=url;
 		 			break;
 		 		default:
 		 			alert("수정되지 않았습니다");

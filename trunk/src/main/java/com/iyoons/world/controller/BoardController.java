@@ -105,7 +105,6 @@ public class BoardController {
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
-		System.out.println(0);
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/free/list";
 	}
@@ -117,8 +116,9 @@ public class BoardController {
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="1")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
-		System.out.println(1);
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
+		List<BoardVO>fixedBoardList = service.getNoticeFixedBoard();
+		model.addAttribute("fixedBoardList",fixedBoardList);
 		return "board/notice/list";
 	}
 	
@@ -129,7 +129,6 @@ public class BoardController {
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="2")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
-		System.out.println(2);
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		return "board/pds/list";
 	}
@@ -162,9 +161,11 @@ public class BoardController {
 	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session/*,MultipartFile file*/) {
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
-		System.out.println();
 		System.out.println(vo.getRegrSeq());
 		System.out.println(sessionSeqForUser);
+		if(vo.getBoardFixYn() == null) {
+			vo.setBoardFixYn("N");
+		}
 		if(vo.getRegrSeq() == sessionSeqForUser) {
 		vo.setUpdrSeq(sessionSeqForUser);
 		return service.modView(vo);
@@ -253,25 +254,32 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
-	@ResponseBody public String FreeWriteCheck(
+	@ResponseBody public int FreeWriteCheck(
 			@RequestParam(value="file",required=false) MultipartFile[] files,
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
 			HttpSession session
 			) throws Exception {
 		
+		
 		String name = (String)session.getAttribute("sessionNameForUser");
 		int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
+		
 		if(vo.getHideCheck() == 1 && (!vo.getHideName().equals(""))) {
 			vo.setWriterName(vo.getHideName());
 		}else {
 			vo.setWriterName(name);	
 		}
-		
-		vo.setRegrSeq(sessionSeqForUser);
+		if(vo.getBoardFixYn() == null) {
+			vo.setBoardFixYn("N");
+		}
 		vo.setFileAttachYn("N");
+		vo.setRegrSeq(sessionSeqForUser);
+		if(!files[0].isEmpty()) {
+		vo.setFileAttachYn("Y");
+		}
 		
 		int result = service.insertBoard(vo,files);
-		return result+"";
+		return result;
 	}
 	
 	@RequestMapping("notice/write")

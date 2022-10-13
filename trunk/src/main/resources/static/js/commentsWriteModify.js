@@ -5,8 +5,14 @@
 function writeCommentsCheck(){
 	var param = $("#comm_insert_form").serialize();
 	
-	if($("#commContent").val().length == ""){
+	if($("#commContent").val() == ""){
 		alert("댓글 내용을 작성해주세요");
+		$("#commContent").focus();
+		return false;
+	}
+	if($("#commContent").val().trim().length == 0){
+		alert("공백만으로 댓글을 작성할 수 없습니다");
+		$("#commContent").val() = "";
 		$("#commContent").focus();
 		return false;
 	}
@@ -58,7 +64,13 @@ function modifyCommentsCheck(index){
 	
 	if($("#mod_comm_content_"+index).val() == ""){
 		alert("댓글 내용을 작성해주세요");
-		$("#mod_comm_content_").focus();
+		$("#mod_comm_content_"+index).focus();
+		return false;
+	}
+	if($("#mod_comm_content_"+index).val().trim().length == 0){
+		alert("공백만으로 댓글을 작성할 수 없습니다");
+		$("#mod_comm_content_"+index).val() = "";
+		$("#mod_comm_content_"+index).focus();
 		return false;
 	}
 	if($("#mod_comm_content_"+index).val().length > 500){

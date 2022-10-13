@@ -26,5 +26,10 @@ public class AttachServiceImpl implements AttachService{
 		}
 		return anlist;
 	}
+
+	@Override
+	public int getAttachCount(int postSeq) {
+		return dao.getAttachCount(postSeq);
+	}
 	
 }

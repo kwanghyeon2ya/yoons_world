@@ -5,8 +5,6 @@
  * 
  */
 function deleteViewCheck(url){ //게시글 삭제
-	console.log(url);
-	alert(url);
 	var rtn = false;
 	var post_seq = document.getElementById("post_seq").value;
 	var view_regr_seq = document.getElementById("view_regr_seq").value;

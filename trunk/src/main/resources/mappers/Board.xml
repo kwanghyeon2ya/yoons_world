@@ -44,7 +44,7 @@
 									0,
 									#{boardType},
 									#{fileAttachYn},
-									'N',
+									#{boardFixYn},
 									#{regrSeq},
 									sysdate,
 									0,
@@ -65,23 +65,47 @@
 	            pb.status,
 	            pb.read_cnt,
 	            pb.board_type,
+	            pb.board_fix_yn,
 	            pb.first_insert_dt,
 	            pb.last_update_dt,
+	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq) as attach_cnt,
+	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1) as full_file_name,
+	            <if test="search != null and search.equals('attach_file')">
+	            ba.file_name,
+	            ba.file_type,
+	            </if>
 	            row_number() over(order by pb.first_insert_dt desc) as r,
 	            row_number() over(order by pb.first_insert_dt asc) as post_num
 	        from
 				post_board pb
 				<if test="search != null and search.equals('comments')">
-			inner join 
-				(select DISTINCT
-				c1.post_seq from comments c1 
-			where 
-				c1.comm_content like '%${keyword}%')ic 
-					on pb.post_seq = ic.post_seq
+				inner join 
+					(select DISTINCT
+					c1.post_seq from comments c1 
+				where 
+					c1.comm_content like '%${keyword}%')ic 
+						on pb.post_seq = ic.post_seq
+				</if>
+				<if test="search != null and search.equals('attach_file')">
+				inner join (
+					select 
+		    			post_seq,
+		    			file_name,
+		    			file_type
+		    		from 
+	    				board_attach 
+		    		where 
+	    				file_name like '%#{keyword}%' 
+	    			group by 
+	    				post_seq,
+	    				file_name,
+	    				file_type
+	    				) ba on pb.post_seq = ba.post_seq
 				</if>
 			where 
-				pb.board_type=#{boardType} and 
-				pb.status=1 
+				pb.board_type=#{boardType} 
+				and pb.status=1
+				and pb.board_fix_yn = 'N'
 			<if test="searchCheck != null">
 				<if test="search != null and search.equals('subject_content')">
 				and (pb.subject like '%${keyword}%' or 
@@ -153,9 +177,10 @@
 		set 
 			subject = #{subject} ,
 			content = #{content} ,
+			board_fix_yn = #{boardFixYn},
 			last_update_dt = sysdate,
 			updr_seq = #{updrSeq}
-		where 
+		where
 			post_seq=#{postSeq} 
 			and status = 1
 	</update>
@@ -186,5 +211,26 @@
 		where
 			post_seq = #{postSeq}
 			and status = 1
+	</select>
+	<select id="getNoticeFixedBoard" resultType="com.iyoons.world.vo.BoardVO">
+		select
+			post_seq,
+            writer_name,
+            subject,
+            content,
+            status,
+            read_cnt,
+            board_type,
+            board_fix_yn,
+            first_insert_dt,
+            last_update_dt
+        from
+        	post_board
+        where 
+        	board_type=1
+        	and status=1
+        	and board_fix_yn ='Y'
+        order by
+        	first_insert_dt desc	
 	</select>
 </mapper>

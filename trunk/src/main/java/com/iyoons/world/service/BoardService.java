@@ -18,4 +18,5 @@ public interface BoardService {
 	public void updateCnt(int postSeq);
 	public int delView(BoardVO vo);
 	public int findUser(int postSeq);
+	public List<BoardVO> getNoticeFixedBoard();
 }

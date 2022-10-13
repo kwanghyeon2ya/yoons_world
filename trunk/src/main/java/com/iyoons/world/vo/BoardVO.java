@@ -31,6 +31,7 @@ public class BoardVO {
 	private String keyword; //검색 내용
 	private String hideName;
 	private int hideCheck;
-	
+	private String fullFileName;
+	private int attachCnt;
 	
 }

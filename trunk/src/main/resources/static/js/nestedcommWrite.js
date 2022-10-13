@@ -25,12 +25,18 @@ function insertCocoCheck(index){
 	
 	if(comm_content.value == ""){
 		alert("댓글을 작성해주세요");
-		commContent2.focus();
+		comm_content.focus();
+		return false;
+	}
+	if(comm_content.value.trim().length == 0){
+		alert("공백만으로 댓글을 작성할 수 없습니다");
+		comm_content.value = "";
+		comm_content.focus();
 		return false;
 	}
 	if(comm_content.value.length > 500){
 		alert("댓글은 500자를 넘길 수 없습니다");
-		commContent.focus();
+		comm_content.focus();
 		return false;
 	}
 	
@@ -46,7 +52,7 @@ function insertCocoCheck(index){
 				break;
 			case 1:
 				alert("대댓글이 작성되었습니다");
-				$("#reloadDiv").load(' #reloadDiv');
+				$("#reloadDivParent").load(' #reloadDiv');
 				break;
 			default:
 				break;
