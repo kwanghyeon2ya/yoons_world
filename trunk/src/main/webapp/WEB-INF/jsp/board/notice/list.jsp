@@ -64,8 +64,23 @@
 				</c:if>
 				
 				<c:if test="${count > 0}">
-					<c:forEach var="list" items="${boardList}">
+				
+					<c:forEach var="fixedBoardList" items="${fixedBoardList}">
 						<div>
+							<div class="num" style="color:#DC143C">[중요]</div>
+							<div class="title"><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}">${fixedBoardList.subject}</a></div>
+							<div class="writer">${fixedBoardList.writerName}</div>
+							<div class="date">	
+							<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /></div>
+							<div class="count">${fixedBoardList.readCnt}</div>
+						</div>
+					</c:forEach>
+				
+					 <c:forEach var="list" items="${boardList}">
+					<%-- <c:if test="${list.boardFixYn == Y}">
+									
+					</c:if> --%>
+					<div>
 							<div class="num">${list.postNum}</div>
 							<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}">${list.subject}</a></div>
 							<div class="writer">${list.writerName}</div>
@@ -78,8 +93,8 @@
 								</c:if>
 							</div>
 							<div class="count">${list.readCnt}</div>
-						</div>
-					</c:forEach>
+					</div>
+					</c:forEach> 
 				</c:if>
 			</div>
 							

@@ -12,6 +12,19 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
+<c:if test="${sessionScope.sessionSeqForUser == null}">
+	<script>
+	alert("로그인화면으로 이동합니다");
+	location.href="/login/loginView";
+	</script>
+</c:if>
+
+<script>
+function MoveAction(){
+	var url = "/board/free/list";
+	modBoardCheck(url);
+}
+</script>
 
 <!-- Main -->
 <div id="main">
@@ -25,7 +38,7 @@
 			<div class="board_write">
 				<form id="modify_form" name="modify_form" action="/board/free/list" method="POST" onSubmit="return modBoardCheck()" class="board-inline" enctype="multipart/form-data">
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
-					<input type="hidden" name="regrSeq" value="${vo.regrSeq}"/>
+					<input type="hidden" id="regrSeq" name="regrSeq" value="${vo.regrSeq}"/>
 					<input type="hidden" name="boardType" value="0"/>
 						
 					<textarea name="content" id="content" style="display:none;"></textarea>
@@ -33,10 +46,6 @@
 					<div class="area-board">
                     	<span>작성자 : ${vo.writerName}</span>
 						<div class="area-board-n">
-							
-							<input type="checkbox" id="hidename" name="hidename" />
-							<label for="hidename">익명</label>
-							
 						</div>								
                     </div>
 
@@ -47,7 +56,7 @@
                     <div style="width:100px;display:inline-block;">
                     	<details open>
 								<summary>첨부파일 목록</summary>
-							<c:forEach var="anlist" items="${anlist}">
+							<c:forEach var="anlist" items="${anlist}" varStatus="loop">
 								⊙${anlist.fileName}.${anlist.fileType}
 							</c:forEach>	
 						</details>
@@ -58,7 +67,7 @@
 					</div>
 						
 					<div class="area-button">
-						<button type="submit">수정</button>
+						<button type="button" onclick="MoveAction()">수정</button>
 						<button type="button" onclick="history.go(-1)">취소</button>
 					</div>
 					

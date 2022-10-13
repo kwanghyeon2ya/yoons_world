@@ -107,6 +107,8 @@ public class BoardServiceImpl implements BoardService {
 			int endRow,
 			String boardType) {
 		
+		System.out.println("서비스");
+		
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("search",search);
 		map.put("keyword",keyword);

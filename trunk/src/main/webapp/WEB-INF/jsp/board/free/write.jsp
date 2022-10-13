@@ -11,17 +11,23 @@
 
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
+
+<c:if test="${sessionScope.sessionSeqForUser == null}">
+	<script>
+	alert("로그인화면으로 이동합니다");
+	location.href="/login/loginView";
+	</script>
+</c:if>
+
 <script>
 function MoveAction(){
 	var url = "/board/free/list";
-	
 	if(document.getElementById("hide_name_check").checked){
 	makeRandomName();
 	}
+	document.getElementById("board_type").value = 0;
 	WriteBoardCheck(url);
 }
-	
-	
 </script>
 <!-- Main -->
 <div id="main">
@@ -34,9 +40,8 @@ function MoveAction(){
 			
 			<div class="board_write">
 				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
-					
-					<input type="hidden" name="boardType" value="0"/>
-					<textarea name="content" id="content" style="display:none;"></textarea>
+					<input type="hidden" name="boardType" id="board_type"/>
+ 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
                     	<span>작성자 : ${sessionScope.sessionNameForUser}</span>

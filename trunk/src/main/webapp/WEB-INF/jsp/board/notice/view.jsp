@@ -76,7 +76,7 @@ function MoveAction(){
 				<div class="area-board-btn">
 					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
 						<button type="button"
-							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
+							onclick="window.location='/board/notice/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
 							<!-- 게시글 수정 -->
 						<button type="button"
 							onclick="MoveAction()">삭제</button> <!-- 게시글 삭제 -->
@@ -163,18 +163,18 @@ function MoveAction(){
 
 						<c:if test="${startPage > 10}">
 							<a class="num"
-								href="/board/free/view?postSeq=${vo.postSeq}&pageNum=${startPage - 10}">
+								href="/board/notice/view?postSeq=${vo.postSeq}&pageNum=${startPage - 10}">
 								< </a>
 						</c:if>
 
 						<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
 							<a class="num"
-								href="/board/free/view?postSeq=${vo.postSeq}&pageNum=${i}&">[${i}]</a>
+								href="/board/notice/view?postSeq=${vo.postSeq}&pageNum=${i}&">[${i}]</a>
 						</c:forEach>
 
 						<c:if test="${endPage < pageCount}">
 							<a class="num"
-								href="/board/free/view?postSeq=${vo.postSeq}&pageNum=${startPage + 10}">
+								href="/board/notice/view?postSeq=${vo.postSeq}&pageNum=${startPage + 10}">
 								> </a>
 						</c:if>
 					</c:if>
@@ -197,7 +197,7 @@ function MoveAction(){
 			</div>
 			
 				<div class="area-button">
-					<button onclick="window.location='/board/free/list'">목록</button>
+					<button onclick="window.location='/board/notice/list'">목록</button>
 				</div>
 			</div>
 		</div>

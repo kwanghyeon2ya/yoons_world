@@ -93,14 +93,14 @@
 		    			file_name,
 		    			file_type
 		    		from 
-	    				board_attach 
+	    				board_attach
 		    		where 
-	    				file_name like '%#{keyword}%' 
+	    				file_name like '%${keyword}%' 
 	    			group by 
 	    				post_seq,
 	    				file_name,
 	    				file_type
-	    				) ba on pb.post_seq = ba.post_seq
+	    				)ba on pb.post_seq = ba.post_seq
 				</if>
 			where 
 				pb.board_type=#{boardType} 

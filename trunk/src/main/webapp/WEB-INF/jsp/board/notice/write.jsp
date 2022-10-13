@@ -14,6 +14,7 @@
 <script>
 function MoveAction(){
 	var url = "/board/notice/list";
+	document.getElementById("board_type").value = 1;
 	WriteBoardCheck(url);
 }
 </script>
@@ -27,10 +28,8 @@ function MoveAction(){
 			</div>
 			
 			<div class="board_write">
-				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
-					
-					<input type="hidden" name="boardType" value="1"/>
-					
+				<form id="insert_board_form" name="insert_board_form" method="POST" enctype="multipart/form-data" class="board-inline">
+					<input type="hidden" id="board_type" name="boardType"/>
 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
 					<div class="area-board">
@@ -40,9 +39,8 @@ function MoveAction(){
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->
 						</div>
-						
-							<input type="checkbox" id="hidename" name="hidename"/>
-							<label for="hidename">익명</label>
+							<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y"/>
+							<label for="board_fix_check">상단노출 고정</label> 
 						</div>								
                     </div>
 
@@ -58,7 +56,7 @@ function MoveAction(){
 					<div class="area-button">
 						<!-- >button type="submit">등록</button-->
 						<button type="button" onclick="MoveAction();">등록</button>
-						<button type="button" onclick="location.href='/board/free/list'">취소</button>
+						<button type="button" onclick="location.href='/board/notice/list'">취소</button>
 					</div>
 					
                 </form>

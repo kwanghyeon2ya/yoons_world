@@ -41,6 +41,7 @@
 					<select name="search">
 						<option value="subject_content">제목+내용</option>
 						<option value="comments">댓글</option>
+						<option value="attach_file">첨부파일</option>
 					</select>
 					<input type="text" name="keyword" value="${keyword}"></input>
 					<button type="submit">검색</button>
@@ -67,7 +68,14 @@
 					<c:forEach var="list" items="${boardList}">
 						<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}">${list.subject}</a></div>
+							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}">${list.subject}
+								<c:if test="${list.attachCnt != 0}">
+								/${list.fullFileName} 
+									<c:if test="${list.attachCnt > 1}">
+									외 ${list.attachCnt-1}
+									</c:if>
+								</c:if>
+							</a></div>
 							<div class="writer">${list.writerName}</div>
 							<div class="date">
 								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
