@@ -3,6 +3,8 @@ package com.iyoons.world.controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,14 +29,6 @@ public class UserAdminController {
 		return "admin/member/list";
 	}
 	
-	/*
-	@RequestMapping(value = "/member/list/view", method = RequestMethod.POST)
-	public String userView(String userId, Model model) {
-		model.addAttribute(null, userService.viewUser(userId));
-		return "admin/user/view";
-	}
-	*/
-	
 	// 회원 등록 페이지
 	@RequestMapping(value = "/member/createUserForm", method = RequestMethod.GET)
  	public String userCreate() throws SQLException {
@@ -51,13 +45,23 @@ public class UserAdminController {
 		return "redirect:/admin/member/list"; //회원 목록으로 이동
 	}
 	
-	// 회원 수정
-	@RequestMapping("/member/modifyUser")
-	public String userModify() {
-		
-		return "redirect:/admin/user/modify";
-	
+	// 회원 수정 페이지
+	@RequestMapping(value = "/member/modifyUserForm", method = RequestMethod.GET)
+	public String userModify(Model model) throws SQLException {
+		model.addAttribute("userModify",userService);		
+			
+		return "admin/member/modifyUserForm";
 	
 	}
 
+	// 회원 수정 처리
+		@RequestMapping("/member/modifyUser")
+		public String userUpdate(UserVO userVO,HttpSession session) throws SQLException {
+
+			userService.updateUser(userVO);
+			
+			return "redirect:/admin/member/list"; //회원 목록으로 이동
+		
+		
+		}
 }

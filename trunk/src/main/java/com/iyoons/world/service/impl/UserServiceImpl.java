@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUser(UserVO userVO) throws SQLException {
 		
-		return 0;
+		return userDAO.updateUser(userVO);
 	}
 
 	@Override

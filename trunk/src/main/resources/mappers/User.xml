@@ -60,22 +60,15 @@
 	</insert>
 	
 	<!-- 회원 수정  -->
-	<insert id="modifyUser" parameterType="com.iyoons.world.vo.UserVO">
-		update user_info (
-        	user_id,
-        	user_pw,
-        	user_name,
-        	email,
-        	user_seq
-    	)
-		VALUES (
-    		#{userId},
- 			#{userPw},
-    		#{userName},
-    		#{email},
-    		#{userSeq}
-    	 )
-	</insert>
+	<update id="modifyUser" parameterType="com.iyoons.world.vo.UserVO">
+		UPDATE user_info SET
+        	user_pw = #{userPw},
+        	user_name #{userName},
+        	email = #{email},
+        	last_update_dt = sysdate 
+    	WhERE
+    		user_id = #{userId} <!-- 일련번호로 수정 -->
+	</update>
 	
 	
 	
