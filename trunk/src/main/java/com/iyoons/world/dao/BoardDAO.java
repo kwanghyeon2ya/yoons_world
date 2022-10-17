@@ -23,5 +23,5 @@ public interface BoardDAO {
 	public void updateCnt(int postSeq); //게시글 조회수 업데이트
 	public int delView(BoardVO vo); //게시글 삭제
 	public int findUser(int postSeq); //입력받은 유저 db검색
-	public List<BoardVO> getNoticeFixedBoard();//상단 고정된 게시글만 가져옴
+	public List<BoardVO> getNoticeFixedBoard(String boardType);//상단 고정된 게시글만 가져옴
 }

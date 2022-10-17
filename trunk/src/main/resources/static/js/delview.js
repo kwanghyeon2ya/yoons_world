@@ -35,3 +35,4 @@ function deleteViewCheck(url){ //게시글 삭제
 		})
 	}
 }
+

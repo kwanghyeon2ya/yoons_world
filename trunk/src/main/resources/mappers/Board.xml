@@ -68,8 +68,8 @@
 	            pb.board_fix_yn,
 	            pb.first_insert_dt,
 	            pb.last_update_dt,
-	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq) as attach_cnt,
-	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1) as full_file_name,
+	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
+	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
 	            <if test="search != null and search.equals('attach_file')">
 	            ba.file_name,
 	            ba.file_type,
@@ -197,7 +197,8 @@
 			post_board
 		set
 			status = 0,
-			updr_seq = #{updrSeq}
+			updr_seq = #{updrSeq},
+			last_update_dt = sysdate
 		where
 			post_seq = #{postSeq} 
 			and regr_seq = #{regrSeq}
@@ -227,10 +228,10 @@
         from
         	post_board
         where 
-        	board_type=1
+        	board_type=#{boardType}
         	and status=1
         	and board_fix_yn ='Y'
         order by
-        	first_insert_dt desc	
+        	first_insert_dt desc
 	</select>
 </mapper>

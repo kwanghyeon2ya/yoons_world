@@ -39,7 +39,7 @@ function MoveAction(){
 			</div>
 			
 			<div class="board_write">
-				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
+				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
 					<input type="hidden" name="boardType" id="board_type"/>
  					<textarea name="content" id="content" style="display:none;"></textarea>
 					
@@ -63,6 +63,9 @@ function MoveAction(){
 					<div class="area-board">
                        	<textarea id="summernote" name="editordata"></textarea>
 					</div>
+					
+					<span id="word_count"></span>
+					
 					<input type="file" name="file" id="file" multiple="multiple"/>
 					
 					<div class="area-button">

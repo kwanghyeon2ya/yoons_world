@@ -57,6 +57,8 @@ public class BoardController {
 		model.addAttribute("allCount",allCount);
 		model.addAttribute("existCount",existCount);
 		model.addAttribute("pageNum",pageNum);
+		
+		
 	}
 	
 	public void boardList(
@@ -81,22 +83,14 @@ public class BoardController {
 		
 		if(count != 0) boardList = service.getBoardList(search,keyword,searchCheck,startRow, endRow, boardType);
 		
-		model.addAttribute("boardType",boardType);
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("currentPage",currentPage);
 		model.addAttribute("startRow",startRow);
 		model.addAttribute("endRow",endRow);
 		model.addAttribute("count",count);
 		model.addAttribute("boardList",boardList);
-		model.addAttribute("pageNum",pageNum);
-		model.addAttribute("keyword",keyword);
-		model.addAttribute("searchCheck",searchCheck);
-		model.addAttribute("search",search);
 	}
 	
-	public void getComments() {
-		
-	}
 	
 	@RequestMapping("free/list")
 	public String getFreeList(
@@ -106,6 +100,11 @@ public class BoardController {
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
+		model.addAttribute("boardType",boardType);
+		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("searchCheck",searchCheck);
+		model.addAttribute("search",search);
 		return "board/free/list";
 	}
 	
@@ -117,7 +116,13 @@ public class BoardController {
 			@RequestParam(value="boardType",required=false,defaultValue="1")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
-		List<BoardVO>fixedBoardList = service.getNoticeFixedBoard();
+		
+		List<BoardVO>fixedBoardList = service.getNoticeFixedBoard(boardType);
+		model.addAttribute("boardType",boardType);
+		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("searchCheck",searchCheck);
+		model.addAttribute("search",search);
 		model.addAttribute("fixedBoardList",fixedBoardList);
 		return "board/notice/list";
 	}
@@ -130,13 +135,19 @@ public class BoardController {
 			@RequestParam(value="boardType",required=false,defaultValue="2")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
+		model.addAttribute("boardType",boardType);
+		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("searchCheck",searchCheck);
+		model.addAttribute("search",search);
 		return "board/pds/list";
 	}
 	
 	@RequestMapping("free/modify")
 	public String FreeModify(BoardVO vo,Model model) {
 		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		model.addAttribute("vo",vo);
+		BoardVO vo2 =service.getView(vo.getPostSeq());
+		model.addAttribute("vo",vo2);
 		model.addAttribute("anlist",anlist);
 		return "board/free/modify";
 	}
@@ -144,7 +155,8 @@ public class BoardController {
 	@RequestMapping("notice/modify")
 	public String NoticeModify(BoardVO vo,Model model) {
 		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		model.addAttribute("vo",vo);
+		BoardVO vo2 =service.getView(vo.getPostSeq());
+		model.addAttribute("vo",vo2);
 		model.addAttribute("anlist",anlist);
 		return "board/notice/modify";
 	}
@@ -152,13 +164,15 @@ public class BoardController {
 	@RequestMapping("pds/modify")
 	public String PdsModify(BoardVO vo,Model model) {
 		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		model.addAttribute("vo",vo);
+		BoardVO vo2 =service.getView(vo.getPostSeq());
+		model.addAttribute("vo",vo2);
 		model.addAttribute("anlist",anlist);
 		return "board/pds/modify";
 	}
 	
 	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
-	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session/*,MultipartFile file*/) {
+	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session,
+										@RequestParam(value="file",required=false)MultipartFile[] files) {
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
 		System.out.println(vo.getRegrSeq());
@@ -168,7 +182,8 @@ public class BoardController {
 		}
 		if(vo.getRegrSeq() == sessionSeqForUser) {
 		vo.setUpdrSeq(sessionSeqForUser);
-		return service.modView(vo);
+		vo.setRegrSeq(sessionSeqForUser);
+		return service.modView(vo,files);
 		}
 		
 		return 0;

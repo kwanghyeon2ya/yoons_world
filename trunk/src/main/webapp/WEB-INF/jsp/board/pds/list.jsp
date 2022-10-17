@@ -25,6 +25,8 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
+<%-- <c:if test="">  --%>
+<%-- </c:if>  --%>
 <!-- Main -->
 <div id="main">
 	<div class="container">
@@ -35,19 +37,20 @@
 			</div>
 						
 			<form action="/board/pds/list" method="get">
+			<input type="hidden" id="keyword_check" value="${keyword}"/>
+			<input type="hidden" id="search_check" value="${search}"/>
 			<input type="hidden" name="boardType" value="2"/>
 			<input type="hidden" name="searchCheck" value="1"/>
 				<div class="area-search">
-					<select name="search">
-						<option value="subject_content">제목+내용</option>
-						<option value="comments">댓글</option>
-						<option value="attach_file">첨부파일</option>
+					<select id="search" name="search">
+						<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
+						<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
+						<option value="attach_file" ${search == 'attach_file' ? 'selected="selected"' :''}>첨부파일</option>
 					</select>
 					<input type="text" name="keyword" value="${keyword}"></input>
 					<button type="submit">검색</button>
 				</div>					
 			</form>
-				
 			
 			<div class="board_list">
 				<div class="top">

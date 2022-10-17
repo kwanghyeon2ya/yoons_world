@@ -21,6 +21,13 @@
 	</script>
 </c:if>
 
+<script>
+function deleteMoveAction(){
+	var url = "/board/pds/list";
+	deleteViewCheck(url);
+}
+</script>
+
 <!-- Main -->
 <div id="main">
 	<div class="container">
@@ -72,7 +79,7 @@
 							onclick="window.location='/board/pds/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
 							<!-- 게시글 수정 -->
 						<button type="button"
-							onclick="MoveAction()">삭제</button><!-- 게시글 삭제 -->
+							onclick="deleteMoveAction()">삭제</button><!-- 게시글 삭제 -->
 					</c:if>
 				</div>
 				

@@ -51,6 +51,9 @@ function MoveAction(){
 					<div class="area-board">
                        	<textarea id="summernote" name="editordata"></textarea>
 					</div>
+					
+					<span id="word_count"></span>
+					
 					<input type="file" name="file" id="file" multiple="multiple"/>
 					
 					<div class="area-button">

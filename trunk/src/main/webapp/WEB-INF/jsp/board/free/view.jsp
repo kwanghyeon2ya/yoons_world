@@ -22,7 +22,7 @@
 </c:if>
 
 <script>
-function MoveAction(){
+function deleteMoveAction(){
 	var url = "/board/free/list";
 	deleteViewCheck(url);
 }
@@ -79,7 +79,7 @@ function MoveAction(){
 							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
 							<!-- 게시글 수정 -->
 						<button type="button"
-							onclick="MoveAction()">삭제</button> <!-- 게시글 삭제 -->
+							onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
 					</c:if>
 				</div>
 				

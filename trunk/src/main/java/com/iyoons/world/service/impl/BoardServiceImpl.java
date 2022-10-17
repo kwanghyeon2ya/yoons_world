@@ -1,6 +1,7 @@
 package com.iyoons.world.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,9 +60,9 @@ public class BoardServiceImpl implements BoardService {
 					uploadPath.mkdir();
 				}
 					
-				String uploadFileName = f.getOriginalFilename();
-				String FileType = f.getContentType();
-				bavo.setFileName(uploadFileName.substring(0,f.getOriginalFilename().lastIndexOf(".")));
+				String uploadFileName = f.getOriginalFilename(); 
+				String FileType = f.getContentType(); 
+				bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
 				bavo.setFileType(FileType.split("/")[1]);
 				String uuid = UUID.randomUUID().toString();
 				
@@ -148,7 +149,59 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int modView(BoardVO vo) { //게시글 수정
+	@Transactional
+	public int modView(BoardVO vo,MultipartFile[] files) { //게시글 수정
+/*		List<BoardAttachVO> blist = new ArrayList<>();*/	
+	for(MultipartFile f : files){
+			if(!f.isEmpty()) {
+				int i = 1;
+				BoardAttachVO bavo = new BoardAttachVO();
+				
+				File uploadPath = new File(REAL_PATH);
+				if(!uploadPath.exists()) {
+					uploadPath.mkdir();
+				}
+				
+				String uploadFileName = f.getOriginalFilename();
+				bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
+				String fileType = f.getContentType();
+				bavo.setFileType(fileType.split("/")[1]);
+				String uuid = UUID.randomUUID().toString();
+				bavo.setFileSize(f.getSize());
+				bavo.setFileUuid(uuid);
+				bavo.setPostSeq(vo.getPostSeq());
+				bavo.setFilePath(REAL_PATH);
+				bavo.setUpdrSeq(vo.getUpdrSeq());
+				bavo.setRegrSeq(vo.getRegrSeq());
+				
+				uploadFileName = File.separator + uuid + uploadFileName;
+				
+				try {
+					f.transferTo(new File(REAL_PATH + uploadFileName));
+					adao.insertAttach(bavo);
+					System.out.println("파일추가 "+i+"개 째");
+					i++;
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(vo.getFileUuidArray() != null) { 
+			if(vo.getFileUuidArray().length != 0) {
+				for(String file : vo.getFileUuidArray()) {
+					BoardVO vo2 = new BoardVO();
+					vo2.setPostSeq(vo.getPostSeq());
+					vo2.setUpdrSeq(vo.getUpdrSeq());
+					vo2.setFileUuid(file);
+					
+					System.out.println("view 수정페이지 삭제 진입확인");
+					System.out.println(file);
+					adao.deleteSelectedAttach(vo2);
+					System.out.println("view 수정페이지 삭제 완료 확인");
+					
+				}
+			}
+		}
 		return dao.modView(vo);
 	}
 	@Override
@@ -176,8 +229,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> getNoticeFixedBoard() {
-		return dao.getNoticeFixedBoard();
+	public List<BoardVO> getNoticeFixedBoard(String boardType) {
+		return dao.getNoticeFixedBoard(boardType);
 	}
 	
 }

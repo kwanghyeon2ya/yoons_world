@@ -8,7 +8,6 @@ function WriteBoardCheck(url){
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
-	var rtn = false;
 	//임시 사용
 	
 	
@@ -28,16 +27,16 @@ function WriteBoardCheck(url){
 		$("#subject").focus();
 		return false;
 	}
-	if($("#summernote").val() == ""){
+	if($("#content").val() == ""){
 		alert("본문을 작성해주세요");
-		$("#content").focus();
+		$("#summernote").focus();
 		return false;
 	}
-	if($("#summernote").val().trim().length == 0){
+	if($("#content").val().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
-	if($("#summernote").val().length > 4000){
+	if($("#content").val().length > 4000){
 		alert("본문은 4000자 이상 작성할 수 없습니다");
 		$("#content").focus();
 		return false;
@@ -112,29 +111,39 @@ function modBoardCheck(url){
 	$("#content").val($(".note-editable").text());
 	var rtn = false;
 	var modify_form = $("#modify_form")[0];
-	var param = $("#modify_form").serialize();
+	var mod_form_data = new FormData(modify_form);
+	var file_uuid_array = document.getElementsByName("fileUuidArray").value
+	
+	console.log("uuidArray :" + file_uuid_array);
 	
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
 		return false;
 	}
-	if($("#summernote").val() == ""){
+	if($("#content").val() == ""){
 		alert("본문 내용을 작성해주세요");
 		return false;
 	}
-	if($("#summernote").val().trim().length == 0){
+	if($("#content").val().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
+	if($("#content").val().length > 4000){
+		alert("본문은 4000자 이상 작성할 수 없습니다");
+		$("#content").focus();
+		return false;
+	}
+		
 	$.ajax({
 		url : '/board/modifyViewProc',
 		type : 'POST',
-		data : param,
+		enctype : 'multipart/form-data',
+		data : mod_form_data,
 		dataType : "json",
 		async : false,
 		cache : false,
-	/* processData: false, */
-		/* contentType: false, */
+		contentType : false,
+		processData: false,
 	 	success : function(data){
 		 		switch(Number(data)){
 		 		case 0:
@@ -157,3 +166,28 @@ function modBoardCheck(url){
 		console.log("form :"+modify_form)
 		return rtn;
 }
+
+
+$(".note-editable").keyup(function() {
+	/*var content_value = document.getElementById("content").value;*/
+	/*$("#content").val($(".note-editable").text());*/
+	
+	
+	/*var content_value = $("#content").val();*/
+	/*var content_len = content_value.length;*/
+	var str = "";
+	/*str += "["+content_len+"자 /4000]";*/
+	
+	var summernote_value = $(".note-editable").val();
+	var summernote_len = summernote_value.length;
+	
+	
+	
+	str += "["+summernote_len+"자 /4000]";
+	
+	if(summernote_len> 3999){
+		alert("제한 글자를 초과하였습니다");
+		content_value(summernote_value.substring(0,3999));
+	}
+	$("#word_count").html(str);
+});

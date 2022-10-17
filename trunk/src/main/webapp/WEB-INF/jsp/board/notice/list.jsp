@@ -39,8 +39,8 @@
 			<input type="hidden" name="searchCheck" value="1"/>
 				<div class="area-search">
 					<select name="search">
-						<option value="subject_content">제목+내용</option>
-						<option value="comments">댓글</option>
+						<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
+						<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
 					</select>
 					<input type="text" name="keyword" value="${keyword}"></input>
 					<button type="submit">검색</button>

@@ -14,9 +14,9 @@ public interface BoardService {
 	public int getBoardCount(String boardType);
 	public int getSearchCount(String search,String keyword,String searchCheck,int startRow, int endRow, String boardType);
 	public BoardVO getView(int postSeq);
-	public int modView(BoardVO vo);
+	public int modView(BoardVO vo,MultipartFile[] files);
 	public void updateCnt(int postSeq);
 	public int delView(BoardVO vo);
 	public int findUser(int postSeq);
-	public List<BoardVO> getNoticeFixedBoard();
+	public List<BoardVO> getNoticeFixedBoard(String boardType);
 }
