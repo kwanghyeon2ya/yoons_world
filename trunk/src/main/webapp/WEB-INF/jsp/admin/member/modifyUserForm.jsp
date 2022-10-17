@@ -16,19 +16,16 @@
 		$(document).ready(function(){
 			
 			$("#insertbtn").on("click", function(){
-				if($("#userId").val()==""){
-					alert("아이디를 입력해주세요.");
-					$("#userId").focus();
-					return false;
-				}
-				if($("#userPw").val()==""){
-					alert("비밀번호를 입력해주세요.");
-					$("#userPw").focus();
-					return false;
-				}
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
 					$("#userName").focus();
+					return false;
+				}
+			
+			$("#insertbtn").on("click", function(){
+				if($("#userPw").val()==""){
+					alert("비밀번호를 입력해주세요.");
+					$("#userPw").focus();
 					return false;
 				}
 				
@@ -37,19 +34,10 @@
 					$("#email").focus();
 					return false;
 				}
-				
-				if($("#userSeq").val()==""){
-					alert("회원번호를 입력해주세요.");
-					$("#userSeq").focus();
-					return false;
-				}
 			});
 			
-			//DatePicker
-			$("#userHireDt").datepicker();
 		})
 </script>
-
 
 <!-- Main -->
 <div id="main">
@@ -57,19 +45,26 @@
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>회원등록</h3>
+				<h3>회원정보수정</h3>
 			</div>
 			
-			<form action="/admin/member/createUser" method="post">
+			<form action="/admin/member/modifyUser" method="post">
     		
 	    		<div class="area-input-info">
 					<label for="userName" >이름</label>
-					<input id="userName" type="text" maxlength="20"/>
+					<input id="userName" type="text" maxlength="20" value="${userVO.userName}"/>
 				</div>
 				
+
+				<div class="area-input-info">
+					<label for="userSeq" >회원번호</label>
+					<input id="userSeq" type="text"  value="${userVO.userSeq}" readonly="readonly"/>
+				</div>
+				
+
 				<div class="area-input-info">
 					<label for="userId" >아이디</label>
-					<input id="userId" type="text" maxlength="15"/>
+					<input id="userId" type="text" value="${userVO.userId}" readonly="readonly"/>
 				</div>
 				
 				<div class="area-input-info">
@@ -79,12 +74,7 @@
 				
 				<div class="area-input-info">
 					<label for="email" >이메일</label>
-					<input id="email" type="text"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userSeq" >회원번호</label>
-					<input id="userSeq" type="text"/>
+					<input id="email" type="text" value="${userVO.email}"/>
 				</div>
 				
 <!-- 				<div class="area-input-info">
@@ -92,7 +82,7 @@
 					<input id="userDep" type="text"/>
 				</div>
 				
-					<div class="area-input-info">
+				<div class="area-input-info">
 					<label for="userStatus" >상태</label>
 					<select id="userStatus" name="userStatus" >
 						<option value="1" selected>활동</option>
@@ -112,11 +102,11 @@
 				<div class="area-input-info">
 					<label for="userHireDt" >입사일</label>
 					<input id="userHireDt" type="text"/>
-				</div>
+				</div> 
 				 -->
 				 
 				<div class="area-button">
-					<button type="submit" id="insertbtn">저장</button>
+					<button type="submit" id="updatebtn">수정</button>
 					<button type="button" onclick="location.href='/admin/member/list'">취소</button>
 				</div>
 			

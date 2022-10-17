@@ -13,6 +13,8 @@ public interface UserDAO {
 	public int insertUser(UserVO userVO) throws SQLException;
 	
 	public int updateUser(UserVO userVO) throws SQLException;
+	
+	public UserVO userDetail(String userId) throws SQLException;
 
 	public int deleteUser(String userId) throws SQLException;
 	
@@ -23,6 +25,5 @@ public interface UserDAO {
 	public List<UserVO> userList();
 
 	public UserVO viewUser();
-	
 	
 }

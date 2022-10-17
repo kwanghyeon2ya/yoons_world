@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.iyoons.world.service.UserService;
@@ -47,16 +48,18 @@ public class UserAdminController {
 	
 	// 회원 수정 페이지
 	@RequestMapping(value = "/member/modifyUserForm", method = RequestMethod.GET)
-	public String userModify(Model model) throws SQLException {
-		model.addAttribute("userModify",userService);		
-			
+	public String userDetail(String userId, Model model) throws SQLException {	
+		
+		//System.out.println("클릭한 아이디: "+ userId); //확인은 항상 위에서 하기
+		//DB로 연결		
+		model.addAttribute("userVO",userService.userDetail(userId));
 		return "admin/member/modifyUserForm";
 	
 	}
 
 	// 회원 수정 처리
-		@RequestMapping("/member/modifyUser")
-		public String userUpdate(UserVO userVO,HttpSession session) throws SQLException {
+		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
+		public String userUpdate(UserVO userVO) throws SQLException {
 
 			userService.updateUser(userVO);
 			

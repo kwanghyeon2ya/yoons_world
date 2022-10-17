@@ -74,8 +74,8 @@ $(function(){
 				<c:forEach var="list" items="${userList}">
 					<div>
 						<div class="mem-num">1</div>
-						<div class="mem-name"><a href="/admin/member/view">${list.userName}</a></div>
-						<div class="mem-id"><a href="/admin/member/view">${list.userId}</a></div>
+						<div class="mem-name"><a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userName}</a></div>
+						<div class="mem-id"><a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userId}</a></div>
 						<div class="mem-dep">${list.depName}</div>
 						<div class="mem-status">${list.userStatus}</div>
 						<div class="mem-type">${list.userType}</div>

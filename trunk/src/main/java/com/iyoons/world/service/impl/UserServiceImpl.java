@@ -58,4 +58,11 @@ public class UserServiceImpl implements UserService {
 		return userDAO.viewUser();
 	}
 
+	@Override
+	public UserVO userDetail(String userId) throws SQLException {
+
+		return userDAO.userDetail(userId);
+	}
+
+	
 }

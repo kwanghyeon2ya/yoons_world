@@ -13,11 +13,13 @@ public interface UserService {
 	public int insertUser(UserVO userVO) throws SQLException;
 	
 	public int updateUser(UserVO userVO) throws SQLException;
+	
+	public UserVO userDetail(String userId) throws SQLException;
 
 	public int deleteUser(String userId) throws SQLException;
 	
 	public List<UserVO> userList();
-
+	
 	public UserVO viewUser();
 
 	
