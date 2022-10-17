@@ -62,10 +62,9 @@
 	<!-- 회원 수정  -->
 	<update id="updateUser" parameterType="com.iyoons.world.vo.UserVO">
 		UPDATE user_info SET
+        	user_name = #{userName},
         	user_pw = #{userPw},
-        	user_name #{userName},
-        	email = #{email},
-        	last_update_dt = sysdate 
+        	email = #{email}
     	WhERE
     		user_id = #{userId} <!-- 일련번호로 수정 -->
 	</update>

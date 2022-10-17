@@ -15,14 +15,12 @@
 <script type="text/javascript">
 		$(document).ready(function(){
 			
-			$("#insertbtn").on("click", function(){
+			$("#updatebtn").on("click", function(){
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
 					$("#userName").focus();
 					return false;
 				}
-			
-			$("#insertbtn").on("click", function(){
 				if($("#userPw").val()==""){
 					alert("비밀번호를 입력해주세요.");
 					$("#userPw").focus();
@@ -34,6 +32,7 @@
 					$("#email").focus();
 					return false;
 				}
+				
 			});
 			
 		})
@@ -52,29 +51,29 @@
     		
 	    		<div class="area-input-info">
 					<label for="userName" >이름</label>
-					<input id="userName" type="text" maxlength="20" value="${userVO.userName}"/>
+					<input id="userName" name="userName" type="text" maxlength="20" value="${userVO.userName}"/>
 				</div>
 				
 
 				<div class="area-input-info">
 					<label for="userSeq" >회원번호</label>
-					<input id="userSeq" type="text"  value="${userVO.userSeq}" readonly="readonly"/>
+					<input id="userSeq" name="userSeq" type="text"  value="${userVO.userSeq}" readonly="readonly"/>
 				</div>
 				
 
 				<div class="area-input-info">
 					<label for="userId" >아이디</label>
-					<input id="userId" type="text" value="${userVO.userId}" readonly="readonly"/>
+					<input id="userId" name="userId" type="text" value="${userVO.userId}" readonly="readonly"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="userPw" >패스워드</label>
-					<input id="userPw" type="password" maxlength="20"/>
+					<input id="userPw" name="userPw" type="password" maxlength="20"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="email" >이메일</label>
-					<input id="email" type="text" value="${userVO.email}"/>
+					<input id="email" name="email" type="text" value="${userVO.email}"/>
 				</div>
 				
 <!-- 				<div class="area-input-info">

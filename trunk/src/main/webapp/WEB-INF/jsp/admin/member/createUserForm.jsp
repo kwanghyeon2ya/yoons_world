@@ -64,27 +64,27 @@
     		
 	    		<div class="area-input-info">
 					<label for="userName" >이름</label>
-					<input id="userName" type="text" maxlength="20"/>
+					<input id="userName" name="userName" type="text" maxlength="20"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="userId" >아이디</label>
-					<input id="userId" type="text" maxlength="15"/>
+					<input id="userId" name="userId" type="text" maxlength="15"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="userPw" >패스워드</label>
-					<input id="userPw" type="password" maxlength="20"/>
+					<input id="userPw" name="userPw" type="password" maxlength="20"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="email" >이메일</label>
-					<input id="email" type="text"/>
+					<input id="email" name="email" type="text"/>
 				</div>
 				
 				<div class="area-input-info">
 					<label for="userSeq" >회원번호</label>
-					<input id="userSeq" type="text"/>
+					<input id="userSeq" name="userSeq" type="text"/>
 				</div>
 				
 <!-- 				<div class="area-input-info">
