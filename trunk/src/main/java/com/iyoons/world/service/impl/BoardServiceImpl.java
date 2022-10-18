@@ -27,7 +27,8 @@ import com.iyoons.world.vo.CommentsVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	final String REAL_PATH= "C:/yoons_world/files";
+	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";
+	/*final String REAL_PATH="C:\yoons_world\files";*/
 	
 	@Autowired
 	private BoardDAO dao;
@@ -154,7 +155,6 @@ public class BoardServiceImpl implements BoardService {
 /*		List<BoardAttachVO> blist = new ArrayList<>();*/	
 	for(MultipartFile f : files){
 			if(!f.isEmpty()) {
-				int i = 1;
 				BoardAttachVO bavo = new BoardAttachVO();
 				
 				File uploadPath = new File(REAL_PATH);
@@ -179,8 +179,6 @@ public class BoardServiceImpl implements BoardService {
 				try {
 					f.transferTo(new File(REAL_PATH + uploadFileName));
 					adao.insertAttach(bavo);
-					System.out.println("파일추가 "+i+"개 째");
-					i++;
 				} catch (IllegalStateException | IOException e) {
 					e.printStackTrace();
 				}
@@ -195,7 +193,7 @@ public class BoardServiceImpl implements BoardService {
 					vo2.setFileUuid(file);
 					
 					System.out.println("view 수정페이지 삭제 진입확인");
-					System.out.println(file);
+					System.out.println("uuid : "+file);
 					adao.deleteSelectedAttach(vo2);
 					System.out.println("view 수정페이지 삭제 완료 확인");
 					

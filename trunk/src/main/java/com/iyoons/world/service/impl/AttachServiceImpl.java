@@ -21,7 +21,7 @@ public class AttachServiceImpl implements AttachService{
 	public List<BoardAttachVO> getAttachList(int postSeq) {
 		List<BoardAttachVO> anlist = dao.getAttachList(postSeq);
 		for(BoardAttachVO avo : anlist) {
-			String path = avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+			String path = File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 			avo.setFullPath(path);
 		}
 		return anlist;

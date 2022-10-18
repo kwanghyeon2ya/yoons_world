@@ -168,26 +168,22 @@ function modBoardCheck(url){
 }
 
 
-$(".note-editable").keyup(function() {
-	/*var content_value = document.getElementById("content").value;*/
-	/*$("#content").val($(".note-editable").text());*/
-	
-	
-	/*var content_value = $("#content").val();*/
-	/*var content_len = content_value.length;*/
-	var str = "";
-	/*str += "["+content_len+"자 /4000]";*/
-	
-	var summernote_value = $(".note-editable").val();
-	var summernote_len = summernote_value.length;
-	
-	
-	
-	str += "["+summernote_len+"자 /4000]";
-	
-	if(summernote_len> 3999){
-		alert("제한 글자를 초과하였습니다");
-		content_value(summernote_value.substring(0,3999));
-	}
-	$("#word_count").html(str);
+
+
+
+$(document).ready(function(){
+	$(".note-editable").keyup(function() {
+		
+		var content_value = $(".note-editable").text();
+		var content_len = content_value.length;
+		var str = "";
+		str += "["+content_len+"자/4000]";
+		
+		if(content_len> 3999){
+			alert("제한 글자를 초과하였습니다");
+			$("#content").val(content_value.substring(0,3999));
+		}
+		$("#word_count").html(str);
+		$("#word_count").attr("color","green");
+	})
 });

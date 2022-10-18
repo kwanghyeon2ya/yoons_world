@@ -180,6 +180,9 @@ public class BoardController {
 		if(vo.getBoardFixYn() == null) {
 			vo.setBoardFixYn("N");
 		}
+		if(!files[0].isEmpty()) {
+			vo.setFileAttachYn("Y");
+			}
 		if(vo.getRegrSeq() == sessionSeqForUser) {
 		vo.setUpdrSeq(sessionSeqForUser);
 		vo.setRegrSeq(sessionSeqForUser);
