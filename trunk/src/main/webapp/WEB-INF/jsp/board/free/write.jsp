@@ -43,6 +43,7 @@ function MoveAction(){
 					<input type="hidden" name="boardType" id="board_type"/>
  					<textarea name="content" id="content" style="display:none;"></textarea>
 					
+					
 					<div class="area-board">
                     	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
 						<div class="area-board-n">
@@ -53,14 +54,14 @@ function MoveAction(){
 							<input type="hidden" id="hide_name" name="hideName"/>
 							<input type="checkbox" id="hide_name_check" name="hideCheck" value="0" onclick="makeRandomName()"/>
 							<label for="hide_name_check">익명</label>
-						</div>								
+						</div>
+						<input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>								
                     </div>
 
-					<div class="area-board">
-                        <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>
-                    </div>
+                        
 
-					<div class="area-board">
+
+					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"></textarea>
 					</div>
 					

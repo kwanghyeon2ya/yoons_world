@@ -9,12 +9,7 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
-	<script>
-		alert("로그인이 필요합니다")
-		window.location.href="/login/loginView";
-	</script>
-</c:if>
+
 
 <%-- <c:if test="${count > 0}">
     <c:if test="${searchCheck != null && searchCheck != ''}">
