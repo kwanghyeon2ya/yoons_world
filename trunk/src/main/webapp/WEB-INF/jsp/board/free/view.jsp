@@ -124,9 +124,11 @@ function deleteMoveAction(){
 									<p><c:out value="${clist.commContent}"/></p>
 									<p>
 										<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/> &nbsp;
-										<c:if test="${clist.commLevel == 0}">
+										
+										<c:if test="${clist.commLevel == 0}"> <!-- level 존재 여부에 따라 본댓글, 대댓글 -->
 											<a href="javascript:showHideCocoForm(${loop.index})" id="showHideButton_${loop.index}">답글쓰기</a>&nbsp;
 										</c:if>
+										
 										<c:if test="${sessionScope.sessionSeqForUser == clist.regrSeq}">
 											<a href="javascript:void(0)" id="modifyCommButton_${loop.index}" onclick="modCommFormShowHide(${loop.index})">수정</a>&nbsp; <!-- 댓글수정폼 보이기 -->
 											<a href="javascript:void(0)" id="deleteCommButton_${loop.index}" onclick="deleteCommentsCheck(${loop.index})">삭제</a> <!-- 댓글삭제 -->

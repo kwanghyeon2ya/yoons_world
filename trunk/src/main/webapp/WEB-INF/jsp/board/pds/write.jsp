@@ -12,34 +12,37 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
+<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
-		alert("로그인이 필요합니다")
-		window.location.href="/login/loginView";
+	alert("로그인화면으로 이동합니다");
+	location.href="/login/loginView";
 	</script>
 </c:if>
 
 <script>
 function MoveAction(){
 	var url = "/board/pds/list";
-	document.getElementById("board_type").value = 2;
+	if(document.getElementById("hide_name_check").checked){
+	makeRandomName();
+	}
+	document.getElementById("board_type").value = 0;
 	WriteBoardCheck(url);
 }
 </script>
-
 <!-- Main -->
 <div id="main">
 	<div class="container">
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>자료실</h3>
+				<h3>자유게시판</h3>
 			</div>
 			
 			<div class="board_write">
-				<form id="insert_board_form" name="insert_board_form" method="POST" onSubmit="return WriteBoardCheck()" enctype="multipart/form-data" class="board-inline">
-					<input type="hidden" id="board_type" name="boardType"/>
-					<textarea name="content" id="content" style="display:none;"></textarea>
+				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
+					<input type="hidden" name="boardType" id="board_type"/>
+ 					<textarea name="content" id="content" style="display:none;"></textarea>
+					
 					
 					<div class="area-board">
                     	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
@@ -48,14 +51,17 @@ function MoveAction(){
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->
 						</div>
-						</div>								
+							<input type="hidden" id="hide_name" name="hideName"/>
+							<input type="checkbox" id="hide_name_check" name="hideCheck" value="0" onclick="makeRandomName()"/>
+							<label for="hide_name_check">익명</label>
+						</div>
+						<input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>								
                     </div>
 
-					<div class="area-board">
-                        <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>
-                    </div>
+                        
 
-					<div class="area-board">
+
+					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"></textarea>
 					</div>
 					
@@ -64,7 +70,9 @@ function MoveAction(){
 					<input type="file" name="file" id="file" multiple="multiple"/>
 					
 					<div class="area-button">
+						<!--button type="submit">등록</button-->
 						<button type="button" onclick="MoveAction();">등록</button>
+						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
 						<button type="button" onclick="location.href='/board/pds/list'">취소</button>
 					</div>
 					
