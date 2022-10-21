@@ -71,7 +71,7 @@
 					<c:forEach var="list" items="${boardList}">
 						<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}">${list.subject}
+							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span>
 								<c:if test="${list.attachCnt != 0}">
 								/${list.fullFileName} 
 									<c:if test="${list.attachCnt > 1}">
@@ -103,6 +103,7 @@
 				<c:if test="${count > 0}">
 					<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
 					<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
+					<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true" />
 					<c:set var="startPage" value="${result*10+1}"/>
 					<c:set var="pageBlock" value="${10}"/>
 					<c:set var="endPage" value="${startPage + pageBlock - 1}"/>
@@ -116,7 +117,10 @@
 					</c:if>
 					
 					<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-						<a class="num" href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">${i}</a>
+						<a class="num" href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">
+						<c:if test="${currentPage eq i}"><span style="font-weight:bold">${i}</span></c:if>
+						<c:if test="${currentPage ne i}">${i}</c:if>
+						</a>
 					</c:forEach> 
 					
 					<c:if test="${endPage < pageCount}">

@@ -68,7 +68,7 @@
 					<c:forEach var="fixedBoardList" items="${fixedBoardList}">
 						<div>
 							<div class="num" style="color:#DC143C">[중요]</div>
-							<div class="title"><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}">${fixedBoardList.subject}</a></div>
+							<div class="title"><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/> &nbsp; <span style="color:#81c147">[${fixedBoardList.commentsCnt}]</span></a></div>
 							<div class="writer">${fixedBoardList.writerName}</div>
 							<div class="date">	
 							<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /></div>
@@ -78,11 +78,10 @@
 				
 					 <c:forEach var="list" items="${boardList}">
 					<%-- <c:if test="${list.boardFixYn == Y}">
-									
 					</c:if> --%>
 					<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}">${list.subject}</a></div>
+							<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span></a></div>
 							<div class="writer">${list.writerName}</div>
 							<div class="date">
 								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
@@ -102,11 +101,12 @@
 				<button onclick="window.location='/board/notice/write'">글쓰기</button>
 			</div>
 			
-			
+					
 			<div class="board_page">
 				<c:if test="${count > 0}">
 					<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
 					<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
+					<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true" />
 					<c:set var="startPage" value="${result*10+1}"/>
 					<c:set var="pageBlock" value="${10}"/>
 					<c:set var="endPage" value="${startPage + pageBlock - 1}"/>
@@ -120,7 +120,10 @@
 					</c:if>
 					
 					<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-						<a class="num" href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${i}&">${i}</a>
+						<a class="num" href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${i}&">
+						<c:if test="${currentPage eq i}"><span style="font-weight:bold">${i}</span></c:if>
+						<c:if test="${currentPage ne i}">${i}</c:if>
+						</a>
 					</c:forEach> 
 					
 					<c:if test="${endPage < pageCount}">

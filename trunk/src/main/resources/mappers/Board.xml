@@ -68,6 +68,7 @@
 	            pb.board_fix_yn,
 	            pb.first_insert_dt,
 	            pb.last_update_dt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq) as comments_cnt,
 	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
 	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
 	            <if test="search != null and search.equals('attach_file')">
@@ -179,7 +180,8 @@
 			content = #{content} ,
 			board_fix_yn = #{boardFixYn},
 			last_update_dt = sysdate,
-			updr_seq = #{updrSeq}
+			updr_seq = #{updrSeq},
+			file_attach_yn = #{fileAttachYn}
 		where
 			post_seq=#{postSeq} 
 			and status = 1
@@ -215,18 +217,19 @@
 	</select>
 	<select id="getNoticeFixedBoard" resultType="com.iyoons.world.vo.BoardVO">
 		select
-			post_seq,
-            writer_name,
-            subject,
-            content,
-            status,
-            read_cnt,
-            board_type,
-            board_fix_yn,
-            first_insert_dt,
-            last_update_dt
+			pb.post_seq,
+            pb.writer_name,
+            pb.subject,
+            pb.content,
+            pb.status,
+            pb.read_cnt,
+            pb.board_type,
+            pb.board_fix_yn,
+            pb.first_insert_dt,
+            pb.last_update_dt,
+			(select count(1) from comments c1 where pb.post_seq = c1.post_seq) as comments_cnt
         from
-        	post_board
+        	post_board pb
         where 
         	board_type=#{boardType}
         	and status=1

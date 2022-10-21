@@ -33,6 +33,7 @@ public class BoardVO {
 	private int hideCheck;
 	private String fullFileName;
 	private int attachCnt;
+	private int commentsCnt;
 	private String [] fileUuidArray;
 	private String fileUuid;
 	

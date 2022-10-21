@@ -17,6 +17,13 @@
     </c:if>
 </c:if> --%>
 
+<c:if test="${sessionScope.sessionIdForUser == null}">
+	<script>
+		alert("로그인이 필요합니다")
+		window.location.href="/login/loginView";
+	</script>
+</c:if>
+
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
@@ -61,7 +68,7 @@
 					<c:forEach var="list" items="${boardList}">
 						<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}">${list.subject}</a></div>
+							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span></a></div>
 							<div class="writer">${list.writerName}</div>
 							<div class="date">
 								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
@@ -86,6 +93,7 @@
 				<c:if test="${count > 0}">
 					<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
 					<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
+					<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true" />
 					<c:set var="startPage" value="${result*10+1}"/>
 					<c:set var="pageBlock" value="${10}"/>
 					<c:set var="endPage" value="${startPage + pageBlock - 1}"/>
@@ -99,7 +107,10 @@
 					</c:if>
 					
 					<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-						<a class="num" href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">${i}</a>
+						<a class="num" href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">
+						<c:if test="${currentPage eq i}"><span style="font-weight:bold">${i}</span></c:if>
+						<c:if test="${currentPage ne i}">${i}</c:if>
+						</a>
 					</c:forEach> 
 					
 					<c:if test="${endPage < pageCount}">

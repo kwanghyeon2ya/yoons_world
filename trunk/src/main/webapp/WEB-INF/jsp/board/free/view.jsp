@@ -27,8 +27,6 @@ function deleteMoveAction(){
 	var url = "/board/free/list";
 	deleteViewCheck(url);
 }
-
-
 </script>
 
 <!-- Main -->
@@ -43,19 +41,21 @@ function deleteMoveAction(){
 			<div class="board_write">
 
 				<div class="area-board-title">
-					제목 : <span>${vo.subject}</span>
+					제목 : <span><c:out escapeXml="" value="${vo.subject}"/></span>
 				</div>
 
 				<div class="area-board-info">
 					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
-					<p>작성자 : ${vo.writerName} &nbsp;&nbsp;
+					<p>작성자 : <c:out value="${vo.writerName}"/> &nbsp;&nbsp;
 					
 						<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
-							<fmt:formatDate value="${vo.firstInsertDt}" type="date"	pattern="yyyy-MM-dd HH:mm" />
+							<fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" />
 								&nbsp;&nbsp; 조회 ${vo.readCnt}
 						</c:if>
+						
 					</p>
+					
 						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
 							원글작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
 								pattern="yyyy-MM-dd" /> &nbsp; /
@@ -63,14 +63,16 @@ function deleteMoveAction(){
 								pattern="yyyy-MM-dd" /></p>
 								&nbsp;&nbsp; 조회 ${vo.readCnt}
 						</c:if>
+							</div>
+							
+						
+						
 				</div>
-				
-			</div>
 
 				<div class="area-board-btn">
 					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
 						<button type="button"
-							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}&subject=${vo.subject}&content=${vo.content}&regrSeq=${vo.regrSeq}&writerName=${vo.writerName}'">수정</button>
+							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}'">수정</button>
 							<!-- 게시글 수정 -->
 						<button type="button"
 							onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
@@ -101,7 +103,7 @@ function deleteMoveAction(){
 				
 				<!-- 댓글 영역 -->
 				<div id="reloadDivParent">
-					<h4>댓글 ${existCount}</h4>
+					<h4>댓글 <c:out value="${existCount}"/></h4>
 					
 					<div id="reloadDiv">
 						
@@ -109,7 +111,7 @@ function deleteMoveAction(){
 						
 							<c:if test="${clist.status == 0}">
 								<div class="area-board-comm">
-									<p>작성자 : ${clist.commId}</p>
+									<p>작성자 : <c:out value="${clist.commId}"/></p>
 									<p>삭제된 댓글입니다</p>
 								</div>
 							</c:if>
@@ -118,8 +120,8 @@ function deleteMoveAction(){
 							
 							<c:if test="${clist.status == 1}">
 								<div class="area-board-comm <c:if test='${clist.commLevel != 0}'> reply</c:if>">
-									<p>작성자 : ${clist.commId}</p>
-									<p>${clist.commContent}</p>
+									<p>작성자 : <c:out value="${clist.commId}"/></p>
+									<p><c:out value="${clist.commContent}"/></p>
 									<p>
 										<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/> &nbsp;
 										<c:if test="${clist.commLevel == 0}">
@@ -170,6 +172,7 @@ function deleteMoveAction(){
 
 				<div class="area-board-comm">
 					<form id="comm_insert_form" method="post">
+						
 						<input type="textarea" name="commContent" id="commContent" placeholder="새로운 댓글을 등록해보세요" />
 						<div class="area-board-comm-btn">
 							<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />

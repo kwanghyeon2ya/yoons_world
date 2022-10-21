@@ -53,13 +53,13 @@ function DeleteFileCheck(index){
 					<textarea name="content" id="content" style="display:none;"></textarea>
 									
 					<div class="area-board">
-                    	<span>작성자 : ${vo.writerName}</span>
+                    	<span>작성자 : <c:out value="${vo.writerName}"/></span>
 						<div class="area-board-n">
 						</div>								
                     </div>
 
 					<div class="area-board">
-                        <input type="text" id="subject" name="subject" value="${vo.subject}"/>
+                        <input type="text" id="subject" name="subject" value="<c:out value='${vo.subject}'/>"/>
                         
                     </div>
                     <div style="width:100px;display:inline-block;">
@@ -76,7 +76,7 @@ function DeleteFileCheck(index){
 						
 					</div>
 					<div class="area-board">
-                       	<textarea id="summernote" name="editordata">${vo.content}</textarea>
+                       	<textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea>
 					</div>
 					
 					<span id="word_count"></span>

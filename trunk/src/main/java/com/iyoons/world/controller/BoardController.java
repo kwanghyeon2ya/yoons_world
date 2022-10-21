@@ -58,7 +58,6 @@ public class BoardController {
 		model.addAttribute("existCount",existCount);
 		model.addAttribute("pageNum",pageNum);
 		
-		
 	}
 	
 	public void boardList(
@@ -144,46 +143,59 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/modify")
-	public String FreeModify(BoardVO vo,Model model) {
-		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		BoardVO vo2 =service.getView(vo.getPostSeq());
-		model.addAttribute("vo",vo2);
-		model.addAttribute("anlist",anlist);
-		return "board/free/modify";
+	public String FreeModify(String postSeq,Model model,HttpSession session) {
+		int postSeq2 = Integer.parseInt(postSeq);
+		BoardVO vo2 = service.getView(postSeq2);
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		if(sessionSeqForUser == vo2.getRegrSeq()) {
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			model.addAttribute("vo",vo2);
+			model.addAttribute("anlist",anlist);
+			return "board/notice/modify";	
+		}
+			return "common/nuguruman";
 	}
 	
 	@RequestMapping("notice/modify")
-	public String NoticeModify(BoardVO vo,Model model) {
-		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		BoardVO vo2 =service.getView(vo.getPostSeq());
-		model.addAttribute("vo",vo2);
-		model.addAttribute("anlist",anlist);
-		return "board/notice/modify";
+	public String NoticeModify(String postSeq,Model model,HttpSession session) {
+		int postSeq2 = Integer.parseInt(postSeq);
+		BoardVO vo2 = service.getView(postSeq2);
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		if(sessionSeqForUser == vo2.getRegrSeq()) {
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			model.addAttribute("vo",vo2);
+			model.addAttribute("anlist",anlist);
+			return "board/notice/modify";	
+		}
+			return "common/nuguruman";
 	}
 	
 	@RequestMapping("pds/modify")
-	public String PdsModify(BoardVO vo,Model model) {
-		List<BoardAttachVO> anlist = aservice.getAttachList(vo.getPostSeq());
-		BoardVO vo2 =service.getView(vo.getPostSeq());
-		model.addAttribute("vo",vo2);
-		model.addAttribute("anlist",anlist);
-		return "board/pds/modify";
+	public String PdsModify(String postSeq,Model model,HttpSession session) {
+		int postSeq2 = Integer.parseInt(postSeq);
+		BoardVO vo2 = service.getView(postSeq2);
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		if(sessionSeqForUser == vo2.getRegrSeq()) {
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			model.addAttribute("vo",vo2);
+			model.addAttribute("anlist",anlist);
+			return "board/notice/modify";	
+		}
+			return "common/nuguruman";
 	}
 	
 	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
 	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session,
 										@RequestParam(value="file",required=false)MultipartFile[] files) {
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		
-		System.out.println(vo.getRegrSeq());
-		System.out.println(sessionSeqForUser);
+		BoardVO vo2 = service.getView(vo.getPostSeq());
 		if(vo.getBoardFixYn() == null) {
 			vo.setBoardFixYn("N");
 		}
 		if(!files[0].isEmpty()) {
 			vo.setFileAttachYn("Y");
 			}
-		if(vo.getRegrSeq() == sessionSeqForUser) {
+		if(vo2.getRegrSeq() == sessionSeqForUser) {
 		vo.setUpdrSeq(sessionSeqForUser);
 		vo.setRegrSeq(sessionSeqForUser);
 		return service.modView(vo,files);
@@ -196,7 +208,9 @@ public class BoardController {
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
-		if(sessionSeqForUser == vo.getRegrSeq()) {
+		BoardVO vo2 = service.getView(vo.getPostSeq());
+		
+		if(sessionSeqForUser == vo2.getRegrSeq()) {
 		vo.setUpdrSeq(sessionSeqForUser);
 		
 		return cservice.modComment(vo);
@@ -347,7 +361,9 @@ public class BoardController {
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
-		if(sessionSeqForUser == vo.getRegrSeq()) {
+		BoardVO vo2 = service.getView(vo.getPostSeq());
+		
+		if(sessionSeqForUser == vo2.getRegrSeq()) {
 			vo.setUpdrSeq(sessionSeqForUser);
 			return cservice.delComment(vo);
 		}

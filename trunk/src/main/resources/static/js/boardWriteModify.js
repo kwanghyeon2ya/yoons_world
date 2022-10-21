@@ -3,8 +3,8 @@
  */
 function WriteBoardCheck(url){
 
-	
-	$("#content").val($(".note-editable p").text());
+	$("#content").val($('#summernote').summernote('code'));
+	/*$("#content").val($('.note-editable').summernote('code'));*/
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
@@ -108,7 +108,11 @@ function WriteBoardCheck(url){
 
 function modBoardCheck(url){
 	console.log($("#regrSeq"));
-	$("#content").val($(".note-editable").text());
+	$("#content").val($('#summernote').summernote('code'));
+	/*$("#content").val($('#summernote').text());*/
+	
+//	<p>test &lt;script&gt;dfjksalkdjls</script>"
+	
 	var rtn = false;
 	var modify_form = $("#modify_form")[0];
 	var mod_form_data = new FormData(modify_form);
@@ -174,16 +178,37 @@ function modBoardCheck(url){
 $(document).ready(function(){
 	$(".note-editable").keyup(function() {
 		
-		var content_value = $(".note-editable").text();
-		var content_len = content_value.length;
-		var str = "";
-		str += "["+content_len+"자/4000]";
+		/*var chk = "`!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ` ";*/
+		//내 오라클은 한글 2BYTE 확인
+		$("#content").val($('.note-editable').text());
+		var content_len = $("#content").val().length;
+		var length = 0;
 		
-		if(content_len> 3999){
-			alert("제한 글자를 초과하였습니다");
-			$("#content").val(content_value.substring(0,3999));
+		console.log("content value :"+ $("#content").val());
+		console.log("content_len :"+ content_len);
+		/*for(var i = 0;i < content_len;i++){
+			if(chk.indexOf($("#content").val().charAt(i)) >=0){
+				length++
+			}else{
+				length += 2
+			}
+		}*/
+		var str = "["+content_len+"자/4000]";
+		
+		if(content_len > 4000){
+			
+			$("#word_count").html(str);
+			$("#word_count").attr("color","red");
+			
+			/*alert("더이상 입력하실 수 없습니다");*/
+//			$('.note-editable').text().substring(0,3999);
+			$("#content").val($("#content").val().substring(0,3999));
+			
+		}else{
+			
+			$("#word_count").html(str);
+			$("#word_count").attr("color","green");
+		
 		}
-		$("#word_count").html(str);
-		$("#word_count").attr("color","green");
 	})
 });

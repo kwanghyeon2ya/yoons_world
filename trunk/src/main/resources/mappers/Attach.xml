@@ -71,7 +71,7 @@
 			board_attach
 		where
 			post_seq = #{postSeq}
-			and status = 1; 
+			and status = 1
 	</select>
 	<update id="deleteSelectedAttach">
 		update

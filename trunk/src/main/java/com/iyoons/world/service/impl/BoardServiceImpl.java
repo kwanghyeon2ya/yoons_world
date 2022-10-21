@@ -27,8 +27,8 @@ import com.iyoons.world.vo.CommentsVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";
-	/*final String REAL_PATH="C:\yoons_world\files";*/
+	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";*/
+	final String REAL_PATH="C:/yoons_world/files";
 	
 	@Autowired
 	private BoardDAO dao;
@@ -199,6 +199,14 @@ public class BoardServiceImpl implements BoardService {
 					
 				}
 			}
+		}
+		
+		int attachCount = adao.getAttachCount(vo.getPostSeq()); //첨부파일 카운트
+		System.out.println(attachCount);
+		if(attachCount != 0) { //카운트 확인 후 post_board에 첨부파일 여부 컬럼 입력
+			vo.setFileAttachYn("Y");
+		}else {
+			vo.setFileAttachYn("N");
 		}
 		return dao.modView(vo);
 	}
