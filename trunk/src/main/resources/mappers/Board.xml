@@ -68,7 +68,7 @@
 	            pb.board_fix_yn,
 	            pb.first_insert_dt,
 	            pb.last_update_dt,
-	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq) as comments_cnt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt,
 	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
 	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
 	            <if test="search != null and search.equals('attach_file')">
@@ -84,7 +84,7 @@
 					(select DISTINCT
 					c1.post_seq from comments c1 
 				where 
-					c1.comm_content like '%${keyword}%')ic 
+					c1.comm_content like '%${keyword}%' and c1.status = 1)ic 
 						on pb.post_seq = ic.post_seq
 				</if>
 				<if test="search != null and search.equals('attach_file')">
@@ -96,7 +96,7 @@
 		    		from 
 	    				board_attach
 		    		where 
-	    				file_name like '%${keyword}%' 
+	    				file_name like '%${keyword}%' and status = 1
 	    			group by 
 	    				post_seq,
 	    				file_name,
@@ -162,6 +162,7 @@
 			file_attach_yn,
 			board_fix_yn,
 			regr_seq,
+			status,
 			first_insert_dt,
 			updr_seq,
 			last_update_dt

@@ -68,7 +68,7 @@
 					<c:forEach var="list" items="${boardList}">
 						<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span></a></div>
+							<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span></a></div>
 							<div class="writer">${list.writerName}</div>
 							<div class="date">
 								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">

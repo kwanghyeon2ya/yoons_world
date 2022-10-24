@@ -71,7 +71,7 @@
 					<c:forEach var="list" items="${boardList}">
 						<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span>
+							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 								<c:if test="${list.attachCnt != 0}">
 								/${list.fullFileName} 
 									<c:if test="${list.attachCnt > 1}">

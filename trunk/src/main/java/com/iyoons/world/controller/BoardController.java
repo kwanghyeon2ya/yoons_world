@@ -36,29 +36,25 @@ public class BoardController {
 	@Autowired
 	public AttachService aservice;
 
-	public void commentsList(String pageNum,int postSeq,Model model) {
+	/*public void commentsList(String pageNum,int postSeq,Model model) {
 		
 		int pageSize = 4;
 		int currentPage = Integer.parseInt(pageNum);
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = pageSize * currentPage;
-		int allCount = 0;
 		
-		int existCount = cservice.getExistCommentsCount(postSeq); //존재하는 댓글의 카운트-status가 1인글
 		
-		allCount = cservice.getALLCommentsCount(postSeq);//모든 댓글의 카운트 -status가 0,1인글
-		List<CommentsVO> clist = cservice.getCommentsList(postSeq,startRow,endRow);
 		
-		model.addAttribute("clist",clist);
+		
+		
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("currentPage",currentPage);
 		model.addAttribute("startRow",startRow);
 		model.addAttribute("endRow",endRow);
-		model.addAttribute("allCount",allCount);
-		model.addAttribute("existCount",existCount);
+		
 		model.addAttribute("pageNum",pageNum);
 		
-	}
+	}*/
 	
 	public void boardList(
 					String search,
@@ -208,11 +204,12 @@ public class BoardController {
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
-		BoardVO vo2 = service.getView(vo.getPostSeq());
-		
+		CommentsVO vo2 = cservice.getComment(vo);
+		System.out.println("sessionSeq : "+sessionSeqForUser);
+		System.out.println("vo2.regrSeq : "+vo2.getRegrSeq());
+		System.out.println("vo2postSeq : "+vo2.getPostSeq());
 		if(sessionSeqForUser == vo2.getRegrSeq()) {
 		vo.setUpdrSeq(sessionSeqForUser);
-		
 		return cservice.modComment(vo);
 		}
 		return 0;
@@ -220,64 +217,99 @@ public class BoardController {
 	
 	@RequestMapping("free/view")
 	public String getFreeView(@RequestParam(value="postSeq",required=false)String postSeq,
-			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
 						Model model,HttpSession session) {
 			 
-			 int postSeq2 = Integer.parseInt(postSeq);
-			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			 BoardVO vo = service.getView(postSeq2);
-			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-			 
-			 if(vo.getRegrSeq() != sessionSeqForUser) {
-				 service.updateCnt(postSeq2);	 
-			 }
-			 
-			 commentsList(pageNum,postSeq2,model);
+		 int postSeq2 = Integer.parseInt(postSeq);
+		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+		 BoardVO vo = service.getView(postSeq2);//DB조회
+		 int nullCheck = 0;
+		 if(vo == null) {
+			nullCheck = 1; 
+		 }
+		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		 System.out.println("nullCheck : "+nullCheck);
+		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			 return "redirect:/board/free/list";
+		 }
+		 
+		 if(vo.getRegrSeq() != sessionSeqForUser) {
+			 service.updateCnt(postSeq2);	 
+		 }
+		 
+			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
+			
+			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
+		
+			 model.addAttribute("clist",clist);
+			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
-		return "board/free/view";
+			 return "board/free/view";
 	}
 	
 	@RequestMapping("notice/view")
 	public String getNoticeView(@RequestParam(value="postSeq",required=false)String postSeq,
-			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
 						Model model,HttpSession session) {
 			 
-			 int postSeq2 = Integer.parseInt(postSeq);
-			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			 BoardVO vo = service.getView(postSeq2);
-			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-			 
-			 if(vo.getRegrSeq() != sessionSeqForUser) {
-				 service.updateCnt(postSeq2);	 
-			 }
-			 
-			 commentsList(pageNum,postSeq2,model);
+		int postSeq2 = Integer.parseInt(postSeq);
+		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+		 BoardVO vo = service.getView(postSeq2); //DB조회
+		 
+		 int nullCheck = 0;
+		 if(vo == null) {
+			nullCheck = 1; 
+		 }
+		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		 System.out.println("nullCheck : "+nullCheck);
+		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			 return "redirect:/board/notice/list";
+		 }
+		 
+		 if(vo.getRegrSeq() != sessionSeqForUser) {
+			 service.updateCnt(postSeq2);	 
+		 }
+		 
+			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
+			
+			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
+		
+			 model.addAttribute("clist",clist);
+			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
-			 
-			 return "/board/notice/view";
-	}
+			 return "board/free/view";
+		 }
 	
 	@RequestMapping("pds/view")
 	public String getPdsView(@RequestParam(value="postSeq",required=false)String postSeq,
-			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
 						Model model,HttpSession session) {
 			 
-			 int postSeq2 = Integer.parseInt(postSeq);
-			 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			 BoardVO vo = service.getView(postSeq2);
-			 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-			 
-			 if(vo.getRegrSeq() != sessionSeqForUser) {
-				 service.updateCnt(postSeq2);	 
-			 }
-			 
-			 commentsList(pageNum,postSeq2,model);
+		int postSeq2 = Integer.parseInt(postSeq);
+		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+		 BoardVO vo = service.getView(postSeq2);//DB조회
+		 
+		 int nullCheck = 0;
+		 if(vo == null) {
+			nullCheck = 1; 
+		 }
+		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		 System.out.println("nullCheck : "+nullCheck);
+		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			 return "redirect:/board/pds/list";
+		 }
+		 
+		 if(vo.getRegrSeq() != sessionSeqForUser) {
+			 service.updateCnt(postSeq2);	 
+		 }
+			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
+			
+			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
+		
+			 model.addAttribute("clist",clist);
+			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
-			 
-			 return "/board/pds/view";
+			 return "board/free/view";
 	}
 	
 	@RequestMapping("free/write")
@@ -360,11 +392,13 @@ public class BoardController {
 		
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		
-		BoardVO vo2 = service.getView(vo.getPostSeq());
-		
+		System.out.println(vo);
+		CommentsVO vo2 = cservice.getComment(vo);
+		System.out.println(vo2.getRegrSeq());
+		System.out.println(sessionSeqForUser);
 		if(sessionSeqForUser == vo2.getRegrSeq()) {
-			vo.setUpdrSeq(sessionSeqForUser);
+			vo.setRegrSeq(vo2.getRegrSeq());
+			vo.setUpdrSeq(vo2.getRegrSeq());
 			return cservice.delComment(vo);
 		}
 		return 0;

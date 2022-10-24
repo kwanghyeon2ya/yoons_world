@@ -24,5 +24,6 @@ public class CommentsVO {
 	private int maxCommStep;
 	private String commId;
 	private int status;// 댓글 상태(일반1/삭제0)
+	private int nestedCommentsCnt;
 	
 }

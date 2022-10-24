@@ -5,8 +5,8 @@
 function deleteCommentsCheck(index){
 	
 	var comm_seq_value = $("#mod_comm_seq_"+index).val();
-	var regr_seq_value = $("#mod_regr_seq_"+index).val();
-	var param = {commSeq : comm_seq_value, regrSeq : regr_seq_value};
+	var post_seq_value = $("#mod_post_seq_"+index).val();
+	var param = {commSeq : comm_seq_value , postSeq : post_seq_value};
 	
 	if(window.confirm("댓글을 삭제하시겠습니까?")){
 		$.ajax({

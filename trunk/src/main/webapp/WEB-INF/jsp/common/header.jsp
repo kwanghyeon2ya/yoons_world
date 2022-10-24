@@ -30,7 +30,13 @@
 	<script src="/js/delcomments.js"></script>
 	<script src="/js/commnetsShowHide.js"></script>
 	<script src="/js/randomName.js"></script>
-	
+	<script>
+		window.onpageshow = function(event){
+			if(event.persisted){ //캐시 남아있는지 확인 후 남아있다면 true
+				location.reload(true);
+			}
+		}
+	</script>
 	
 </head>
 <body>
@@ -41,7 +47,7 @@
 				<div class="row">
 					<div class="col-12">
 						<header id="header">
-							<h1><a href="index.html" id="logo">YOONS WoRLD</a></h1>
+							<h1><a href="/main" id="logo">YOONS WoRLD</a></h1>
 							<nav id="nav">
 								<c:if test="${sessionScope.sessionIdForUser == null}">
 		                            <a href="/login/loginView" class="tag-show-m">로그인하세요</a>

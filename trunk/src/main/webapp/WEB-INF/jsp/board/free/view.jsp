@@ -21,7 +21,12 @@
 	location.href="/login/loginView";
 	</script>
 </c:if>
-
+<c:if test="${vo.status eq 0}">
+	<script>
+		alert("삭제된 글입니다");
+		location.href="/board/free/list";
+	</script>
+</c:if>
 <script>
 function deleteMoveAction(){
 	var url = "/board/free/list";
@@ -37,7 +42,6 @@ function deleteMoveAction(){
 			<div class="title-page">
 				<h3>자유게시판</h3>
 			</div>
-
 			<div class="board_write">
 
 				<div class="area-board-title">
@@ -109,32 +113,75 @@ function deleteMoveAction(){
 						
 						<c:forEach var="clist" items="${clist}" varStatus="loop">
 						
-							<c:if test="${clist.status == 0}">
-								<div class="area-board-comm">
-									<p>작성자 : <c:out value="${clist.commId}"/></p>
-									<p>삭제된 댓글입니다</p>
-								</div>
-							</c:if>
+								<%-- <c:if test="${clist.status == 0 && clist.commLevel eq 0}">
+									<div class="area-board-comm">
+										<p>작성자 : <c:out value="${clist.commId}"/></p>
+										<p>삭제된 댓글입니다</p>
+									</div>
+								</c:if> --%>
 								
 							
-							
-							<c:if test="${clist.status == 1}">
-								<div class="area-board-comm <c:if test='${clist.commLevel != 0}'> reply</c:if>">
+								<div class="area-board-comm <c:if test='${clist.commLevel != 0}'> reply</c:if>"> <!-- 본 댓글 -->
+								
+								
+									<!-- 스크롤 시작부분 -->
+								<c:if test='${clist.commLevel eq 0}'> <!-- 게시글의 본 댓글 -->
+									<c:if test="${clist.status == 1}"> <!-- 살아있는글 -->
 									<p>작성자 : <c:out value="${clist.commId}"/></p>
 									<p><c:out value="${clist.commContent}"/></p>
 									<p>
 										<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/> &nbsp;
-										
-										<c:if test="${clist.commLevel == 0}"> <!-- level 존재 여부에 따라 본댓글, 대댓글 -->
-											<a href="javascript:showHideCocoForm(${loop.index})" id="showHideButton_${loop.index}">답글쓰기</a>&nbsp;
-										</c:if>
+										<a href="javascript:showHideCocoForm(${loop.index})" id="showHideButton_${loop.index}">답글쓰기</a>&nbsp;
 										
 										<c:if test="${sessionScope.sessionSeqForUser == clist.regrSeq}">
 											<a href="javascript:void(0)" id="modifyCommButton_${loop.index}" onclick="modCommFormShowHide(${loop.index})">수정</a>&nbsp; <!-- 댓글수정폼 보이기 -->
 											<a href="javascript:void(0)" id="deleteCommButton_${loop.index}" onclick="deleteCommentsCheck(${loop.index})">삭제</a> <!-- 댓글삭제 -->
 										</c:if>
-									</p>
+										</p>
+										<c:if test="${clist.nestedCommentsCnt != 0}">
+										<a href="javascript:showHideNestedCocoList(${loop.index},${clist.commSeq})" id="showHideNestedCocoList_${loop.index}">▼답글${clist.nestedCommentsCnt}개</a>
+										</c:if>
+									</c:if> 
 								
+									<c:if test="${clist.status == 0}"> <!-- 삭제된글 -->
+										<div class="area-board-comm">
+											<p>작성자 : <c:out value="${clist.commId}"/></p>
+											<p>삭제된 댓글입니다</p>
+										</div>
+									</c:if>
+								</c:if>
+								
+								<c:if test='${clist.commLevel eq 1}'> <!-- 본 댓글의 대댓글 -->
+									
+									<div name="coco_list_hidden_div" id="coco_list_hidden_div_${loop.index}" class="coco_list_hidden_div_class" style="display:none" value="${clist.commGroup}">
+									
+									<c:if test="${clist.status == 1}"> <!-- 살아있는 댓글 -->
+									
+									
+										<input type="hidden" name="coco_group" id="coco_group_${loop.index}" class="coco_group_class" value="${clist.commGroup}"/>
+										<p>작성자 : <c:out value="${clist.commId}"/></p>
+										<p><c:out value="${clist.commContent}"/></p>
+										<p>
+											<fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/> &nbsp;
+											<c:if test="${sessionScope.sessionSeqForUser == clist.regrSeq}">
+												<a href="javascript:void(0)" id="modifyCommButton_${loop.index}" onclick="modCommFormShowHide(${loop.index})">수정</a>&nbsp; <!-- 댓글수정폼 보이기 -->
+												<a href="javascript:void(0)" id="deleteCommButton_${loop.index}" onclick="deleteCommentsCheck(${loop.index})">삭제</a> <!-- 댓글삭제 -->
+											</c:if>
+											</p>
+											
+									</c:if>
+									
+									<c:if test="${clist.status == 0}"> <!-- 삭제된 댓글 -->
+											<div class="area-board-comm">
+											<input type="hidden" name="coco_group" id="coco_group_${loop.index}" class="coco_group_class" value="${clist.commGroup}"/>
+												<p>작성자 : <c:out value="${clist.commId}"/></p>
+												<p>삭제된 댓글입니다</p>
+											</div>
+									</c:if>	
+									
+									</div>
+								</c:if>
+								<c:if test="${clist.status == 1}">
 									<div class="area-board-comm-mod">
 										<form id="coco_insert_form_${loop.index}" method="post" style="display:none">
 												<input type="hidden" id="coco_comm_seq_${loop.index}" value="${clist.commSeq}"/>
@@ -157,14 +204,13 @@ function deleteMoveAction(){
 											</div> 
 										</form>
 									</div>
+								</c:if>
 								
-								
-								
-								</div>
+									
+							</div>
 							
 								
-								
-							</c:if>
+							
 							
 						</c:forEach>
 						

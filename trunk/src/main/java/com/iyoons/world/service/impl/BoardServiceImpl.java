@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.dao.AttachDAO;
 import com.iyoons.world.dao.BoardDAO;
+import com.iyoons.world.dao.CommentsDAO;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
@@ -29,12 +32,16 @@ public class BoardServiceImpl implements BoardService {
 
 	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";*/
 	final String REAL_PATH="C:/yoons_world/files";
+	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";
 	
 	@Autowired
 	private BoardDAO dao;
 
 	@Autowired
 	private AttachDAO adao;
+	
+	@Autowired
+	private CommentsDAO cdao;
 	
 	@Autowired
 	private ServletContext sc;
@@ -226,7 +233,36 @@ public class BoardServiceImpl implements BoardService {
 //			File f = new File(path);
 //			f.delete();
 //		}
+		
+		
+		CommentsVO cvo = new CommentsVO();
+		
+		cvo.setPostSeq(vo.getPostSeq());
+		cvo.setUpdrSeq(vo.getUpdrSeq());
+		
+		cdao.delAllCommentsByPostSeq(cvo);
 		adao.delAttach(vo);
+		
+		
+		List<BoardAttachVO> alist = adao.getAttachList(vo.getPostSeq());
+		for(BoardAttachVO avo : alist) {
+			
+			String originalFilePath = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+			String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+				
+			File f = FileUtils.getFile(originalFilePath);
+			File df = FileUtils.getFile(newFilePath);
+			
+			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
+			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름
+*/			try {
+				FileUtils.moveFile(f, df);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+//		FileUtils.moveFile(f,new File(DELETED_FILE_PATH));
 		
 		return dao.delView(vo);
 	}

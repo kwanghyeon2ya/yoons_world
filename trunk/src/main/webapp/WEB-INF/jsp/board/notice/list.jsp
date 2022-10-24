@@ -68,7 +68,7 @@
 					<c:forEach var="fixedBoardList" items="${fixedBoardList}">
 						<div>
 							<div class="num" style="color:#DC143C">[중요]</div>
-							<div class="title"><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/> &nbsp; <span style="color:#81c147">[${fixedBoardList.commentsCnt}]</span></a></div>
+							<div class="title"><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/> &nbsp; <span style="color:#81c147">${fixedBoardList.commentsCnt > 0 ? [fixedBoardList.commentsCnt] : ''}</span></a></div>
 							<div class="writer">${fixedBoardList.writerName}</div>
 							<div class="date">	
 							<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /></div>
@@ -81,7 +81,7 @@
 					</c:if> --%>
 					<div>
 							<div class="num">${list.postNum}</div>
-							<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">[${list.commentsCnt}]</span></a></div>
+							<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span></a></div>
 							<div class="writer">${list.writerName}</div>
 							<div class="date">
 								<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">

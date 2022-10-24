@@ -22,10 +22,7 @@
 <script>
 function MoveAction(){
 	var url = "/board/notice/list";
-	if(document.getElementById("hide_name_check").checked){
-	makeRandomName();
-	}
-	document.getElementById("board_type").value = 0;
+	document.getElementById("board_type").value = 1;
 	WriteBoardCheck(url);
 }
 </script>
@@ -35,7 +32,7 @@ function MoveAction(){
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>자유게시판</h3>
+				<h3>공지사항</h3>
 			</div>
 			
 			<div class="board_write">
@@ -51,9 +48,6 @@ function MoveAction(){
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->
 						</div>
-							<input type="hidden" id="hide_name" name="hideName"/>
-							<input type="checkbox" id="hide_name_check" name="hideCheck" value="0" onclick="makeRandomName()"/>
-							<label for="hide_name_check">익명</label>
 						</div>
 						<input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>								
                     </div>

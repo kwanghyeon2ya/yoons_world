@@ -57,6 +57,10 @@ function modifyCommentsCheck(index){
 	var mod_comm_group_value = $("#mod_comm_group_"+index).val();
 	var mod_comm_content_value = $("#mod_comm_content_"+index).val();
 	
+	console.log("content : " + mod_comm_content_value);
+	console.log("commSeq : " + comm_seq_value);
+	console.log("regr_seq : " + regr_seq_value);
+	console.log("postSeq : "+ post_seq_value);
 	
 	var param = {regrSeq : regr_seq_value,postSeq : post_seq_value,
 				 commSeq : comm_seq_value,commContent : mod_comm_content_value,
