@@ -16,7 +16,7 @@ public interface UserDAO {
 	
 	public UserVO userDetail(String userId) throws SQLException;
 
-	public int deleteUser(String userId) throws SQLException;
+	public int deleteUser(UserVO userVO) throws SQLException;
 	
 	public int checkUser(UserVO userVO);
 	

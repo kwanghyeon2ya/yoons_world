@@ -26,7 +26,7 @@ $.ajax({
 	data : $("#frm").serialize(),
 	dataType : "json",
 	async : false,
-/* processData: false, */
+	/* processData: false, */
 	/* contentType: false, */
  	success : function(data){
 		document.frm.loginCheck.value = data;

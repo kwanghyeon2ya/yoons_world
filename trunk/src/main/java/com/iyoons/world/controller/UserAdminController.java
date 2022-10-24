@@ -2,17 +2,16 @@ package com.iyoons.world.controller;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserVO;
+
 
 
 @Controller
@@ -51,10 +50,10 @@ public class UserAdminController {
 	public String userDetail(String userId, Model model) throws SQLException {	
 		
 		//System.out.println("클릭한 아이디: "+ userId); //확인은 항상 위에서 하기
-		//DB로 연결		
+		
 		model.addAttribute("userVO",userService.userDetail(userId));
 		return "admin/member/modifyUserForm";
-	
+		
 	}
 
 	// 회원 수정 처리
@@ -67,4 +66,24 @@ public class UserAdminController {
 		
 		
 		}
+	
+	// 회원 삭제 처리
+			@ResponseBody 
+			@RequestMapping(value = "/member/deleteUser", method = RequestMethod.POST)
+			public int deleteUser(UserVO userVO) throws SQLException {
+				
+				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().size());
+				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().get(0));
+				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().get(1));
+				
+				int deleteUserResult = userService.deleteUser(userVO);
+				
+				if(deleteUserResult != 0 ) {
+					return 1;
+	    		}else{
+					return 0;
+	    		}
+				
+		}		
+		
 }

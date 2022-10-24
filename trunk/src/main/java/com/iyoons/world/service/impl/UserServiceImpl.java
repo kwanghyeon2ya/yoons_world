@@ -41,9 +41,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int deleteUser(String userId) throws SQLException {
+	public int deleteUser(UserVO userVO) throws SQLException {
 
-		return 0;
+		return userDAO.deleteUser(userVO);
 	}
 
 	@Override
@@ -63,6 +63,5 @@ public class UserServiceImpl implements UserService {
 
 		return userDAO.userDetail(userId);
 	}
-
 	
 }

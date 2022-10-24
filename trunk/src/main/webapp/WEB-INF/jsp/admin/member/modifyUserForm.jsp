@@ -57,7 +57,7 @@
 
 				<div class="area-input-info">
 					<label for="userSeq" >회원번호</label>
-					<input id="userSeq" name="userSeq" type="text"  value="${userVO.userSeq}" readonly="readonly"/>
+					<input id="userSeq" name="userSeq" type="text" value="${userVO.userSeq}" readonly="readonly"/>
 				</div>
 				
 

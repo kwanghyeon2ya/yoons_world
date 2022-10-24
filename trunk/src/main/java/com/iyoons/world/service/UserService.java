@@ -16,7 +16,7 @@ public interface UserService {
 	
 	public UserVO userDetail(String userId) throws SQLException;
 
-	public int deleteUser(String userId) throws SQLException;
+	public int deleteUser(UserVO userVO) throws SQLException;
 	
 	public List<UserVO> userList();
 	

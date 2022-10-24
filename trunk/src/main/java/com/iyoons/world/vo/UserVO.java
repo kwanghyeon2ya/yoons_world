@@ -1,6 +1,8 @@
 package com.iyoons.world.vo;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -26,5 +28,6 @@ public class UserVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt; //회원정보 수정일자
 	private String depName;
+	private List<String> userIdArray;
 	
 }
