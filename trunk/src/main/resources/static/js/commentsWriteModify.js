@@ -37,7 +37,7 @@ function writeCommentsCheck(){
 					break;
 				case 1:
 					alert("댓글이 작성되었습니다");
-					$("#reloadDivParent").load(' #reloadDiv');
+					$("#reload_div_parent").load(' #reload_div');
 					break;
 				default:
 					break;
@@ -98,7 +98,7 @@ function modifyCommentsCheck(index){
 					break;
 				case 1:
 					alert("댓글이 수정되었습니다");
-					$("#reloadDivParent").load(' #reloadDiv');
+					$("#reload_div_parent").load(' .reload_comment');
 					break;
 				default:
 					break;

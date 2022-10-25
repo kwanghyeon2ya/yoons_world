@@ -30,12 +30,27 @@
 	<script src="/js/delcomments.js"></script>
 	<script src="/js/commnetsShowHide.js"></script>
 	<script src="/js/randomName.js"></script>
-	<script>
-		window.onpageshow = function(event){
+	<script>	
+		/* console.log(performance.getEntriesByType('navigation')[0]);	
+		console.log(performance.getEntriesByType('navigation')[0].type == 'reload');
+		console.log(window.performance.getEntriesByType('navigation')[0]);
+		console.log(performance.getEntriesByType('navigation')[0].type);
+		console.log(window.performance.getEntriesByType("navigation")[0].type == "back_forward");
+		console.log(window.performance.getEntriesByType("navigation")[0].type === "back_forward");
+		console.log(window.performance.navigation.type === 2);
+		console.log(window.performance.navigation.type);
+		if(window.performance.getEntriesByType("navigation")[0].type == "back_forward") {
+
+			location.reload();
+
+		} */
+		console.log(window.performance.navigation.type == 2);
+		window.onpageshow = function(event){ // 뒤로가기 공부
 			if(event.persisted){ //캐시 남아있는지 확인 후 남아있다면 true
+				console.log(event.persisted);
 				location.reload(true);
 			}
-		}
+		} 
 	</script>
 	
 </head>

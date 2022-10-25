@@ -251,7 +251,9 @@ public class BoardServiceImpl implements BoardService {
 			String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 				
 			File f = FileUtils.getFile(originalFilePath);
+			System.out.println(f.toString());
 			File df = FileUtils.getFile(newFilePath);
+			System.out.println(df.toString());
 			
 			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
 			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름

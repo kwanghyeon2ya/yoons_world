@@ -49,6 +49,7 @@ function showHideNestedCocoList(index,comm_seq){ // 다시짜야할듯 ..
 		var coco_list_hidden_div_class = document.getElementsByClassName("coco_list_hidden_div_class");
 		let coco_group_arr = Array.from(document.getElementsByName("coco_group"));
 		
+		
 		/*console.log("index : " +index);
 		
 		console.log("coco_group_arr : "+coco_group_arr);
@@ -61,6 +62,8 @@ function showHideNestedCocoList(index,comm_seq){ // 다시짜야할듯 ..
 		console.log("coco_group_index : "+coco_group);
 		
 		console.log("document.getElementById(coco_list_hidden_div_+index).style.display == none "+document.getElementById("coco_list_hidden_div_"+index));*/
+		
+		
 		
 		for(var i in coco_list_hidden_div_class){ // 대댓글 div태그의 class 전체조회
 			

@@ -52,7 +52,7 @@ function insertCocoCheck(index){
 				break;
 			case 1:
 				alert("대댓글이 작성되었습니다");
-				$("#reloadDivParent").load(' #reloadDiv');
+				$("#reload_div_parent").load(' #reload_div');
 				break;
 			default:
 				break;

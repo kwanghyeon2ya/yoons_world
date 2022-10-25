@@ -222,15 +222,13 @@ public class BoardController {
 		 int postSeq2 = Integer.parseInt(postSeq);
 		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 		 BoardVO vo = service.getView(postSeq2);//DB조회
-		 int nullCheck = 0;
-		 if(vo == null) {
-			nullCheck = 1; 
+		 
+
+		 if(vo == null) { // Null체크 - 뒤로가기시 Null
+			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
+	 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 System.out.println("nullCheck : "+nullCheck);
-		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-			 return "redirect:/board/free/list";
-		 }
 		 
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
@@ -255,15 +253,11 @@ public class BoardController {
 		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 		 BoardVO vo = service.getView(postSeq2); //DB조회
 		 
-		 int nullCheck = 0;
-		 if(vo == null) {
-			nullCheck = 1; 
+		 if(vo == null) { // Null체크 - 뒤로가기시 Null
+			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
+		 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 System.out.println("nullCheck : "+nullCheck);
-		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-			 return "redirect:/board/notice/list";
-		 }
 		 
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
@@ -288,15 +282,11 @@ public class BoardController {
 		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 		 BoardVO vo = service.getView(postSeq2);//DB조회
 		 
-		 int nullCheck = 0;
-		 if(vo == null) {
-			nullCheck = 1; 
+		 if(vo == null) { // Null체크 - 뒤로가기시 Null
+			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
+		 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 System.out.println("nullCheck : "+nullCheck);
-		 if(nullCheck == 1) { // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-			 return "redirect:/board/pds/list";
-		 }
 		 
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
