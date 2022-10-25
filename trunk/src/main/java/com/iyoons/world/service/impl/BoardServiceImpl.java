@@ -31,8 +31,10 @@ import com.iyoons.world.vo.CommentsVO;
 public class BoardServiceImpl implements BoardService {
 
 	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";*/
+	/*final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
 	final String REAL_PATH="C:/yoons_world/files";
 	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";
+	
 	
 	@Autowired
 	private BoardDAO dao;
@@ -191,13 +193,39 @@ public class BoardServiceImpl implements BoardService {
 				}
 			}
 		}
+	
+		
+			
+			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
+			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름
+	*/		
+		
 		if(vo.getFileUuidArray() != null) { 
 			if(vo.getFileUuidArray().length != 0) {
 				for(String file : vo.getFileUuidArray()) {
 					BoardVO vo2 = new BoardVO();
+					
 					vo2.setPostSeq(vo.getPostSeq());
 					vo2.setUpdrSeq(vo.getUpdrSeq());
 					vo2.setFileUuid(file);
+					
+					BoardAttachVO avo = adao.getSeletedAttach(vo2);
+					
+					String originalFilePath = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+					String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+					
+					File f = FileUtils.getFile(originalFilePath);
+					System.out.println(f.toString());
+					File df = FileUtils.getFile(newFilePath);
+					System.out.println(df.toString());
+					
+					try {
+						FileUtils.moveFile(f, df);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					
 					System.out.println("view 수정페이지 삭제 진입확인");
 					System.out.println("uuid : "+file);
@@ -212,8 +240,10 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println(attachCount);
 		if(attachCount != 0) { //카운트 확인 후 post_board에 첨부파일 여부 컬럼 입력
 			vo.setFileAttachYn("Y");
+			System.out.println("Y떳다");
 		}else {
 			vo.setFileAttachYn("N");
+			System.out.println("N떳다");
 		}
 		return dao.modView(vo);
 	}
@@ -241,11 +271,13 @@ public class BoardServiceImpl implements BoardService {
 		cvo.setUpdrSeq(vo.getUpdrSeq());
 		
 		cdao.delAllCommentsByPostSeq(cvo);
-		adao.delAttach(vo);
 		
 		
+		System.out.println(vo.getPostSeq());
 		List<BoardAttachVO> alist = adao.getAttachList(vo.getPostSeq());
+		System.out.println(alist.toString());
 		for(BoardAttachVO avo : alist) {
+			System.out.println(avo.toString());
 			
 			String originalFilePath = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 			String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
@@ -264,6 +296,8 @@ public class BoardServiceImpl implements BoardService {
 				e.printStackTrace();
 			}
 		}
+		
+		adao.delAttach(vo);
 //		FileUtils.moveFile(f,new File(DELETED_FILE_PATH));
 		
 		return dao.delView(vo);

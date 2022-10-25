@@ -73,6 +73,26 @@
 			post_seq = #{postSeq}
 			and status = 1
 	</select>
+	<select id="getSeletedAttach" resultType="com.iyoons.world.vo.BoardAttachVO">
+		select
+			post_seq,
+		 	file_path,
+		 	file_size,
+		 	file_name,
+		 	file_uuid,
+		 	file_type,
+		 	regr_seq,
+		 	first_insert_dt,
+		 	updr_seq,
+		 	last_update_dt,
+			status		 	
+		from 
+			board_attach 
+		where
+			post_seq = #{postSeq}
+			and status = 1
+			and file_uuid = #{fileUuid}
+	</select>
 	<update id="deleteSelectedAttach">
 		update
 			board_attach

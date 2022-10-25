@@ -18,4 +18,5 @@ public interface AttachDAO {
 	public void delAttach(BoardVO vo);
 	public int getAttachCount(int postSeq);
 	public void deleteSelectedAttach(BoardVO vo);
+	public BoardAttachVO getSeletedAttach(BoardVO vo2);
 }

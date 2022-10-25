@@ -32,7 +32,7 @@ function WriteBoardCheck(url){
 		$("#summernote").focus();
 		return false;
 	}
-	if($("#content").val().trim().length == 0){
+	if($('.note-editable').text().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
@@ -119,6 +119,9 @@ function modBoardCheck(url){
 	var file_uuid_array = document.getElementsByName("fileUuidArray").value
 	
 	console.log("uuidArray :" + file_uuid_array);
+	console.log("modify_form : "+modify_form);
+	console.log("mod_form_data : "+mod_form_data);
+	
 	
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
@@ -128,7 +131,7 @@ function modBoardCheck(url){
 		alert("본문 내용을 작성해주세요");
 		return false;
 	}
-	if($("#content").val().trim().length == 0){
+	if($('.note-editable').text().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}

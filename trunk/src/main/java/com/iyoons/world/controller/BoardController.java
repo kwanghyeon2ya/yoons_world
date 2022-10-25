@@ -147,7 +147,7 @@ public class BoardController {
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			model.addAttribute("vo",vo2);
 			model.addAttribute("anlist",anlist);
-			return "board/notice/modify";	
+			return "board/free/modify";	
 		}
 			return "common/nuguruman";
 	}
@@ -175,7 +175,7 @@ public class BoardController {
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			model.addAttribute("vo",vo2);
 			model.addAttribute("anlist",anlist);
-			return "board/notice/modify";	
+			return "board/pds/modify";	
 		}
 			return "common/nuguruman";
 	}
