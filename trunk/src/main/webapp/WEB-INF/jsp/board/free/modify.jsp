@@ -41,7 +41,7 @@ function DeleteFileCheck(index){
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>공지사항</h3>
+				<h3>자유게시판</h3>
 			</div>
 			
 			<div class="board_write">
@@ -53,33 +53,38 @@ function DeleteFileCheck(index){
 					<textarea name="content" id="content" style="display:none;"></textarea>
 									
 					<div class="area-board">
-                    	<span>작성자 : <c:out value="${vo.writerName}"/></span>
-						<div class="area-board-n">
-						</div>								
-                    </div>
-
-					<div class="area-board">
+                    	<!-- <span>작성자 : <c:out value="${vo.writerName}"/></span> -->
                         <input type="text" id="subject" name="subject" value="<c:out value='${vo.subject}'/>"/>
-                        
                     </div>
-                    <div style="width:100px;display:inline-block;">
-                    	<details open>
-								<summary>첨부파일 목록</summary>
-							<c:forEach var="anlist" items="${anlist}" varStatus="loop">
-								<input type="hidden" id="file_uuid_${loop.index}" name="fileUuidArray" value="${anlist.fileUuid}" disabled/>
-								⊙${anlist.fileName}.${anlist.fileType}<button type="button" onclick="DeleteFileCheck(${loop.index})">삭제하기</button>
-								<span id="delete_word_${loop.index}"></span>
-							</c:forEach>	
-						</details>
-						
-						<input type="file" id="file" name="file" multiple/>			
-						
-					</div>
-					<div class="area-board">
+                    
+					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea>
 					</div>
 					
-					<span id="word_count"></span>
+					<div class="area-board-attach">
+						<span id="word_count"></span>
+					</div>
+					
+					<div class="area-board-mod-attach">
+	                   	<details open>
+							<summary>첨부파일</summary>
+								<ul>
+								<c:forEach var="anlist" items="${anlist}" varStatus="loop">
+									<li>
+										<input type="hidden" id="file_uuid_${loop.index}" name="fileUuidArray" value="${anlist.fileUuid}" disabled/>
+										${anlist.fileName}.${anlist.fileType}
+<%-- 										<button type="button" onclick="DeleteFileCheck(${loop.index})">삭제하기</button> --%>
+										<span style="cursor:pointer;" onclick="DeleteFileCheck(${loop.index})">&nbsp;&nbsp;[삭제]</span>
+										<span id="delete_word_${loop.index}"></span>
+									</li>
+								</c:forEach>
+								</ul>
+						</details>
+					</div>
+					
+					<input type="file" id="file" name="file" multiple/>
+					
+					
 						
 					<div class="area-button">
 						<button type="button" onclick="MoveAction()">수정</button>

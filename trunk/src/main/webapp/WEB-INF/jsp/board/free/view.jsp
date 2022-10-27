@@ -90,11 +90,13 @@ function deleteMoveAction(){
 							<details>
 							    <summary>첨부파일</summary>
 							    <ul>
-								<c:forEach var="dlist" items="${anlist}">
-									<a href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>
-										<li>${dlist.fileName}.${dlist.fileType}</li>
-									</a>	
-								</c:forEach>
+									<c:forEach var="dlist" items="${anlist}">
+										<li>
+											<a href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>
+												${dlist.fileName}.${dlist.fileType}
+											</a>
+										</li>
+									</c:forEach>
 								</ul>
 							</details>
 						</c:if>
