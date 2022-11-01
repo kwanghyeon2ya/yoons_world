@@ -21,7 +21,7 @@ function deleteCommentsCheck(index){
 					break;
 				case 1:
 					alert("댓글이 삭제되었습니다");
-					$("#reload_div_parent").load(' .reload_comment');
+					$('.reload_comment_parent_'+index).load('/board/comments .reload_comment_'+index,{postSeq:post_seq_value});
 					break;
 				default:
 					alert("댓글이 삭제되지 않았습니다");

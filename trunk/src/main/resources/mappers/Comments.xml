@@ -7,6 +7,30 @@
 
 	<select id="getCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
 		select
+			cd.*
+		from
+			(select
+					c.comm_seq,
+					c.comm_content,
+					c.comm_group,
+					c.comm_level,
+					c.post_seq,
+					c.regr_seq,
+					c.first_insert_dt,
+					c.updr_seq,
+					c.last_update_dt,
+					c.status,
+					c.comm_id,
+					(select count(1) from comments ac where c.comm_seq = ac.comm_group and comm_level = 1) nested_comments_cnt,
+					rownum r 
+				from
+					(select * from comments order by comm_group desc,first_insert_dt asc)c
+				where 
+					c.post_seq = #{postSeq} and c.status in (0,1))cd
+					where cd.r &gt;= #{startIndex} and cd.r &lt;= #{endIndex}
+	</select>
+	<select id="getNestedCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
+		select
 				c.comm_seq,
 				c.comm_content,
 				c.comm_group,
@@ -18,15 +42,12 @@
 				c.last_update_dt,
 				c.status,
 				c.comm_id,
-				(select count(1) from comments ac where c.comm_seq = ac.comm_group and comm_level = 1) nested_comments_cnt,
 				rownum r 
 			from
 				(select * from comments order by comm_group desc,first_insert_dt asc)c
 			where 
-				c.post_seq = #{postSeq} and c.status in (0,1)
-			
+				c.post_seq = #{postSeq} and c.status in (0,1) and c.comm_level = 1
 	</select>
-	
 	<insert id="insertComments">
 			insert into comments(comm_seq,
 								 comm_content,
@@ -71,6 +92,7 @@
 	</select>
 	<select id="getComment" resultType="com.iyoons.world.vo.CommentsVO">
 		select
+			comm_content,
 			comm_seq,
 			regr_seq,
 			post_seq,

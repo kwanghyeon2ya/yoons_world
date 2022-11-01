@@ -13,11 +13,12 @@ import com.iyoons.world.vo.CommentsVO;
 public interface CommentsDAO {
 
 	public int insertComments(CommentsVO vo);
-	public List<CommentsVO> getCommentsList(int postSeq);
+	public List<CommentsVO> getCommentsList(CommentsVO vo);
 	public int getExistCommentsCount(int postSeq);
 	public int getALLCommentsCount(int postSeq);
 	public CommentsVO getComment(CommentsVO vo);
 	public int delComment(CommentsVO vo);
 	public int modComment(CommentsVO vo);
 	public void delAllCommentsByPostSeq(CommentsVO vo);
+	public List<CommentsVO> getNestedCommentsList(int postSeq);
 }

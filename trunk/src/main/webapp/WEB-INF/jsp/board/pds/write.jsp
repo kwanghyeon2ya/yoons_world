@@ -12,7 +12,7 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionSeqForUser == null}">
+<c:if test="${sessionScope.sessionIdForUser == null}">
 	<script>
 	alert("로그인화면으로 이동합니다");
 	location.href="/login/loginView";
@@ -65,7 +65,7 @@ function MoveAction(){
 					
 					<div class="area-button">
 						<!--button type="submit">등록</button-->
-						<button type="button" onclick="MoveAction();">등록</button>
+						<button id="move_action_button" type="button" onclick="MoveAction();">등록</button>
 						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
 						<button type="button" onclick="location.href='/board/pds/list'">취소</button>
 					</div>

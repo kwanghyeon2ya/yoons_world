@@ -31,9 +31,8 @@ $(document).ready(function(){
 					alert("아이디 또는 비밀번호가 일치하지 않습니다.");
 					break;
 				case 1:
-					alert("${#user_ID}님 환영합니다.");
+					alert($("#userID").val()+" 님 환영합니다.");
 					window.location.href = "/main";
-
 				default:
 					break;
 				}

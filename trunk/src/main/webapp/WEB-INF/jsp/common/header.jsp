@@ -30,6 +30,7 @@
 	<script src="/js/delcomments.js"></script>
 	<script src="/js/commnetsShowHide.js"></script>
 	<script src="/js/randomName.js"></script>
+	<script src="/js/enterkeyevent.js"></script> 
 	<script>	
 		/* console.log(performance.getEntriesByType('navigation')[0]);	
 		console.log(performance.getEntriesByType('navigation')[0].type == 'reload');
@@ -44,6 +45,7 @@
 			location.reload();
 
 		} */
+		
 		console.log(window.performance.navigation.type == 2);
 		window.onpageshow = function(event){ // 뒤로가기 공부
 			if(event.persisted){ //캐시 남아있는지 확인 후 남아있다면 true
@@ -70,6 +72,7 @@
 									<a href="/board/notice/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>
+									<a href="/login/loginView">로그인</a>
 		                            <a class="tag-show-m"></a>
 		                        </c:if>
 		                        <c:if test="${sessionScope.sessionIdForUser != null}">
@@ -78,9 +81,15 @@
 									<a href="/board/notice/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>
-									<!-- <a href="">게시판관리</a> 추후 개발 예정-->
-									<a href="/admin/member/list">회원관리</a> <!-- 추후 관리자일 경우만 노출되도록 할것 -->
-									<a href="">마이페이지</a> <!-- 추후 개발 예정 -->
+									<c:if test="${sessionScope.sessionSeqForAdmin != null}">
+										<!-- <a href="">게시판관리</a> 추후 개발 예정-->
+										<a href="/admin/member/list">회원관리</a>
+										<!-- 추후 관리자일 경우만 노출되도록 할것 -->
+									</c:if>
+									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
+									<a href="">마이페이지</a><!-- 추후 개발예정 -->
+									</c:if>
+									<a href="/login/logout">로그아웃</a>
 		                            <a href="/login/logout" class="tag-show-m">Logout</a>
 		                        </c:if>
 							</nav>

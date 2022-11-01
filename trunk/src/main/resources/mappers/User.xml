@@ -6,27 +6,39 @@
 <mapper namespace="com.iyoons.world.dao.UserDAO">
 
 	<select id="findUser" resultType="com.iyoons.world.vo.UserVO">
-		select * from user_info where
-		user_id=#{userId} and user_pw=#{userPw} and user_status = 1
+		select 
+			user_id,
+			user_seq,
+			user_pw,
+			user_name,
+			user_type
+		from
+			user_info 
+		where
+			user_id=#{userId} 
+			and user_pw=#{userPw}
+			and user_status = 1
 	</select>
 
-	<select id="checkUser" resultType="int">
-		select count(*) from user_info
-		where user_id=#{userId} and user_pw=#{userPw}
+	<select id="checkId" resultType="int">
+		select 
+			count(1)
+		from 
+			user_info
+		where
+			user_id=#{userId}
 	</select>
 
 	<select id="userList" resultType="com.iyoons.world.vo.UserVO">
 		SELECT
-		US.user_id,
-		US.user_name,
-		US.user_type,
-		US.user_status,
-		US.user_seq,
-		DP.dep_name
+			US.user_id,
+			US.user_name,
+			US.user_type,
+			US.user_status,
+			US.user_seq,
+			row_number() over(order by us.user_status desc) as r
 		FROM
-		user_info US
-		LEFT JOIN dep DP ON US.user_seq = DP.user_seq
-		/*WHERE US.user_name LIKE '%${userName}%'*/
+			user_info US
 	</select>
 
 	<select id="viewUser" resultType="com.iyoons.world.vo.UserVO">
@@ -47,18 +59,26 @@
 	<insert id="insertUser"
 		parameterType="com.iyoons.world.vo.UserVO">
 		INSERT INTO user_info (
+		user_seq,
 		user_id,
 		user_pw,
 		user_name,
 		email,
-		user_seq
+		hire_dt,
+		user_type,
+		user_status,
+		regr_seq
 		)
 		VALUES (
+		user_seq.nextval,
 		#{userId},
 		#{userPw},
 		#{userName},
 		#{email},
-		#{userSeq}
+		#{hireDt},
+		#{userType},
+		1,
+		#{regrSeq}
 		)
 	</insert>
 
@@ -72,7 +92,7 @@
 		WhERE
 		user_id = #{userId} <!-- 일련번호로 수정 -->
 	</update>
-
+	
 	<!-- 회원 상세 페이지 -->
 	<select id="userDetail" resultType="com.iyoons.world.vo.UserVO">
 		SELECT
@@ -91,12 +111,13 @@
 		UPDATE
 		user_info
 		SET
-		user_status = 0,
-		last_update_dt = sysdate
+			user_status = 0,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
 		WhERE
-		user_id IN
-		<foreach item="userId" collection="userIdArray" open="(" close=")" separator=",">
-			#{userId} <!-- 일련번호로 수정 -->
+		user_seq IN
+		<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+			#{userSeq} <!-- 일련번호로 수정 -->
 		</foreach>
 	</update>
 

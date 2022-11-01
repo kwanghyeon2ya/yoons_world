@@ -47,8 +47,8 @@
 						<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
 						<option value="attach_file" ${search == 'attach_file' ? 'selected="selected"' :''}>첨부파일</option>
 					</select>
-					<input type="text" name="keyword" value="${keyword}"></input>
-					<button type="submit">검색</button>
+					<input id="search_text" type="text" name="keyword" value="${keyword}"></input>
+					<button id="submit_button" type="submit">검색</button>
 				</div>					
 			</form>
 			

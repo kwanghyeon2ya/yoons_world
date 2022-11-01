@@ -30,8 +30,8 @@ import com.iyoons.world.vo.CommentsVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";*/
-	/*final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
+	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
 	final String REAL_PATH="C:/yoons_world/files";
 	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";
 	
@@ -240,10 +240,8 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println(attachCount);
 		if(attachCount != 0) { //카운트 확인 후 post_board에 첨부파일 여부 컬럼 입력
 			vo.setFileAttachYn("Y");
-			System.out.println("Y떳다");
 		}else {
 			vo.setFileAttachYn("N");
-			System.out.println("N떳다");
 		}
 		return dao.modView(vo);
 	}

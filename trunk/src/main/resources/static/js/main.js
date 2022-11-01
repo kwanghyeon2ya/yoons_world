@@ -23,7 +23,7 @@
 			$(
 				'<div id="titleBar">' +
 					'<a href="#navPanel" class="toggle"></a>' +
-					'<span class="title">' + $('#logo').html() + '</span>' +
+					'<a class="title" href="/main">' + $('#logo').html() + '</span>' +
 				'</div>'
 			)
 				.appendTo($body);

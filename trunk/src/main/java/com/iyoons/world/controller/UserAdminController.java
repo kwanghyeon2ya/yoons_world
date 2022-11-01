@@ -2,6 +2,9 @@ package com.iyoons.world.controller;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +32,7 @@ public class UserAdminController {
 		return "admin/member/list";
 	}
 	
+	
 	// 회원 등록 페이지
 	@RequestMapping(value = "/member/createUserForm", method = RequestMethod.GET)
  	public String userCreate() throws SQLException {
@@ -36,13 +40,32 @@ public class UserAdminController {
  		return "admin/member/createUserForm";
  	}
 	
+	@RequestMapping(value = "/member/duplicatedIdCheck", method = RequestMethod.GET)
+	@ResponseBody public int checkDuplicatedId(UserVO vo) throws SQLException {
+		
+		if(userService.checkId(vo) == 1) {
+			return 0;	
+		}else {
+			return 1;
+		}
+		
+	}
+	
 	// 회원 등록 처리
 	@RequestMapping(value = "/member/createUser", method = RequestMethod.POST)
-	public String userInsert(UserVO userVO) throws SQLException {
-
-		userService.insertUser(userVO);
+	@ResponseBody public int userInsert(UserVO vo,HttpSession session) throws SQLException {
 		
-		return "redirect:/admin/member/list"; //회원 목록으로 이동
+		if(userService.checkId(vo) == 1) {
+			return 2;
+		}
+		
+		if(vo.getEmailPart2() == "self_writing") {
+			vo.setEmailPart2(vo.getEmailPart3());
+		}
+		int sessionSeqForAdmin = Integer.parseInt("sessionSeqForAdmin");
+		vo.setRegrSeq(sessionSeqForAdmin);
+		
+		return userService.insertUser(vo);
 	}
 	
 	// 회원 수정 페이지
@@ -70,13 +93,13 @@ public class UserAdminController {
 	// 회원 삭제 처리
 			@ResponseBody 
 			@RequestMapping(value = "/member/deleteUser", method = RequestMethod.POST)
-			public int deleteUser(UserVO userVO) throws SQLException {
+			public int deleteUser(UserVO vo,HttpSession session) throws SQLException {
 				
-				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().size());
-				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().get(0));
-				System.out.println("=========================아이디 배열 확인: " +userVO.getUserIdArray().get(1));
-				
-				int deleteUserResult = userService.deleteUser(userVO);
+				System.out.println("=========================아이디 배열 확인: " +vo.getUserSeqArray().size());
+				System.out.println("=========================아이디 배열 확인: " +vo.getUserSeqArray().get(0));
+				int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
+				vo.setUpdrSeq(sessionSeqForAdmin);
+				int deleteUserResult = userService.deleteUser(vo);
 				
 				if(deleteUserResult != 0 ) {
 					return 1;

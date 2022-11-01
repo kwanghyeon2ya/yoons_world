@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import com.google.gson.Gson;
 import com.iyoons.world.service.AttachService;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.service.CommentsService;
@@ -200,7 +201,7 @@ public class BoardController {
 		return 0;
 	}
 	@RequestMapping(value="modifyCommentProc",method=RequestMethod.POST)
-	@ResponseBody public int modCommentProc(CommentsVO vo,HttpSession session) {
+	@ResponseBody public String modCommentProc(CommentsVO vo,HttpSession session) {
 		
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
@@ -210,9 +211,92 @@ public class BoardController {
 		System.out.println("vo2postSeq : "+vo2.getPostSeq());
 		if(sessionSeqForUser == vo2.getRegrSeq()) {
 		vo.setUpdrSeq(sessionSeqForUser);
-		return cservice.modComment(vo);
+			if(cservice.modComment(vo) == 1) {
+				System.out.println("댓글 업데이트 진입 확인");
+				CommentsVO vo3 = cservice.getComment(vo);
+				System.out.println(vo3.getCommContent());
+				return vo3.getCommContent();
+			}
 		}
-		return 0;
+		return "";
+	}
+	
+	
+	@RequestMapping(value="comments")
+	public String getComments(CommentsVO cvo,Model model) {
+		
+		if(cvo.getStartIndex() == 0) {
+			System.out.println("StartIndex nullcheck");
+			cvo.setStartIndex(1);
+			cvo.setEndIndex(10);
+		}
+		
+		if(cvo.getCocoCount() == 0) {
+			cvo.setCocoCount(10);
+		}else {
+			cvo.setCocoCount(cvo.getCocoCount()+10); //더보기 버튼 필요한지 확인용 +10 - 밑에서 비교함
+		}	// view페이지에 처음 접근할 때 는 0이 넘어오지만, 후에는 10단위로 더해져 넘어옴(html 태그 length 값)
+			// ajax후에 태그 갯수를 세는 것이기 때문에 10을 더해서 계산해야함 -> 더보기 버튼 활성화/비활성화 용도
+		
+		BoardVO vo = service.getView(cvo.getPostSeq());
+		
+		if(vo == null) { // Null체크 - 글삭제 후 뒤로가기시 Null
+			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		 }
+		
+		System.out.println("comments 들어오긴함?");
+		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); //존재하는 댓글의 카운트-status가 1인글
+		
+		List<CommentsVO> clist = cservice.getCommentsList(cvo);
+		
+		int stopMoreCommentsButton = 0;
+		
+		int maxCommentsCount = cservice.getALLCommentsCount(vo.getPostSeq());
+		
+		System.out.println("cococount : "+cvo.getCocoCount());
+		System.out.println("endindex : "+cvo.getEndIndex());
+		System.out.println("maxcommentcount : "+maxCommentsCount);
+		
+		if(cvo.getCocoCount() > maxCommentsCount) { //더보기 버튼 변화
+			stopMoreCommentsButton = 1;
+		}
+		
+		model.addAttribute("stopMoreCommentsButton",stopMoreCommentsButton);
+		model.addAttribute("vo",vo);
+		model.addAttribute("clist",clist);
+		model.addAttribute("existCount",existCount);
+		
+		return "board/comments";
+	}
+	
+	@RequestMapping(value="getMoreCommentsList") // 댓글 더 보기(클릭시)
+	@ResponseBody public String getMoreCommentsList(CommentsVO cvo) {
+		
+		BoardVO vo = service.getView(cvo.getPostSeq());
+
+		if(vo == null) {
+			return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		}
+		
+		List<CommentsVO> cmlist = cservice.getCommentsList(cvo);
+		
+		Gson gson = new Gson();
+		String cmlistString = gson.toJson(cmlist); // list를 object로 바꾸고 다시 문자열로 바꿈
+		
+		return cmlistString;
+	}
+	
+	
+	@RequestMapping(value="getNestedCommentsProc") //돌아가고있는 forEach문 안에 어떻게?
+	@ResponseBody public List<CommentsVO> getNestedCommentsProc(String postSeq,Model model) {
+		
+		int postSeq2 = Integer.parseInt(postSeq);
+		
+		int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
+		List<CommentsVO> nestedCommlist = cservice.getNestedCommentsList(postSeq2);
+		
+		model.addAttribute("nestedCommlist",nestedCommlist);
+		return nestedCommlist;
 	}
 	
 	@RequestMapping("free/view")
@@ -234,16 +318,11 @@ public class BoardController {
 			 service.updateCnt(postSeq2);	 
 		 }
 		 
-			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
-			
-			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
-		
-			 model.addAttribute("clist",clist);
-			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
 			 return "board/free/view";
 	}
+	
 	
 	@RequestMapping("notice/view")
 	public String getNoticeView(@RequestParam(value="postSeq",required=false)String postSeq,
@@ -263,12 +342,6 @@ public class BoardController {
 			 service.updateCnt(postSeq2);	 
 		 }
 		 
-			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
-			
-			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
-		
-			 model.addAttribute("clist",clist);
-			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
 			 return "board/free/view";
@@ -291,12 +364,7 @@ public class BoardController {
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
 		 }
-			 int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
 			
-			 List<CommentsVO> clist = cservice.getCommentsList(postSeq2);
-		
-			 model.addAttribute("clist",clist);
-			 model.addAttribute("existCount",existCount);
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
 			 return "board/free/view";

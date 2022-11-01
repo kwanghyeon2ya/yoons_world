@@ -12,7 +12,7 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionSeqForUser == null}">
+<c:if test="${sessionScope.sessionIdForUser == null}">
 	<script>
 	alert("로그인화면으로 이동합니다");
 	location.href="/login/loginView";
@@ -39,7 +39,7 @@ function MoveAction(){
 			</div>
 			
 			<div class="board_write">
-				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
+				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline" onsubmit="return false">
 					<input type="hidden" name="boardType" id="board_type"/>
  					<textarea name="content" id="content" style="display:none;"></textarea>
 					
@@ -58,8 +58,6 @@ function MoveAction(){
 						<input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>								
                     </div>
 
-                        
-
 
 					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"></textarea>
@@ -71,7 +69,7 @@ function MoveAction(){
 					
 					<div class="area-button">
 						<!--button type="submit">등록</button-->
-						<button type="button" onclick="MoveAction();">등록</button>
+						<button id="move_action_button" type="button" onclick="MoveAction();">등록</button>
 						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
 						<button type="button" onclick="location.href='/board/free/list'">취소</button>
 					</div>

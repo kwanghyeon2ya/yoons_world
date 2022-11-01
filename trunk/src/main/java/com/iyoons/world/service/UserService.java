@@ -6,7 +6,7 @@ import java.util.List;
 import com.iyoons.world.vo.UserVO;
 
 public interface UserService {
-	public int checkUser(UserVO userVO);
+	public int checkId(UserVO userVO);
 	
 	public UserVO findUser(UserVO userVO);
 	

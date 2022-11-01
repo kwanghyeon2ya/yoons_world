@@ -17,9 +17,9 @@ public class UserServiceImpl implements UserService {
 	UserDAO userDAO;
 
 	@Override
-	public int checkUser(UserVO userVO) {
+	public int checkId(UserVO userVO) {
 		
-		return userDAO.checkUser(userVO);
+		return userDAO.checkId(userVO);
 	}
 
 	@Override
@@ -29,9 +29,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int insertUser(UserVO userVO) throws SQLException {
-
-		return userDAO.insertUser(userVO);
+	public int insertUser(UserVO vo) throws SQLException {
+		
+		vo.setEmail(vo.getEmailPart1()+"@"+vo.getEmailPart2());
+		
+		return userDAO.insertUser(vo);
 	}
 
 	@Override

@@ -12,9 +12,8 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionSeqForUser == null}">
+<c:if test="${sessionScope.sessionIdForUser == null}">
 	<script>
-	alert("로그인화면으로 이동합니다");
 	location.href="/login/loginView";
 	</script>
 </c:if>
@@ -41,48 +40,53 @@ function DeleteFileCheck(index){
 		<div class="col-12">
 		
 			<div class="title-page">
-				<h3>공지사항</h3>
+				<h3>자료실</h3>
 			</div>
 			
 			<div class="board_write">
-				<form id="modify_form" name="modify_form" method="POST" class="board-inline" enctype="multipart/form-data">
+				<form id="modify_form" name="modify_form" action="/board/notice/list" method="POST" class="board-inline" enctype="multipart/form-data">
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
-					<input type="hidden" name="regrSeq" value="${vo.regrSeq}"/>
-					<input type="hidden" id="board_type" name="boardType" value="2"/>
+					<input type="hidden" id="regrSeq" name="regrSeq" value="${vo.regrSeq}"/>
+					<input type="hidden" id="board_type" name="boardType" value="0"/>
 						
 					<textarea name="content" id="content" style="display:none;"></textarea>
 									
 					<div class="area-board">
-                    	<span>작성자 : <c:out value="${vo.writerName}"/></span>
-						<div class="area-board-n">
-						</div>								
-                    </div>
-
-					<div class="area-board">
+                    	<!-- <span>작성자 : <c:out value="${vo.writerName}"/></span> -->
                         <input type="text" id="subject" name="subject" value="<c:out value='${vo.subject}'/>"/>
-                        
                     </div>
-                    <div style="width:100px;display:inline-block;">
-                    	<details open>
-								<summary>첨부파일 목록</summary>
-							<c:forEach var="anlist" items="${anlist}" varStatus="loop">
-								<input type="hidden" id="file_uuid_${loop.index}" name="fileUuidArray" value="${anlist.fileUuid}" disabled/>
-								⊙${anlist.fileName}.${anlist.fileType}<button type="button" onclick="DeleteFileCheck(${loop.index})">삭제하기</button>
-								<span id="delete_word_${loop.index}"></span>
-							</c:forEach>	
+                    
+					<div class="area-board-cont">
+                       	<textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea>
+					</div>
+					
+					<div class="area-board-attach">
+						<span id="word_count"></span>
+					</div>
+					
+					<div class="area-board-mod-attach">
+	                   	<details open>
+							<summary>첨부파일</summary>
+								<ul>
+								<c:forEach var="anlist" items="${anlist}" varStatus="loop">
+									<li>
+										<input type="hidden" id="file_uuid_${loop.index}" name="fileUuidArray" value="${anlist.fileUuid}" disabled/>
+										${anlist.fileName}.${anlist.fileType}
+<%-- 										<button type="button" onclick="DeleteFileCheck(${loop.index})">삭제하기</button> --%>
+										<span style="cursor:pointer;" onclick="DeleteFileCheck(${loop.index})">&nbsp;&nbsp;[삭제]</span>
+										<span id="delete_word_${loop.index}"></span>
+									</li>
+								</c:forEach>
+								</ul>
 						</details>
-							
-						<input type="file" id="file" name="file" multiple/>
-										
 					</div>
-					<div class="area-board">
-                       	<textarea id="summernote" name="editordata"><c:out value="${vo.content}"/></textarea>
-					</div>
-						
-						<span id="word_count"></span>	
+					
+					<input type="file" id="file" name="file" multiple/>
+					
+					
 						
 					<div class="area-button">
-						<button type="button" onclick="MoveAction()">수정</button>
+						<button id="move_action_button" type="button" onclick="MoveAction()">수정</button>
 						<button type="button" onclick="history.go(-1)">취소</button>
 					</div>
 					
@@ -117,4 +121,3 @@ function DeleteFileCheck(index){
 
 <!-- Footer -->
 <jsp:include page="../../common/footer.jsp" flush="false"/>
-

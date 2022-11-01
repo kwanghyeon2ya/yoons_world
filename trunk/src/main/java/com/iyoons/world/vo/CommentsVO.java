@@ -25,5 +25,7 @@ public class CommentsVO {
 	private String commId;
 	private int status;// 댓글 상태(일반1/삭제0)
 	private int nestedCommentsCnt;
-	
+	private int startIndex;
+	private int endIndex;
+	private int cocoCount;//게시글 jsp에 for문을 통해 보여지는 댓글 갯수
 }

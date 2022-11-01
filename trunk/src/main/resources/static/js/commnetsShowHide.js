@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -43,7 +44,6 @@ function modCommFormShowHide(index){ //댓글 수정폼 보이기 js
 	
 }
 
-
 function showHideNestedCocoList(index,comm_seq){ // 다시짜야할듯 ..
 	
 		var coco_list_hidden_div_class = document.getElementsByClassName("coco_list_hidden_div_class");
@@ -79,18 +79,61 @@ function showHideNestedCocoList(index,comm_seq){ // 다시짜야할듯 ..
 		}
 }
 
-		/*coco_list_hidden_div_class_values.forEach(function(class_value) {
-		    console.log(class_value);
-		});
-		
-		coco_list_hidden_div_name_values.forEach(function(name_value) {
-		    console.log(name_value);
-		});*/
-		
-		/*for(var name_value of Object.entries(coco_list_hidden_div_name_values)){
-			console.log("name : "+name_value);
-		}
-		
-		for(var class_value of Object.entries(coco_list_hidden_div_class_values)){
-			console.log("class : "+class_value);
-		}*/
+function getCommentsList(post_seq){
+	
+		$.ajax({
+			url : '/board/comments?postSeq='+post_seq,
+			type : 'POST',
+			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+			dataType : "html",
+			async : false,
+		 	success : function(data){
+						$('#reload_div_parent').append(data);
+			}
+		})
+}
+
+
+function showMoreComments(post_seq){ //댓글 더보기 추가
+			
+			var more_comments_div = Array.from(document.getElementsByClassName("more_comments_div"));
+			var coco_count = document.getElementsByClassName("coco_count_check").length;
+			console.log("coco_count : "+coco_count); // 더보기 누르고 추가되는 것이기 떄문에 순서 생각
+			var start_index = coco_count + 1;
+			var end_index = coco_count + 10;
+			
+			console.log("start_index : "+start_index);
+			console.log("end_index : "+end_index);
+			
+			var param = {postSeq:post_seq,startIndex:start_index,endIndex:end_index,cocoCount:coco_count};
+			
+			$.ajax({
+				url : '/board/comments',
+				type : 'GET',
+				contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+				data : param,
+				dataType : "html",
+				async : false,
+			 	success : function(data){
+			 		
+			 				var view_page_count = +$("#more_comments_page").val()+1
+			 				$("#more_comments_page").val(view_page_count); //view.jsp 페이지확인 value +1
+			 				var comment_page_count = +$("#page_count").val()+1;
+			 				$("#page_count").val(comment_page_count); //comments.jsp 페이지확인 value +1
+			 				
+			 				console.log("view_page_count : "+view_page_count);
+			 				console.log("comment_page_count : "+comment_page_count);
+			 				
+			 				if(view_page_count == comment_page_count){
+			 					
+			 					console.log("more_comments_list remove");
+			 					$("#more_comments_list").remove();
+			 				
+			 				}
+			 				
+			 				$('#reload_div_parent').append($(data).find("#comments_div"));
+							+$("#more_comments_page").val() + 1;
+							console.log("after plus : "+$("#more_comments_page").val());
+				}
+			})
+	}

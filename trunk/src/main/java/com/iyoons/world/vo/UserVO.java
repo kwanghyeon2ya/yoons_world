@@ -15,6 +15,9 @@ public class UserVO {
 	private String userPw; 
 	private String userName;
 	private String email;
+	private String emailPart1;
+	private String emailPart2;
+	private String emailPart3;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date hireDt; //입사일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
@@ -28,6 +31,6 @@ public class UserVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt; //회원정보 수정일자
 	private String depName;
-	private List<String> userIdArray;
+	private List<String> userSeqArray;
 	
 }

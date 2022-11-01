@@ -16,8 +16,13 @@ public class CommentsServicveImpl implements CommentsService {
 	private CommentsDAO dao;
 	
 	@Override
-	public List<CommentsVO> getCommentsList(int postSeq) {
-		return dao.getCommentsList(postSeq);
+	public List<CommentsVO> getCommentsList(CommentsVO vo) {
+		return dao.getCommentsList(vo);
+	}
+	
+	@Override
+	public List<CommentsVO> getNestedCommentsList(int postSeq) {
+		return dao.getNestedCommentsList(postSeq);
 	}
 
 	@Override
@@ -56,5 +61,5 @@ public class CommentsServicveImpl implements CommentsService {
 	public CommentsVO getComment(CommentsVO vo) {
 		return dao.getComment(vo);
 	}
-	
+
 }

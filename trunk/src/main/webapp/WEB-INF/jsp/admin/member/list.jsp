@@ -33,13 +33,13 @@ $(function(){
 	$('#deleteButton').click(function() {
 				
 		var checked = $("input[type=checkbox]:checked");
-		var userIdArray = []; // 아이디 배열 생성
+		var userSeqArray = []; // 아이디 배열 생성
 		
 		$.each(checked, function(){
-			userIdArray.push($(this).val()); //체크한 아이디 배열로 입력
+			userSeqArray.push($(this).val()); //체크한 아이디 배열로 입력
 		});
 		
-		console.log(userIdArray); //체크한 아이디 콘솔 확인
+		console.log(userSeqArray); //체크한 아이디 콘솔 확인
 		//console.log(userIdArray.join(','));
 		
 		if(checked.length < 1) { //선택 값이 없으면 알림 메세지
@@ -50,7 +50,7 @@ $(function(){
 		$.ajax({
 			url : '/admin/member/deleteUser',
 			type : 'POST',
-			data : {'userIdArray' : userIdArray },
+			data : {'userSeqArray' : userSeqArray },
 			dataType: 'json',
 			success : function(result){
 				switch (Number(result)) {
@@ -94,6 +94,7 @@ $(function(){
 				</div>
 				
 				<div class="area-button-chk">
+					<button onclick="location.href='/admin/member/createUserForm'">회원등록</button> &nbsp;
 					<button type="button" id="deleteButton">삭제</button>
 				</div>	
 			</div>
@@ -118,7 +119,7 @@ $(function(){
 						<div class="mem-dep">${list.depName}</div>
 						<div class="mem-status">${list.userStatus}</div>
 						<div class="mem-type">${list.userType}</div>
-						<div class="mem-check"><input type="checkbox" name="chkMember" value="${list.userId}"/></div>
+						<div class="mem-check"><input type="checkbox" name="chkMember" value="${list.userSeq}"/></div>
 					
 					</div>
 				
@@ -126,18 +127,12 @@ $(function(){
 				
 			</div>
 			
-			<div class="area-button">
-				<button onclick="location.href='/admin/member/createUserForm'">회원등록</button>
-			</div>
 			
 			<div class="board_page">
-				<a href="#" class="num"><</a>
-				<a href="#" class="num on">1</a>
-				<a href="#" class="num">2</a>
-				<a href="#" class="num">3</a>
-				<a href="#" class="num">4</a>
-				<a href="#" class="num">5</a>
-				<a href="#" class="num">></a>
+			
+			
+			
+			
 			</div>
 			
 		</div>

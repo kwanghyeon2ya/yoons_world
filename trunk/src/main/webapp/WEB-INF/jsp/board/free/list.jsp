@@ -43,8 +43,8 @@
 						<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
 						<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
 					</select>
-					<input type="text" name="keyword" value="${keyword}"></input>
-					<button type="submit">검색</button>
+					<input id="search_text" type="text" name="keyword" value="${keyword}"></input>
+					<button id="submit_button" type="submit">검색</button>
 				</div>					
 			</form>
 				

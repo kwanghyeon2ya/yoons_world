@@ -27,20 +27,24 @@ public class LoginController {
         	
     		return "login/login";
     	}
-   
+        
+        
         
         @ResponseBody 
      	@RequestMapping(value = "/login", method = RequestMethod.POST)
     	public int login(UserVO userVO,HttpSession session) {
 
-    		UserVO userInfo = userService.findUser(userVO);
+    		UserVO userInfovo = userService.findUser(userVO);
+    		System.out.println(userInfovo+"userInfovoㅎㅎㅎ");
     		if(userVO != null ) {
-    			
-    			session.setAttribute("sessionIdForUser", userInfo.getUserId());
-    			session.setAttribute("sessionNameForUser",userInfo.getUserName());
-    			session.setAttribute("sessionSeqForUser", userInfo.getUserSeq());
+    			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
+    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
+    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
     			session.setMaxInactiveInterval(60*60);
-    			
+    			if(userInfovo.getUserType() == 1) {
+    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
+    			session.setMaxInactiveInterval(60*60);
+    			}
     			return 1;
     		}else{
 				return 0;

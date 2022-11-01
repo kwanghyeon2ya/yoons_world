@@ -2,7 +2,7 @@
  * 
  */
 
-function writeCommentsCheck(){
+function writeCommentsCheck(post_seq){
 	var param = $("#comm_insert_form").serialize();
 	
 	if($("#commContent").val() == ""){
@@ -37,7 +37,7 @@ function writeCommentsCheck(){
 					break;
 				case 1:
 					alert("댓글이 작성되었습니다");
-					$("#reload_div_parent").load(' #reload_div');
+					$("#reload_div_parent").load('/board/comments ',{postSeq:post_seq});
 					break;
 				default:
 					break;
@@ -87,29 +87,25 @@ function modifyCommentsCheck(index){
 		type : 'POST',
 		data : param,
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-		dataType : "json",
+		dataType : "html",
 		async : false,
 	/* processData: false, */
 		/* contentType: false, */
 	 	success : function(data){
-				switch (Number(data)) {
-				case 0:
-					alert("댓글이 수정되지 않았습니다");
-					break;
-				case 1:
-					alert("댓글이 수정되었습니다");
-					$("#reload_div_parent").load(' .reload_comment');
-					break;
-				default:
-					break;
+	 		console.log("data 확인 : "+data);
+					if(data == '') {
+						alert("댓글이 수정되지 않았습니다");
+					}else{
+						alert("댓글이 수정되었습니다");
+						console.log("data : "+data);
+						/*$('.reload_comment_parent_'+index).html();*/
+						$("#ptag_commContent_"+index).text(data);
+						/*$("#ptag_commContent_"+index).html("<p><c:out escaperXml='ture' value="+data+"/>"+data+"</p>");*/
+						$("#comment_mod_form_"+index).css("display","none");
+					}
 				}
-			}
 	})
 }
 
 
-
-
-	
-	
 	
