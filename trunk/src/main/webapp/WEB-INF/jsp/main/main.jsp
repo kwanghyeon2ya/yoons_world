@@ -45,14 +45,14 @@
 								</c:if>
 								
 	<script>
-        $("a").click(function(){
-           $("a").toggleClass("current-page-item");
-        })
+        // $("a").click(function(){
+        //    $("a").toggleClass("current-page-item");
+        // })
     </script>
 								<c:if test="${sessionScope.sessionIdForUser != null}">
 									<a class="tag-show-m">Hello,
 										${sessionScope.sessionNameForUser} 님</a>
-									<a href="/main">Home</a>
+									<a href="/main" class="current-page-item">Home</a>
 									<a href="/board/notice/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>

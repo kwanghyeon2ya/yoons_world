@@ -69,7 +69,7 @@
 								<c:if test="${sessionScope.sessionIdForUser == null}">
 		                            <a href="/login/loginView" class="tag-show-m">로그인하세요</a>
 									<a href="/main" class="current-page-item">Home</a>
-									<a href="/board/notice/list" class="current-page-item">공지사항 </a>
+									<a href="/board/notice/list" >공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>
 									<a href="/login/loginView">로그인</a>
@@ -77,14 +77,10 @@
 		                        </c:if>
 		                        
 		                        
-    <script>
-        $("a").click(function(){
-           $("a").toggleClass("current-page-item");
-        })
-    </script>
+
 		                        <c:if test="${sessionScope.sessionIdForUser != null}">
 		                            <a class="tag-show-m">Hello, ${sessionScope.sessionNameForUser} 님</a>
-									<a href="/main">Home</a>
+									<a href="/main" class="current-page-item">Home</a>
 									<a href="/board/notice/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>

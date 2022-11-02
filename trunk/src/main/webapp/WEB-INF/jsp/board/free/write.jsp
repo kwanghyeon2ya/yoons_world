@@ -101,7 +101,10 @@ function MoveAction(){
 		]
 	});
 </script>
-
+<script>
+	$("#nav a").removeClass("current-page-item");
+	$("#nav").find('a[href*="/free"]').addClass("current-page-item");
+</script>
 
 <!-- Footer -->
 <jsp:include page="../../common/footer.jsp" flush="false"/>

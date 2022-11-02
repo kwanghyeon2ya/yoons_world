@@ -120,7 +120,10 @@ function deleteMoveAction(){
 			</div>
 		</div>
 	</div>
-
+<script>
+	$("#nav a").removeClass("current-page-item");
+	$("#nav").find('a[href*="/pds"]').addClass("current-page-item");
+</script>
 
 <!-- Footer -->
 <jsp:include page="../../common/footer.jsp" flush="false" />
