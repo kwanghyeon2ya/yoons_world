@@ -57,75 +57,72 @@ function deleteMoveAction(){
 				</div>
 
 				<div class="area-board-info">
-					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
-					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
-					<p>작성자 : <c:out value="${vo.writerName}"/> &nbsp;&nbsp;
-					
-						<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
-							<fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" />
-								&nbsp;&nbsp; 조회 ${vo.readCnt}
-						</c:if>
+					<div class="area-board-info-detail">
+						<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
+						<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
+						<p>작성자 : <c:out value="${vo.writerName}"/> &nbsp;&nbsp;
+							<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
+								<fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" />
+									&nbsp;&nbsp; 조회 ${vo.readCnt}
+							</c:if>
+						</p>
 						
-					</p>
-					
 						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
-							원글작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date"
-								pattern="yyyy-MM-dd" /> &nbsp; /
-							<p>수정된 작성일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date"
-								pattern="yyyy-MM-dd" /></p>
-								&nbsp;&nbsp; 조회 ${vo.readCnt}
-						</c:if>
-							</div>
-							
-						
-						
-			</div>
-
-				<div class="area-board-btn">
-					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
-						<button type="button"
-							onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}'">수정</button>
-							<!-- 게시글 수정 -->
-						<button type="button"
-							onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
-					</c:if>
-				</div>
-				
-				<div class="area-board-cont">
-					<!-- 첨부파일 영역 -->
-					<div class="area-board-attach">
-						<c:if test="${!empty anlist}">
-							<details>
-							    <summary>첨부파일</summary>
-							    <ul>
-								<c:forEach var="dlist" items="${anlist}">
-									<a href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>
-										<li>${dlist.fileName}.${dlist.fileType}</li>
-									</a>	
-								</c:forEach>
-								</ul>
-							</details>
+							작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /> &nbsp; /
+							수정일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" /> &nbsp;&nbsp;
+						       조회 ${vo.readCnt}
 						</c:if>
 					</div>
-				
-					<!-- 게시글 본문 영역 -->
-					${vo.content}
 					
+					<div class="area-board-btn">
+						<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
+							<button type="button"
+								onclick="window.location='/board/free/modify?postSeq=${vo.postSeq}'">수정</button>
+								<!-- 게시글 수정 -->
+							<button type="button"
+								onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
+						</c:if>
+					</div>	
+				
 				</div>
+			</div>
+
+			<div class="area-board-cont">
+				<!-- 첨부파일 영역 -->
+				<div class="area-board-attach">
+					<c:if test="${!empty anlist}">
+						<details>
+						    <summary>첨부파일</summary>
+						    <ul>
+							<c:forEach var="dlist" items="${anlist}">
+								<a href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>
+									<li>${dlist.fileName}.${dlist.fileType}</li>
+								</a>	
+							</c:forEach>
+							</ul>
+						</details>
+					</c:if>
+				</div>
+			
+				<!-- 게시글 본문 영역 -->
+				${vo.content}
 				
-				<!-- 댓글 영역 -->
+			</div>
+			
+			<!-- 댓글 영역 -->
 			<div id="reload_div_parent">
-				
+			
 				<!-- 페이지 분리 구간 -->
 				<input type="hidden" id="more_comments_page" value="1"/>
 			</div><!-- reload_div_parent -->
-			
-				<div class="area-button">
-					<button onclick="window.location='/board/free/list'">목록</button>
-				</div>
+		
+			<div class="area-button">
+				<button onclick="window.location='/board/free/list'">목록</button>
 			</div>
+				
 		</div>
 	</div>
+</div>
 
 <script>
 	$("#nav a").removeClass("current-page-item");

@@ -167,6 +167,7 @@ p, span {
 
 	h4 {
 		font-size: 1em;
+		color:#5b3c88;
 	}
 
 	p, ul {
@@ -1704,10 +1705,10 @@ p, span {
 		width:100%;
 	}
 	.area-board-info{
-		display: inline-block;
-		width:50%;
-		float:left;
-		margin-bottom:0.7em;
+		display:flex;
+		align-items:center;
+		width:100%;
+		margin-bottom:0.5em;
 	}
 	.area-board-info p{
 		margin:0;
@@ -1715,13 +1716,12 @@ p, span {
 		line-height: 0;
 		display:inline-block;
 	}
+	.area-board-info-detail{
+		width:50%;
+	}
 	.area-board-btn {
-		display: inline-block;
 		width:50%;
 		text-align:right;
-		margin:0;
-		padding:0;
-		margin-bottom:0.7em;
 		float:right;
 	}
 	.area-board-cont {
@@ -1740,21 +1740,23 @@ p, span {
 		width: 100%;
 		padding: 0.7em 0;
 		position:relative;
+		font-size:0.9em;
+		color: #6b6b6b;
 	}
-	.area-board-comm p{
-		font-size: 0.9em;
-		padding:3px 0;
+	.area-board-comm> p:first-child {
+		color:#5b3c88;
 	}
-	.area-board-comm p:last-child, p>a{
-		color:#8f8f8f;
-		padding-top:10px;
+	.area-board-comm p, .area-board-comm a{
+		padding:4px 0;
+		word-wrap: break-word;
 	}
+	
 	.area-board-comm input[type="text"]{
-		font-size: 0.9em;
 		border:none;
 		background:transparent;
 		height:auto;
 		width:100%;
+		padding-top:5px;
 	}
 	.area-board-comm input[type="text"]:focus{
 		outline:none;
@@ -1791,18 +1793,25 @@ p, span {
 	}
 	.reply p, .reply form{
 		padding-left:30px;
-		overflow:auto;
+		word-wrap:break-word;
 	}
 	
 	.area-board-comm-mod textarea {
-		width:95%;
+		/*width:95%;
 		height:auto;
 		border: 1px solid #999;
     	border-radius: 3px;
 		font-size: 0.9em;
 		font-family: 'Noto Sans KR', sans-serif;
 		color: #6b6b6b;
-		letter-spacing: -1px;
+		letter-spacing: -1px;*/
+		border:none;
+		background:transparent;
+		height:auto;
+		width:95%;
+		font-family: 'Noto Sans KR', sans-serif;
+		color: #6b6b6b;
+		
 	}
 	.area-board-comm-mod textarea:focus {
 		outline:none;
