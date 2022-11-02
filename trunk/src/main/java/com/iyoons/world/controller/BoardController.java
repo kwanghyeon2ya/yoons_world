@@ -344,7 +344,7 @@ public class BoardController {
 		 
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
-			 return "board/free/view";
+			 return "board/notice/view";
 		 }
 	
 	@RequestMapping("pds/view")
@@ -367,7 +367,7 @@ public class BoardController {
 			
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
-			 return "board/free/view";
+			 return "board/pds/view";
 	}
 	
 	@RequestMapping("free/write")
