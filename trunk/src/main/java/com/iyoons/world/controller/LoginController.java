@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,9 +21,21 @@ public class LoginController {
 		
         @Autowired
         UserService userService;
-        
 
-        @RequestMapping("/loginView")
+
+	@RequestMapping("/msgTest")
+	public String loginView(Model model) {
+
+		model.addAttribute("msg", "메세지를 이렇게 출력합니다!");
+		model.addAttribute("loc", "/main");
+
+		return "common/msg";
+	}
+
+
+
+
+	@RequestMapping("/loginView")
     	public String loginView() {
         	
     		return "login/login";
