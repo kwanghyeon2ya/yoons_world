@@ -27,5 +27,6 @@ public interface UserService {
 
 	public int recoverUserStatus(UserVO userVO);
 
+	public int getSearchedUserCount(PageVO page);
 	
 }

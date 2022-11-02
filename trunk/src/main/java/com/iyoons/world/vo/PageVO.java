@@ -10,7 +10,7 @@ public class PageVO {
 	private int currentPage;
 	private int startRow;
 	private int endRow;
-	private String search;
-	private String keyword;
+	private String search = "";
+	private String keyword = "";
 
 }

@@ -79,5 +79,10 @@ public class UserServiceImpl implements UserService {
 		
 		return userDAO.recoverUserStatus(userVO);
 	}
+
+	@Override
+	public int getSearchedUserCount(PageVO page) {
+		return userDAO.getSearchedUserCount(page);
+	}
 	
 }

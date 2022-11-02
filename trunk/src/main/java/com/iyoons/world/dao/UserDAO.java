@@ -31,4 +31,6 @@ public interface UserDAO {
 	
 	public int getCountUser();
 	
+	public int getSearchedUserCount(PageVO page);
+	
 }

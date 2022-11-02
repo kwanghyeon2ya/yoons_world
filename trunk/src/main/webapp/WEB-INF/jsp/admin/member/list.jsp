@@ -124,7 +124,6 @@ $(function(){
 			<div class="title-page">
 				<h3>회원리스트</h3>
 			</div>
-			
 			<div class="area-search">
 				<div class="area-search-form">
 					<form action="/admin/member/list" method="get">
@@ -147,7 +146,10 @@ $(function(){
 			</div>
 			
 			<c:if test="${count eq 0}">
-				<h1>회원이 없습니다..</h1>			
+				<c:if test="${search ne ''}"><h1>검색하신 회원은 존재하지 않습니다..</h1>
+				<a class="num" href="/admin/member/list">되돌아가기</a>
+				</c:if>
+				<c:if test="${search eq ''}"><h1>회원이 존재하지 않습니다..</h1></c:if>			
 			</c:if>
 			
 			<c:if test="${count > 0}">
@@ -157,9 +159,10 @@ $(function(){
 					<div class="mem-num">번호</div>
 					<div class="mem-name">이름</div>
 					<div class="mem-id">ID</div>
-					<div class="mem-dep">부서</div>
-					<div class="mem-status">상태</div>
-					<div class="mem-type">구분</div>
+					<div class="mem-dep">이메일</div>
+					<!-- <div class="mem-dep">부서</div> -->
+					<div class="mem-status">회원상태</div>
+					<div class="mem-type">권한</div>
 					<div class="mem-check"><input type="checkbox" id="chkAll"/></div>
 				</div>
 				
@@ -168,9 +171,11 @@ $(function(){
 						<div class="mem-num">${list.userSeq}</div>
 						<div class="mem-name"><a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userName}</a></div>						
 						<div class="mem-id"><a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userId}</a></div>
-						<div class="mem-dep">${list.depName}</div>
-						<div class="mem-status">${list.userStatus}</div>
-						<div class="mem-type">${list.userType}</div>
+						<div class="mem-dep">${list.email}</div>
+						<%-- <div class="mem-dep">${list.depName}</div> --%>
+						<div class="mem-status">${list.userStatus eq 0?'정지':'활동중'}</div>
+						
+						<div class="mem-type">${list.userType eq 0?'일반회원':'관리자'}</div>
 						<div class="mem-check"><input type="checkbox" name="chkMember" value="${list.userSeq}"/></div>
 					
 					</div>
@@ -180,17 +185,17 @@ $(function(){
 			</div>
 			
 			</c:if>
-			
 			<div class="board_page">
 			
 				<c:if test="${count > 0}">
 						
-						<fmt:parseNumber var="pageCount" value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}" integerOnly="true"/>
+						<c:set var="pageCount" value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}"/>
+						<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true"/>
 						<fmt:parseNumber var="result" value="${((page.currentPage-1)/10)}" integerOnly="true"></fmt:parseNumber>
 						<c:set var="startPage" value="${result*10+1}"/>
 						<c:set var="pageBlock" value="${10}"/>
 						<c:set var="endPage" value="${startPage + pageBlock -1}"/>
-						
+						${pageCount}					
 						<c:if test="${endPage > pageCount}">
 							<c:set var="endPage" value="${pageCount}"/>						
 						</c:if>

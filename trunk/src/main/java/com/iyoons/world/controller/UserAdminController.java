@@ -39,10 +39,18 @@ public class UserAdminController {
 		
 		pagevo.setStartRow(page2.getStartRow());
 		pagevo.setEndRow(page2.getEndRow());
+		pagevo.setPageSize(pageSize);
+		pagevo.setCurrentPage(page2.getCurrentPage());
+		
+		if(!pagevo.getSearch().equals("")) {
+			count = userService.getSearchedUserCount(pagevo);
+		}
+		
 		System.out.println("page2 : "+page2);
+		System.out.println("pagevo : "+pagevo);
 		List<UserVO> userList = userService.userList(pagevo);
 		model.addAttribute("userList",userList);
-		model.addAttribute("page",page2); //페이징용 page객체
+		model.addAttribute("page",pagevo); //페이징용 page객체
 		model.addAttribute("count",count);
 		
 		return "admin/member/list";
