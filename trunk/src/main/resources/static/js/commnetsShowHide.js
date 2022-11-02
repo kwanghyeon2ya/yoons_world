@@ -116,20 +116,18 @@ function showMoreComments(post_seq){ //댓글 더보기 추가
 				async : false,
 			 	success : function(data){
 			 		
-			 				var view_page_count = +$("#more_comments_page").val()+1
+			 				/*var view_page_count = +$("#more_comments_page").val()+1
 			 				$("#more_comments_page").val(view_page_count); //view.jsp 페이지확인 value +1
 			 				var comment_page_count = +$("#page_count").val()+1;
 			 				$("#page_count").val(comment_page_count); //comments.jsp 페이지확인 value +1
-			 				
+*/			 				
 			 				console.log("view_page_count : "+view_page_count);
 			 				console.log("comment_page_count : "+comment_page_count);
 			 				
-			 				if(view_page_count == comment_page_count){
 			 					
 			 					console.log("more_comments_list remove");
 			 					$("#more_comments_list").remove();
 			 				
-			 				}
 			 				
 			 				$('#reload_div_parent').append($(data).find("#comments_div"));
 							+$("#more_comments_page").val() + 1;

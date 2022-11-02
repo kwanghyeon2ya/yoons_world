@@ -78,6 +78,7 @@ function deleteMoveAction(){
 							<button type="button"
 								onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
 						</c:if>
+						
 					</div>
 				</div>
 			</div>
