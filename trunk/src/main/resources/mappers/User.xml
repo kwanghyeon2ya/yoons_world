@@ -19,7 +19,7 @@
 			and user_pw=#{userPw}
 			and user_status = 1
 	</select>
-
+	<!-- 아이디 중복 확인 -->
 	<select id="checkId" resultType="int">
 		select 
 			count(1)
@@ -28,57 +28,81 @@
 		where
 			user_id=#{userId}
 	</select>
-
+	<select id="getCountUser" resultType="int">
+		select 
+			count(1)
+		from 
+			user_info
+	</select>
 	<select id="userList" resultType="com.iyoons.world.vo.UserVO">
+		select
+			cd.*
+		from	
+			(select
+				user_id,
+				user_name,
+				user_type,
+				user_status,
+				user_seq,
+				first_insert_dt,
+				row_number() over(order by user_status desc,first_insert_dt asc) as r
+			FROM
+				user_info
+			<if test="search == 'member_name'">
+			where
+				user_name like '%${keyword}%'
+			</if>
+			<if test="search == 'member_id'">
+			where
+				user_id like '%${keyword}%'
+			</if>
+				)cd
+			where 
+				cd.r &gt;=#{startRow} 
+				and cd.r &lt;= #{endRow}
+	</select>
+
+	<select id="viewUser" resultType="com.iyoons.world.vo.UserVO">
 		SELECT
 			US.user_id,
 			US.user_name,
 			US.user_type,
 			US.user_status,
-			US.user_seq,
-			row_number() over(order by us.user_status desc) as r
+			US.email,
+			US.hire_dt,
+			DP.dep_name
 		FROM
 			user_info US
-	</select>
-
-	<select id="viewUser" resultType="com.iyoons.world.vo.UserVO">
-		SELECT
-		US.user_id,
-		US.user_name,
-		US.user_type,
-		US.user_status,
-		US.email,
-		US.hire_dt,
-		DP.dep_name
-		FROM
-		user_info US
-		LEFT JOIN dep DP ON US.user_seq = DP.user_seq
+		LEFT JOIN 
+			dep DP 
+		ON 
+			US.user_seq = DP.user_seq
 	</select>
 
 	<!-- 회원 등록 -->
 	<insert id="insertUser"
 		parameterType="com.iyoons.world.vo.UserVO">
 		INSERT INTO user_info (
-		user_seq,
-		user_id,
-		user_pw,
-		user_name,
-		email,
-		hire_dt,
-		user_type,
-		user_status,
-		regr_seq
+			user_seq,
+			user_id,
+			user_pw,
+			user_name,
+			email,
+			hire_dt,
+			user_type,
+			user_status,
+			regr_seq
 		)
 		VALUES (
-		user_seq.nextval,
-		#{userId},
-		#{userPw},
-		#{userName},
-		#{email},
-		#{hireDt},
-		#{userType},
-		1,
-		#{regrSeq}
+			user_seq.nextval,
+			#{userId},
+			#{userPw},
+			#{userName},
+			#{email},
+			#{hireDt},
+			#{userType},
+			1,
+			#{regrSeq}
 		)
 	</insert>
 
@@ -109,16 +133,33 @@
 	<!-- 회원 삭제 -->
 	<update id="deleteUser">
 		UPDATE
-		user_info
+			user_info
 		SET
 			user_status = 0,
 			last_update_dt = sysdate,
 			updr_seq = #{updrSeq}
 		WhERE
-		user_seq IN
+			user_status = 1
+			and user_seq in
+			<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+				#{userSeq} <!-- 일련번호로 수정 -->
+			</foreach>
+	</update>
+	<!-- 회원 삭제 -->
+	<update id="recoverUserStatus">
+		UPDATE
+			user_info
+		SET
+			user_status = 1,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		WhERE
+			user_status = 0
+			and user_seq IN
 		<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
 			#{userSeq} <!-- 일련번호로 수정 -->
 		</foreach>
 	</update>
+	
 
 </mapper>

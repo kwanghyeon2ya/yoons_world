@@ -5,17 +5,23 @@
 
 
 <script>
+
 $(document).ready(function(){
-	$("#loginbtn").click(function(){	
-		if($("#userID").val() == '' || $("#userID").val() == null) {
-			alert("id를 입력하세요.");
-			return;
-		}
+	
+	$("#loginbtn").click(function(){
+
+	
+	console.log($("#userId").val());	
+	if($("#userID").val() == '' || $("#userID").val() == null) {
+		alert("id를 입력하세요.");
+		return;
+	}
+	
+	if($("#password").val() == '' || $("#password").val() == null) {
+		alert("비밀번호를 입력하세요.");
+		return;
+	}
 		
-		if($("#password").val() == '' || $("#password").val() == null) {
-			alert("비밀번호를 입력하세요.");
-			return;
-		}
 		var json = {
 			userId : $("#userID").val(),
 			userPw : $("#password").val()
@@ -38,10 +44,12 @@ $(document).ready(function(){
 				}
 			},
 			error : function(error) {
-				alert("다시 시도해주세요"+ error);
+				alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+				console.log(error);
 			}
 		});
 	});
+	
 });
 </script>
 
@@ -61,7 +69,7 @@ $(document).ready(function(){
                           <input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요">
                       </div>
                       
-                      <input type="button" id="loginbtn" class="input-button" value="Login">
+                      <button type="button" id="loginbtn" class="input-button" value="Login">Login</button>
                       
                       
                   </form>

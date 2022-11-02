@@ -65,7 +65,9 @@ function MoveAction(){
 					
 					<div class="area-button">
 						<!--button type="submit">등록</button-->
+						<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
 						<button id="move_action_button" type="button" onclick="MoveAction();">등록</button>
+						</c:if>
 						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
 						<button type="button" onclick="location.href='/board/notice/list'">취소</button>
 					</div>

@@ -16,14 +16,14 @@
 
 		$(document).ready(function(){
 			  document.getElementById('hire_dt').value = new Date().toISOString().substring(0, 10);
-		})
+		});
 		
 			function insertForm(){
 				
 				var insert_user_form = $("#insert_user_form").serialize();		
-				var name_confirm = RegExp(/^[가-힣]{2,10}$/);
+				var name_confirm = RegExp(/^[가-힣]{2,5}$/);
 				var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
-				var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/)
+				var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
 				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
 				
 				var user_name = $("#userName").val();
@@ -50,7 +50,7 @@
 				};
 				
 				if(!name_confirm.test($("#userName").val())){
-					alert("이름은 2~10글자 이내의 한글로만 작성할 수 있습니다");
+					alert("이름은 2~5글자 이내의 한글로만 작성할 수 있습니다");
 					$("#userName").val("");
 					$("#userName").focus();
 					return false;
@@ -96,13 +96,13 @@
 					return false;
 				};
 				
-				if($("#userId").val() == $("#userPw").val()){
+				/* if($("#userId").val() == $("#userPw").val()){
 					alert("아이디와 비밀번호는 같게 작성할 수 없습니다");
 					$("#userPw").val("");
 					$("#userPw2").val("");
 					$("#userPw").focus();
 					return false;
-				};
+				}; */
 				
 				if($("#email_part1").val()==""){
 					alert("이메일을 입력해주세요.");
@@ -128,7 +128,7 @@
 					};
 					
 					if(!email_confirm.test($("#email_part3").val())){
-						alert("이메일은 영문과 2숫자로만 작성할 수 있습니다.");
+						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
 						$("#email_part3").val("");
 						$("#email_part3").focus();
 						return false;
@@ -139,9 +139,9 @@
 				$.ajax({
 					url : '/admin/member/createUser',
 					type : 'POST',
-					data : param, 
-					/* contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-					dataType : "json", */
+					data : JSON.stringify(param), // 파라미터 데이터 json 문자열 변환 
+					contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
+					dataType  : "json", //리턴 데이터 타입 지정
 					async : true,
 					success : function(data){
 						switch(Number(data)){
@@ -170,7 +170,7 @@
 		function noSpaceForm(obj){
 				var str_space = /\s/;
 				console.log(str_space.exec(obj.value));
-				if(str_space.exec(obj.value)){
+				if(str_space.exec(obj.value)){  //
 					alert("공백을 사용할 수 없습니다");
 					obj.focus();
 					obj.value = obj.value.replace(' ','');
@@ -181,12 +181,12 @@
 			
 		function selectedSelfWriting(value){
 			if(value == 'self_writing'){
-				document.getElementById("emailpart3").style.display = "block";
+				$("#email_part3").css("display","block");
 			}else{
-				document.getElementById("emailpart3").style.display = "none";
-				document.getElementById("emailpart3").value = "";
-			}
-		}
+				$("#email_part3").css("display","none");
+				$("#email_part3").val("");
+			};
+		};
 		
 		function DuplicatedIdCheck(){
 			
@@ -244,7 +244,7 @@
     		
 	    		<div class="area-input-info">
 					<label for="userName" >이름</label>
-					<input id="userName" name="userName" type="text" maxlength="20" onkeyup="noSpaceForm(this)"/>
+					<input id="userName" name="userName" type="text" maxlength="5" onkeyup="noSpaceForm(this)"/>
 				</div>
 				<div class="area-input-info">
 					<label for="userId" >아이디</label>
@@ -259,7 +259,7 @@
 				
 				<div class="area-input-info">
 					<label for="userPw2" >패스워드확인</label>
-					<input id="userPw2" type="password" maxlength="20"/>
+					<input id="userPw2" type="password" maxlength="12"/>
 				</div>
 				
 				<div class="area-input-info">
@@ -267,7 +267,7 @@
 					<input id="email_part1" style="max-width:100px" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)"/>
 					@
 					<input type="text" name="emailpart3" id="email_part3" style="display:none;max-width:100px;"/>
-					<select style="max-width:100px" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)" style="display:block">
+					<select style="max-width:100px" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
 						<option value="naver.com">naver.com</option>
 						<option value="daum.net">daum.net</option>
 						<option value="gmail.com">gmail.com</option>

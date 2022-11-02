@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.iyoons.world.dao.UserDAO;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserVO;
+import com.iyoons.world.vo.PageVO;
 
 @Service(value = "UserService")
 public class UserServiceImpl implements UserService {
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUser(UserVO userVO) throws SQLException {
 		
+		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		
 		return userDAO.updateUser(userVO);
 	}
 
@@ -49,9 +52,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> userList() {
+	public List<UserVO> userList(PageVO page) {
 
-		return userDAO.userList();
+		return userDAO.userList(page);
 	}
 
 	@Override
@@ -64,6 +67,17 @@ public class UserServiceImpl implements UserService {
 	public UserVO userDetail(String userId) throws SQLException {
 
 		return userDAO.userDetail(userId);
+	}
+
+	@Override
+	public int getCountUser() {
+		return userDAO.getCountUser();
+	}
+
+	@Override
+	public int recoverUserStatus(UserVO userVO) {
+		
+		return userDAO.recoverUserStatus(userVO);
 	}
 	
 }

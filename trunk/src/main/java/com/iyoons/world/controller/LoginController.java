@@ -36,7 +36,7 @@ public class LoginController {
 
     		UserVO userInfovo = userService.findUser(userVO);
     		System.out.println(userInfovo+"userInfovoㅎㅎㅎ");
-    		if(userVO != null ) {
+    		if(userInfovo != null ) {
     			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
     			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
     			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());

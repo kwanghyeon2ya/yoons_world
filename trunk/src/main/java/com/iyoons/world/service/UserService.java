@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.iyoons.world.vo.UserVO;
+import com.iyoons.world.vo.PageVO;
 
 public interface UserService {
 	public int checkId(UserVO userVO);
@@ -18,9 +19,13 @@ public interface UserService {
 
 	public int deleteUser(UserVO userVO) throws SQLException;
 	
-	public List<UserVO> userList();
+	public List<UserVO> userList(PageVO page);
 	
 	public UserVO viewUser();
+
+	public int getCountUser();
+
+	public int recoverUserStatus(UserVO userVO);
 
 	
 }

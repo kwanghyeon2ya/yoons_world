@@ -98,7 +98,9 @@
 			</div>
 							
 			<div class="area-button">
+				<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
 				<button onclick="window.location='/board/notice/write'">글쓰기</button>
+				</c:if>
 			</div>
 			
 					
