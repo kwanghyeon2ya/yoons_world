@@ -9,5 +9,5 @@
 %>
 <script>
 	alert("${msg}");
-	location.href="${request.getContextPath}${loc}";
+	location.href="${request.getContextPath()}${loc}";
 </script>

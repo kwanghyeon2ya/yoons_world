@@ -98,21 +98,44 @@ public class UserAdminController {
 		
 		//System.out.println("클릭한 아이디: "+ userId); //확인은 항상 위에서 하기
 		
-		model.addAttribute("userVO",userService.userDetail(userId));
+		UserVO userVO = userService.userDetail(userId);
+		userVO.setEmailPart1(userVO.getEmail().split("@")[0]);
+		String [] emailList = {"naver.com","daum.net","gmail.com","hanmail.com","yahoo.co.kr"};
+		for(String email : emailList) {
+			System.out.println("이메일 목록 : "+email);
+			if(userVO.getEmail().split("@")[1].equals(email)) {
+				System.out.println("매칭된 if문 속 email :"+email);
+				userVO.setEmailPart2(email);
+			}
+		}
+		if(userVO.getEmailPart2() == null) {
+			userVO.setEmailPart2("self_writing");
+			userVO.setEmailPart3(userVO.getEmail().split("@")[1]);
+		}
+		System.out.println(userVO.getEmailPart2());
+		System.out.println(userVO.getEmail());
+		model.addAttribute("userVO",userVO);
 		return "admin/member/modifyUserForm";
 		
 	}
 
 	// 회원 수정 처리
 		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
-		public String userUpdate(UserVO userVO) throws SQLException {
+		public String userUpdate(UserVO userVO,Model model) throws SQLException {
 			
+			System.out.println(userVO);
 			if("self_writing".equals(userVO.getEmailPart2())) {
 				userVO.setEmailPart2(userVO.getEmailPart3());
 			}
-			userService.updateUser(userVO);
 			
-			return "redirect:/admin/member/list"; //회원 목록으로 이동
+			userService.updateUser(userVO);
+			model.addAttribute("msg", "수정 되었습니다!");
+			model.addAttribute("loc", "/admin/member/list");
+			
+			return "common/msg";
+			
+			
+			/*return "redirect:/admin/member/list";*/ //회원 목록으로 이동
 		
 		
 		}

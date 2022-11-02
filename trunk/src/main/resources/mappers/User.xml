@@ -125,25 +125,27 @@
 	<!-- 회원 수정 -->
 	<update id="updateUser"
 		parameterType="com.iyoons.world.vo.UserVO">
-		UPDATE user_info SET
-		user_name = #{userName},
-		user_pw = #{userPw},
-		email = #{email}
+		UPDATE
+			user_info
+		SET
+			user_name = #{userName},
+			user_pw = #{userPw},
+			email = #{email}
 		WhERE
-		user_id = #{userId} <!-- 일련번호로 수정 -->
+			user_seq = #{userSeq} <!-- 일련번호로 수정 -->
 	</update>
 	
 	<!-- 회원 상세 페이지 -->
 	<select id="userDetail" resultType="com.iyoons.world.vo.UserVO">
 		SELECT
-		user_id,
-		user_name,
-		email,
-		user_seq
+			user_id,
+			user_name,
+			email,
+			user_seq
 		FROM
-		user_info
+			user_info
 		WhERE
-		user_id = #{userId} <!-- 일련번호로 수정 -->
+			user_id = #{userId} <!-- 일련번호로 수정 -->
 	</select>
 
 	<!-- 회원 삭제 -->

@@ -15,6 +15,10 @@
 <script type="text/javascript">
 		$(document).ready(function(){
 			
+			<c:if test="${userVO.emailPart2 eq 'self_writing'}">
+				$("#email_part3").css("display","block");
+			</c:if>
+			
 			var name_confirm = RegExp(/^[가-힣]{2,5}$/);
 			var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
 			var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
@@ -171,17 +175,17 @@
 				</div>
 				
 				<div class="area-input-info">
-					<label for="email">이메일</label>
-					<input id="email_part1" style="max-width:100px" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)"/>
+					<label for="email_part1">이메일</label>
+					<input id="email_part1" style="max-width:100px" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
 					@
-					<input type="text" name="emailpart3" id="email_part3" style="display:none;max-width:100px;"/>
-					<select style="max-width:100px" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
-						<option value="naver.com">naver.com</option>
-						<option value="daum.net">daum.net</option>
-						<option value="gmail.com">gmail.com</option>
-						<option value="hanmail.com">hanmail.com</option>
-						<option value="yahoo.co.kr">yahoo.co.kr</option>
-						<option value="self_writing">직접입력</option>
+					<input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;max-width:100px;"/>
+					<select style="max-width:100px" name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+						<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
+						<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
+						<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
+						<option value="hanmail.com" ${userVO.emailPart2 eq 'hanmail.com'?'selected="selected"':''}>hanmail.com</option>
+						<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
+						<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
 					</select>
 				</div>
 				
@@ -226,6 +230,7 @@
 </div>
 
 <script>
+
 	$("#nav a").removeClass("current-page-item");
 	$("#nav").find('a[href*="/member"]').addClass("current-page-item");
 </script>
