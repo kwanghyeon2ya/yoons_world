@@ -21,8 +21,8 @@ public class CommentsServicveImpl implements CommentsService {
 	}
 	
 	@Override
-	public List<CommentsVO> getNestedCommentsList(int postSeq) {
-		return dao.getNestedCommentsList(postSeq);
+	public List<CommentsVO> getNestedCommentsList(CommentsVO comm) {
+		return dao.getNestedCommentsList(comm);
 	}
 
 	@Override

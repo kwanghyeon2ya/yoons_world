@@ -13,5 +13,5 @@ public interface CommentsService {
 	public int getALLCommentsCount(int postSeq);
 	public int modComment(CommentsVO vo);
 	public CommentsVO getComment(CommentsVO vo);
-	public List<CommentsVO> getNestedCommentsList(int postSeq);
+	public List<CommentsVO> getNestedCommentsList(CommentsVO comm);
 }

@@ -39,6 +39,10 @@ $(document).ready(function(){
 				case 1:
 					alert($("#userID").val()+" 님 환영합니다.");
 					window.location.href = "/main";
+					break;
+				case 2:
+					alert("아이디가 정지되었습니다. 자신을 되돌아 보는 시간을 가지길 바랍니다");
+					break;
 				default:
 					break;
 				}

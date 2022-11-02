@@ -20,5 +20,5 @@ public interface CommentsDAO {
 	public int delComment(CommentsVO vo);
 	public int modComment(CommentsVO vo);
 	public void delAllCommentsByPostSeq(CommentsVO vo);
-	public List<CommentsVO> getNestedCommentsList(int postSeq);
+	public List<CommentsVO> getNestedCommentsList(CommentsVO comm);
 }

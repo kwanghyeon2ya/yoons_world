@@ -26,8 +26,12 @@
 				from
 					(select * from comments order by comm_group desc,first_insert_dt asc)c
 				where 
-					c.post_seq = #{postSeq} and c.status in (0,1))cd
-					where cd.r &gt;= #{startIndex} and cd.r &lt;= #{endIndex}
+					c.post_seq = #{postSeq} 
+					and c.status = 1 
+					and comm_level = 0
+					)cd
+						where cd.r &gt;= #{startIndex} 
+						and cd.r &lt;= #{endIndex}
 	</select>
 	<select id="getNestedCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
 		select
@@ -46,7 +50,10 @@
 			from
 				(select * from comments order by comm_group desc,first_insert_dt asc)c
 			where 
-				c.post_seq = #{postSeq} and c.status in (0,1) and c.comm_level = 1
+				c.post_seq = #{postSeq} 
+				and c.status in (0,1) 
+				and c.comm_level = 1
+				and c.comm_group = #{commGroup}
 	</select>
 	<insert id="insertComments">
 			insert into comments(comm_seq,
@@ -88,7 +95,13 @@
 		select count(comm_seq) from comments where post_seq = #{postSeq} and status = 1
 	</select>
 	<select id="getALLCommentsCount" resultType="int">
-		select count(comm_seq) from comments where post_seq = #{postSeq}
+		select
+			count(comm_seq) 
+		from 
+			comments 
+		where 
+			post_seq = #{postSeq}
+			and comm_level = 0
 	</select>
 	<select id="getComment" resultType="com.iyoons.world.vo.CommentsVO">
 		select
@@ -139,4 +152,7 @@
 		and comm_seq = #{commSeq}
 		and status = 1
 	</update>
+	<select id="getCommCoomList" resultType="com.iyoons.world.vo.CommentsVO">
+		
+	</select>
 </mapper>

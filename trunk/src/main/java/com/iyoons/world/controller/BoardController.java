@@ -232,6 +232,7 @@ public class BoardController {
 		}
 		
 		if(cvo.getCocoCount() == 0) {
+			System.out.println("cocoCount 첫등장: "+cvo.getCocoCount());
 			cvo.setCocoCount(10);
 		}else {
 			cvo.setCocoCount(cvo.getCocoCount()+10); //더보기 버튼 필요한지 확인용 +10 - 밑에서 비교함
@@ -248,6 +249,12 @@ public class BoardController {
 		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); //존재하는 댓글의 카운트-status가 1인글
 		
 		List<CommentsVO> clist = cservice.getCommentsList(cvo);
+		System.out.println("clist size :" +clist.size());
+		for(CommentsVO comm : clist) {
+			if(comm.getNestedCommentsCnt() >= 1) {
+				comm.setCocoList(cservice.getNestedCommentsList(comm));//대댓글을 List로 담음
+			}
+		}
 		
 		int stopMoreCommentsButton = 0;
 		
@@ -259,6 +266,7 @@ public class BoardController {
 		
 		if(cvo.getCocoCount() > maxCommentsCount) { //더보기 버튼 변화
 			stopMoreCommentsButton = 1;
+			System.out.println("stopMoreCommentsButton : "+stopMoreCommentsButton);
 		}
 		
 		model.addAttribute("stopMoreCommentsButton",stopMoreCommentsButton);
@@ -284,19 +292,6 @@ public class BoardController {
 		String cmlistString = gson.toJson(cmlist); // list를 object로 바꾸고 다시 문자열로 바꿈
 		
 		return cmlistString;
-	}
-	
-	
-	@RequestMapping(value="getNestedCommentsProc") //돌아가고있는 forEach문 안에 어떻게?
-	@ResponseBody public List<CommentsVO> getNestedCommentsProc(String postSeq,Model model) {
-		
-		int postSeq2 = Integer.parseInt(postSeq);
-		
-		int existCount = cservice.getExistCommentsCount(postSeq2); //존재하는 댓글의 카운트-status가 1인글
-		List<CommentsVO> nestedCommlist = cservice.getNestedCommentsList(postSeq2);
-		
-		model.addAttribute("nestedCommlist",nestedCommlist);
-		return nestedCommlist;
 	}
 	
 	@RequestMapping("free/view")
