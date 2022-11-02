@@ -248,8 +248,9 @@
 				</div>
 				<div class="area-input-info">
 					<label for="userId" >아이디</label>
-					<span id="dup_id"></span><button onclick="DuplicatedIdCheck()">중복확인</button>
 					<input id="userId" name="userId" type="text" maxlength="15" onkeyup="noSpaceForm(this)"/>
+					<button onclick="DuplicatedIdCheck()">중복확인</button>
+					<p id="dup_id"></p>
 				</div>
 				
 				<div class="area-input-info">
@@ -264,10 +265,9 @@
 				
 				<div class="area-input-info">
 					<label for="email">이메일</label>
-					<input id="email_part1" style="max-width:100px" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)"/>
+					<input id="email_part1" style="width:32%;" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)"/>
 					@
-					<input type="text" name="emailpart3" id="email_part3" style="display:none;max-width:100px;"/>
-					<select style="max-width:100px" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+					<select style="width:32%;" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
 						<option value="naver.com">naver.com</option>
 						<option value="daum.net">daum.net</option>
 						<option value="gmail.com">gmail.com</option>
@@ -275,6 +275,15 @@
 						<option value="yahoo.co.kr">yahoo.co.kr</option>
 						<option value="self_writing">직접입력</option>
 					</select>
+					<input type="text" name="emailpart3" id="email_part3" style="display:none; width:70%; margin-top:3px;"/>
+				</div>
+				
+				<div class="area-input-info">
+					<label for="userType" >권한설정</label>
+					<div class="area-input-info-sub">
+						<input type="radio" name="userType" value="0" checked/>일반회원	
+						<input type="radio" name="userType" value="1"/>관리자
+					</div>
 				</div>
 				
 				<div class="area-input-info">
@@ -282,12 +291,7 @@
 					<input id="hire_dt" type="date" name="hireDt"/>
 				</div>
 				
-				<div class="area-input-info">
-					<label for="userType" >회원 구별</label>
-				</div>
-				일반 회원<input type="radio" name="userType" value="0" checked/>
-				관리자<input type="radio" name="userType" value="1"/>
-				
+								
 <!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>
@@ -316,11 +320,12 @@
 				</div>
 				 -->
 				 
-				<div class="area-button">
-					<button type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
-					<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+				<div class="area-input-info">
+					<div class="area-button area-input-info-sub">
+						<button type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
+						<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+					</div>
 				</div>
-			
 			</form>
 			
 			

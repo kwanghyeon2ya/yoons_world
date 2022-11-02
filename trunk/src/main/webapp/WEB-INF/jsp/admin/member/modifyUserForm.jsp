@@ -176,10 +176,9 @@
 				
 				<div class="area-input-info">
 					<label for="email_part1">이메일</label>
-					<input id="email_part1" style="max-width:100px" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
+					<input id="email_part1" style="width:32%;" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
 					@
-					<input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;max-width:100px;"/>
-					<select style="max-width:100px" name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+					<select style="width:32%;" name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
 						<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
 						<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
 						<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
@@ -187,6 +186,7 @@
 						<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
 						<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
 					</select>
+					<input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;width:70%;"/>
 				</div>
 				
 <!-- 				<div class="area-input-info">
@@ -217,9 +217,11 @@
 				</div> 
 				 -->
 				 
-				<div class="area-button">
-					<button type="submit" id="updatebtn">수정</button>
-					<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+				<div class="area-input-info">
+					<div class="area-button area-input-info-sub">
+						<button type="submit" id="updatebtn">수정</button>
+						<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+					</div>
 				</div>
 			
 			</form>

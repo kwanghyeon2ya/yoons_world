@@ -124,26 +124,26 @@ $(function(){
 			<div class="title-page">
 				<h3>회원리스트</h3>
 			</div>
-			<div class="area-search">
-				<div class="area-search-form">
-					<form action="/admin/member/list" method="get">
+			
+			<form action="/admin/member/list" method="get">
+				<div class="area-search">
+					<div class="area-search-form">
 						<select name="search">
 							<option value="member_name" ${page.search == 'member_name'?'selected="selected"':''}>이름</option>
 							<option value="member_id" ${page.search == 'member_id'?'selected="selected"':''}>아이디</option>
 						</select>
 						<input type="text" name="keyword"></input>
-						<input type="submit" id="submit_button" value="검색">
-					</form>
+						<button id="submit_button" type="submit">검색</button>
+					</div>
+					
+					<div class="area-button-chk">
+						<c:if test="${count > 0}">
+							<button type="button" id="deleteButton">중단</button>
+							<button type="button" id="modifyStatus">활동</button>
+						</c:if>
+					</div>	
 				</div>
-				
-				<div class="area-button-chk">
-					<button onclick="location.href='/admin/member/createUserForm'">회원등록</button> &nbsp;
-					<c:if test="${count > 0}">
-					<button type="button" id="deleteButton">활동정지</button>
-					<button type="button" id="modifyStatus">정지해제</button>
-					</c:if>
-				</div>	
-			</div>
+			</form>
 			
 			<c:if test="${count eq 0}">
 				<c:if test="${search ne ''}"><h1>검색하신 회원은 존재하지 않습니다..</h1>
@@ -183,8 +183,14 @@ $(function(){
 				</c:forEach>
 				
 			</div>
-			
 			</c:if>
+			
+			<div class="area-button">
+				<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
+					<button onclick="location.href='/admin/member/createUserForm'">회원등록</button>
+				</c:if>
+			</div>
+			
 			<div class="board_page">
 			
 				<c:if test="${count > 0}">
