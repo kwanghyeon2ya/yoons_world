@@ -11,13 +11,13 @@
 			user_seq,
 			user_pw,
 			user_name,
-			user_type
+			user_type,
+			user_status
 		from
 			user_info 
 		where
 			user_id=#{userId} 
 			and user_pw=#{userPw}
-			and user_status = 1
 	</select>
 	<!-- 아이디 중복 확인 -->
 	<select id="checkId" resultType="int">

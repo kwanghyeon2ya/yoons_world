@@ -49,14 +49,19 @@ public class LoginController {
 
     		UserVO userInfovo = userService.findUser(userVO);
     		System.out.println(userInfovo+"userInfovoㅎㅎㅎ");
+    		
     		if(userInfovo != null ) {
-    			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
-    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
-    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
-    			session.setMaxInactiveInterval(60*60);
-    			if(userInfovo.getUserType() == 1) {
-    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
-    			session.setMaxInactiveInterval(60*60);
+    			if(userInfovo.getUserStatus() == 1) {
+	    			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
+	    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
+	    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
+	    			session.setMaxInactiveInterval(60*60);
+	    			if(userInfovo.getUserType() == 1) {
+	    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
+	    			session.setMaxInactiveInterval(60*60);
+	    			}
+    			}else {
+    				return 2;
     			}
     			return 1;
     		}else{
