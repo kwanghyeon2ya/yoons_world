@@ -215,3 +215,40 @@ $(document).ready(function(){
 		}
 	})
 });
+
+
+function getBoardList(){
+	
+	$.ajax({ // 자유게시판 AJAX
+		url : '/board/free/list',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('#free_list').append($(data).find(".board_list"));
+		}
+	})
+	
+	$.ajax({// 공지사항 게시판 AJAX
+		url : '/board/notice/list',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('#notice_list').append($(data).find(".board_list"));
+		}
+	})
+	
+	$.ajax({// 자료실 게시판 AJAX
+		url : '/board/pds/list',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('#pds_list').append($(data).find(".board_list"));
+		}
+	})
+}

@@ -43,7 +43,11 @@ function MoveAction(){
 					
 					<div class="area-board">
                     	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
+                    	
 						<div class="area-board-n">
+						
+						<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y"/>
+						<label for="board_fix_check">상단노출 고정</label> 
 						
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->

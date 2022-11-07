@@ -54,7 +54,12 @@ function DeleteFileCheck(index){
 					<textarea name="content" id="content" style="display:none;"></textarea>
 									
 					<div class="area-board">
+						
                     	<!-- <span>작성자 : <c:out value="${vo.writerName}"/></span> -->
+                    	<div class="area-board-n">
+	                    	<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y" ${(vo.boardFixYn eq 'Y') ? "checked" : ''}/>
+							<label for="board_fix_check">상단노출 고정</label> 
+                    	</div>
                         <input type="text" id="subject" name="subject" value="<c:out value='${vo.subject}'/>"/>
                     </div>
                     

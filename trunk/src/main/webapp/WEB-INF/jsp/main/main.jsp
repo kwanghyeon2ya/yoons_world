@@ -20,6 +20,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/browser.min.js"></script>
 <script src="/js/breakpoints.min.js"></script>
+<script src="/js/boardWriteModify.js"></script>
 </head>
 <body>
 
@@ -63,7 +64,7 @@
 									</c:if>
 									<a href="/login/logout">로그아웃</a>
 									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
-									<a href="">마이페이지</a>
+									<!-- <a href="">마이페이지</a> -->
 									</c:if>
 									<!-- 추후 개발 예정 -->
 									<a href="/login/logout" class="tag-show-m">Logout</a>
@@ -77,6 +78,26 @@
 	</div>
 
 	<!-- Main -->
+
+<script>
+$(document).ready(function(){
+	getBoardList();
+});
+</script>
+
+	
+	<div id="free_list">
+		
+	</div>
+	
+	<div id="notice_list">
+	
+	</div>
+	
+	<div id="pds_list">
+	
+	</div>
+
 
 	<div class="intro-container">
 		<div class="snow"></div>

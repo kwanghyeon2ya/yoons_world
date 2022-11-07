@@ -46,7 +46,7 @@
 
 		} */
 		
-		console.log(window.performance.navigation.type == 2);
+		/* console.log(window.performance.navigation.type == 2); */
 		window.onpageshow = function(event){ // 뒤로가기 공부
 			if(event.persisted){ //캐시 남아있는지 확인 후 남아있다면 true
 				console.log(event.persisted);
@@ -90,7 +90,7 @@
 										<!-- 추후 관리자일 경우만 노출되도록 할것 -->
 									</c:if>
 									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
-									<a href="">마이페이지</a><!-- 추후 개발예정 -->
+									<!-- <a href="">마이페이지</a>추후 개발예정 -->
 									</c:if>
 									<a href="/login/logout">로그아웃</a>
 		                        </c:if>

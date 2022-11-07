@@ -47,7 +47,6 @@
 				</div>					
 			</form>
 				
-			
 			<div class="board_list">
 				<div class="top">
 					<div class="num">번호</div>

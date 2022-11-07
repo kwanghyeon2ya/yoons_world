@@ -88,7 +88,7 @@ public class BoardController {
 	}
 	
 	
-	@RequestMapping("free/list")
+	@RequestMapping(value="free/list",method=RequestMethod.GET)
 	public String getFreeList(
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
@@ -104,7 +104,7 @@ public class BoardController {
 		return "board/free/list";
 	}
 	
-	@RequestMapping("notice/list")
+	@RequestMapping(value="notice/list",method=RequestMethod.GET)
 	public String getNoticeList(
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
@@ -123,7 +123,7 @@ public class BoardController {
 		return "board/notice/list";
 	}
 	
-	@RequestMapping("pds/list")
+	@RequestMapping(value="pds/list",method=RequestMethod.GET)
 	public String PdsList(
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
@@ -245,26 +245,25 @@ public class BoardController {
 			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
 		
-		System.out.println("comments 들어오긴함?");
 		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); //존재하는 댓글의 카운트-status가 1인글
 		
 		List<CommentsVO> clist = cservice.getCommentsList(cvo);
 		System.out.println("clist size :" +clist.size());
 		for(CommentsVO comm : clist) {
-			if(comm.getNestedCommentsCnt() >= 1) {
+			if(comm.getNestedCommentsCnt() >= 1) {//대댓글 갯수
 				comm.setCocoList(cservice.getNestedCommentsList(comm));//대댓글을 List로 담음
 			}
 		}
 		
 		int stopMoreCommentsButton = 0;
 		
-		int maxCommentsCount = cservice.getALLCommentsCount(vo.getPostSeq());
+		int maxCommentsCount = cservice.getALLCommentsCount(vo.getPostSeq()); //본 댓글 갯 수
 		
 		System.out.println("cococount : "+cvo.getCocoCount());
 		System.out.println("endindex : "+cvo.getEndIndex());
 		System.out.println("maxcommentcount : "+maxCommentsCount);
 		
-		if(cvo.getCocoCount() > maxCommentsCount) { //더보기 버튼 변화
+		if(cvo.getCocoCount() >= maxCommentsCount) { //더보기 버튼 변화
 			stopMoreCommentsButton = 1;
 			System.out.println("stopMoreCommentsButton : "+stopMoreCommentsButton);
 		}

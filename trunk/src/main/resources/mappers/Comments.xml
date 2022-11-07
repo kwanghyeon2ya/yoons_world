@@ -27,7 +27,7 @@
 					(select * from comments order by comm_group desc,first_insert_dt asc)c
 				where 
 					c.post_seq = #{postSeq} 
-					and c.status = 1 
+					and c.status in (0,1) 
 					and comm_level = 0
 					)cd
 						where cd.r &gt;= #{startIndex} 
@@ -45,8 +45,7 @@
 				c.updr_seq,
 				c.last_update_dt,
 				c.status,
-				c.comm_id,
-				rownum r 
+				c.comm_id
 			from
 				(select * from comments order by comm_group desc,first_insert_dt asc)c
 			where 
