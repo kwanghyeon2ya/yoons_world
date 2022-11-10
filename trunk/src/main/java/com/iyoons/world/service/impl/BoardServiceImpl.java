@@ -308,5 +308,24 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVO> getNoticeFixedBoard(String boardType) {
 		return dao.getNoticeFixedBoard(boardType);
 	}
+
+	@Override
+	public List<BoardVO> getAllBoardListOrderedByReadCount(int startRow,int endRow) {
+		return dao.getAllBoardListOrderedByReadCount(startRow,endRow);
+	}
+
+	@Override
+	public int getAllBoardCount() {
+		return dao.getAllBoardCount();
+	}
+
+	@Override
+	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow, int endRow) {
+		return dao.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
+	}
+	@Override
+	public List<BoardVO> getListForMain(int startRow, int endRow,String boardType){
+		return dao.getListForMain(startRow, endRow, boardType);
+	}
 	
 }

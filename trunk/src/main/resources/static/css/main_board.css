@@ -1,0 +1,146 @@
+@charset "UTF-8";
+
+.board_grandparent div{ /* 페이지 전체 */
+	word-break: break-all;/* 글자 겹침방지 */
+}
+
+.board_parent{ /* 페이지에서 첫번째로 큰 div */
+/* padding은 부모에서 주는것인듯 margin은 자식에서 잘 쓰이는듯-물론 부모div에서도 사용가능  */
+	display : flex;
+	flex-direction : column;
+	justify-content : space-around;
+	width : 1200px;
+    height : 90%;
+	/* align-items : center; */
+    /* flex-wrap : nowrap; */ 
+    margin : 0 auto; /* 가운데 정렬 */
+    margin-top: 36px;
+    padding : 10px;
+   	flex : 1 1 auto; 
+}
+
+.login_and_free_list{ /* 게시판 + 로그인,랭킹 가로정렬 */
+	display: flex;
+	justify-content: center;
+}
+
+.board_child{ /* 게시판 세로 정렬 */
+	display : flex;
+	flex-direction : column;
+	padding: 10px;
+}
+
+.board_child h1{
+	position : relative;
+	top: -0.5%;
+    left: 44.5%;
+}
+
+.rank_from_readcnt h1{
+	position: relative;
+    top: -10%;
+    left: 44.5%;
+}
+
+.free_list_border{
+	width: 642px;
+	height: 40%;
+	background-color : #f2f4f7;
+	margin-bottom : 30px;
+	border-top : 3px solid #B2EBF2;
+	text-align : center;
+}
+.notice_list_border{
+	width: 642px;
+    height: 40%;
+	background-color : #f2f4f7;
+	margin-bottom : 30px;
+	border-top : 3px solid #B2EBF2;
+	text-align : center;
+}
+.pds_list_border{
+	width: 642px;
+    height: 40%;
+	background-color : #f2f4f7;
+	margin-bottom : 30px;
+	border-top : 3px solid #B2EBF2;
+	text-align : center;
+}
+
+.get_all_board_list_for_month{
+	width : 600px;
+	height : 40%;
+}
+
+.login_box span{
+	margin-top : 50px;
+	margin-bottom : 50px;
+} 
+
+.login_box{
+	display : flex;
+	align-items: center;
+	border : 3px solid #ccc; 	
+	width : 404px;
+	margin: 0 auto;
+	height: 207px;
+}
+.login_box_parent{
+	display : flex;
+	flex-direction : column;
+}
+
+.login_button{
+	display : flex;
+	flex-direction : column;
+	justify-content : center;
+	align-items : center;
+	height: 30%;
+	margin : 0 auto;
+}
+
+.login_button button{ /* 버튼위치 */
+	width : 250px;
+	height : 50px;
+	background-color : #5b3c88; /* 버튼 색상 */
+	color : #ffffff; /* 글씨 색상 */
+	/* margin : 5px; 선택자의 바깥의 여백 설정 */
+	/* padding : 5px; */ /* 선택자 내부여백(자식을 바탕으로 여백을 줌) */ 
+	border-top-left-radius : 5px;
+	border-bottom-left-radius : 5px;
+	font-weight : bold;
+	margin : 0 auto;
+}
+
+.get_all_board_list{
+	width : 30%;
+	height : 30%;
+}
+
+/* .rank_from_readcnt h1{ 게시판 제목 위치
+	position : relative;
+	top: -30px;
+ 	left:206px;
+} */
+
+
+.rank_from_readcnt{ /* 조회수 랭킹 div */
+	display : flex;
+	background-color : #B4C3FF;
+	margin-bottom : 30px;
+	border-top : 3px solid #B2EBF2;
+	padding : 10px;
+	margin-top: 50px;
+	width: 382px;
+	text-align: center;
+	
+    /* position: relative; */
+    /* left: 399px;
+    top: -335px; */
+}
+ */
+
+
+
+
+

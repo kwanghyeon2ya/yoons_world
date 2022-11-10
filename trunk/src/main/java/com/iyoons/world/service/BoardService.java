@@ -19,4 +19,8 @@ public interface BoardService {
 	public int delView(BoardVO vo);
 	public int findUser(int postSeq);
 	public List<BoardVO> getNoticeFixedBoard(String boardType);
+	public List<BoardVO> getAllBoardListOrderedByReadCount(int startRow,int endRow);
+	public int getAllBoardCount();
+	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow,int endRow);
+	public List<BoardVO> getListForMain(int startRow, int endRow,String boardType);
 }

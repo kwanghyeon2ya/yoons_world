@@ -24,4 +24,8 @@ public interface BoardDAO {
 	public int delView(BoardVO vo); //게시글 삭제
 	public int findUser(int postSeq); //입력받은 유저 db검색
 	public List<BoardVO> getNoticeFixedBoard(String boardType);//상단 고정된 게시글만 가져옴
+	public List<BoardVO> getAllBoardListOrderedByReadCount(@Param("startRow")int startRow,@Param("endRow")int endRow);
+	public int getAllBoardCount();
+	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(@Param("startRow")int startRow,@Param("endRow")int endRow);
+	public List<BoardVO> getListForMain(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("boardType") String boardType);
 }

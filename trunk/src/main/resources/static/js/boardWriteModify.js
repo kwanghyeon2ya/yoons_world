@@ -220,7 +220,7 @@ $(document).ready(function(){
 function getBoardList(){
 	
 	$.ajax({ // 자유게시판 AJAX
-		url : '/board/free/list',
+		url : '/board/free/freeListForMain',
 		type : 'GET',
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dataType : "html",
@@ -231,7 +231,7 @@ function getBoardList(){
 	})
 	
 	$.ajax({// 공지사항 게시판 AJAX
-		url : '/board/notice/list',
+		url : '/board/notice/noticeListForMain',
 		type : 'GET',
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dataType : "html",
@@ -242,7 +242,7 @@ function getBoardList(){
 	})
 	
 	$.ajax({// 자료실 게시판 AJAX
-		url : '/board/pds/list',
+		url : '/board/pds/pdsListForMain',
 		type : 'GET',
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dataType : "html",
@@ -251,4 +251,25 @@ function getBoardList(){
 					$('#pds_list').append($(data).find(".board_list"));
 		}
 	})
+	$.ajax({// 전체 시간 모든 게시판 조회수 순
+		url : '/board/getAllBoardListForReadCount',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('.get_all_board_list').append($(data).find(".board_list"));
+		}
+	})
+	$.ajax({// 한달간 모든 게시판 조회수 순
+		url : '/board/getAllBoardListForReadCountForMonth',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('.get_all_board_list_for_month').append($(data).find(".board_list"));
+		}
+	})
+	
 }

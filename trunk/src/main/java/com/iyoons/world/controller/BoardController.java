@@ -1,5 +1,8 @@
 package com.iyoons.world.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -137,6 +140,111 @@ public class BoardController {
 		model.addAttribute("searchCheck",searchCheck);
 		model.addAttribute("search",search);
 		return "board/pds/list";
+	}
+	
+	@RequestMapping(value="free/freeListForMain",method=RequestMethod.GET)
+	public String freeListForMain(Model model) {
+		
+		int count = 0;
+		String boardType = "0";
+		int startRow = 1;
+		int endRow = 10;
+		int pageSize = 0;
+		count = service.getBoardCount(boardType);
+		System.out.println("free count : "+count);
+		
+		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
+		
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		
+		return "board/free/freeListForMain";
+	}
+	@RequestMapping(value="notice/noticeListForMain",method=RequestMethod.GET)
+	public String noticeListForMain(Model model) {
+		
+		int count = 0;
+		String boardType = "1";
+		int startRow = 1;
+		int endRow = 10;
+		int pageSize = 0;
+		System.out.println("service.getBoardCount(boardType) : " + service.getBoardCount(boardType));
+		count = service.getBoardCount(boardType);
+		System.out.println("notice count : "+count);
+		
+		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
+		
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		
+		return "board/notice/noticeListForMain";
+	}
+	@RequestMapping(value="pds/pdsListForMain",method=RequestMethod.GET)
+	public String pdsListForMain(Model model) {
+		
+		int count = 0;
+		String boardType = "2";
+		int startRow = 1;
+		int endRow = 10;
+		int pageSize = 0;
+		count = service.getBoardCount(boardType);
+		System.out.println("pds count : "+count);
+		
+		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
+		
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		
+		return "board/pds/pdsListForMain";
+	}
+	
+	@RequestMapping(value="getAllBoardListForReadCount",method=RequestMethod.GET)
+	public String getAllBoardListForReadCount(Model model) {
+		
+		int startRow = 1;
+		int endRow = 10;
+		int count = 0;
+		int pageSize = 10;
+		
+		count = service.getAllBoardCount();
+		
+		List<BoardVO> boardList = null;
+		
+		if(count != 0) boardList = service.getAllBoardListOrderedByReadCount(startRow, endRow);
+		
+		System.out.println("boardList : zz"+boardList);
+		System.out.println("count : zz"+count);
+		
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		return "board/pds/list";
+	}
+	
+	@RequestMapping(value="getAllBoardListForReadCountForMonth",method=RequestMethod.GET)
+	public String getAllBoardListForReadCountForMonth(Model model) {
+		
+		int startRow = 1;
+		int endRow = 10;
+		int count = 0;
+		int pageSize = 10;
+		
+		count = service.getAllBoardCount();
+		
+		List<BoardVO> boardList = null;
+		
+		if(count != 0) boardList = service.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
+		
+		System.out.println("boardList : zz"+boardList);
+		System.out.println("count : zz"+count);
+		
+		model.addAttribute("pageSize",pageSize);
+		model.addAttribute("count",count);
+		model.addAttribute("boardList",boardList);
+		return "board/getAllBoardListForReadCountForMonth";
 	}
 	
 	@RequestMapping("free/modify")
@@ -305,6 +413,10 @@ public class BoardController {
 		 if(vo == null) { // Null체크 - 뒤로가기시 Null
 			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
+		 
+		 if(session.getAttribute("sessionSeqForUser") == null) {
+			 return "redirect:/board/free/list";
+		 }
 	 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		 
@@ -330,6 +442,10 @@ public class BoardController {
 			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
 		 
+		 if(session.getAttribute("sessionSeqForUser") == null) {
+			 return "redirect:/board/notice/list";
+		 }
+		
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		 
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
@@ -351,6 +467,10 @@ public class BoardController {
 		 
 		 if(vo == null) { // Null체크 - 뒤로가기시 Null
 			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		 }
+		 
+		 if(session.getAttribute("sessionSeqForUser") == null) {
+			 return "redirect:/board/pds/list";
 		 }
 		 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
