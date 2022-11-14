@@ -27,5 +27,4 @@ public interface BoardDAO {
 	public List<BoardVO> getAllBoardListOrderedByReadCount(@Param("startRow")int startRow,@Param("endRow")int endRow);
 	public int getAllBoardCount();
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(@Param("startRow")int startRow,@Param("endRow")int endRow);
-	public List<BoardVO> getListForMain(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("boardType") String boardType);
 }

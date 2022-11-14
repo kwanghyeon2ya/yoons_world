@@ -324,8 +324,41 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
 	}
 	@Override
-	public List<BoardVO> getListForMain(int startRow, int endRow,String boardType){
-		return dao.getListForMain(startRow, endRow, boardType);
+	public BoardVO getListForMain(){ // 메인페이지 게시판 리스트
+		
+		HashMap<String,Object> freeMap = new HashMap<>();
+		BoardVO vo = new BoardVO();
+		
+		freeMap.put("search","");
+		freeMap.put("keyword","");
+		freeMap.put("searchCheck",null);
+		freeMap.put("startRow",1);
+		freeMap.put("endRow",5);
+		freeMap.put("boardType",'0');
+		vo.setFreeBoardList(dao.getBoardList(freeMap)); // 자유게시판
+		
+		vo.setFixedBoardList(dao.getNoticeFixedBoard("1")); // 공지사항게시판 고정글
+		
+		HashMap<String,Object> noticeMap = new HashMap<>();
+		
+		noticeMap.put("search","");
+		noticeMap.put("keyword","");
+		noticeMap.put("searchCheck",null);
+		noticeMap.put("startRow",1);
+		noticeMap.put("endRow",5);
+		noticeMap.put("boardType",'1');
+		vo.setNoticeBoardList(dao.getBoardList(noticeMap)); // 공지사항게시판
+		
+		HashMap<String,Object> pdsMap = new HashMap<>();
+		
+		pdsMap.put("search","");
+		pdsMap.put("keyword","");
+		pdsMap.put("searchCheck",null);
+		pdsMap.put("startRow",1);
+		pdsMap.put("endRow",5);
+		pdsMap.put("boardType",'2');
+		vo.setPdsBoardList(dao.getBoardList(pdsMap)); // 자료실게시판
+		
+		return vo;
 	}
-	
 }

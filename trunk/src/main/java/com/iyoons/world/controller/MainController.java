@@ -29,4 +29,10 @@ public class MainController {
 		return "/main/main";
 		
 	}
+	
+	@RequestMapping(value="/common/nuguruman")
+	public String getNuguruman() {
+		
+		return "common/nuguruman"; 
+	}
 }

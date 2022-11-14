@@ -20,6 +20,12 @@
 </c:if>
 
 <script>
+
+/* $(document).ready(function(){
+	  document.getElementById('fix_start_day').value = new Date().toISOString().substring(0, 10);
+	  document.getElementById('fix_end_day').value = new Date().toISOString().substring(0, 10);
+}); */
+
 function MoveAction(){
 	var url = "/board/notice/list";
 	document.getElementById("board_type").value = 1;
@@ -45,6 +51,9 @@ function MoveAction(){
                     	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
                     	
 						<div class="area-board-n">
+						
+						<h1>⊙상단고정 시작일자 ⊙상단고정 종료일자</h1>
+						<input id="fix_start_day" name="fix_start_day" style="width:120px;" type="date"/> ~ <input id="fix_end_day" name="fix_end_day" style="width:120px;" type="date"/><br/> 
 						
 						<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y"/>
 						<label for="board_fix_check">상단노출 고정</label> 

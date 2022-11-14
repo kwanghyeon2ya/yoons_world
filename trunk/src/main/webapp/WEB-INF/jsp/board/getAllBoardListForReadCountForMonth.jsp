@@ -22,6 +22,12 @@
     </c:if>
 </c:if> --%>
 
+<script>
+	$(document).ready(function(){
+		
+	})
+</script>
+
 <!-- Header -->
 <jsp:include page="../common/header.jsp" flush="false"/>
 
@@ -30,52 +36,40 @@
 <!-- Main -->
 <div id="main">
 	<div class="container">
-		<div class="col-12">
 		
-			<div class="title-page">
-				<h3>자료실</h3>
-			</div>
 			
-			<div class="board_list">
-				<div class="top">
-					<div class="title">제목</div>
-					<div class="count">조회수</div>
+			<div id="pds_board_list">
+				
+				<div class="title-page">
+					<h3>자료실</h3>
 				</div>
 				
-				<c:if test="${count == 0}">
-					<div style="width:100%; text-align:center;">
-						<div>작성된 글이 없습니다</div>
+				<div class="board_list">
+					<div class="top">
+						<div class="title">제목</div>
+						<div class="count">조회수</div>
 					</div>
-				</c:if>
-				
-				<c:if test="${count > 0}">
-					<c:forEach var="list" items="${boardList}">
-						<div>
-							<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
-								<c:if test="${list.attachCnt != 0}">
-								/${list.fullFileName} 
-									<c:if test="${list.attachCnt > 1}">
-									외 ${list.attachCnt-1}
-									</c:if>
-								</c:if>
-							</a></div>
-							<div class="count">${list.readCnt}</div>
+					
+					<c:if test="${empty boardList}">
+						<div style="width:100%; text-align:center;">
+							<div>작성된 글이 없습니다</div>
 						</div>
-					</c:forEach>
-				</c:if>
-			</div>
+					</c:if>
+					
+					<c:if test="${!empty boardList}">
+						<c:forEach var="list" items="${boardList}">
+							<div>
+								<c:set var="boardUrl" value="${list.boardType eq 0 ? '/board/free/view' : list.boardType eq '1' ? '/board/notice/view':'/board/pds/view'}"/>
+								<div class="title"><a href="${boardUrl}?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a></div>
+								<div class="count">${list.readCnt}</div>
+							</div>
+						</c:forEach>
+					</c:if>
+				</div>
 							
-			<div class="area-button">
-				<button onclick="window.location='/board/pds/write'">글쓰기</button>
-			</div>
 		</div>
 	</div>
 </div>
-
-<script>
-	$("#nav a").removeClass("current-page-item");
-	$("#nav").find('a[href*="/pds"]').addClass("current-page-item");
-</script>
 
 <!-- Footer -->
 <jsp:include page="../common/footer.jsp" flush="false"/>

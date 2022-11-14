@@ -27,6 +27,10 @@ public class BoardVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt; //글 최근 수정일자
 	private List<BoardAttachVO> AttachList; //첨부파일 목록
+	private List<BoardVO> freeBoardList;
+	private List<BoardVO> noticeBoardList;
+	private List<BoardVO> pdsBoardList;
+	private List<BoardVO> fixedBoardList;
 	private String search; //검색 항목
 	private String keyword; //검색 내용
 	private String hideName;
@@ -36,5 +40,9 @@ public class BoardVO {
 	private int commentsCnt;
 	private String [] fileUuidArray;
 	private String fileUuid;
-	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+	private Date fix_start_day;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+	private Date fix_end_day;
+	private String boardUrl;
 }

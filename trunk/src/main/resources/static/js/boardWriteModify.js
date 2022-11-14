@@ -8,6 +8,7 @@ function WriteBoardCheck(url){
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
+	
 	//임시 사용
 	
 	
@@ -219,48 +220,17 @@ $(document).ready(function(){
 
 function getBoardList(){
 	
-	$.ajax({ // 자유게시판 AJAX
-		url : '/board/free/freeListForMain',
+	$.ajax({ // 3개의 리스트를 전부 가져와 jsp한페이지에 뿌려줄 ajax
+		url : '/board/getListForMain',
 		type : 'GET',
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dataType : "html",
 		async : true,
 	 	success : function(data){
-					$('#free_list').append($(data).find(".board_list"));
+					$('.left_main_page').append($(data).find("#every_board_list"));
 		}
 	})
 	
-	$.ajax({// 공지사항 게시판 AJAX
-		url : '/board/notice/noticeListForMain',
-		type : 'GET',
-		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-		dataType : "html",
-		async : true,
-	 	success : function(data){
-					$('#notice_list').append($(data).find(".board_list"));
-		}
-	})
-	
-	$.ajax({// 자료실 게시판 AJAX
-		url : '/board/pds/pdsListForMain',
-		type : 'GET',
-		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-		dataType : "html",
-		async : true,
-	 	success : function(data){
-					$('#pds_list').append($(data).find(".board_list"));
-		}
-	})
-	$.ajax({// 전체 시간 모든 게시판 조회수 순
-		url : '/board/getAllBoardListForReadCount',
-		type : 'GET',
-		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-		dataType : "html",
-		async : true,
-	 	success : function(data){
-					$('.get_all_board_list').append($(data).find(".board_list"));
-		}
-	})
 	$.ajax({// 한달간 모든 게시판 조회수 순
 		url : '/board/getAllBoardListForReadCountForMonth',
 		type : 'GET',
@@ -271,5 +241,17 @@ function getBoardList(){
 					$('.get_all_board_list_for_month').append($(data).find(".board_list"));
 		}
 	})
+	
+	/*$.ajax({// 전체 시간 모든 게시판 조회수 순
+		url : '/board/getAllBoardListForReadCount',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : true,
+	 	success : function(data){
+					$('.get_all_board_list').append($(data).find(".board_list"));
+		}
+	})*/
+	
 	
 }

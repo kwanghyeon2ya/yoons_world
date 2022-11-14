@@ -22,5 +22,5 @@ public interface BoardService {
 	public List<BoardVO> getAllBoardListOrderedByReadCount(int startRow,int endRow);
 	public int getAllBoardCount();
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow,int endRow);
-	public List<BoardVO> getListForMain(int startRow, int endRow,String boardType);
+	public BoardVO getListForMain();
 }

@@ -72,7 +72,6 @@
 									<a href="/board/notice/list" >공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/pds/list">자료실</a>
-									<a href="/login/loginView">로그인</a>
 		                            <a class="tag-show-m"></a>
 		                        </c:if>
 		                        

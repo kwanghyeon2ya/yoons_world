@@ -27,6 +27,8 @@ import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @RequestMapping("/board/*")
 @Controller
 public class BoardController {
@@ -116,7 +118,7 @@ public class BoardController {
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model){
 		boardList(search,keyword,searchCheck,boardType,pageNum,model);
 		
-		List<BoardVO>fixedBoardList = service.getNoticeFixedBoard(boardType);
+		List<BoardVO> fixedBoardList = service.getNoticeFixedBoard(boardType);
 		model.addAttribute("boardType",boardType);
 		model.addAttribute("pageNum",pageNum);
 		model.addAttribute("keyword",keyword);
@@ -142,13 +144,26 @@ public class BoardController {
 		return "board/pds/list";
 	}
 	
-	@RequestMapping(value="free/freeListForMain",method=RequestMethod.GET)
+	@RequestMapping(value="getListForMain",method=RequestMethod.GET)
+	public String getListForMain(Model model) {// 각 게시판을 가져옴 
+		
+		BoardVO vo = service.getListForMain(); //vo에 각 게시판에 대한 List 객체를 만들어서
+												//Hash map타입의 매개변수를 넣어 호출후 vo안의 List객체에 대입
+		model.addAttribute("freeBoardList",vo.getFreeBoardList());
+		model.addAttribute("fixedBoardList",vo.getFixedBoardList());
+		model.addAttribute("noticeBoardList",vo.getNoticeBoardList());
+		model.addAttribute("pdsBoardList",vo.getPdsBoardList());
+		
+		return "board/boardListForMain"; 
+	}
+	
+	/*@RequestMapping(value="free/freeListForMain",method=RequestMethod.GET)
 	public String freeListForMain(Model model) {
 		
 		int count = 0;
 		String boardType = "0";
 		int startRow = 1;
-		int endRow = 10;
+		int endRow = 5;
 		int pageSize = 0;
 		count = service.getBoardCount(boardType);
 		System.out.println("free count : "+count);
@@ -167,7 +182,7 @@ public class BoardController {
 		int count = 0;
 		String boardType = "1";
 		int startRow = 1;
-		int endRow = 10;
+		int endRow = 5;
 		int pageSize = 0;
 		System.out.println("service.getBoardCount(boardType) : " + service.getBoardCount(boardType));
 		count = service.getBoardCount(boardType);
@@ -187,7 +202,7 @@ public class BoardController {
 		int count = 0;
 		String boardType = "2";
 		int startRow = 1;
-		int endRow = 10;
+		int endRow = 5;
 		int pageSize = 0;
 		count = service.getBoardCount(boardType);
 		System.out.println("pds count : "+count);
@@ -199,27 +214,20 @@ public class BoardController {
 		model.addAttribute("boardList",boardList);
 		
 		return "board/pds/pdsListForMain";
-	}
+	}*/
 	
 	@RequestMapping(value="getAllBoardListForReadCount",method=RequestMethod.GET)
 	public String getAllBoardListForReadCount(Model model) {
 		
 		int startRow = 1;
 		int endRow = 10;
-		int count = 0;
 		int pageSize = 10;
 		
-		count = service.getAllBoardCount();
-		
-		List<BoardVO> boardList = null;
-		
-		if(count != 0) boardList = service.getAllBoardListOrderedByReadCount(startRow, endRow);
+		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCount(startRow, endRow);
 		
 		System.out.println("boardList : zz"+boardList);
-		System.out.println("count : zz"+count);
 		
 		model.addAttribute("pageSize",pageSize);
-		model.addAttribute("count",count);
 		model.addAttribute("boardList",boardList);
 		return "board/pds/list";
 	}
@@ -229,20 +237,13 @@ public class BoardController {
 		
 		int startRow = 1;
 		int endRow = 10;
-		int count = 0;
 		int pageSize = 10;
 		
-		count = service.getAllBoardCount();
+		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
 		
-		List<BoardVO> boardList = null;
-		
-		if(count != 0) boardList = service.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
-		
-		System.out.println("boardList : zz"+boardList);
-		System.out.println("count : zz"+count);
+		System.out.println("boardList : "+boardList);
 		
 		model.addAttribute("pageSize",pageSize);
-		model.addAttribute("count",count);
 		model.addAttribute("boardList",boardList);
 		return "board/getAllBoardListForReadCountForMonth";
 	}
@@ -512,6 +513,9 @@ public class BoardController {
 		vo.setRegrSeq(sessionSeqForUser);
 		if(!files[0].isEmpty()) {
 		vo.setFileAttachYn("Y");
+		}
+		if(vo.getFix_start_day() != null) {
+			
 		}
 		
 		int result = service.insertBoard(vo,files);

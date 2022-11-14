@@ -44,7 +44,6 @@
 									<a href="/board/free/list">공지사항 </a>
 									<a href="/board/free/list">자유게시판</a>
 									<a href="/board/free/list">자료실</a>
-									<a href="/login/loginView">로그인</a>
 									<a class="tag-show-m"></a>
 								</c:if>
 								
@@ -90,42 +89,35 @@ $(document).ready(function(){
 </script>
 
 
-<div class="board_grandparent">
+<div class="main_page_parent">
 
-	<div class="board_parent">
+	<div class="main_page">
 		
-		<div class="login_and_free_list">
+		<div class="main_page_Sorting"> <!-- 메인페이지의 가로정렬 -->
 			
-			<div class="board_child">
-				<h1 class="free_h1">자유 게시판</h1>
-				<div class="free_list_border">
-					<div id="free_list">
-					</div>
-				</div>
-				<h1 class="notice_h1">공지사항 게시판</h1>
-				<div class="notice_list_border">
-					<div id="notice_list">
-					</div>
-				</div>
-				<h1 class="pds_h1">자료실 게시판</h1>
-				<div class="pds_list_border">
-					<div id="pds_list">
-					</div>
+			<div class="left_main_page">
+			
+				<div class="main_page_board_list"> <!-- 왼쪽 게시판 리스트 -->
+				
 				</div>
 			</div>
 			
-			<div class="login_box_parent">
-			
-				<div class="login_box">
+			<div class="right_main_page">
+					
+				<div class="login_box"> <!-- 오른쪽 로그인박스 -->
+					<c:if test="${sessionScope.sessionSeqForUser == null}">
 					<div class="login_button">
-						<span>YoonWorld를 더 안전하고 편리하게 이용하세요</span>>
+						<div class="login_span_div">
+							<span style="font-weight:bold;">YoonWorld</span><span>를 더 안전하고 편리하게 이용하세요</span>
+						</div>
 						<button onClick="location.href='/login/loginView'">Yoons World 로그인</button>
-						<span>아이디 비밀번호 찾기</span>
+						<a href="/common/nuguruman">아이디 비밀번호 찾기</a>
 					</div>
+					</c:if>
 				</div>
 				
 				<div class="rank_from_readcnt">
-					<h1>한달 조회수 랭킹</h1>
+					<h1 class="rank_h1">한달 조회수 랭킹</h1>
 					<div class="get_all_board_list_for_month">
 					</div>
 				</div>
