@@ -66,8 +66,6 @@
 }
 
 .board_list .title{
-    width: 60%;
-    text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

@@ -33,19 +33,17 @@ function MoveAction(){
 }
 
 function boardFixDate(){
-	var startDate = new Date().toISOString().substring(0, 10);
-	var endDate = new Date();
-	endDate.setDate(endDate.getDate() + 1);
 	
 	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
 		
 		console.log("시작일자임ㅋㅋ :"+$("#fix_start_dt").val());
 		console.log("종료일자임ㅋㅋ :"+$("#fix_end_dt").val());
 		
-		if($("#fix_start_dt").val() == "" && $("#fix_end_dt").val() == ""){
-			alert("고정버튼 체크 후 날짜를 입력하지 않아 1일간 상단에 게시됩니다");
-			$("#fix_start_dt").val(startDate);
-			$("#fix_end_dt").val(endDate.toISOString().substring(0, 10));
+		if($("#fix_start_dt").val() == ""){
+			alert("시작 날짜를 지정해주세요");
+		}
+		if($("#fix_end_dt").val() == ""){
+			alert("종료 날짜를 지정해주세요");
 		}
 	}
 }

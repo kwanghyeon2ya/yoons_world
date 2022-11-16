@@ -93,7 +93,7 @@
 									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
 									<!-- <a href="">마이페이지</a>추후 개발예정 -->
 									</c:if>
-									<img class="logout_icon" onclick="location.href='/login/logout'" title="Logout" src="<%=File.separator%>yoons_world<%=File.separator%>files<%=File.separator%>logout.png">
+									<img class="logout_icon" onclick="location.href='/login/logout'" title="Logout" src="/img/common/logout.png">
 		                        </c:if>
 							</nav>
 						</header>

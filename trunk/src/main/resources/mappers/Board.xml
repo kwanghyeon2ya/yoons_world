@@ -119,7 +119,6 @@
 			where 
 				pb.status=1
 				and pb.board_type=#{boardType} 
-				and pb.board_fix_yn = 'N'
 			<if test="searchCheck != null">
 				<if test="search != null and search.equals('subject_content')">
 				and (pb.subject like '%${keyword}%' or 
@@ -139,7 +138,6 @@
 		where 
 			board_type=#{boardType} 
 			and status=1
-			and board_fix_yn = 'N'
 	</select>
 	
 	<select id="getSearchCount" resultType="int">

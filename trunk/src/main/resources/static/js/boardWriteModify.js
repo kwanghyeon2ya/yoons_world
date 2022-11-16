@@ -42,6 +42,13 @@ function WriteBoardCheck(url){
 		$("#content").focus();
 		return false;
 	}
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		if($("#fix_start_dt").val() == "" || $("#fix_end_dt").val() == ""){
+			alert("날짜를 비워둘 수 없습니다");
+			return false;
+		}
+	}
+		
 	
 	  $.ajax({
 		url : '/board/writeProc',
@@ -140,6 +147,12 @@ function modBoardCheck(url){
 		alert("본문은 4000자 이상 작성할 수 없습니다");
 		$("#content").focus();
 		return false;
+	}
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		if($("#fix_start_dt").val() == "" || $("#fix_end_dt").val() == ""){
+			alert("날짜를 비워둘 수 없습니다");
+			return false;
+		}
 	}
 		
 	$.ajax({
