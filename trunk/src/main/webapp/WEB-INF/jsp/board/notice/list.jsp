@@ -76,7 +76,7 @@
 					</c:forEach>
 				
 					 <c:forEach var="list" items="${boardList}">
-					<%-- <c:if test="${list.boardFixYn == Y}">
+					<%-- <c:if test="${list.boardFIxYn == Y}">
 					</c:if> --%>
 					<div>
 							<div class="num">${list.postNum}</div>

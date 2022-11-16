@@ -24,6 +24,12 @@
 	</script>
 </c:if>
 
+<script>
+	$(document).ready(function(){
+		/* $("#every_board_list").children(".title_href").trim() */	
+	})
+</script>
+
 <!-- Header -->
 <jsp:include page="../common/header.jsp" flush="false"/>
 
@@ -57,7 +63,7 @@
 						
 							<c:forEach var="fixedBoardList" items="${fixedBoardList}">
 								<div>
-									<div class="title"><span style="color:#DC143C">[중요] </span><a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/> &nbsp; <span style="color:#81c147">${fixedBoardList.commentsCnt > 0 ? [fixedBoardList.commentsCnt] : ''}</span></a></div>
+									<div class="title"><span style="color:#DC143C">[중요] </span><a class="title_href" title="${fixedBoardList.subject}" href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/></a></div>
 									<div class="date">	
 									<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /></div>
 								</div>
@@ -65,7 +71,7 @@
 						
 							 <c:forEach var="list" items="${noticeBoardList}">
 								<div>
-									<div class="title"><a href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span></a></div>
+									<div class="title"><a class="title_href" title="${list.subject}" href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a></div>
 									<div class="date">
 										<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
 											<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
@@ -102,7 +108,7 @@
 						<c:if test="${!empty freeBoardList}">
 							<c:forEach var="list" items="${freeBoardList}">
 								<div>
-									<div class="title"><a href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span></a></div>
+									<div class="title"><a class="title_href" title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a></div>
 									<div class="date">
 										<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
 											<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
@@ -138,7 +144,7 @@
 						<c:if test="${!empty pdsBoardList}">
 							<c:forEach var="list" items="${pdsBoardList}">
 								<div>
-									<div class="title"><a href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
+									<div class="title"><a title="${list.subject}" href="/board/pds/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/>
 										<c:if test="${list.attachCnt != 0}">
 										/${list.fullFileName} 
 											<c:if test="${list.attachCnt > 1}">

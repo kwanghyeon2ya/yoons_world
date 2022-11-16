@@ -36,12 +36,10 @@
 <!-- Main -->
 <div id="main">
 	<div class="container">
-		
 			
 			<div id="pds_board_list">
 				
 				<div class="title-page">
-					<h3>자료실</h3>
 				</div>
 				
 				<div class="board_list">
@@ -60,7 +58,7 @@
 						<c:forEach var="list" items="${boardList}">
 							<div>
 								<c:set var="boardUrl" value="${list.boardType eq 0 ? '/board/free/view' : list.boardType eq '1' ? '/board/notice/view':'/board/pds/view'}"/>
-								<div class="title"><a href="${boardUrl}?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a></div>
+								<div class="title"><a href="${boardUrl}?postSeq=${list.postSeq}" title="${list.subject}"><c:out value="${list.subject}"/></a></div>
 								<div class="count">${list.readCnt}</div>
 							</div>
 						</c:forEach>

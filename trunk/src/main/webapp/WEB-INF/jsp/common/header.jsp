@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="java.io.File"%>
 <%
 	response.setHeader("Cache-Control","no-store");
 	response.setHeader("Pragma","no-cache");
@@ -19,6 +20,7 @@
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="/css/main_board.css">
 	<script src="/js/browser.min.js"></script>
 	<script src="/js/breakpoints.min.js"></script>	
 	<script src="/js/summernote-lite.js"></script>
@@ -30,7 +32,7 @@
 	<script src="/js/delcomments.js"></script>
 	<script src="/js/commnetsShowHide.js"></script>
 	<script src="/js/randomName.js"></script>
-	<script src="/js/enterkeyevent.js"></script> 
+	<script src="/js/enterkeyevent.js"></script>
 	<script>	
 		/* console.log(performance.getEntriesByType('navigation')[0]);	
 		console.log(performance.getEntriesByType('navigation')[0].type == 'reload');
@@ -91,7 +93,7 @@
 									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
 									<!-- <a href="">마이페이지</a>추후 개발예정 -->
 									</c:if>
-									<a href="/login/logout">로그아웃</a>
+									<img class="logout_icon" onclick="location.href='/login/logout'" title="Logout" src="<%=File.separator%>yoons_world<%=File.separator%>files<%=File.separator%>logout.png">
 		                        </c:if>
 							</nav>
 						</header>

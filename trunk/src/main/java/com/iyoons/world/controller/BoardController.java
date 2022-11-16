@@ -302,8 +302,9 @@ public class BoardController {
 			vo.setFileAttachYn("Y");
 			}
 		if(vo2.getRegrSeq() == sessionSeqForUser) {
-		vo.setUpdrSeq(sessionSeqForUser);
-		vo.setRegrSeq(sessionSeqForUser);
+			vo.setUpdrSeq(sessionSeqForUser);
+			vo.setRegrSeq(sessionSeqForUser);
+		
 		return service.modView(vo,files);
 		}
 		
@@ -479,11 +480,19 @@ public class BoardController {
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
 		 }
-			
 			 model.addAttribute("vo",vo);
 			 model.addAttribute("anlist",anlist);
 			 return "board/pds/view";
 	}
+	
+	@RequestMapping("increasingHeartProc")
+	@ResponseBody public String increasingHeartProc() {
+		
+			
+		
+		return "";
+	}
+	
 	
 	@RequestMapping("free/write")
 	public String FreeWrite() {
@@ -491,12 +500,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
-	@ResponseBody public int FreeWriteCheck(
+	@ResponseBody public int WriteCheck(
 			@RequestParam(value="file",required=false) MultipartFile[] files,
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
 			HttpSession session
 			) throws Exception {
 		
+		System.out.println("vo값 :"+vo);
 		
 		String name = (String)session.getAttribute("sessionNameForUser");
 		int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
@@ -504,18 +514,18 @@ public class BoardController {
 		if(vo.getHideCheck() == 1 && (!vo.getHideName().equals(""))) {
 			vo.setWriterName(vo.getHideName());
 		}else {
-			vo.setWriterName(name);	
+			vo.setWriterName(name);
 		}
 		if(vo.getBoardFixYn() == null) {
 			vo.setBoardFixYn("N");
+		}
+		if(vo.getBoardFixYn().equals("Y")) {
+			System.out.println(vo.getFixStartDt()+"할로?ㅋㅋ"+vo.getFixEndDt());
 		}
 		vo.setFileAttachYn("N");
 		vo.setRegrSeq(sessionSeqForUser);
 		if(!files[0].isEmpty()) {
 		vo.setFileAttachYn("Y");
-		}
-		if(vo.getFix_start_day() != null) {
-			
 		}
 		
 		int result = service.insertBoard(vo,files);

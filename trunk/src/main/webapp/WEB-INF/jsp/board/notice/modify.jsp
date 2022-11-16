@@ -20,6 +20,25 @@
 </c:if>
 
 <script>
+
+$(document).ready(function(){
+	var start_date = "${vo.fixStartDt}";
+	var end_date = "${vo.fixEndDt}";
+	
+	console.log(end_date.split(" ")[0]);
+	
+	var start_year = start_date.split(" ")[0];
+	var end_year = end_date.split(" ")[0];
+	
+	console.log(start_year);
+	
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		$(".fix_date_div").css("display","block");
+		$("#fix_start_dt").val(start_year);
+		$("#fix_end_dt").val(end_year);
+	}
+})
+
 function MoveAction(){
 	var url = "/board/notice/list";
 	document.getElementById("board_type").value = 1;
@@ -32,6 +51,47 @@ function DeleteFileCheck(index){
 		$("#delete_word_"+index).html("글 수정시 삭제될 파일입니다");
 		$("#delete_word_"+index).attr("color","red");
 	}
+}
+
+function boardFixDate(){
+	var startDate = new Date().toISOString().substring(0, 10);
+	var endDate = new Date();
+	endDate.setDate(endDate.getDate() + 1);
+	
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		
+		console.log("시작일자임ㅋㅋ :"+$("#fix_start_dt").val());
+		console.log("종료일자임ㅋㅋ :"+$("#fix_end_dt").val());
+		
+		if($("#fix_start_dt").val() == "" && $("#fix_end_dt").val() == ""){
+			alert("고정버튼 체크 후 날짜를 입력하지 않아 1일간 상단에 게시됩니다");
+			$("#fix_start_dt").val(startDate);
+			$("#fix_end_dt").val(endDate.toISOString().substring(0, 10));
+		}
+	}
+}
+
+function checkBoardFixChkbx(){
+	var startDate = new Date().toISOString().substring(0, 10);
+	var endDate = new Date();
+	endDate.setMonth(endDate.getMonth() + 1);
+	console.log("고정 해제 날짜 : "+endDate.toISOString().substring(0, 10));
+	
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == false){
+		
+		$(".fix_date_div").css("display","none");
+		$("#fix_start_dt").val("");
+		$("#fix_end_dt").val("");
+		console.log("체크박스 체크해제"+$("#fix_start_day").val());
+		
+	}else{
+		
+		$(".fix_date_div").css("display","block");
+		$("#fix_start_dt").val(startDate);
+		$("#fix_end_dt").val(endDate.toISOString().substring(0, 10));
+		
+	}
+		
 }
 </script>
 
@@ -50,15 +110,23 @@ function DeleteFileCheck(index){
 					<input type="hidden" name="postSeq" value="${vo.postSeq}"/>
 					<input type="hidden" id="regrSeq" name="regrSeq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="board_type" name="boardType" value="0"/>
-						
+					
 					<textarea name="content" id="content" style="display:none;"></textarea>
 									
 					<div class="area-board">
 						
                     	<!-- <span>작성자 : <c:out value="${vo.writerName}"/></span> -->
                     	<div class="area-board-n">
-	                    	<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y" ${(vo.boardFixYn eq 'Y') ? "checked" : ''}/>
-							<label for="board_fix_check">상단노출 고정</label> 
+                    	
+                    	<div class="fix_date_div" style="display:none">
+							&nbsp;&nbsp;<h1 style="display:inline;">상단 고정 시작일</h1>&nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp;<h1 style="display:inline;">상단 고정 종료일</h1><br/>
+							<input id="fix_start_dt" name="fixStartDt" onchange="boardFixDate()" style="width:120px;" type="date" value="${vo.fixStartDt}"/>
+						 	  ~ 
+							<input id="fix_end_dt" name="fixEndDt" onchange="boardFixDate()" style="width:120px;" type="date" value="${vo.fixEndDt}"/><br/> 
+						</div>
+                    	
+	                    	<input type="checkbox" id="board_fix_yn" name="boardFixYn" onclick="checkBoardFixChkbx()" value="Y" ${(vo.boardFixYn eq 'Y') ? "checked" : ''}/>
+							<label for="board_fix_yn">상단노출 고정</label> 
                     	</div>
                         <input type="text" id="subject" name="subject" value="<c:out value='${vo.subject}'/>"/>
                     </div>

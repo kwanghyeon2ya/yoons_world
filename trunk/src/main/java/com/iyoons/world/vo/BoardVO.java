@@ -40,9 +40,7 @@ public class BoardVO {
 	private int commentsCnt;
 	private String [] fileUuidArray;
 	private String fileUuid;
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-	private Date fix_start_day;
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-	private Date fix_end_day;
+	private String fixStartDt;
+	private String fixEndDt;
 	private String boardUrl;
 }

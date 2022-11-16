@@ -2,6 +2,7 @@
 
 .main_page_parent div{ /* 페이지 전체 */
 	word-break: break-all;/* 글자 겹침방지 */
+	vertical-align: middle; /* 수직정렬 */
 	/* width : 1920px;
 	height : 1080px; */
 }
@@ -59,14 +60,24 @@
 }
 
 .get_all_board_list_for_month{
-	width : 600px;
-	height : 40%;
+	width: 136%;
+    height: 40%;
+    margin-left: 5%;
+}
+
+.board_list .title{
+    width: 60%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .login_box span{
 	margin-top : 50px;
 	margin-bottom : 25px;
 }
+
 .login_box a{
 margin-bottom : 50px; 
 padding: 10px;
@@ -77,11 +88,9 @@ padding: 10px;
 }
 
 .login_box{
-	display : flex;
-	align-items: center;
 	border : 3px solid #ccc; 	
 	width : 404px;
-	margin: 0 auto;
+	margin-top: 13%;
 	height: 207px;
 }
 .right_main_page{
@@ -121,7 +130,19 @@ padding: 10px;
 	width: 382px;
 	text-align: center;
 	border: 3px solid #ccc;
+	position:sticky; 
 }
+
+.logout_icon{
+	position: absolute;
+    left: 108%;
+    top: 14%;
+}
+
+.logout_icon:hover { /* hover 마우스 올려두면 작동 */
+     filter: invert(16%) sepia(89%) saturate(6054%) hue-rotate(358deg) brightness(97%) contrast(113%);
+}
+
  */
 
 

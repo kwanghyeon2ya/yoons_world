@@ -64,7 +64,6 @@
 										<a href="/admin/member/list">회원관리</a>
 										<!-- 추후 관리자일 경우만 노출되도록 할것 -->
 									</c:if>
-									<a href="/login/logout">로그아웃</a>
 									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
 									<!-- <a href="">마이페이지</a> -->
 									</c:if>
@@ -85,7 +84,15 @@
 <script>
 $(document).ready(function(){
 	getBoardList();
+	
+	var currentPosition = parseInt($(".rank_from_readcnt").css("top"));
+	$(window).scroll(function(){
+		var position = $(window).scrollTop();
+	    $(".rank_from_readcnt").stop().animate({"top":position+currentPosition+"px"},10000);
+	 });
+	
 });
+
 </script>
 
 
@@ -114,11 +121,22 @@ $(document).ready(function(){
 						<a href="/common/nuguruman">아이디 비밀번호 찾기</a>
 					</div>
 					</c:if>
+					<c:if test="${sessionScope.sessionSeqForUser != null}">
+					<div class="login_button">
+						<div class="login_span_div">
+							<span>Hello, </span><span style="font-weight:bold;">${sessionScope.sessionNameForUser}</span><span> 님 </span>
+						</div>
+						<button onClick="location.href='/login/logout'">Yoons World 로그아웃</button>
+						<!-- <a href="/common/nuguruman">아이디 비밀번호 찾기</a> -->
+					</div>
+					</c:if>
 				</div>
 				
 				<div class="rank_from_readcnt">
 					<h1 class="rank_h1">한달 조회수 랭킹</h1>
-					<div class="get_all_board_list_for_month">
+					<div class="rank_from_readcnt_child">
+						<div class="get_all_board_list_for_month">
+					</div>
 					</div>
 				</div>
 			

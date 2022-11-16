@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.io.File"%>
 <%
 	response.setHeader("Cache-Control","no-store");
 	response.setHeader("Pragma","no-cache");
@@ -61,6 +62,7 @@ function MoveAction(){
 
 					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"></textarea>
+                       	<img class="heart_icon" onclick="location.href='/board/increasingHeartProc'" title="Logout" src="<%=File.separator%>yoons_world<%=File.separator%>files<%=File.separator%>logout.png">
 					</div>
 					
 					<span id="word_count"></span>

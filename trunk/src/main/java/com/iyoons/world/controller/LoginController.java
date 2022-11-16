@@ -1,5 +1,7 @@
 package com.iyoons.world.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -50,11 +52,24 @@ public class LoginController {
     		UserVO userInfovo = userService.findUser(userVO);
     		System.out.println(userInfovo+"userInfovoㅎㅎㅎ");
     		
+    		ArrayList<Object> userSessionList = (ArrayList<Object>) session.getAttribute("userSessionList");
+    		System.out.println(userSessionList);    		
     		if(userInfovo != null ) {
     			if(userInfovo.getUserStatus() == 1) {
+    				
+    				if(userSessionList!= null && userSessionList.isEmpty()) {
+    	    			session.setAttribute("userSessionList",userSessionList);
+    	    			userSessionList.add(userInfovo.getUserId());
+        				userSessionList.add(userInfovo.getUserName());
+        				userSessionList.add(userInfovo.getUserSeq());
+    	    		}
+    				
 	    			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
 	    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
 	    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
+	    			
+	    			
+	    			
 	    			session.setMaxInactiveInterval(60*60);
 	    			if(userInfovo.getUserType() == 1) {
 	    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());

@@ -31,6 +31,48 @@ function MoveAction(){
 	document.getElementById("board_type").value = 1;
 	WriteBoardCheck(url);
 }
+
+function boardFixDate(){
+	var startDate = new Date().toISOString().substring(0, 10);
+	var endDate = new Date();
+	endDate.setDate(endDate.getDate() + 1);
+	
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		
+		console.log("시작일자임ㅋㅋ :"+$("#fix_start_dt").val());
+		console.log("종료일자임ㅋㅋ :"+$("#fix_end_dt").val());
+		
+		if($("#fix_start_dt").val() == "" && $("#fix_end_dt").val() == ""){
+			alert("고정버튼 체크 후 날짜를 입력하지 않아 1일간 상단에 게시됩니다");
+			$("#fix_start_dt").val(startDate);
+			$("#fix_end_dt").val(endDate.toISOString().substring(0, 10));
+		}
+	}
+}
+
+function checkBoardFixChkbx(){
+	var startDate = new Date().toISOString().substring(0, 10);
+	var endDate = new Date();
+	endDate.setMonth(endDate.getMonth() + 1);
+	console.log("고정 해제 날짜 : "+endDate.toISOString().substring(0, 10));
+	
+	if($("input:checkbox[id='board_fix_yn']").is(":checked") == false){
+		
+		$(".fix_date_div").css("display","none");
+		$("#fix_start_dt").val("");
+		$("#fix_end_dt").val("");
+		console.log("체크박스 체크해제"+$("#fix_start_day").val());
+		
+	}else{
+		
+		$(".fix_date_div").css("display","block");
+		$("#fix_start_dt").val(startDate);
+		$("#fix_end_dt").val(endDate.toISOString().substring(0, 10));
+		
+	}
+		
+}
+	
 </script>
 <!-- Main -->
 <div id="main">
@@ -43,6 +85,7 @@ function MoveAction(){
 			
 			<div class="board_write">
 				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
+					
 					<input type="hidden" name="boardType" id="board_type"/>
  					<textarea name="content" id="content" style="display:none;"></textarea>
 					
@@ -52,11 +95,15 @@ function MoveAction(){
                     	
 						<div class="area-board-n">
 						
-						<h1>⊙상단고정 시작일자 ⊙상단고정 종료일자</h1>
-						<input id="fix_start_day" name="fix_start_day" style="width:120px;" type="date"/> ~ <input id="fix_end_day" name="fix_end_day" style="width:120px;" type="date"/><br/> 
+						<div class="fix_date_div" style="display:none">
+							&nbsp;&nbsp;<h1 style="display:inline;">상단 고정 시작일</h1>&nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp;<h1 style="display:inline;">상단 고정 종료일</h1><br/>
+							<input id="fix_start_dt" name="fixStartDt" onchange="boardFixDate()" style="width:120px;" type="date"/>
+						 	  ~ 
+							<input id="fix_end_dt" name="fixEndDt" onchange="boardFixDate()" style="width:120px;" type="date"/><br/> 
+						</div>
 						
-						<input type="checkbox" id="board_fix_check" name="boardFixYn" value="Y"/>
-						<label for="board_fix_check">상단노출 고정</label> 
+						<input type="checkbox" onclick="checkBoardFixChkbx()" id="board_fix_yn" name="boardFixYn" value="Y"/>
+						<label for="board_fix_yn">상단노출 고정</label>
 						
 						<div style="display:inline;text-align:right">
 							<!-- script연습예정 -->

@@ -35,7 +35,10 @@
 									regr_seq,
 									first_insert_dt,
 									updr_seq,
-									last_update_dt)
+									last_update_dt,
+									fix_start_dt,
+									fix_end_dt
+									)
 				 			values( #{postSeq},
 									#{writerName},
 									#{subject},
@@ -48,7 +51,18 @@
 									#{regrSeq},
 									sysdate,
 									0,
-									sysdate)
+									sysdate,
+									<choose>
+										<when test="boardFixYn != null">
+											nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
+											nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
+										</when>
+										<otherwise>
+											(sysdate)-1,
+											(sysdate)-1
+										</otherwise>									
+									</choose>
+									)
 		<selectKey  resultType="int" keyProperty="postSeq" order="BEFORE" keyColumn="int">
 			select post_seq.nextval from dual
 		</selectKey>
@@ -125,6 +139,7 @@
 		where 
 			board_type=#{boardType} 
 			and status=1
+			and board_fix_yn = 'N'
 	</select>
 	
 	<select id="getSearchCount" resultType="int">
@@ -166,7 +181,9 @@
 			status,
 			first_insert_dt,
 			updr_seq,
-			last_update_dt
+			last_update_dt,
+			fix_start_dt,
+			fix_end_dt
 		from 
 			post_board
 		where 
@@ -181,9 +198,13 @@
 			subject = #{subject} ,
 			content = #{content} ,
 			board_fix_yn = #{boardFixYn},
-			last_update_dt = sysdate,
+			last_update_dt = SYSDATE,
 			updr_seq = #{updrSeq},
 			file_attach_yn = #{fileAttachYn}
+			<if test='boardFixYn.equals("Y")'>
+				,fix_start_dt = nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
+				fix_end_dt = nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
+			</if>
 		where
 			post_seq=#{postSeq} 
 			and status = 1
@@ -239,6 +260,7 @@
         	board_type=#{boardType}
         	and status=1
         	and board_fix_yn ='Y'
+        	and SYSDATE between fix_start_dt and fix_end_dt
         order by
         	first_insert_dt desc
 	</select>
@@ -265,7 +287,7 @@
 				post_board pb
 			where 
 				pb.status=1
-				and pb.board_fix_yn = 'N'
+				and pb.board_fix_yn ='N'
 				)cd
 			where 
 				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
@@ -293,8 +315,8 @@
 				post_board pb
 			where 
 				pb.status=1
-				and pb.board_fix_yn = 'N'
-				and first_insert_dt &gt;= TO_CHAR(SYSDATE-30,'YYYYMMDD')
+				and pb.board_fix_yn ='N'
+				and first_insert_dt &gt;= (SYSDATE-30)
 				)cd
 			where 
 				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
