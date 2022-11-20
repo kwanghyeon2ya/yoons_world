@@ -28,12 +28,15 @@
 		location.href="/board/free/list";
 	</script>
 </c:if>
+
 <script>
 
 $(document).ready(function(){
 	console.log("first page : "+$("#more_comments_page").val());
 	var page_post_seq = $("#post_seq").val();
 	getCommentsList(page_post_seq); //댓글 function ajax 호출
+	
+	console.log("${checkHeart == 0}"+"asdasd");
 });
 
 function deleteMoveAction(){
@@ -46,7 +49,7 @@ function deleteMoveAction(){
 <div id="main">
 	<div class="container">
 		<div class="col-12">
-
+		
 			<div class="title-page">
 				<h3>자유게시판</h3>
 			</div>
@@ -105,8 +108,19 @@ function deleteMoveAction(){
 				</div>
 			
 				<!-- 게시글 본문 영역 -->
-				${vo.content}
+				<c:out value="${vo.content}"/>
 				
+				<div class="heart_img_div" style="display:flex;justify-content:flex-end;align-items:flex-end;">  <!--  좋아요 DIV  -->
+	            	<c:if test="${checkHeart eq 0}">
+	            		<img class="blankheart_icon" style="" onclick="increasingHeart(${vo.postSeq})" title="좋아요" src="/img/board/blankheart.png">
+	            		<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none">
+	            	</c:if>
+	            	<c:if test="${checkHeart ne 0}">
+	            		<img class="heart_icon" title="좋아요" src="/img/board/heart.png">
+	            	</c:if>
+	            	<span id="heart_count" style="font-size:16px">${heartCount}개</span>
+            	</div>	<!-- 좋아요 DIV -->
+            	
 			</div>
 			
 			<!-- 댓글 영역 -->
@@ -131,3 +145,9 @@ function deleteMoveAction(){
 
 <!-- Footer -->
 <jsp:include page="../../common/footer.jsp" flush="false" />
+
+<style>
+
+.blankheart_icon:hover {cursor : url(/img/board/heart.png) 22.5 20, auto;}
+
+</style>

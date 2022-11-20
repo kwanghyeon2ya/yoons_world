@@ -34,7 +34,6 @@ function MoveAction(){
 <div id="main">
 	<div class="container">
 		<div class="col-12">
-		
 			<div class="title-page">
 				<h3>자유게시판</h3>
 			</div>
@@ -62,7 +61,6 @@ function MoveAction(){
 
 					<div class="area-board-cont">
                        	<textarea id="summernote" name="editordata"></textarea>
-                       	<img class="heart_icon" onclick="location.href='/board/increasingHeartProc'" title="Logout" src="<%=File.separator%>yoons_world<%=File.separator%>files<%=File.separator%>logout.png">
 					</div>
 					
 					<span id="word_count"></span>

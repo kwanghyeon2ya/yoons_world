@@ -25,6 +25,9 @@ public class LoginController {
         UserService userService;
 
 
+        private int localSessTime = 60*60*60*60; //개발서버
+        private int serverSessTime = 60*60;//로컬
+        
 	@RequestMapping("/msgTest")
 	public String loginView(Model model) {
 
@@ -60,10 +63,13 @@ public class LoginController {
 	    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
 	    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
 	    			
-	    			session.setMaxInactiveInterval(60*60);
+	    			UserVO userVO2 = (UserVO)session.getAttribute("userInfovo");
+	    			System.out.println("ㅎㅇ요"+userVO2);
+	    			
+	    			session.setMaxInactiveInterval(localSessTime);
 	    			if(userInfovo.getUserType() == 1) {
 	    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
-	    			session.setMaxInactiveInterval(60*60);
+	    			session.setMaxInactiveInterval(localSessTime);
 	    			}
     			}else {
     				return 2;

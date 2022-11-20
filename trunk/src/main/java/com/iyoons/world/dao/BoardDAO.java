@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.UserActionVO;
 
 @Mapper
 public interface BoardDAO {
@@ -27,4 +28,7 @@ public interface BoardDAO {
 	public List<BoardVO> getAllBoardListOrderedByReadCount(@Param("startRow")int startRow,@Param("endRow")int endRow);
 	public int getAllBoardCount();
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(@Param("startRow")int startRow,@Param("endRow")int endRow);
+	public int increasingHeart(UserActionVO uavo);
+	public int checkHeart(UserActionVO uavo);
+	public int getHeartCount(UserActionVO uavo);
 }

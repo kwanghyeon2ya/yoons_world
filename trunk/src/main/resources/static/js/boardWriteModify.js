@@ -266,5 +266,24 @@ function getBoardList(){
 		}
 	})*/
 	
-	
 }
+
+function increasingHeart(post_seq){
+	
+	$.ajax({
+		url : '/board/increasingHeartProc?postSeq='+post_seq,
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dateType :'json',
+		async : true,
+		success : function(data){
+				$(".blankheart_icon").hide(0,function(){
+					console.log(data);
+					$(".heart_icon").show(0);
+					$(".blankheart_icon").remove();
+					$("#heart_count").text(data+"개");
+				})
+		}
+	})
+	
+};

@@ -53,13 +53,13 @@
 									0,
 									sysdate,
 									<choose>
-										<when test="boardFixYn != null">
+										<when test="boardFixYn != N">
 											nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
 											nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
 										</when>
 										<otherwise>
-											(sysdate)-1,
-											(sysdate)-1
+											sysdate-1,
+											sysdate-1
 										</otherwise>									
 									</choose>
 									)
@@ -167,25 +167,25 @@
 	
 	<select id="getView" resultType="com.iyoons.world.vo.BoardVO">
 		select 
-			post_seq,
-			writer_name,
-			subject,
-			content,
-			read_cnt,
-			board_type,
-			file_attach_yn,
-			board_fix_yn,
-			regr_seq,
-			status,
-			first_insert_dt,
-			updr_seq,
-			last_update_dt,
-			fix_start_dt,
-			fix_end_dt
-		from 
-			post_board
+			pb.post_seq,
+			pb.writer_name,
+			pb.subject,
+			pb.content,
+			pb.read_cnt,
+			pb.board_type,
+			pb.file_attach_yn,
+			pb.board_fix_yn,
+			pb.regr_seq,
+			pb.status,
+			pb.first_insert_dt,
+			pb.updr_seq,
+			pb.last_update_dt,
+			pb.fix_start_dt,
+			pb.fix_end_dt
+		from
+			post_board pb
 		where 
-			post_seq = #{postSeq} 
+			pb.post_seq = #{postSeq} 
 			and status = 1
 	</select>
 	
@@ -329,4 +329,44 @@
 			status=1
 	</select>
 	
+	<insert id="increasingHeart">
+		insert into user_action(action_seq,
+								user_seq,
+								target_type,
+								target_seq,
+								action_type,
+								first_insert_dt								
+								)
+	 					 values(user_action_seq.nextval,
+								#{userSeq},
+								#{targetType},
+								#{targetSeq},
+								#{actionType},
+								SYSDATE					
+								)
+	</insert>
+	
+	<select id="checkHeart" resultType="int">
+	
+		select
+			count(1)
+		from
+			user_action
+		where
+			user_seq in #{userSeq}
+			and target_seq = #{targetSeq}
+			and target_type = #{targetType}
+			and action_type = #{actionType}
+			
+	</select>
+	<select id="getHeartCount" resultType="int">
+		select
+			count(1)
+		from
+			user_action
+		where
+			target_seq = #{targetSeq}
+			and target_type = #{targetType}
+			and action_type = #{actionType}
+	</select>
 </mapper>

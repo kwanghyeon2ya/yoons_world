@@ -39,11 +39,9 @@ function boardFixDate(){
 		console.log("시작일자임ㅋㅋ :"+$("#fix_start_dt").val());
 		console.log("종료일자임ㅋㅋ :"+$("#fix_end_dt").val());
 		
-		if($("#fix_start_dt").val() == ""){
-			alert("시작 날짜를 지정해주세요");
-		}
-		if($("#fix_end_dt").val() == ""){
-			alert("종료 날짜를 지정해주세요");
+		if($("#fix_start_dt").val() > $("#fix_end_dt").val()){
+			alert("시작일이 종료일보다 낮아야 합니다");
+			$("#fix_start_dt").val("");
 		}
 	}
 }

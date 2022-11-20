@@ -23,4 +23,7 @@ public interface BoardService {
 	public int getAllBoardCount();
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow,int endRow);
 	public BoardVO getListForMain();
+	public int increasingHeart(BoardVO vo);
+	public int checkHeart(BoardVO vo);
+	public int getHeartCount(BoardVO vo);
 }

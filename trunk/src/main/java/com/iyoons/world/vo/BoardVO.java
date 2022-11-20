@@ -12,6 +12,7 @@ public class BoardVO {
 	
 	private int postNum;
 	private int postSeq; //글 고유번호
+	private int userSeq; //유저 고유번호
 	private String writerName; //글 작성자(Client가 보는 작성자이름)
 	private String subject; //글 제목
 	private String content; //글 내용
@@ -43,4 +44,6 @@ public class BoardVO {
 	private String fixStartDt;
 	private String fixEndDt;
 	private String boardUrl;
+	private int heartCount;
+	private String heartCheck;
 }

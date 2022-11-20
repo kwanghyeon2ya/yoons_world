@@ -101,7 +101,7 @@ function deleteMoveAction(){
 				</div>
 			
 				<!-- 게시글 본문 영역 -->
-				${vo.content}
+				<c:out value="${vo.content}"/>
 				
 			</div>
 			

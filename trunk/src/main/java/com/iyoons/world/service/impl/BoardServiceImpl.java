@@ -16,9 +16,9 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.iyoons.world.FinalVariables;
 import com.iyoons.world.dao.AttachDAO;
 import com.iyoons.world.dao.BoardDAO;
 import com.iyoons.world.dao.CommentsDAO;
@@ -26,6 +26,7 @@ import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.UserActionVO;
 
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
@@ -60,6 +61,7 @@ public class BoardServiceImpl implements BoardService {
 	public int insertBoard(BoardVO vo,MultipartFile[] files) { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
 		int result = dao.insertBoard(vo);
+		System.out.println(vo+"입력넣을때");
 		
 		for(MultipartFile f : files) {
 			if(!f.isEmpty()) {
@@ -70,7 +72,7 @@ public class BoardServiceImpl implements BoardService {
 					uploadPath.mkdir();
 				}
 					
-				String uploadFileName = f.getOriginalFilename(); 
+				String uploadFileName = f.getOriginalFilename();
 				String FileType = f.getContentType(); 
 				bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
 				bavo.setFileType(FileType.split("/")[1]);
@@ -361,5 +363,39 @@ public class BoardServiceImpl implements BoardService {
 		vo.setPdsBoardList(dao.getBoardList(pdsMap)); // 자료실게시판
 		
 		return vo;
+	}
+
+	@Override
+	public int increasingHeart(BoardVO vo) { // 좋아요 입력
+		
+		UserActionVO uavo = new UserActionVO();
+		uavo.setUserSeq(vo.getUserSeq());
+		uavo.setTargetType(FinalVariables.TARGET_BOARD);
+		uavo.setTargetSeq(vo.getPostSeq());
+		uavo.setActionType(FinalVariables.ACTION_TYPE_LIKE);
+		
+		return dao.increasingHeart(uavo);
+	}
+
+	@Override
+	public int checkHeart(BoardVO vo) {
+		
+		UserActionVO uavo = new UserActionVO();
+		uavo.setUserSeq(vo.getUserSeq());
+		uavo.setTargetSeq(vo.getPostSeq());
+//		uavo.setTargetType(FinalVariables.TARGET_BOARD);
+		uavo.setTargetType(FinalVariables.TARGET_BOARD);
+		uavo.setActionType(FinalVariables.ACTION_TYPE_LIKE);
+		return dao.checkHeart(uavo);
+	}
+
+	@Override
+	public int getHeartCount(BoardVO vo) {
+		
+		UserActionVO uavo = new UserActionVO();
+		uavo.setTargetSeq(vo.getPostSeq());
+		uavo.setTargetType(FinalVariables.TARGET_BOARD);
+		uavo.setActionType(FinalVariables.ACTION_TYPE_LIKE);
+		return dao.getHeartCount(uavo);
 	}
 }

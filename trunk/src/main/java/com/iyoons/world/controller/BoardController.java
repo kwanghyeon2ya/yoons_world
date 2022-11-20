@@ -26,6 +26,7 @@ import com.iyoons.world.service.CommentsService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.UserVO;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 
@@ -422,11 +423,22 @@ public class BoardController {
 	 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		 
+		 vo.setPostSeq(postSeq2); 
+		 vo.setRegrSeq(sessionSeqForUser);
+		 vo.setUserSeq(sessionSeqForUser);
+		 
+		 int checkHeart = service.checkHeart(vo);
+		 int heartCount = service.getHeartCount(vo);
+		
+		 System.out.println(checkHeart+": 좋아요 체크 0 = 하트안누름");
+		 System.out.println(heartCount);
 		 if(vo.getRegrSeq() != sessionSeqForUser) {
 			 service.updateCnt(postSeq2);	 
 		 }
 		 
 			 model.addAttribute("vo",vo);
+			 model.addAttribute("heartCount",heartCount);
+			 model.addAttribute("checkHeart",checkHeart);
 			 model.addAttribute("anlist",anlist);
 			 return "board/free/view";
 	}
@@ -441,7 +453,7 @@ public class BoardController {
 		 BoardVO vo = service.getView(postSeq2); //DB조회
 		 
 		 if(vo == null) { // Null체크 - 뒤로가기시 Null
-			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			 return "redirect:/board/notice/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
 		 
 		 if(session.getAttribute("sessionSeqForUser") == null) {
@@ -485,12 +497,28 @@ public class BoardController {
 			 return "board/pds/view";
 	}
 	
-	@RequestMapping("increasingHeartProc")
-	@ResponseBody public String increasingHeartProc() {
+	@RequestMapping(value="increasingHeartProc",method=RequestMethod.GET)
+	@ResponseBody public String increasingHeartProc(BoardVO boardVO,HttpSession session) {
 		
-			
 		
-		return "";
+		/*UserVO userVO = (UserVO)session.getAttribute("userInfovo");*/
+		BoardVO vo = service.getView(boardVO.getPostSeq());
+		
+		if(vo == null) { // Null체크 - 뒤로가기시 Null
+			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		}
+		if(session.getAttribute("sessionSeqForUser") == null) {
+			 return "redirect:/board/free/list";
+		 }
+		
+		/*System.out.println(userVO);*/
+		int userSeq = (int)session.getAttribute("sessionSeqForUser");
+		
+		vo.setUserSeq(userSeq);
+		
+		service.increasingHeart(vo);
+		int heartCount = service.getHeartCount(vo);
+		return ""+heartCount;
 	}
 	
 	
