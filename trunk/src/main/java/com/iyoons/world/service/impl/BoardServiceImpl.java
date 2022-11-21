@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.iyoons.world.FinalVariables;
+import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.dao.AttachDAO;
 import com.iyoons.world.dao.BoardDAO;
 import com.iyoons.world.dao.CommentsDAO;

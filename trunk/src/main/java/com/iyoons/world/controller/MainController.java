@@ -24,7 +24,7 @@ public class MainController {
 	@RequestMapping(value= {"/main","/"})
 	public String callMain(HttpServletRequest request) {
 		
-		System.out.println("zxc");
+		
 		
 		return "/main/main";
 		

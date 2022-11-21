@@ -53,7 +53,7 @@
 									0,
 									sysdate,
 									<choose>
-										<when test="boardFixYn != N">
+										<when test="'Y'.equals(boardFixYn)">
 											nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
 											nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
 										</when>

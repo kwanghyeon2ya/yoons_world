@@ -32,5 +32,6 @@ public class UserVO {
 	private Date lastUpdateDt; //회원정보 수정일자
 	private String depName;
 	private List<String> userSeqArray;
+	private String checkToken;
 	
 }

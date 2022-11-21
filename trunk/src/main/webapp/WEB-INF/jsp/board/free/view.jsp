@@ -108,7 +108,7 @@ function deleteMoveAction(){
 				</div>
 			
 				<!-- 게시글 본문 영역 -->
-				<c:out value="${vo.content}"/>
+				${vo.content}
 				
 				<div class="heart_img_div" style="display:flex;justify-content:flex-end;align-items:flex-end;">  <!--  좋아요 DIV  -->
 	            	<c:if test="${checkHeart eq 0}">

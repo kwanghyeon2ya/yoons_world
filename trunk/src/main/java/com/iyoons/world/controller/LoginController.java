@@ -2,6 +2,8 @@ package com.iyoons.world.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iyoons.world.common.JwtUtils;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserVO;
 
@@ -50,23 +53,39 @@ public class LoginController {
         
         @ResponseBody 
      	@RequestMapping(value = "/login", method = RequestMethod.POST)
-    	public int login(UserVO userVO,HttpSession session) {
+    	public int login(UserVO userVO,HttpSession session,HttpServletResponse response) {
 
     		UserVO userInfovo = userService.findUser(userVO);
     		System.out.println(userInfovo+"userInfovoㅎㅎㅎ");
     		
+    		System.out.println(userInfovo.getCheckToken()+"하하하하");
+    		
     		if(userInfovo != null ) {
     			if(userInfovo.getUserStatus() == 1) {
+    				
+    				
+    				if("Y".equals(userVO.getCheckToken())) {
+    				
+    				JwtUtils JU = new JwtUtils();
+    				
+    				String token = JU.createJWT(userInfovo.getUserId(), userInfovo.getUserSeq());
+    				System.out.println("토큰 확인 : "+token);
+    				
+    				Cookie cookie = new Cookie("token", token);
+    				cookie.setPath("/");
+    				cookie.setMaxAge(60*60*24*7);
+    		        cookie.setHttpOnly(true);
+    		 
+    		        response.addCookie(cookie);
+    				}
     				
     				session.setAttribute("userInfovo", userInfovo);
 	    			session.setAttribute("sessionIdForUser", userInfovo.getUserId());
 	    			session.setAttribute("sessionNameForUser",userInfovo.getUserName());
 	    			session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
 	    			
-	    			UserVO userVO2 = (UserVO)session.getAttribute("userInfovo");
-	    			System.out.println("ㅎㅇ요"+userVO2);
-	    			
 	    			session.setMaxInactiveInterval(localSessTime);
+	    			
 	    			if(userInfovo.getUserType() == 1) {
 	    			session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
 	    			session.setMaxInactiveInterval(localSessTime);

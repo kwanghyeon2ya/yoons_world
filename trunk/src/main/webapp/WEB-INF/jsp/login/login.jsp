@@ -24,7 +24,8 @@ $(document).ready(function(){
 		
 		var json = {
 			userId : $("#userID").val(),
-			userPw : $("#password").val()
+			userPw : $("#password").val(),
+			checkToken : $("#checkToken").val()
 		};
 		
 		 $.ajax({
@@ -72,9 +73,8 @@ $(document).ready(function(){
                           <label for="password">Password</label>
                           <input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요">
                       </div>
-                      
+	          	          <span>자동로그인</span><input type="checkbox" id="checkToken" name="checkToken" value="Y"/>
                       <button type="button" id="loginbtn" class="input-button" value="Login">Login</button>
-                      
                       
                   </form>
                </div>
