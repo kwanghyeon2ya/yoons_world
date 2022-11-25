@@ -388,15 +388,16 @@ section:last-child, article:last-child {
 }
 
 .table.type_01 {border-top: 3px solid #512f83;}
-.table.type_01 > div {border-bottom: 1px solid #ddd;}
+.table.type_01 > div {border-bottom: 1px solid #ccc;}
 
 .table.type_02 > div.title {
 	background-color: #512f83;
 	color: #fff;
 	text-align: center;
+	border-bottom: 0;
 }
 
-.table.type_03 > div {border-bottom: 1px solid #ddd;}
+.table.type_03 > div {border-bottom: 1px solid #ccc;}
 .table.type_03 > div.title {
 	background-color: #512f83;
 	color: #fff;
@@ -467,6 +468,8 @@ input.size_full, select.size_full {width: 100%;}
 		display: inline-block;
 		width: 4.5vw;
 		height: 4.5vw;
+		cursor: pointer;
+		filter: brightness(0) invert(1);
 	}
 	
 	#gnb .btn_menu span {
@@ -568,6 +571,7 @@ input.size_full, select.size_full {width: 100%;}
 		height: auto;
 		margin-right: 2vw;
 		vertical-align: middle;
+		filter: brightness(0) invert(1);
 	}
 	
 	/* Container */

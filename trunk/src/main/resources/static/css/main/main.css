@@ -31,7 +31,7 @@
 	width: 100%;
 	padding: 30px;
 	margin: 0;
-	border: 1px solid #ccc;
+	border: 1px solid #999;
 }
 .login_info {
 	position: relative;
@@ -70,7 +70,7 @@
 
 .rank_area {
 	padding: 10px;
-	border: 1px solid #ccc;
+	border: 1px solid #999;
 }
 
 .rank_area .rank_num {
