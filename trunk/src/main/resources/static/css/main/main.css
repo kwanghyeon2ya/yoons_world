@@ -1,0 +1,129 @@
+@charset "utf-8";
+
+.main_wrappper {
+	position: relative;
+	display: flex;
+	flex-flow: row-reverse;
+	margin: 0;
+	font-size: 0;
+	vertical-align: top;
+}
+.main_wrappper > div:nth-of-type(1) {
+	width: 33%;
+	margin-left: 2%; 
+}
+.main_wrappper > div:nth-of-type(2) {
+	width: 65%;
+}
+
+.main_board_area:nth-child(n+2) {
+	margin-top: 30px;
+}
+
+.main_board_area .table {
+	grid-template-columns: 4fr 1fr;
+}
+
+.login_area {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 30px;
+	margin: 0;
+	border: 1px solid #ccc;
+}
+.login_info {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 20px;
+	word-break: keep-all;
+}
+.login_info > img.profile {
+	width: 48px;
+	height: 48px;
+	margin-right: 10px;
+	border-radius: 50%;
+}
+.login_info p {
+	font-size: 1.6rem;
+}
+.login_area > button {
+	display: inline-block;
+	width: 100%;
+	padding: 12px;
+	background-color: #512f83;
+	font-family: 'Fredoka One', cursive;
+	font-size: 1.6rem;
+	font-weight: 500;
+	line-height: 20px;
+    letter-spacing: 3px;
+	color: #fff;
+}
+.login_area > a {
+	display: inline-block;
+	margin-top: 7px;
+	font-size: 1.3rem;
+}
+
+.rank_area {
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+.rank_area .rank_num {
+	display: inline-block;
+    width: 20px;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    text-align: center;
+}
+
+.rank_area .table {
+	grid-template-columns: auto 3fr auto;
+}
+
+/* Mobile (가로 800px 이하) */
+@media screen and (max-width: 800px) {
+	.main_wrappper {
+		flex-flow: column;
+	}
+	
+	.main_wrappper > div:nth-of-type(1),
+	.main_wrappper > div:nth-of-type(2) {
+		width: 100%;
+	}
+	
+	.main_wrappper > div:nth-of-type(1) {
+		margin-left: 0;
+	}
+	
+	.main_wrappper > div:nth-of-type(1) > h3 {
+		margin-top: 0;
+	}
+	
+	.main_wrappper > div:nth-of-type(2) {
+		margin-top: 30px;
+	}
+	
+	.login_area {
+		display: none;
+	}
+	
+	.rank_area .table {
+		grid-template-columns: repeat(2, auto 3fr minmax(56px, 1fr));
+	}
+	
+	.rank_area .table div.title {
+		display: none;
+	}
+}
+
+/* Mobile (가로 480px 이하) */
+@media screen and (max-width: 480px) {
+	
+}

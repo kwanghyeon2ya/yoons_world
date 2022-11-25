@@ -1,0 +1,327 @@
+@charset "utf-8";
+
+/* 공통 */
+.search_area {
+	position: relative;
+	margin-bottom: 10px;
+}
+.search_area.left {text-align: left;}
+.search_area.center {text-align: center;}
+.search_area.right {text-align: right;}
+
+.btn_area {
+	position: relative;
+	margin-top: 10px;
+}
+.btn_area.left {text-align: left;}
+.btn_area.center {text-align: center;}
+.btn_area.right {text-align: right;}
+
+.btn_area .btn.f_left {float:left;}
+.btn_area .btn.f_right {float:right;}
+
+.btn_area > .btn:nth-of-type(n+2) {margin-left: 10px;}
+
+.paging_area {
+	position: relative;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 0;
+}
+.paging_area > a {
+	display: inline-block;
+	padding: 0 6px;
+	font-size: 1.4rem;
+	font-weight: 500;
+	line-height: 2rem;
+	text-align: center;
+}
+
+.paging_area > a:nth-of-type(n+2) {margin-left: 10px;}
+
+.input_area {
+	position: relative;
+	font-size: 0;
+	line-height: 4rem;
+}
+
+.input_area .tilde {
+	display: inline-block;
+	margin: 0 5px;
+	font-size: 1.4rem;
+    vertical-align: middle;
+}
+
+.editor_area {
+	letter-spacing: 0;
+}
+
+#word_count {
+	margin-top: 5px;
+	font-size: 1.4rem;
+	text-align: right;
+}
+
+.file_list {
+	position: relative;
+	padding: 6px 10px;
+	margin-top: 10px;
+	border: 1px solid #999;
+	background-color: #fff;
+}
+
+.file_list > li {
+	position: relative;
+	line-height: 3rem;
+	font-size: 0;
+}
+
+.file_list .file_name {
+	display: inline-block;
+	max-width: 90%;
+	padding-right: 6px;
+	font-size: 1.4rem;
+	line-height: 3rem;
+	vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.file_list a.file_name:hover {
+	color: #512f83;
+	text-decoration: underline;
+}
+.file_list a::before {
+	content: '';
+	box-sizing: border-box;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+	background-image: url(/img/board/icon_download.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	vertical-align: middle;
+	filter: invert(59%) sepia(6%) saturate(2797%) hue-rotate(222deg) brightness(88%) contrast(95%);
+}
+
+.file_list img.del_btn {
+	display: inline-block;
+    width: 18px;
+    height: auto;
+    vertical-align: middle;
+    filter: invert(8%) sepia(100%) saturate(7028%) hue-rotate(0deg) brightness(108%) contrast(118%);
+    cursor: pointer;
+}
+
+.file_list img.cancel_btn {
+	display: inline-block;
+    width: 18px;
+    height: auto;
+    vertical-align: middle;
+    filter: invert(70%) sepia(84%) saturate(492%) hue-rotate(63deg) brightness(102%) contrast(91%);
+    cursor: pointer;
+}
+
+.board_info_area {
+	position: relative;
+}
+
+.board_title {
+	position: relative;
+	font-size: 2.2rem;
+	font-weight: 500;
+	line-height: 3rem;
+	word-break: keep-all;
+	padding: 20px 80px 10px 0;
+}
+
+.board_view_cnt {
+	position: absolute;
+	top: 30px;
+	right: 0;
+	display: inline-block;
+	font-size: 1.4rem;
+	line-height: 1;
+}
+
+.board_view_cnt::before {
+	content: '';
+	box-sizing: border-box;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-right: 5px;
+	background-image: url(/img/board/icon_eye.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	vertical-align: middle;
+}
+
+.board_view_cnt > span {
+	display: inline-block;
+	font-size: 1.4rem;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.board_info {
+	position: relative;
+	padding: 6px 0;
+	border-top: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+.board_info > div {
+	position: relative;
+	display: flex;
+}
+.board_info > div:nth-of-type(n+2) {margin-top: 10px;}
+.board_info > div.between {justify-content: space-between;}
+
+.board_info .profile {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.board_info .writer,
+.board_info .date {
+	display: inline-block;
+	line-height: 3rem;
+	vertical-align: middle;
+}
+
+.board_info .writer:nth-child(n+2),
+.board_info .date:nth-child(n+2) {
+	margin-left: 5px;
+}
+
+.board_info .writer {font-size: 1.6rem;}
+.board_info .date {font-size: 1.4rem;}
+
+.board_content_area {
+	position: relative;
+    font-size: 1.6rem;
+    padding: 30px 0;
+    min-height: 200px;
+    border-bottom: 1px solid #999;
+}
+
+/* 댓글 */
+.comm_area {
+	position: relative;
+	margin-top: 10px;
+}
+
+.area-board-comm {
+    padding: 10px 0;
+    border-bottom: 1px solid #bbb;
+}
+.area-board-comm.reply {padding: 10px 0 10px 50px;}
+
+.comm_form {
+	display: flex;
+	margin-top: 10px;
+}
+
+.comm_form .comm_textarea {
+	width: calc(100% - 80px);
+	height: 90px;
+}
+
+.comm_form button {
+	width: 80px;
+	height: 90px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #512f83;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.comm_info {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+}
+
+.comm_info .profile {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.comm_info .writer,
+.comm_info .date {
+	display: inline-block;
+	line-height: 3rem;
+	vertical-align: middle;
+}
+
+.comm_info .writer:nth-child(n+2),
+.comm_info .date:nth-child(n+2) {
+	margin-left: 5px;
+}
+
+.comm_info .writer {font-size: 1.6rem;}
+.comm_info .date {font-size: 1.4rem;}
+
+.comm_txt {
+	padding: 10px 0;
+}
+
+.comm_btn {
+	position: relative;
+	text-align: right;
+}
+
+.comm_btn > .left {float: left;}
+.comm_btn > a {font-size: 1.4rem;}
+.comm_btn > a:nth-child(n+2) {margin-left: 10px;}
+.comm_btn > a.reply_show_btn::after {
+	content: '';
+	box-sizing: border-box;
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 0 5px;
+	background-image: url(/img/common/arrow_down_grey.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	vertical-align: middle;
+}
+
+/* 공지사항 */
+.notice_board {
+	grid-template-columns: auto 7fr 2fr 2fr auto;
+}
+
+#fix_date_div {
+	display: inline-block;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+/* 자유게시판 */
+.free_board {
+	grid-template-columns: auto 7fr 2fr 2fr auto;
+}
+
+/* 자료실 */
+.pds_board {
+	grid-template-columns: auto 6fr 2fr 2fr 2fr auto;
+}
+
+/* Mobile (가로 800px 이하) */
+@media screen and (max-width: 800px) {
+	
+}
+
+/* Mobile (가로 480px 이하) */
+@media screen and (max-width: 480px) {
+	
+}

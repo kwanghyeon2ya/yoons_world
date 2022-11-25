@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	response.setHeader("Cache-Control", "no-store");
@@ -12,238 +11,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Yoons WoRLD</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" type="text/css" href="/css/main.css">
-<link rel="stylesheet" type="text/css" href="/css/main_board.css"/>
-<!-- <link rel="stylesheet" type="text/css" href="/css/intro.css"> -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/browser.min.js"></script>
-<script src="/js/breakpoints.min.js"></script>
-<script src="/js/boardWriteModify.js"></script>
-
-
+	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+	
+	<link rel="stylesheet" type="text/css" href="/css/main/main.css">
+	
+	<script src="/js/main.js"></script>
+	
 </head>
 <body>
-
 	<div id="page-wrapper">
+		
 		<!-- Header -->
-		<div id="header-wrapper">
-			<div class="container">
-				<div class="row">
-					<div class="col-12">
-						<header id="header">
-							<h1>
-								<a href="/main" id="logo">YOONS WoRLD</a>
-							</h1>
-							<nav id="nav">
-								<c:if test="${sessionScope.sessionSeqForUser == null}">
-									<a href="/login/loginView" class="tag-show-m">로그인하세요</a>
-									<a href="/main" class="current-page-item">Home</a>
-									<a href="/board/free/list">공지사항 </a>
-									<a href="/board/free/list">자유게시판</a>
-									<a href="/board/free/list">자료실</a>
-									<a class="tag-show-m"></a>
-								</c:if>
-								
-	<script>
-        // $("a").click(function(){
-        //    $("a").toggleClass("current-page-item");
-        // })
-    </script>
-								<c:if test="${sessionScope.sessionSeqForUser != null}">
-									<a class="tag-show-m">Hello,
-										${sessionScope.sessionNameForUser} 님</a>
-									<a href="/main" class="current-page-item">Home</a>
-									<a href="/board/notice/list">공지사항 </a>
-									<a href="/board/free/list">자유게시판</a>
-									<a href="/board/pds/list">자료실</a>
-									<c:if test="${sessionScope.sessionSeqForAdmin != null}">
-										<!-- <a href="">게시판관리</a> 추후 개발 예정-->
-										<a href="/admin/member/list">회원관리</a>
-										<!-- 추후 관리자일 경우만 노출되도록 할것 -->
-									</c:if>
-									<c:if test="${sessionScope.sessionSeqForAdmin == null}">
-									<!-- <a href="">마이페이지</a> -->
-									</c:if>
-									<!-- 추후 개발 예정 -->
-									<a href="/login/logout" class="tag-show-m">Logout</a>
-								</c:if>
-							</nav>
-						</header>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Main -->
-
-
-<script>
-$(document).ready(function(){
-	getBoardList();
-	
-	var currentPosition = parseInt($(".rank_from_readcnt").css("top"));
-	$(window).scroll(function(){
-		var position = $(window).scrollTop();
-	    $(".rank_from_readcnt").stop().animate({"top":position+currentPosition+"px"},10000);
-	 });
-	
-});
-
-</script>
-
-
-<div class="main_page_parent">
-
-	<div class="main_page">
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false"/>
 		
-		<div class="main_page_Sorting"> <!-- 메인페이지의 가로정렬 -->
-			
-			<div class="left_main_page">
-			
-				<div class="main_page_board_list"> <!-- 왼쪽 게시판 리스트 -->
+		<!-- Container -->
+		<div id="container">
+			<div class="content">
 				
-				</div>
-			</div>
-			
-			<div class="right_main_page">
+				<!-- main_wrapper begin -->
+				<div class="main_wrappper">
 					
-				<div class="login_box"> <!-- 오른쪽 로그인박스 -->
-					<c:if test="${sessionScope.sessionSeqForUser == null}">
-					<div class="login_button">
-						<div class="login_span_div">
-							<span style="font-weight:bold;">YoonWorld</span><span>를 더 안전하고 편리하게 이용하세요</span>
+					<!-- 메인 영역 (right) -->
+					<div>
+						<!-- 로그인 영역 -->
+						<div class="login_area">
+							<%-- 로그인 전 --%>
+							<c:if test="${sessionScope.sessionSeqForUser == null}">
+							<div class="login_info">
+								<div>
+									<p>
+										<strong>Yoons World</strong> - 윤선생 직원들의 새로운 세상
+									</p>
+								</div>
+							</div>
+							<button onClick="location.href='/login/loginView'">LOGIN</button>
+							</c:if>
+							
+							<%-- 로그인 후 --%>
+							<c:if test="${sessionScope.sessionSeqForUser != null}">
+							<div class="login_info">
+								<img class="profile" src="/img/common/profile.png">
+								<div>
+									<p>
+										<strong>${sessionScope.sessionNameForUser}</strong>님 환영합니다.
+									</p>
+									<p>${sessionScope.sessionSeqForAdmin != null ? "관리자" : "일반 회원"}</p>
+								</div>
+							</div>
+							<button onClick="location.href='/login/logout'">LOGOUT</button>
+							</c:if>
 						</div>
-						<button onClick="location.href='/login/loginView'">Yoons World 로그인</button>
-						<a href="/common/nuguruman">아이디 비밀번호 찾기</a>
+						
+						<!-- 조회수 TOP 리스트 -->
+						<h3>조회수 TOP (한달)</h3>
+						<div id="rank_board_list" class="rank_area"></div>
+						
 					</div>
-					</c:if>
-					<c:if test="${sessionScope.sessionSeqForUser != null}">
-					<div class="login_button">
-						<div class="login_span_div">
-							<span>Hello, </span><span style="font-weight:bold;">${sessionScope.sessionNameForUser}</span><span> 님 </span>
-						</div>
-						<button onClick="location.href='/login/logout'">Yoons World 로그아웃</button>
-						<!-- <a href="/common/nuguruman">아이디 비밀번호 찾기</a> -->
+					
+					<!-- 메인 영역 (left) -->
+					<div>
+						<!-- 전체 게시글 리스트 -->
+						<div id="main_board_list"></div>
 					</div>
-					</c:if>
+					
 				</div>
+				<!-- main_wrapper end -->
 				
-				<div class="rank_from_readcnt">
-					<h1 class="rank_h1">한달 조회수 랭킹</h1>
-					<div class="rank_from_readcnt_child">
-						<div class="get_all_board_list_for_month">
-					</div>
-					</div>
-				</div>
-			
 			</div>
-			
 		</div>
 		
+		<!-- footer -->
+		<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/>
+		
 	</div>
-
-		<!-- <h1>전체 조회수 순위</h1>
-		<div class="get_all_board_list">
-		</div> -->
-		
-		
-			
-			
-				<div class="intro-container">
-					<div class="snow"></div>
-					<div class="tree1"></div>
-					<div class="tree2"></div>
-					<div class="house">
-						<div class="roof1">
-							<div class="b1"></div>
-							<div class="b2"></div>
-						</div>
-						<div class="wall1">
-							<div class="w3">
-								<div class="window1">
-									<div class="glass1"></div>
-								</div>
-							</div>
-						</div>
-						<div class="wall2">
-							<div class="light">
-								<div class="w1">
-									<div class="window">
-										<div class="glass"></div>
-									</div>
-								</div>
-								<div class="w2">
-									<div class="window">
-										<div class="glass"></div>
-									</div>
-								</div>
-							</div>
-							<div class="door">
-								<div class="handle"></div>
-							</div>
-							<div class="snw1"></div>
-							<div class="snw2"></div>
-						</div>
-						<div class="wall3">
-							<div class="b3"></div>
-							<div class="b4"></div>
-							<div class="chimney">
-								<div class="top">
-									<div class="smoke">
-										<div class="s1"></div>
-										<div class="s2"></div>
-										<div class="s3"></div>
-									</div>
-									<div class="shne1"></div>
-									<div class="shne2"></div>
-								</div>
-							</div>
-							<div class="sn">
-								<div class="dr1"></div>
-								<div class="dr2"></div>
-								<div class="dr3"></div>
-							</div>
-							<div class="sn1">
-								<div class="dr4"></div>
-							</div>
-							<div class="sh1"></div>
-							<div class="sh2"></div>
-							<div class="sh3"></div>
-							<div class="sh4"></div>
-							<div class="sh5"></div>
-						</div>
-					</div>
-					<div class="snowfall"></div>
-					<div class="cover"></div>
-					<div class="bottom">
-						<div class="bt1"></div>
-						<div class="bt2"></div>
-					</div>
-					<div class="fence">
-						<div class="fn1">
-							<div class="screw"></div>
-						</div>
-						<div class="fn2">
-							<div class="screw"></div>
-						</div>
-						<div class="fn3">
-							<div class="screw"></div>
-						</div>
-						<div class="stck"></div>
-					</div>
-				</div>
-			
-		
-</div>
-
-	
-
-	<script src="/js/util.js"></script>
-	<script src="/js/main.js"></script>
 
 </body>
 </html>

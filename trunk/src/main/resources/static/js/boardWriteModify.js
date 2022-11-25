@@ -210,12 +210,12 @@ $(document).ready(function(){
 				length += 2
 			}
 		}*/
-		var str = "["+content_len+"자/4000]";
+		var str = "["+content_len+"/4000자]";
 		
 		if(content_len > 4000){
 			
 			$("#word_count").html(str);
-			$("#word_count").attr("color","red");
+			$("#word_count").addClass("txt_red");
 			
 			/*alert("더이상 입력하실 수 없습니다");*/
 //			$('.note-editable').text().substring(0,3999);
@@ -224,7 +224,9 @@ $(document).ready(function(){
 		}else{
 			
 			$("#word_count").html(str);
-			$("#word_count").attr("color","green");
+			if($("#word_count").hasClass("txt_red")) {
+				$("#word_count").removeClass("txt_red");
+			}
 		
 		}
 	})

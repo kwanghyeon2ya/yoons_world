@@ -1,9 +1,8 @@
-<%@page import="java.io.File"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.io.File"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ page import="java.util.List"%>
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -11,120 +10,111 @@
 	if (request.getProtocol().equals("HTTP/1.1"))
 		response.setHeader("Cache-Control", "no-cache");
 %>
-<!-- Header -->
 <jsp:useBean id="today" class="java.util.Date" />
-<jsp:include page="../../common/header.jsp" flush="false" />
 
-<c:if test="${sessionScope.sessionSeqForUser == null}">
+<!DOCTYPE html>
+<html>
+<head>
+	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+	<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
+	
+	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
+	
+	<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
-	alert("로그인화면으로 이동합니다");
-	location.href="/login/loginView";
+		alert("로그인화면으로 이동합니다");
+		location.href="/login/loginView";
 	</script>
-</c:if>
-
-<script>
-
-$(document).ready(function(){
-	console.log("first page : "+$("#more_comments_page").val());
-	var page_post_seq = $("#post_seq").val();
-	getCommentsList(page_post_seq);
-});
-
-function deleteMoveAction(){
-	var url = "/board/notice/list";
-	deleteViewCheck(url);
-
-}
-</script>
-
-<!-- Main -->
-<div id="main">
-	<div class="container">
-		<div class="col-12">
-
-			<div class="title-page">
-				<h3>공지사항</h3>
-			</div>
-
-			<div class="board_write">
-
-				<div class="area-board-title">
-					제목 : <span><c:out escapeXml="" value="${vo.subject}"/></span>
-				</div>
-
-				<div class="area-board-info">
-					<div class="area-board-info-detail">
-						<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
-						<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
-						<p>작성자 : <c:out value="${vo.writerName}"/> &nbsp;&nbsp;
-							<c:if test="${vo.firstInsertDt >= vo.lastUpdateDt}">
-								<fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" />
-									&nbsp;&nbsp; 조회 ${vo.readCnt}
-							</c:if>
-						</p>
-						
-						<c:if test="${vo.firstInsertDt < vo.lastUpdateDt}">
-							작성일 : <fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd" /> &nbsp; /
-							수정일 : <fmt:formatDate value="${vo.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" /> &nbsp;&nbsp;
-					      	 조회 ${vo.readCnt}
-						</c:if>
-							
-					</div>
-					
-					<div class="area-board-btn">
-						<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
-							<button type="button"
-								onclick="window.location='/board/notice/modify?postSeq=${vo.postSeq}'">수정</button>
-								<!-- 게시글 수정 -->
-							<button type="button"
-								onclick="deleteMoveAction()">삭제</button> <!-- 게시글 삭제 -->
-						</c:if>
-					</div>
-					
-				</div>				
-			</div>
+	</c:if>
+	
+	<script>
+		$(document).ready(function(){
+			console.log("first page : "+$("#more_comments_page").val());
+			var page_post_seq = $("#post_seq").val();
+			getCommentsList(page_post_seq);
+		});
+		
+		function deleteMoveAction(){
+			var url = "/board/notice/list";
+			deleteViewCheck(url);
+		}
+	</script>
+</head>
+<body>
+	<div id="page-wrapper">
+		
+		<!-- Header -->
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false"/>
+		
+		<!-- Container -->
+		<div id="container">
+			<div class="content">
 				
-			<div class="area-board-cont">
-				<!-- 첨부파일 영역 -->
-				<div class="area-board-attach">
+				<h2>공지사항</h2>
+				
+				<div class="board_info_area">
+					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
+					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
+					
+					<div class="board_title"><c:out escapeXml="" value="${vo.subject}"/></div>
+					<div class="board_view_cnt" title="조회수">
+						<span class="view_cnt">${vo.readCnt}</span>
+					</div>
+	
+					<div class="board_info">
+						<div class="between">
+							<div>
+								<img class="profile" src="/img/common/profile.png">
+								<span class="writer"><c:out value="${vo.writerName}"/></span>
+							</div>
+							<div>
+								<span class="date"><fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" /></span>
+								<c:if test="${vo.lastUpdateDt > vo.firstInsertDt}">
+								<span class="date txt_999">(<fmt:formatDate value="${vo.lastUpdateDt}" type="date" pattern="yyyy-MM-dd HH:mm" /> 수정)</span>
+								</c:if>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 첨부파일 영역 -->
 					<c:if test="${!empty anlist}">
-						<details>
-						    <summary>첨부파일</summary>
-						    <ul>
-							<c:forEach var="dlist" items="${anlist}">
-								<a href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>
-									<li>${dlist.fileName}.${dlist.fileType}</li>
-								</a>	
-							</c:forEach>
-							</ul>
-						</details>
+				    <ul class="file_list">
+						<c:forEach var="dlist" items="${anlist}">
+						<li>
+							<a class="file_name" href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>${dlist.fileName}.${dlist.fileType}</a>
+						</li>
+						</c:forEach>
+					</ul>
 					</c:if>
 				</div>
+					
+				<div class="board_content_area">
+					<!-- 게시글 본문 영역 -->
+					${vo.content}
+				</div>
+					
+				<!-- 댓글 영역 -->
+				<div id="reload_div_parent" class="comm_area">
+					<!-- 페이지 분리 구간 -->
+					<input type="hidden" id="more_comments_page" value="1"/>
+				</div>
 			
-				<!-- 게시글 본문 영역 -->
-				${vo.content}
+				<div class="btn_area right">
+					
+					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
+					<button type="button" class="btn type_02 size_s bg_purple f_left" onclick="window.location='/board/notice/modify?postSeq=${vo.postSeq}'">수정</button>
+					<button type="button" class="btn type_02 size_s bg_aaa f_left" onclick="deleteMoveAction()">삭제</button>
+					</c:if>
+					
+					<button type="button" class="btn type_02 size_s bg_purple" onclick="window.location='/board/notice/list'">목록</button>
+				</div>
 				
 			</div>
-				
-			<!-- 댓글 영역 -->
-			<div id="reload_div_parent">
-			
-				<!-- 페이지 분리 구간 -->
-				<input type="hidden" id="more_comments_page" value="1"/>
-			</div><!-- reload_div_parent -->
-		
-			<div class="area-button">
-				<button onclick="window.location='/board/notice/list'">목록</button>
-			</div>
-				
 		</div>
+		
+		<!-- Footer -->
+		<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/>
+		
 	</div>
-</div>
-
-<script>
-	$("#nav a").removeClass("current-page-item");
-	$("#nav").find('a[href*="/notice"]').addClass("current-page-item");
-</script>
-
-<!-- Footer -->
-<jsp:include page="../../common/footer.jsp" flush="false" />
+</body>
+</html>
