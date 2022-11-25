@@ -179,5 +179,56 @@
 		</foreach>
 	</update>
 	
+	<insert id="insertAutoLoginInfo" parameterType="com.iyoons.world.vo.UserAutoLoginVO">
+		 insert into user_auto_login(cookie_key,
+									 user_seq,
+									 user_ip,
+									 user_browser,
+									 cookie_status,
+									 reg_dt,
+									 expiry_dt
+										)
+							  values(#{cookieKey},
+							  		 #{userSeq},
+							  		 #{userIp},
+							  		 #{userBrowser},
+							  		 1,
+							  		 sysdate,
+							  		 (sysdate+30)
+										)
+	</insert>
+	
+	<select id="getCookieInfo" parameterType="String" resultType="com.iyoons.world.vo.UserAutoLoginVO">
+		select
+			ua.user_seq,
+			ua.user_browser,
+			ua.reg_dt,
+			(select user_name from user_info ui where ua.user_seq = ui.user_seq) as user_name,
+			(select user_type from user_info ui where ua.user_seq = ui.user_seq and user_type = 1) as admin_type
+		from
+			user_auto_login ua
+		where
+			ua.cookie_key = #{cookieKey}
+			and sysdate between	reg_dt and expiry_dt
+			and cookie_status = 1	
+	</select>
+	
+	<update id="deleteCookie">
+		update 
+			user_auto_login
+		set
+			cookie_status = 0
+		where
+			cookie_key = #{cookieKey}
+	</update>
+	<update id="deleteCookieWhenLogin" parameterType="com.iyoons.world.vo.UserAutoLoginVO">
+		update
+			user_auto_login
+		set
+			cookie_status = 0
+		where 
+			user_seq = #{userSeq}
+			and user_browser = #{userBrowser}
+	</update>
 
 </mapper>

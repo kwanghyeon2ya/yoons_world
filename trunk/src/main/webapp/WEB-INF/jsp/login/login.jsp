@@ -9,7 +9,7 @@
 $(document).ready(function(){
 	
 	$("#loginbtn").click(function(){
-
+	var checkTokenValue = "N";
 	
 	console.log($("#userId").val());	
 	if($("#userID").val() == '' || $("#userID").val() == null) {
@@ -21,11 +21,14 @@ $(document).ready(function(){
 		alert("비밀번호를 입력하세요.");
 		return;
 	}
+	if($("input:checkbox[id='checkToken']").is(":checked") == true){
+		checkTokenValue = "Y";
+	}
 		
 		var json = {
 			userId : $("#userID").val(),
 			userPw : $("#password").val(),
-			checkToken : $("#checkToken").val()
+			checkToken : checkTokenValue
 		};
 		
 		 $.ajax({

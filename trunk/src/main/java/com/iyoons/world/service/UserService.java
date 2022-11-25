@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.iyoons.world.vo.UserVO;
 import com.iyoons.world.vo.PageVO;
+import com.iyoons.world.vo.UserAutoLoginVO;
 
 public interface UserService {
 	public int checkId(UserVO userVO);
@@ -28,5 +29,13 @@ public interface UserService {
 	public int recoverUserStatus(UserVO userVO);
 
 	public int getSearchedUserCount(PageVO page);
+
+	public int insertAutoLoginInfo(UserAutoLoginVO alvo);
+	
+	public UserAutoLoginVO getCookieInfo(String cookieKey);
+	
+	public int deleteCookie(String cookieKey);
+	
+	public int deleteCookieWhenLogin (UserAutoLoginVO alvo);
 	
 }

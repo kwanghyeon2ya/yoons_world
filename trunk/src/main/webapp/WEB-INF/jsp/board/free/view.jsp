@@ -16,12 +16,6 @@
 <jsp:include page="../../common/header.jsp" flush="false" />
 
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
-	<script>
-	alert("로그인화면으로 이동합니다");
-	location.href="/login/loginView";
-	</script>
-</c:if>
 <c:if test="${vo.status eq 0}">
 	<script>
 		alert("삭제된 글입니다");
@@ -148,6 +142,6 @@ function deleteMoveAction(){
 
 <style>
 
-.blankheart_icon:hover {cursor : url(/img/board/heart.png) 22.5 20, auto;}
+.blankheart_icon:hover {cursor : pointer;}
 
 </style>

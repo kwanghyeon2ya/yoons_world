@@ -12,7 +12,7 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
+<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
 	location.href="/login/loginView";
 	</script>

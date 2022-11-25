@@ -1,5 +1,6 @@
 package com.iyoons.world.controller;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class UserAdminController {
 	
 	// 회원 등록 처리
 	@RequestMapping(value = "/member/createUser", method = RequestMethod.POST)
-	@ResponseBody public int userInsert(@RequestBody UserVO userVO, HttpSession session) throws SQLException {
+	@ResponseBody public int userInsert(@RequestBody UserVO userVO, HttpSession session) throws SQLException, NoSuchAlgorithmException {
 		
 		if(userService.checkId(userVO) == 1) {
 			return 2;

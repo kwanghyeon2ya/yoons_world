@@ -414,13 +414,9 @@ public class BoardController {
 		 
 
 		 if(vo == null) { // Null체크 - 뒤로가기시 Null
-			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			 return "redirect:/login/logout";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		 }
 		 
-		 if(session.getAttribute("sessionSeqForUser") == null) {
-			 return "redirect:/board/free/list";
-		 }
-	 
 		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		 
 		 vo.setPostSeq(postSeq2); 

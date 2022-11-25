@@ -17,7 +17,7 @@
     </c:if>
 </c:if> --%>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
+<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
 		alert("로그인이 필요합니다")
 		window.location.href="/login/loginView";

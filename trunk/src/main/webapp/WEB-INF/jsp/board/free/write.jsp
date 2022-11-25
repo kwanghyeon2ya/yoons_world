@@ -13,7 +13,7 @@
 <!-- Header -->
 <jsp:include page="../../common/header.jsp" flush="false"/>
 
-<c:if test="${sessionScope.sessionIdForUser == null}">
+<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
 	alert("로그인화면으로 이동합니다");
 	location.href="/login/loginView";

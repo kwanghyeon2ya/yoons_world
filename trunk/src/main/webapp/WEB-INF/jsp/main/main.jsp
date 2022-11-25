@@ -38,7 +38,7 @@
 								<a href="/main" id="logo">YOONS WoRLD</a>
 							</h1>
 							<nav id="nav">
-								<c:if test="${sessionScope.sessionIdForUser == null}">
+								<c:if test="${sessionScope.sessionSeqForUser == null}">
 									<a href="/login/loginView" class="tag-show-m">로그인하세요</a>
 									<a href="/main" class="current-page-item">Home</a>
 									<a href="/board/free/list">공지사항 </a>
@@ -52,7 +52,7 @@
         //    $("a").toggleClass("current-page-item");
         // })
     </script>
-								<c:if test="${sessionScope.sessionIdForUser != null}">
+								<c:if test="${sessionScope.sessionSeqForUser != null}">
 									<a class="tag-show-m">Hello,
 										${sessionScope.sessionNameForUser} 님</a>
 									<a href="/main" class="current-page-item">Home</a>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.iyoons.world.vo.UserVO;
 import com.iyoons.world.vo.PageVO;
+import com.iyoons.world.vo.UserAutoLoginVO;
 
 @Mapper
 public interface UserDAO {
@@ -33,4 +34,11 @@ public interface UserDAO {
 	
 	public int getSearchedUserCount(PageVO page);
 	
+	public int insertAutoLoginInfo(UserAutoLoginVO alvo);
+	
+	public UserAutoLoginVO getCookieInfo(String cookieKey);
+	
+	public int deleteCookie(String cookieKey);
+	
+	public int deleteCookieWhenLogin(UserAutoLoginVO alvo);
 }

@@ -24,8 +24,6 @@ public class MainController {
 	@RequestMapping(value= {"/main","/"})
 	public String callMain(HttpServletRequest request) {
 		
-		
-		
 		return "/main/main";
 		
 	}
