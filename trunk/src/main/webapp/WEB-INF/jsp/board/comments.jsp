@@ -183,7 +183,7 @@
 									<textarea id="mod_comm_content_${cocoList.commSeq}" class="comm_textarea" placeholder="수정할 댓글 내용을 작성해주세요">${cocoList.commContent}</textarea>
 									<div class="area-board-comm-btn">
 										<input type="hidden" id="mod_post_seq_${cocoList.commSeq}" value="${vo.postSeq}"/>
-										<button type="button" id="modify_comments_check_${cocoList.commSeq}" onclick="modifyCommentsCheck(${cocoList.commSeq})">수정</button>
+										<button type="button" id="modify_comments_check_${cocoList.commSeq}" onclick="modifyCommentsCheck(${cocoList.commSeq})">저장</button>
 									</div> 
 								</form>
 							</div>

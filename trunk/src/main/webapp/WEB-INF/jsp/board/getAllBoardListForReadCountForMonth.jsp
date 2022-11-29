@@ -3,9 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <div class="table type_02">
-	<div class="title">순위</div>
-	<div class="title">제목</div>
-	<div class="title">조회수</div>
+	<div class="th">순위</div>
+	<div class="th">제목</div>
+	<div class="th">조회수</div>
 	
 	<c:if test="${empty boardList}">
 	<div class="non_data center">작성된 글이 없습니다.</div>
@@ -17,10 +17,10 @@
 	
 	<div class="center">
 		<c:if test="${status.index < 5}">
-		<div class="rank_num bg_purple">${status.count}</div>
+		<span class="rank_num bg_purple">${status.count}</span>
 		</c:if>
 		<c:if test="${status.index >= 5}">
-		<div class="rank_num bg_aaa">${status.count}</div>
+		<span class="rank_num bg_aaa">${status.count}</span>
 		</c:if>
 	</div>
 	<div>

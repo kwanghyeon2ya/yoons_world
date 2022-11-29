@@ -3,7 +3,8 @@
 /* 공통 */
 .search_area {
 	position: relative;
-	margin-bottom: 10px;
+	margin-bottom: 1rem;
+	font-size: 0;
 }
 .search_area.left {text-align: left;}
 .search_area.center {text-align: center;}
@@ -11,7 +12,7 @@
 
 .btn_area {
 	position: relative;
-	margin-top: 10px;
+	margin-top: 1rem;
 }
 .btn_area.left {text-align: left;}
 .btn_area.center {text-align: center;}
@@ -20,24 +21,24 @@
 .btn_area .btn.f_left {float:left;}
 .btn_area .btn.f_right {float:right;}
 
-.btn_area > .btn:nth-of-type(n+2) {margin-left: 10px;}
+.btn_area > .btn:nth-of-type(n+2) {margin-left: 1rem;}
 
 .paging_area {
 	position: relative;
-	margin-top: 20px;
+	margin-top: 2rem;
 	text-align: center;
 	font-size: 0;
 }
 .paging_area > a {
 	display: inline-block;
-	padding: 0 6px;
+	padding: 0 0.6rem;
 	font-size: 1.4rem;
 	font-weight: 500;
 	line-height: 2rem;
 	text-align: center;
 }
 
-.paging_area > a:nth-of-type(n+2) {margin-left: 10px;}
+.paging_area > a:nth-of-type(n+2) {margin-left: 1rem;}
 
 .input_area {
 	position: relative;
@@ -47,26 +48,27 @@
 
 .input_area .tilde {
 	display: inline-block;
-	margin: 0 5px;
+	margin: 0 0.5rem;
 	font-size: 1.4rem;
     vertical-align: middle;
 }
 
 .editor_area {
+	background-color: #fff;
 	letter-spacing: 0;
 }
 
 #word_count {
-	margin-top: 5px;
+	margin-top: 0.5rem;
 	font-size: 1.4rem;
 	text-align: right;
 }
 
 .file_list {
 	position: relative;
-	padding: 6px 10px;
-	margin-top: 10px;
-	border: 1px solid #999;
+	padding: 0.6rem 1rem;
+	margin-top: 1rem;
+	border: 0.1rem solid #999;
 	background-color: #fff;
 }
 
@@ -79,7 +81,7 @@
 .file_list .file_name {
 	display: inline-block;
 	max-width: 90%;
-	padding-right: 6px;
+	padding-right: 0.6rem;
 	font-size: 1.4rem;
 	line-height: 3rem;
 	vertical-align: middle;
@@ -96,9 +98,9 @@
 	content: '';
 	box-sizing: border-box;
 	display: inline-block;
-	width: 20px;
-	height: 20px;
-	margin-right: 5px;
+	width: 2rem;
+	height: 2rem;
+	margin-right: 0.5rem;
 	background-image: url(/img/board/icon_download.png);
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -108,7 +110,7 @@
 
 .file_list img.del_btn {
 	display: inline-block;
-    width: 18px;
+    width: 1.8rem;
     height: auto;
     vertical-align: middle;
     filter: invert(8%) sepia(100%) saturate(7028%) hue-rotate(0deg) brightness(108%) contrast(118%);
@@ -117,7 +119,7 @@
 
 .file_list img.cancel_btn {
 	display: inline-block;
-    width: 18px;
+    width: 1.8rem;
     height: auto;
     vertical-align: middle;
     filter: invert(70%) sepia(84%) saturate(492%) hue-rotate(63deg) brightness(102%) contrast(91%);
@@ -134,12 +136,12 @@
 	font-weight: 500;
 	line-height: 3rem;
 	word-break: keep-all;
-	padding: 20px 80px 10px 0;
+	padding: 2rem 8rem 1rem 0;
 }
 
 .board_view_cnt {
 	position: absolute;
-	top: 30px;
+	top: 3rem;
 	right: 0;
 	display: inline-block;
 	font-size: 1.4rem;
@@ -150,9 +152,9 @@
 	content: '';
 	box-sizing: border-box;
 	display: inline-block;
-	width: 24px;
-	height: 24px;
-	margin-right: 5px;
+	width: 2.4rem;
+	height: 2.4rem;
+	margin-right: 0.5rem;
 	background-image: url(/img/board/icon_eye.png);
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -168,22 +170,22 @@
 
 .board_info {
 	position: relative;
-	padding: 6px 0;
-	border-top: 1px solid #999;
-	border-bottom: 1px solid #999;
+	padding: 0.6rem 0;
+	border-top: 0.1rem solid #999;
+	border-bottom: 0.1rem solid #999;
 }
 
 .board_info > div {
 	position: relative;
 	display: flex;
 }
-.board_info > div:nth-of-type(n+2) {margin-top: 10px;}
+.board_info > div:nth-of-type(n+2) {margin-top: 1rem;}
 .board_info > div.between {justify-content: space-between;}
 
 .board_info .profile {
 	display: inline-block;
-	width: 30px;
-	height: 30px;
+	width: 3rem;
+	height: 3rem;
 	vertical-align: middle;
 }
 
@@ -196,7 +198,7 @@
 
 .board_info .writer:nth-child(n+2),
 .board_info .date:nth-child(n+2) {
-	margin-left: 5px;
+	margin-left: 0.5rem;
 }
 
 .board_info .writer {font-size: 1.6rem;}
@@ -205,36 +207,36 @@
 .board_content_area {
 	position: relative;
     font-size: 1.6rem;
-    padding: 30px 0;
-    min-height: 200px;
-    border-bottom: 1px solid #999;
+    padding: 3rem 0;
+    min-height: 20rem;
+    border-bottom: 0.1rem solid #999;
 }
 
 /* 댓글 */
 .comm_area {
 	position: relative;
-	margin-top: 10px;
+	margin-top: 1rem;
 }
 
 .area-board-comm {
-    padding: 10px 0;
-    border-bottom: 1px solid #bbb;
+    padding: 1rem 0;
+    border-bottom: 0.1rem solid #bbb;
 }
-.area-board-comm.reply {padding: 10px 0 10px 50px;}
+.area-board-comm.reply {padding: 1rem 0 1rem 5rem;}
 
 .comm_form {
 	display: flex;
-	margin-top: 10px;
+	margin-top: 1rem;
 }
 
 .comm_form .comm_textarea {
-	width: calc(100% - 80px);
-	height: 90px;
+	width: calc(100% - 8rem);
+	height: 9rem;
 }
 
 .comm_form button {
-	width: 80px;
-	height: 90px;
+	width: 8rem;
+	height: 9rem;
     font-size: 1.4rem;
     font-weight: 600;
     color: #fff;
@@ -250,8 +252,8 @@
 
 .comm_info .profile {
 	display: inline-block;
-	width: 30px;
-	height: 30px;
+	width: 3rem;
+	height: 3rem;
 	vertical-align: middle;
 }
 
@@ -264,14 +266,14 @@
 
 .comm_info .writer:nth-child(n+2),
 .comm_info .date:nth-child(n+2) {
-	margin-left: 5px;
+	margin-left: 0.5rem;
 }
 
 .comm_info .writer {font-size: 1.6rem;}
 .comm_info .date {font-size: 1.4rem;}
 
 .comm_txt {
-	padding: 10px 0;
+	padding: 1rem 0;
 }
 
 .comm_btn {
@@ -281,14 +283,14 @@
 
 .comm_btn > .left {float: left;}
 .comm_btn > a {font-size: 1.4rem;}
-.comm_btn > a:nth-child(n+2) {margin-left: 10px;}
+.comm_btn > a:nth-child(n+2) {margin-left: 1rem;}
 .comm_btn > a.reply_show_btn::after {
 	content: '';
 	box-sizing: border-box;
 	display: inline-block;
-	width: 14px;
-	height: 14px;
-	margin: 0 5px;
+	width: 1.4rem;
+	height: 1.4rem;
+	margin: 0 0.5rem;
 	background-image: url(/img/common/arrow_down_grey.png);
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -296,13 +298,30 @@
 }
 
 /* 공지사항 */
-.notice_board {
-	grid-template-columns: auto 7fr 2fr 2fr auto;
+.notice_board {grid-template-columns: auto 7fr 2fr 2fr auto;}
+.notice_board > div:nth-of-type(5n-4) {text-align: center;}
+.notice_board > div:nth-of-type(5n-3) {text-align: left;}
+.notice_board > div:nth-of-type(5n-2) {text-align: center;}
+.notice_board > div:nth-of-type(5n-1) {text-align: center;}
+.notice_board > div:nth-of-type(5n) {text-align: center;}
+.notice_board > div.non_data {text-align: center;}
+
+.notice_board > div > a {
+	position: relative;
+	display: inline-flex;
+	max-width: 100%;
 }
+.notice_board > div > a > span {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.notice_board > div > a > span:nth-child(1) {padding-right: 0.5rem;}
+.notice_board > div > a > span:nth-child(2) {width: 5rem;}
 
 #fix_date_div {
 	display: inline-block;
-	margin-left: 10px;
+	margin-left: 1rem;
 	vertical-align: middle;
 }
 
@@ -318,10 +337,57 @@
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
+	/* 공지사항 */
+	.notice_board {grid-template-columns: 4fr 4fr auto auto;}
+	
+	.notice_board > div:nth-of-type(5n-4) {
+		display: none;
+	}
+	.notice_board > div:nth-of-type(5n-3) {
+		grid-column: span 4;
+		border-bottom: 0;
+	}
+	.notice_board > div:nth-of-type(5n-2) {
+		text-align: left;
+	}
+	.notice_board > div:nth-of-type(5n-1) {
+		text-align: right;
+	}
+	.notice_board > div:nth-of-type(5n-1)::before {
+		content: '';
+		box-sizing: border-box;
+		display: inline-block;
+		width: 1.3rem;
+		height: 1.3rem;
+		margin-right: 0.4rem;
+		background-image: url(/img/board/icon_time.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		vertical-align: middle;
+	}
+	.notice_board > div:nth-of-type(5n) {
+		grid-column: span 2;
+		text-align: left;
+	}
+	.notice_board > div:nth-of-type(5n)::before {
+		content: '';
+		box-sizing: border-box;
+		display: inline-block;
+		width: 1.3rem;
+		height: 1.3rem;
+		margin-right: 0.4rem;
+		background-image: url(/img/board/icon_eye.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		vertical-align: middle;
+	}
 	
 }
 
 /* Mobile (가로 480px 이하) */
 @media screen and (max-width: 480px) {
+	.area-board-comm.reply {padding: 1rem 0 1rem 3.5rem;}
 	
+	.comm_form .comm_textarea {width: calc(100% - 5rem);}
+	.comm_form button {width: 5rem;}
 }

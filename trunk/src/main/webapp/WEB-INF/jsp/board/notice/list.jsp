@@ -37,46 +37,52 @@
 							<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
 							<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
 						</select>
-						<input id="search_text" type="text" name="keyword" value="${keyword}"></input>
-						<button id="submit_button" class="btn type_02 size_s bg_purple" type="submit">검색</button>
+						<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
+						<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
 					</form>
 				</div>					
 				
 				<div class="list_area">
 					<div class="notice_board table type_03">
-						<div class="title">번호</div>
-						<div class="title">제목</div>
-						<div class="title">글쓴이</div>
-						<div class="title">작성일</div>
-						<div class="title">조회수</div>
+						<div class="th">번호</div>
+						<div class="th">제목</div>
+						<div class="th">글쓴이</div>
+						<div class="th">작성일</div>
+						<div class="th">조회수</div>
 						
 						<c:if test="${count == 0}">
-						<div class="non_data center">작성된 글이 없습니다.</div>
+						<div class="non_data">작성된 글이 없습니다.</div>
 						</c:if>
 						
 						
 						<c:if test="${count > 0}">
 						<!-- 상단 고정 글 리스트 -->
 						<c:forEach var="fixedBoardList" items="${fixedBoardList}">
-						<div class="center txt_red">[중요]</div>
+						<div class="txt_red">[중요]</div>
 						<div>
-							<a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}"><c:out value="${fixedBoardList.subject}"/> &nbsp; <span class="txt_purple">${fixedBoardList.commentsCnt > 0 ? [fixedBoardList.commentsCnt] : ''}</span></a>
+							<a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}">
+								<span><strong class="tag_m_only txt_red">[중요]&nbsp;</strong><c:out value="${fixedBoardList.subject}"/></span>
+								<span class="txt_purple">${fixedBoardList.commentsCnt > 0 ? [fixedBoardList.commentsCnt] : ''}</span>
+							</a>
 						</div>
-						<div class="center">${fixedBoardList.writerName}</div>
-						<div class="center">	
+						<div>${fixedBoardList.writerName}</div>
+						<div>	
 							<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 						</div>
-						<div class="center">${fixedBoardList.readCnt}</div>
+						<div>${fixedBoardList.readCnt}</div>
 						</c:forEach>
 						
 						<!-- 일반 글 리스트 -->
 						<c:forEach var="list" items="${boardList}">
-						<div class="center">${list.postNum}</div>
+						<div>${list.postNum}</div>
 						<div>
-							<a href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/> &nbsp; <span style="color:#81c147">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span></a>
+							<a href="/board/notice/view?postSeq=${list.postSeq}">
+								<span><c:out value="${list.subject}"/></span>
+								<span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
+							</a>
 						</div>
-						<div class="center">${list.writerName}</div>
-						<div class="center">
+						<div>${list.writerName}</div>
+						<div>
 							<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
 							<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 							</c:if>
@@ -84,7 +90,7 @@
 							<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" /><!--수정필요-->
 							</c:if>
 						</div>
-						<div class="center">${list.readCnt}</div>
+						<div>${list.readCnt}</div>
 						</c:forEach> 
 						</c:if>
 						

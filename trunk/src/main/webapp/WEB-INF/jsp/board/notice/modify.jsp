@@ -142,10 +142,9 @@
 					
 					<div class="editor_area">
                        	<textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea>
-                       	
                        	<textarea name="content" id="content" style="display:none;"></textarea>
-						<div id="word_count">[0/4000자]</div>
 					</div>
+					<div id="word_count">[0/4000자]</div>
 					
 					<div class="input_area">
 						<h4>첨부 파일</h4>

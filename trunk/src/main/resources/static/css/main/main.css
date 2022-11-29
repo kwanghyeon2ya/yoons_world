@@ -17,7 +17,7 @@
 }
 
 .main_board_area:nth-child(n+2) {
-	margin-top: 30px;
+	margin-top: 3rem;
 }
 
 .main_board_area .table {
@@ -29,22 +29,22 @@
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
-	padding: 30px;
+	padding: 3rem;
 	margin: 0;
-	border: 1px solid #999;
+	border: 0.1rem solid #999;
 }
 .login_info {
 	position: relative;
 	display: flex;
 	align-items: center;
 	width: 100%;
-	margin-bottom: 20px;
+	margin-bottom: 2rem;
 	word-break: keep-all;
 }
 .login_info > img.profile {
-	width: 48px;
-	height: 48px;
-	margin-right: 10px;
+	width: 4.8rem;
+	height: 4.8rem;
+	margin-right: 1rem;
 	border-radius: 50%;
 }
 .login_info p {
@@ -53,29 +53,30 @@
 .login_area > button {
 	display: inline-block;
 	width: 100%;
-	padding: 12px;
+	padding: 1.2rem;
 	background-color: #512f83;
 	font-family: 'Fredoka One', cursive;
 	font-size: 1.6rem;
 	font-weight: 500;
-	line-height: 20px;
-    letter-spacing: 3px;
+	line-height: 2rem;
+    letter-spacing: 0.3rem;
 	color: #fff;
 }
 .login_area > a {
 	display: inline-block;
-	margin-top: 7px;
+	margin-top: 0.7rem;
 	font-size: 1.3rem;
 }
 
 .rank_area {
-	padding: 10px;
-	border: 1px solid #999;
+	padding: 1rem;
+	border: 0.1rem solid #999;
+	overflow: hidden;
 }
 
 .rank_area .rank_num {
 	display: inline-block;
-    width: 20px;
+    width: 2rem;
     color: #fff;
     font-size: 1.4rem;
     font-weight: 500;
@@ -84,7 +85,7 @@
 }
 
 .rank_area .table {
-	grid-template-columns: auto 3fr auto;
+	grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
 }
 
 /* Mobile (가로 800px 이하) */
@@ -107,23 +108,37 @@
 	}
 	
 	.main_wrappper > div:nth-of-type(2) {
-		margin-top: 30px;
+		margin-top: 3rem;
 	}
 	
 	.login_area {
 		display: none;
 	}
 	
-	.rank_area .table {
-		grid-template-columns: repeat(2, auto 3fr minmax(56px, 1fr));
+	.rank_area {
+		padding: 0 1rem;
 	}
 	
-	.rank_area .table div.title {
+	.rank_area .table {
+		grid-template-columns: repeat(2, auto 3fr minmax(5.6rem, 1fr));
+	}
+	
+	.rank_area .table div.th {
 		display: none;
 	}
 }
 
 /* Mobile (가로 480px 이하) */
 @media screen and (max-width: 480px) {
+	.rank_area {
+		height: 18rem;
+	}
 	
+	.rank_area .table {
+		grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
+	}
+	
+	.main_board_area .table {
+		grid-template-columns: 4fr minmax(8rem, 1fr);
+	}
 }
