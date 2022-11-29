@@ -277,10 +277,15 @@
 .comm_btn {
 	position: relative;
 	text-align: right;
+	line-height: 2rem;
+    min-height: 2rem;
 }
 
 .comm_btn > .left {float: left;}
-.comm_btn > a {font-size: 1.4rem;}
+.comm_btn > a {
+	font-size: 1.4rem;
+	line-height: 2rem;
+}
 .comm_btn > a:nth-child(n+2) {margin-left: 1rem;}
 .comm_btn > a.reply_show_btn::after {
 	content: '';
