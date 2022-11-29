@@ -196,13 +196,11 @@
 	vertical-align: middle;
 }
 
-.board_info .writer:nth-child(n+2),
-.board_info .date:nth-child(n+2) {
-	margin-left: 0.5rem;
-}
-
 .board_info .writer {font-size: 1.6rem;}
+.board_info .writer:nth-child(n+2) {margin-left: 0.5rem;}
+
 .board_info .date {font-size: 1.4rem;}
+.board_info .date:nth-child(n+2) {margin-left: 0.5rem;}
 
 .board_content_area {
 	position: relative;
@@ -386,6 +384,14 @@
 
 /* Mobile (가로 480px 이하) */
 @media screen and (max-width: 480px) {
+	/* 공통 */
+	.board_info .date {
+		display: block;
+		text-align: right;
+	}
+	.board_info .date:nth-child(n+2) {margin-left: 0;}
+	
+	/* 댓글 */
 	.area-board-comm.reply {padding: 1rem 0 1rem 3.5rem;}
 	
 	.comm_form .comm_textarea {width: calc(100% - 5rem);}
