@@ -396,4 +396,10 @@
 	
 	.comm_form .comm_textarea {width: calc(100% - 5rem);}
 	.comm_form button {width: 5rem;}
+	
+	/* 공지사항 */
+	#fix_date_div {
+		display: block;
+		margin-left: 0;
+	}
 }
