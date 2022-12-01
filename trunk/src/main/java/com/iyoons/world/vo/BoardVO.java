@@ -34,16 +34,15 @@ public class BoardVO {
 	private List<BoardVO> fixedBoardList;
 	private String search; //검색 항목
 	private String keyword; //검색 내용
-	private String hideName;
-	private int hideCheck;
-	private String fullFileName;
-	private int attachCnt;
-	private int commentsCnt;
-	private String [] fileUuidArray;
-	private String fileUuid;
-	private String fixStartDt;
-	private String fixEndDt;
-	private String boardUrl;
-	private int heartCount;
-	private String heartCheck;
+	private String hideName; // 익명이름
+	private int hideCheck; // 익명 확인 숫자  - 1 익명
+	private String fullFileName; // 게시글에 첨부된 파일이름 -  파일명.확장자
+	private int attachCnt; // 첨부파일 갯수
+	private int commentsCnt; // 댓글 수
+	private String [] fileUuidArray; // 글 수정시 가감되는 첨부파일의 배열
+	private String fileUuid; // 글 수정시 가감되는 첨부파일 배열에게서 for문으로 대입되어 db에 입력되는 첨부파일 테이블의 pk
+	private String fixStartDt; // 공지사항 게시판 상단고정 시작날짜
+	private String fixEndDt; // 공지사항 게시판 상단고정 종료날짜
+	private int heartCount; // 게시글에 대한 좋아요 총 갯수
+	private String heartCheck; // 좋아요를 누른적이 있는지 확인용
 }

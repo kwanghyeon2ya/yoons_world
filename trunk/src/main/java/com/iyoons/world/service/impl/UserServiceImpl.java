@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserDAO userDAO;
 	
-//	private final Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public String getShaAlgorithm(String password , String salt_key) throws NoSuchAlgorithmException {
@@ -36,9 +35,10 @@ public class UserServiceImpl implements UserService {
 		MessageDigest sh = MessageDigest.getInstance("SHA-256");
 		sh.update(password.getBytes()); // 데이터를 해쉬
 		byte byteData[] = sh.digest(); // 시큐리티의 MessageDigest클래스의 digest() - 바이트 배열로 해쉬를 반환함
-		logger.info("byteData - 바이트배열 크기 : "+byteData.length);
-		StringBuffer sb = new StringBuffer();
 		
+		logger.debug("byteData - 바이트배열 크기 : "+byteData.length);
+		
+		StringBuffer sb = new StringBuffer();
 		
 		for(byte bt: byteData) {
 			sb.append(Integer.toString((bt & 0xff) + 0x100, 16).substring(1));//바이트를 문자열로
@@ -56,8 +56,6 @@ public class UserServiceImpl implements UserService {
 		
 //		String [] str = {pw,hashPw,salt_key};
 //		String resultPw = Arrays.toString(str);
-		System.out.println(salt_key);
-		System.out.println(hashPw);
 		return hashPw;
 	}
 	
@@ -79,39 +77,29 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO findUser(UserVO userVO) {
+	public UserVO findUser(UserVO userVO) throws NoSuchAlgorithmException {
 		
-		try {
-			userVO.setUserPw(getHashPw(userVO));
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.info("유저 찾기 시 발견된 알고리즘 없음"+e);
-		}
+		userVO.setUserPw(getHashPw(userVO));
 		
 		return userDAO.findUser(userVO);
 	}
 
 	@Override
-	public int insertUser(UserVO userVO) throws SQLException {
+	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		
-		try {
-			userVO.setUserPw(getHashPw(userVO));
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.info("등록시 발견된 알고리즘 없음"+e);
-		}
+		userVO.setUserPw(getHashPw(userVO));
 		
 		return userDAO.insertUser(userVO);
 	}
 
 	@Override
-	public int updateUser(UserVO userVO) throws SQLException {
+	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		
+		userVO.setUserPw(getHashPw(userVO));
 		
 		return userDAO.updateUser(userVO);
 	}

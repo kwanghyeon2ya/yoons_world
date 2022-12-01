@@ -1,11 +1,16 @@
 package com.iyoons.world.controller;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +34,8 @@ public class UserAdminController {
 	
 	@Autowired 
 	PagingService pageService;
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
 	public String userList(PageVO pagevo,Model model) {
@@ -122,14 +129,21 @@ public class UserAdminController {
 
 	// 회원 수정 처리
 		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
-		public String userUpdate(UserVO userVO,Model model) throws SQLException {
+		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request) throws SQLException, IOException {
 			
 			System.out.println(userVO);
 			if("self_writing".equals(userVO.getEmailPart2())) {
 				userVO.setEmailPart2(userVO.getEmailPart3());
 			}
 			
-			userService.updateUser(userVO);
+			try {
+				userService.updateUser(userVO);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error("NoSuchAlgorithmException"+e);
+				response.sendRedirect(request.getContextPath()+"/login/loginView");
+			}
 			model.addAttribute("msg", "수정 되었습니다!");
 			model.addAttribute("loc", "/admin/member/list");
 			

@@ -31,7 +31,7 @@ public class UserVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date lastUpdateDt; //회원정보 수정일자
 	private String depName;
-	private List<String> userSeqArray;
-	private String checkToken;
+	private List<String> userSeqArray; // 관리자페이지 - 회원관리리스트에서 삭제or수정에 체크된 회원
+	private String checkTokenYn; // 로그인 페이지에서 자동로그인 checkbox의 value값 확인용
 	
 }

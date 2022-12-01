@@ -1,13 +1,17 @@
 package com.iyoons.world.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +47,8 @@ public class BoardController {
 	@Autowired
 	public AttachService aservice;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	/*public void commentsList(String pageNum,int postSeq,Model model) {
 		
 		int pageSize = 4;
@@ -76,7 +82,7 @@ public class BoardController {
 		int endRow = pageSize * currentPage;
 		int count = 0;
 		count = service.getBoardCount(boardType);
-		System.out.println(keyword);
+		logger.debug("keyword : "+keyword);
 		if(searchCheck != null && search != null && keyword != null) {
 			count = service.getSearchCount(search, keyword, searchCheck, startRow, endRow, boardType);
 		}
@@ -158,65 +164,6 @@ public class BoardController {
 		return "board/boardListForMain"; 
 	}
 	
-	/*@RequestMapping(value="free/freeListForMain",method=RequestMethod.GET)
-	public String freeListForMain(Model model) {
-		
-		int count = 0;
-		String boardType = "0";
-		int startRow = 1;
-		int endRow = 5;
-		int pageSize = 0;
-		count = service.getBoardCount(boardType);
-		System.out.println("free count : "+count);
-		
-		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
-		
-		model.addAttribute("pageSize",pageSize);
-		model.addAttribute("count",count);
-		model.addAttribute("boardList",boardList);
-		
-		return "board/free/freeListForMain";
-	}
-	@RequestMapping(value="notice/noticeListForMain",method=RequestMethod.GET)
-	public String noticeListForMain(Model model) {
-		
-		int count = 0;
-		String boardType = "1";
-		int startRow = 1;
-		int endRow = 5;
-		int pageSize = 0;
-		System.out.println("service.getBoardCount(boardType) : " + service.getBoardCount(boardType));
-		count = service.getBoardCount(boardType);
-		System.out.println("notice count : "+count);
-		
-		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
-		
-		model.addAttribute("pageSize",pageSize);
-		model.addAttribute("count",count);
-		model.addAttribute("boardList",boardList);
-		
-		return "board/notice/noticeListForMain";
-	}
-	@RequestMapping(value="pds/pdsListForMain",method=RequestMethod.GET)
-	public String pdsListForMain(Model model) {
-		
-		int count = 0;
-		String boardType = "2";
-		int startRow = 1;
-		int endRow = 5;
-		int pageSize = 0;
-		count = service.getBoardCount(boardType);
-		System.out.println("pds count : "+count);
-		
-		List<BoardVO> boardList = service.getListForMain(startRow,endRow,boardType);
-		
-		model.addAttribute("pageSize",pageSize);
-		model.addAttribute("count",count);
-		model.addAttribute("boardList",boardList);
-		
-		return "board/pds/pdsListForMain";
-	}*/
-	
 	@RequestMapping(value="getAllBoardListForReadCount",method=RequestMethod.GET)
 	public String getAllBoardListForReadCount(Model model) {
 		
@@ -226,7 +173,7 @@ public class BoardController {
 		
 		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCount(startRow, endRow);
 		
-		System.out.println("boardList : zz"+boardList);
+		logger.debug("boardList : " +boardList);
 		
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("boardList",boardList);
@@ -242,7 +189,7 @@ public class BoardController {
 		
 		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
 		
-		System.out.println("boardList : "+boardList);
+		logger.debug("boardList : " +boardList);
 		
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("boardList",boardList);
@@ -250,79 +197,132 @@ public class BoardController {
 	}
 	
 	@RequestMapping("free/modify")
-	public String FreeModify(String postSeq,Model model,HttpSession session) {
-		int postSeq2 = Integer.parseInt(postSeq);
-		BoardVO vo2 = service.getView(postSeq2);
-		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		if(sessionSeqForUser == vo2.getRegrSeq()) {
-			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			model.addAttribute("vo",vo2);
-			model.addAttribute("anlist",anlist);
-			return "board/free/modify";	
+	public String FreeModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+
+		try {
+			int postSeq2 = Integer.parseInt(postSeq);
+			BoardVO vo2 = service.getView(postSeq2);
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+			if (sessionSeqForUser == vo2.getRegrSeq()) {
+				List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+				model.addAttribute("vo", vo2);
+				model.addAttribute("anlist", anlist);
+				return "board/free/modify";
+			} else {
+				return "common/nuguruman";
+			}
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
-			return "common/nuguruman";
+
 	}
-	
+
 	@RequestMapping("notice/modify")
-	public String NoticeModify(String postSeq,Model model,HttpSession session) {
-		int postSeq2 = Integer.parseInt(postSeq);
-		BoardVO vo2 = service.getView(postSeq2);
-		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		if(sessionSeqForUser == vo2.getRegrSeq()) {
-			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			model.addAttribute("vo",vo2);
-			model.addAttribute("anlist",anlist);
-			return "board/notice/modify";	
+	public String NoticeModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		try {
+			int postSeq2 = Integer.parseInt(postSeq);
+			BoardVO vo2 = service.getView(postSeq2);
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+			if (sessionSeqForUser == vo2.getRegrSeq()) {
+				List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+				model.addAttribute("vo", vo2);
+				model.addAttribute("anlist", anlist);
+				return "board/notice/modify";
+			} else {
+				return "common/nuguruman";
+			}
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
-			return "common/nuguruman";
 	}
-	
+
 	@RequestMapping("pds/modify")
-	public String PdsModify(String postSeq,Model model,HttpSession session) {
-		int postSeq2 = Integer.parseInt(postSeq);
-		BoardVO vo2 = service.getView(postSeq2);
-		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		if(sessionSeqForUser == vo2.getRegrSeq()) {
-			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-			model.addAttribute("vo",vo2);
-			model.addAttribute("anlist",anlist);
-			return "board/pds/modify";	
+	public String PdsModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		try {
+			int postSeq2 = Integer.parseInt(postSeq);
+			BoardVO vo2 = service.getView(postSeq2);
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+			if (sessionSeqForUser == vo2.getRegrSeq()) {
+				List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+				model.addAttribute("vo", vo2);
+				model.addAttribute("anlist", anlist);
+				return "board/pds/modify";
+			} else {
+				return "common/nuguruman";
+			}
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
-			return "common/nuguruman";
 	}
-	
-	@RequestMapping(value="modifyViewProc",method=RequestMethod.POST)
-	@ResponseBody public int modViewProc(BoardVO vo,HttpSession session,
-										@RequestParam(value="file",required=false)MultipartFile[] files) {
-		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+
+	@RequestMapping(value = "modifyViewProc", method = RequestMethod.POST)
+	@ResponseBody
+	public int modViewProc(BoardVO vo, HttpSession session,
+			@RequestParam(value = "file", required = false) MultipartFile[] files) {
+		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
 		BoardVO vo2 = service.getView(vo.getPostSeq());
-		if(vo.getBoardFixYn() == null) {
+		if (vo.getBoardFixYn() == null) {
 			vo.setBoardFixYn("N");
 		}
-		if(!files[0].isEmpty()) {
+		if (!files[0].isEmpty()) {
 			vo.setFileAttachYn("Y");
-			}
-		if(vo2.getRegrSeq() == sessionSeqForUser) {
+		}
+		if (vo2.getRegrSeq() == sessionSeqForUser) {
 			vo.setUpdrSeq(sessionSeqForUser);
 			vo.setRegrSeq(sessionSeqForUser);
-		
-		return service.modView(vo,files);
+
+			return service.modView(vo, files);
 		}
-		
+
 		return 0;
 	}
-	@RequestMapping(value="modifyCommentProc",method=RequestMethod.POST)
-	@ResponseBody public String modCommentProc(CommentsVO vo,HttpSession session) {
-		
-		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		
+
+	@RequestMapping(value = "modifyCommentProc", method = RequestMethod.POST)
+	@ResponseBody
+	public String modCommentProc(CommentsVO vo, HttpSession session) {
+
+		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+
 		CommentsVO vo2 = cservice.getComment(vo);
-		System.out.println("sessionSeq : "+sessionSeqForUser);
-		System.out.println("vo2.regrSeq : "+vo2.getRegrSeq());
-		System.out.println("vo2postSeq : "+vo2.getPostSeq());
-		if(sessionSeqForUser == vo2.getRegrSeq()) {
-		vo.setUpdrSeq(sessionSeqForUser);
-			if(cservice.modComment(vo) == 1) {
+		System.out.println("sessionSeq : " + sessionSeqForUser);
+		System.out.println("vo2.regrSeq : " + vo2.getRegrSeq());
+		System.out.println("vo2postSeq : " + vo2.getPostSeq());
+		if (sessionSeqForUser == vo2.getRegrSeq()) {
+			vo.setUpdrSeq(sessionSeqForUser);
+			if (cservice.modComment(vo) == 1) {
 				System.out.println("댓글 업데이트 진입 확인");
 				CommentsVO vo3 = cservice.getComment(vo);
 				System.out.println(vo3.getCommContent());
@@ -331,166 +331,206 @@ public class BoardController {
 		}
 		return "";
 	}
-	
-	
-	@RequestMapping(value="comments")
-	public String getComments(CommentsVO cvo,Model model) {
-		
-		if(cvo.getStartIndex() == 0) {
+
+	@RequestMapping(value = "comments")
+	public String getComments(CommentsVO cvo, Model model) {
+
+		if (cvo.getStartIndex() == 0) {
 			System.out.println("StartIndex nullcheck");
 			cvo.setStartIndex(1);
 			cvo.setEndIndex(10);
 		}
-		
-		if(cvo.getCocoCount() == 0) {
-			System.out.println("cocoCount 첫등장: "+cvo.getCocoCount());
+
+		if (cvo.getCocoCount() == 0) {
+			System.out.println("cocoCount 첫등장: " + cvo.getCocoCount());
 			cvo.setCocoCount(10);
-		}else {
-			cvo.setCocoCount(cvo.getCocoCount()+10); //더보기 버튼 필요한지 확인용 +10 - 밑에서 비교함
-		}	// view페이지에 처음 접근할 때 는 0이 넘어오지만, 후에는 10단위로 더해져 넘어옴(html 태그 length 값)
+		} else {
+			cvo.setCocoCount(cvo.getCocoCount() + 10); // 더보기 버튼 필요한지 확인용 +10 - 밑에서 비교함
+		} // view페이지에 처음 접근할 때 는 0이 넘어오지만, 후에는 10단위로 더해져 넘어옴(html 태그 length 값)
 			// ajax후에 태그 갯수를 세는 것이기 때문에 10을 더해서 계산해야함 -> 더보기 버튼 활성화/비활성화 용도
-		
+
 		BoardVO vo = service.getView(cvo.getPostSeq());
-		
-		if(vo == null) { // Null체크 - 글삭제 후 뒤로가기시 Null
-			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-		 }
-		
-		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); //존재하는 댓글의 카운트-status가 1인글
-		
+
+		if (vo == null) { // Null체크 - 글삭제 후 뒤로가기시 Null
+			return "redirect:/board/free/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		}
+
+		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); // 존재하는 댓글의 카운트-status가 1인글
+
 		List<CommentsVO> clist = cservice.getCommentsList(cvo);
-		System.out.println("clist size :" +clist.size());
-		for(CommentsVO comm : clist) {
-			if(comm.getNestedCommentsCnt() >= 1) {//대댓글 갯수
-				comm.setCocoList(cservice.getNestedCommentsList(comm));//대댓글을 List로 담음
+		System.out.println("clist size :" + clist.size());
+		for (CommentsVO comm : clist) {
+			if (comm.getNestedCommentsCnt() >= 1) {// 대댓글 갯수
+				comm.setCocoList(cservice.getNestedCommentsList(comm));// 대댓글을 List로 담음
 			}
 		}
-		
+
 		int stopMoreCommentsButton = 0;
-		
-		int maxCommentsCount = cservice.getALLCommentsCount(vo.getPostSeq()); //본 댓글 갯 수
-		
-		System.out.println("cococount : "+cvo.getCocoCount());
-		System.out.println("endindex : "+cvo.getEndIndex());
-		System.out.println("maxcommentcount : "+maxCommentsCount);
-		
-		if(cvo.getCocoCount() >= maxCommentsCount) { //더보기 버튼 변화
+
+		int maxCommentsCount = cservice.getALLCommentsCount(vo.getPostSeq()); // 본 댓글 갯 수
+
+		System.out.println("cococount : " + cvo.getCocoCount());
+		System.out.println("endindex : " + cvo.getEndIndex());
+		System.out.println("maxcommentcount : " + maxCommentsCount);
+
+		if (cvo.getCocoCount() >= maxCommentsCount) { // 더보기 버튼 변화
 			stopMoreCommentsButton = 1;
-			System.out.println("stopMoreCommentsButton : "+stopMoreCommentsButton);
+			System.out.println("stopMoreCommentsButton : " + stopMoreCommentsButton);
 		}
-		
-		model.addAttribute("stopMoreCommentsButton",stopMoreCommentsButton);
-		model.addAttribute("vo",vo);
-		model.addAttribute("clist",clist);
-		model.addAttribute("existCount",existCount);
-		
+
+		model.addAttribute("stopMoreCommentsButton", stopMoreCommentsButton);
+		model.addAttribute("vo", vo);
+		model.addAttribute("clist", clist);
+		model.addAttribute("existCount", existCount);
+
 		return "board/comments";
 	}
-	
-	@RequestMapping(value="getMoreCommentsList") // 댓글 더 보기(클릭시)
-	@ResponseBody public String getMoreCommentsList(CommentsVO cvo) {
-		
+
+	@RequestMapping(value = "getMoreCommentsList") // 댓글 더 보기(클릭시)
+	@ResponseBody
+	public String getMoreCommentsList(CommentsVO cvo) {
+
 		BoardVO vo = service.getView(cvo.getPostSeq());
 
-		if(vo == null) {
-			return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+		if (vo == null) {
+			return "redirect:/board/free/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 		}
-		
+
 		List<CommentsVO> cmlist = cservice.getCommentsList(cvo);
-		
+
 		Gson gson = new Gson();
 		String cmlistString = gson.toJson(cmlist); // list를 object로 바꾸고 다시 문자열로 바꿈
-		
+
 		return cmlistString;
 	}
-	
-	@RequestMapping("free/view")
-	public String getFreeView(@RequestParam(value="postSeq",required=false)String postSeq,
-						Model model,HttpSession session) {
-			 
-		 int postSeq2 = Integer.parseInt(postSeq);
-		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-		 BoardVO vo = service.getView(postSeq2);//DB조회
-		 
 
-		 if(vo == null) { // Null체크 - 뒤로가기시 Null
-			 return "redirect:/login/logout";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-		 }
-		 
-		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 
-		 vo.setPostSeq(postSeq2); 
-		 vo.setRegrSeq(sessionSeqForUser);
-		 vo.setUserSeq(sessionSeqForUser);
-		 
-		 int checkHeart = service.checkHeart(vo);
-		 int heartCount = service.getHeartCount(vo);
-		
-		 System.out.println(checkHeart+": 좋아요 체크 0 = 하트안누름");
-		 System.out.println(heartCount);
-		 if(vo.getRegrSeq() != sessionSeqForUser) {
-			 service.updateCnt(postSeq2);	 
-		 }
-		 
-			 model.addAttribute("vo",vo);
-			 model.addAttribute("heartCount",heartCount);
-			 model.addAttribute("checkHeart",checkHeart);
-			 model.addAttribute("anlist",anlist);
-			 return "board/free/view";
+	@RequestMapping("free/view")
+	public String getFreeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		try {
+
+			int postSeq2 = Integer.parseInt(postSeq);
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			BoardVO vo = service.getView(postSeq2);// DB조회
+
+			if (vo == null) { // Null체크 - 뒤로가기시 Null
+				return "redirect:/login/logout"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			}
+
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+
+			vo.setPostSeq(postSeq2);
+			vo.setRegrSeq(sessionSeqForUser);
+			vo.setUserSeq(sessionSeqForUser);
+
+			int checkHeart = service.checkHeart(vo);
+			int heartCount = service.getHeartCount(vo);
+
+			System.out.println(checkHeart + ": 좋아요 체크 0 = 하트안누름");
+			System.out.println(heartCount);
+			if (vo.getRegrSeq() != sessionSeqForUser) {
+				service.updateCnt(postSeq2);
+			}
+
+			model.addAttribute("vo", vo);
+			model.addAttribute("heartCount", heartCount);
+			model.addAttribute("checkHeart", checkHeart);
+			model.addAttribute("anlist", anlist);
+			return "board/free/view";
+
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		}
 	}
 	
-	
 	@RequestMapping("notice/view")
-	public String getNoticeView(@RequestParam(value="postSeq",required=false)String postSeq,
-						Model model,HttpSession session) {
-			 
-		int postSeq2 = Integer.parseInt(postSeq);
-		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-		 BoardVO vo = service.getView(postSeq2); //DB조회
-		 
-		 if(vo == null) { // Null체크 - 뒤로가기시 Null
-			 return "redirect:/board/notice/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-		 }
-		 
-		 if(session.getAttribute("sessionSeqForUser") == null) {
-			 return "redirect:/board/notice/list";
-		 }
-		
-		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 
-		 if(vo.getRegrSeq() != sessionSeqForUser) {
-			 service.updateCnt(postSeq2);	 
-		 }
-		 
-			 model.addAttribute("vo",vo);
-			 model.addAttribute("anlist",anlist);
-			 return "board/notice/view";
-		 }
-	
+	public String getNoticeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			int postSeq2 = Integer.parseInt(postSeq);
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			BoardVO vo = service.getView(postSeq2); // DB조회
+
+			if (vo == null) { // Null체크 - 뒤로가기시 Null
+				return "redirect:/board/notice/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			}
+
+			if (session.getAttribute("sessionSeqForUser") == null) {
+				return "redirect:/board/notice/list";
+			}
+
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+
+			if (vo.getRegrSeq() != sessionSeqForUser) {
+				service.updateCnt(postSeq2);
+			}
+
+			model.addAttribute("vo", vo);
+			model.addAttribute("anlist", anlist);
+			return "board/notice/view";
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		}
+	}
+
 	@RequestMapping("pds/view")
-	public String getPdsView(@RequestParam(value="postSeq",required=false)String postSeq,
-						Model model,HttpSession session) {
-			 
-		int postSeq2 = Integer.parseInt(postSeq);
-		 List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
-		 BoardVO vo = service.getView(postSeq2);//DB조회
-		 
-		 if(vo == null) { // Null체크 - 뒤로가기시 Null
-			 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-		 }
-		 
-		 if(session.getAttribute("sessionSeqForUser") == null) {
-			 return "redirect:/board/pds/list";
-		 }
-		 
-		 int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
-		 
-		 if(vo.getRegrSeq() != sessionSeqForUser) {
-			 service.updateCnt(postSeq2);	 
-		 }
-			 model.addAttribute("vo",vo);
-			 model.addAttribute("anlist",anlist);
-			 return "board/pds/view";
+	public String getPdsView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		try {
+
+			int postSeq2 = Integer.parseInt(postSeq);
+			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
+			BoardVO vo = service.getView(postSeq2);// DB조회
+
+			if (vo == null) { // Null체크 - 뒤로가기시 Null
+				return "redirect:/board/free/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			}
+
+			if (session.getAttribute("sessionSeqForUser") == null) {
+				return "redirect:/board/pds/list";
+			}
+
+			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+
+			if (vo.getRegrSeq() != sessionSeqForUser) {
+				service.updateCnt(postSeq2);
+			}
+			model.addAttribute("vo", vo);
+			model.addAttribute("anlist", anlist);
+			return "board/pds/view";
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		}
 	}
 	
 	@RequestMapping(value="increasingHeartProc",method=RequestMethod.GET)
@@ -527,9 +567,11 @@ public class BoardController {
 	@ResponseBody public int WriteCheck(
 			@RequestParam(value="file",required=false) MultipartFile[] files,
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
-			HttpSession session
-			) throws Exception {
+			HttpSession session,HttpServletResponse response,Model model
+			) throws IOException{
+		int result = 0;
 		
+		try {
 		System.out.println("vo값 :"+vo);
 		
 		String name = (String)session.getAttribute("sessionNameForUser");
@@ -550,9 +592,25 @@ public class BoardController {
 		vo.setRegrSeq(sessionSeqForUser);
 		if(!files[0].isEmpty()) {
 		vo.setFileAttachYn("Y");
+		
 		}
 		
-		int result = service.insertBoard(vo,files);
+		result = service.insertBoard(vo,files);
+		
+		
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			response.sendRedirect(request.getContextPath()+"/common/msg");
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			response.sendRedirect(request.getContextPath()+"/common/msg");
+		}
 		return result;
 	}
 	

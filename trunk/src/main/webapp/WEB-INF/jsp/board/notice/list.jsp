@@ -117,7 +117,7 @@
 						</c:if>
 						
 						<c:if test="${startPage > 10}">
-							<a href="/board/notice/list?boardType=1&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">&lt</a>
+							<a href="/board/notice/list?boardType=1&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">&lt;</a>
 						</c:if>
 						
 						<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
@@ -130,7 +130,7 @@
 						</c:forEach> 
 						
 						<c:if test="${endPage < pageCount}">
-							<a href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${startPage + 10}">&gt</a>
+							<a href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${startPage + 10}">&gt;</a>
 						</c:if>
 					</c:if>
 				</div>

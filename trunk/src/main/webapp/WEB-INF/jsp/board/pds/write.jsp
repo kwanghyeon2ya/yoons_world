@@ -8,99 +8,76 @@
 	if (request.getProtocol().equals("HTTP/1.1"))
 		response.setHeader("Cache-Control", "no-cache");
 %>
+<!DOCTYPE html>
+<html>
+<head>
+	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+	<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
+	
+	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
-<!-- Header -->
-<jsp:include page="../../common/header.jsp" flush="false"/>
+	<c:if test="${sessionScope.sessionSeqForUser == null}">
+		<script>
+			alert("로그인화면으로 이동합니다");
+			location.href="/login/loginView";
+		</script>
+	</c:if>
 
-<c:if test="${sessionScope.sessionSeqForUser == null}">
 	<script>
-	alert("로그인화면으로 이동합니다");
-	location.href="/login/loginView";
+		function MoveAction(){
+			var url = "/board/pds/list";
+			document.getElementById("board_type").value = 2;
+			WriteBoardCheck(url);
+		}
 	</script>
-</c:if>
-
-<script>
-function MoveAction(){
-	var url = "/board/pds/list";
-	document.getElementById("board_type").value = 2;
-	WriteBoardCheck(url);
-}
-</script>
+</head>
+<body>
 <!-- Main -->
-<div id="main">
-	<div class="container">
-		<div class="col-12">
+<div id="page-wrapper">
 		
-			<div class="title-page">
-				<h3>자료실</h3>
-			</div>
+		<!-- Header -->
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false"/>
+		
+		<!-- Container -->
+		<div id="container">
+		
+			<div class="content">
 			
-			<div class="board_write">
-				<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
+			<h3>자료실</h3>
+			
+			<form id="insert_board_form" name="insert_board_form" method="POST" class="board-inline">
 					<input type="hidden" name="boardType" id="board_type"/>
- 					<textarea name="content" id="content" style="display:none;"></textarea>
 					
-					
-					<div class="area-board">
-                    	<span>작성자 : ${sessionScope.sessionNameForUser}</span>
-						<div class="area-board-n">
-						
-						<div style="display:inline;text-align:right">
-							<!-- script연습예정 -->
-						</div>
-						</div>
-						<input type="text" id="subject" name="subject" placeholder="제목을 입력하세요"/>								
-                    </div>
-
-                        
-
-
-					<div class="area-board-cont">
-                       	<textarea id="summernote" name="editordata"></textarea>
+					<div class="input_area">
+						<input type="text" id="subject" name="subject" class="size_full" placeholder="제목을 입력하세요" />
 					</div>
 					
-					<span id="word_count"></span>
+					<div class="editor_area">
+                       	<textarea id="summernote" name="editordata"></textarea>
+                       	<textarea name="content" id="content" style="display:none;"></textarea>
+					</div>
+					<div id="word_count">[0/4000자]</div>
 					
-					<input type="file" name="file" id="file" multiple="multiple"/>
+					<div class="input_area">
+						<h4>첨부 파일</h4>
+						<input type="file" name="file" id="file" class="size_full" multiple="multiple"/>
+					</div>
 					
-					<div class="area-button">
-						<!--button type="submit">등록</button-->
-						<button id="move_action_button" type="button" onclick="MoveAction();">등록</button>
-						<!-- <a href="javascript:WriteBoardCheck();">등록</a> -->
-						<button type="button" onclick="location.href='/board/pds/list'">취소</button>
+					<div class="btn_area right">
+						<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
+						<button type="button" id="move_action_button" class="btn type_02 size_s bg_purple" onclick="MoveAction();">등록</button>
+						</c:if>
+						<button type="button" class="btn type_02 size_s bg_aaa" onclick="location.href='/board/notice/list'">취소</button>
 					</div>
 					
                 </form>
-                
+				
 			</div>
-			
 		</div>
+		
+		<!-- Footer -->
+		<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/>
+		
 	</div>
-</div>
-
-<script>
-	$('#summernote').summernote({
-	  /*placeholder: '내용을 입력해주세요',*/
-	  tabsize: 2,
-	  height: 300,
-	  lang: 'ko-KR',
-	  toolbar: [
-	  	['style', ['style']],
-		['font', ['bold', 'underline', 'clear']]
-	 	/* ['insert', ['link', 'picture', 'video']] */
-		/*['style', ['style']],
-		['font', ['bold', 'underline', 'clear']],
-		['color', ['color']],
-		['para', ['ul', 'ol', 'paragraph']],
-		['table', ['table']],								
-		['view', ['fullscreen', 'codeview', 'help']]*/
-		]
-	});
-</script>
-<script>
-	$("#nav a").removeClass("current-page-item");
-	$("#nav").find('a[href*="/pds"]').addClass("current-page-item");
-</script>
-
-<!-- Footer -->
-<jsp:include page="../../common/footer.jsp" flush="false"/>
+</body>
+</html>

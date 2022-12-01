@@ -251,7 +251,7 @@
             pb.board_fix_yn,
             pb.first_insert_dt,
             pb.last_update_dt,
-			(select count(1) from comments c1 where pb.post_seq = c1.post_seq) as comments_cnt
+			(select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt
         from
         	post_board pb
         where 

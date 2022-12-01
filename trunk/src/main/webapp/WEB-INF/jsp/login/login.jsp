@@ -42,14 +42,14 @@
 				return;
 			}
 			
-			if($("input:checkbox[id='checkToken']").is(":checked") == true){
+			if($("input:checkbox[id='checkTokenYn']").is(":checked") == true){
 				checkTokenValue = "Y";
 			}
 			
 			var json = {
 				userId : $("#userID").val(),
 				userPw : $("#password").val(),
-				checkToken : checkTokenValue
+				checkTokenYn : checkTokenValue
 			};
 			
 			 $.ajax({
@@ -100,8 +100,8 @@
 							<input type="password" id="password" class="size_full" name="password" placeholder="비밀번호">
 						</div>
 						<div>
-							<input type="checkbox" id="checkToken" name="checkToken" value="Y"/>
-							<label for="checkToken">
+							<input type="checkbox" id="checkTokenYn" name="checkTokenYn" value="Y"/>
+							<label for="checkTokenYn">
 								<span>로그인 기억</span>
 							</label>
 						</div>
