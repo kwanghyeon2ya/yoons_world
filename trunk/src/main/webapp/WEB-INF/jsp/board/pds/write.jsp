@@ -24,11 +24,53 @@
 	</c:if>
 
 	<script>
-		function MoveAction(){
-			var url = "/board/pds/list";
-			document.getElementById("board_type").value = 2;
-			WriteBoardCheck(url);
+	
+	function getFileList(){
+
+		var fileTarget = $("input[name=file]"); // 파일
+		var fileLength = $("input[name=file]")[0].files.length; // 파일 요소의 갯수
+		
+		var fileList = "";
+		
+		for(var i = 0;i<fileLength;i++){
+			fileList += fileTarget[0].files[i].name + '&nbsp; <img class="delete_file" src="/img/board/x_icon.png" style="cursor:pointer;position:relative;top:3.5px;" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">' + '<br>';
 		}
+		
+		if(fileLength > 0){
+			console.log("block 진입");
+			$(".file_list").css("display","block");
+			$(".file_name").html(fileList);
+		}else{
+			console.log("fileList");
+			console.log("none 진입");
+			$(".file_list").css("display","none");
+			$(".file_name").empty();
+		}
+	}
+	
+	
+	function deleteFile(file_number){
+		
+		const files = $("input[name=file]")[0].files;
+		const dataTransfer = new DataTransfer();
+		
+		Array.from(files)
+			.filter(file => file.lastModified != file_number)
+			.forEach(file => {
+				dataTransfer.items.add(file);
+		})
+		
+		$("input[name=file]")[0].files = dataTransfer.files;
+		
+		getFileList();
+		
+	}
+	
+	function MoveAction(){
+		var url = "/board/pds/list";
+		document.getElementById("board_type").value = 2;
+		WriteBoardCheck(url);
+	}
 	</script>
 </head>
 <body>
@@ -60,7 +102,12 @@
 					
 					<div class="input_area">
 						<h4>첨부 파일</h4>
-						<input type="file" name="file" id="file" class="size_full" multiple="multiple"/>
+						<ul class="file_list" style="display:none">
+							<li>
+								<span class="file_name"></span>
+							</li>
+						</ul>
+						<input type="file" name="file" id="file" class="size_full" onchange="getFileList()" multiple="multiple"/>
 					</div>
 					
 					<div class="btn_area right">

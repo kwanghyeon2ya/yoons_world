@@ -52,6 +52,12 @@
 				
 				<h2>공지사항</h2>
 				
+				<c:if test="${vo.expiryDt ne 0}">
+					<div class="input_area" align="right">
+						<span style="font-size: 15px;">앞으로 ${vo.expiryDt}일간 고정됩니다.</span>
+					</div>
+				</c:if>
+				
 				<div class="board_info_area">
 					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
@@ -60,7 +66,9 @@
 					<div class="board_view_cnt" title="조회수">
 						<span class="view_cnt">${vo.readCnt}</span>
 					</div>
-	
+
+					
+
 					<div class="board_info">
 						<div class="between">
 							<div>
@@ -87,7 +95,7 @@
 					</ul>
 					</c:if>
 				</div>
-					
+
 				<div class="board_content_area">
 					<!-- 게시글 본문 영역 -->
 					${vo.content}

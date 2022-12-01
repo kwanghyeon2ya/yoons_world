@@ -29,17 +29,10 @@
 	/* 
 	 첨부 파일명 리스트 가져오기	
 	*/
-	function getFileList(file_number,file_name_for_del){ /* file태그 onchange function호출함 */
+	function getFileList(){ /* file태그 onchange function호출함 */
 		
 		var fileTarget = $("input[name=file]"); // 파일
 		var fileLength = $("input[name=file]")[0].files.length; // 파일 갯수
-		const dataTranster = new DataTransfer(); // input file의 FileList를 컨트롤할 예정
-		
-		console.log("file_number : "+file_number);
-		
-		if(file_number != null){
-			console.log("삭제-> 리스트 진입");
-		}
 		
 		console.log(fileTarget);
 		console.log(fileLength);
@@ -47,45 +40,47 @@
 		var fileList = "";
 		
 		for(var i = 0;i<fileLength;i++){
-			var fileName = fileTarget[0].files[i].name;
-			
-			if(file_number != null && fileName == file_name_for_del){
-				console.log("파일명같음 진입 : "+$("input[name=file]")[0].files[i]);
-				// 삭제버튼 누른 파일명 및 input file값 삭제 예정자리
-			}
-			
-			console.log("fileName : "+fileName);
-			console.log("file_name_for_del : "+file_name_for_del);
-			if(fileName != file_name_for_del){
-				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
-				fileList += fileName + '&nbsp; <img class="delete_file" src="/img/board/x_icon.png" style="cursor:pointer;position:relative;top:3.5px;" onclick="deleteFile('+i+', \''+fileName+'\');" alt="x">' + '<br>';
-				//삭제 버튼 누른 파일은 안붙도록 처리해야함
-			}
+			console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
+			fileList += fileTarget[0].files[i].name + '&nbsp; <img class="delete_file" src="/img/board/x_icon.png" style="cursor:pointer;position:relative;top:3.5px;" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">' + '<br>';
 		}
 		console.log("fileList : "+fileList);
 		console.log("fileLength 재확인 : "+fileLength);
 		if(fileLength > 0){
 			console.log("block 진입");
-			$("#multi_file_list").css("display","block");
-			$("#show_files").html(fileList);
+			$(".file_list").css("display","block");
+			$(".file_name").html(fileList);
 		}else{
 			console.log("fileList");
 			console.log("none 진입");
-			$("#multi_file_list").css("display","none");
-			$("#show_files").empty();
+			$(".file_list").css("display","none");
+			$(".file_name").empty();
 		}
 		
 	}
 	
 	
-	function deleteFile(file_number,file_name_for_del){ // 파일 삭제 버튼을 누를시에 호출 - 인자를 getFileList(첨부파일명 리스트호출 메서드)에 넣으며 호출
+	function deleteFile(file_number){ // 파일 삭제 버튼을 누를시에 호출 - 인자를 getFileList(첨부파일명 리스트호출 메서드)에 넣으며 호출
 		
 		console.log("deleteFile 메서드 진입");
-		console.log("file_name_for_del : "+file_name_for_del);
 		console.log("file_number : "+file_number);
 		console.log("파일삭제 버튼  : "+$("input[name=file]"));
 
-		getFileList(file_number,file_name_for_del);
+		const files = $("input[name=file]")[0].files;
+		const dataTransfer = new DataTransfer(); // input file의 FileList를 컨트롤할 예정
+
+		Array.from(files)
+	        .filter(file => file.lastModified != file_number)
+	        .forEach(file => {
+        	dataTransfer.items.add(file);
+     	});
+		
+		$("input[name=file]")[0].files = dataTransfer.files;
+		
+		getFileList(); // input의 file에 들어가 있는 파일 변경후 파일 목록 변화를 위해 메서드를 호출
+		//파일선택을 직접적으로 누르지 않기때문에 onchange 작동안하기때문
+		
+		
+		
 		/* fileArray.splice(file_number,1); */
 	}
 	
@@ -192,6 +187,11 @@
 					
 					<div class="input_area">
 						<h4>첨부 파일</h4>
+						<ul class="file_list" style="display:none">
+							<li>
+								<span class="file_name"></span>
+							</li>
+						</ul>
 						<input type="file" name="file" id="file" class="size_full" onchange="getFileList()" multiple="multiple"/>
 					</div>
 					
@@ -203,11 +203,6 @@
 					</div>
 					
                 </form>
-                
-                <div id="multi_file_list" style="display:none">
-                	<span style="font-size:15px;color:rgb(159, 126, 209);">첨부된 파일 목록</span>
-                </div>
-				<div id="show_files"></div>
 			</div>
 		</div>
 		

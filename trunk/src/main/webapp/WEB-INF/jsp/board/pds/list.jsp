@@ -82,7 +82,7 @@
 								<c:forEach var="list" items="${boardList}">
 									<div>${list.postNum}</div>
 									<div>
-										<a href="/board/notice/view?postSeq=${list.postSeq}"> <span><c:out
+										<a href="/board/pds/view?postSeq=${list.postSeq}"> <span><c:out
 													value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>

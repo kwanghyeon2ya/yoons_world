@@ -80,6 +80,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 							if (alvo != null) {
 								logger.debug("bkh cookie db 조회 완료" + alvo);
 								session.setAttribute("sessionSeqForUser", alvo.getUserSeq());
+								session.setAttribute("sessionIdForUser", alvo.getUserId());
 								session.setAttribute("sessionNameForUser", alvo.getUserName());
 								session.setMaxInactiveInterval(60 * 60 * 3);
 								if (alvo.getAdminType() == 1) {

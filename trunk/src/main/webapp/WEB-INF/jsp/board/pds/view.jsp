@@ -103,11 +103,11 @@
 				<div class="btn_area right">
 					
 					<c:if test="${sessionScope.sessionSeqForUser == vo.regrSeq}">
-					<button type="button" class="btn type_02 size_s bg_purple f_left" onclick="window.location='/board/notice/modify?postSeq=${vo.postSeq}'">수정</button>
+					<button type="button" class="btn type_02 size_s bg_purple f_left" onclick="window.location='/board/pds/modify?postSeq=${vo.postSeq}'">수정</button>
 					<button type="button" class="btn type_02 size_s bg_aaa f_left" onclick="deleteMoveAction()">삭제</button>
 					</c:if>
 					
-					<button type="button" class="btn type_02 size_s bg_purple" onclick="window.location='/board/notice/list'">목록</button>
+					<button type="button" class="btn type_02 size_s bg_purple" onclick="window.location='/board/pds/list'">목록</button>
 				</div>
 				
 			</div>

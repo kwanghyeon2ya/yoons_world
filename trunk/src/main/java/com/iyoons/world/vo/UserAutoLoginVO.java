@@ -10,6 +10,7 @@ import lombok.Data;
 public class UserAutoLoginVO {
 
 	private String cookieKey; // 쿠키의 key -  pk
+	private String userId;
 	private int userSeq; // 유저의 고유번호
 	private String userName; // 유저의 이름
 	private String userIp; // 유저가 현재 접속한 pc의 외부ip

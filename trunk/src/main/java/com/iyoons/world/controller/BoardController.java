@@ -2,6 +2,7 @@ package com.iyoons.world.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -474,7 +475,22 @@ public class BoardController {
 			if (vo.getRegrSeq() != sessionSeqForUser) {
 				service.updateCnt(postSeq2);
 			}
-
+			
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date startDt = sdf.parse(vo.getFixStartDt());
+			long currentMilliseconds = System.currentTimeMillis();
+			System.out.println("현재밀리초"+currentMilliseconds);
+			System.out.println("시작날짜 밀리초"+startDt.getTime());
+			
+			Date endDt = sdf.parse(vo.getFixEndDt());
+			
+			System.out.println("시작시간확인"+(int)(startDt.getTime()-currentMilliseconds));		
+			
+			if(startDt.getTime()-currentMilliseconds < 0) {
+				int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000) / (24*60*60);
+				vo.setExpiryDt(expiryDt);
+			}
 			model.addAttribute("vo", vo);
 			model.addAttribute("anlist", anlist);
 			return "board/notice/view";

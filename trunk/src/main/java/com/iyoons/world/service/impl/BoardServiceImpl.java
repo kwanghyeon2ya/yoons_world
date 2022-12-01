@@ -60,6 +60,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int insertBoard(BoardVO vo,MultipartFile[] files) { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
+		System.out.println("서비스vo확인 : "+vo);
 		int result = dao.insertBoard(vo);
 		System.out.println(vo+"입력넣을때");
 		

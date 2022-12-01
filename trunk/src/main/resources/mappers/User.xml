@@ -204,7 +204,8 @@
 			ua.user_browser,
 			ua.reg_dt,
 			(select user_name from user_info ui where ua.user_seq = ui.user_seq) as user_name,
-			(select user_type from user_info ui where ua.user_seq = ui.user_seq and user_type = 1) as admin_type
+			(select user_type from user_info ui where ua.user_seq = ui.user_seq and user_type = 1) as admin_type,
+			(select user_id from user_info ui where ua.user_seq = ui.user_seq) as user_id
 		from
 			user_auto_login ua
 		where

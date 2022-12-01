@@ -64,6 +64,8 @@
 	text-align: right;
 }
 
+/* 파일 리스트 */
+
 .file_list {
 	position: relative;
 	padding: 0.6rem 1rem;
@@ -125,6 +127,74 @@
     filter: invert(70%) sepia(84%) saturate(492%) hue-rotate(63deg) brightness(102%) contrast(91%);
     cursor: pointer;
 }
+
+
+/* 추가 입력하는 첨부파일*/
+
+.insert_file_list {
+	position: relative;
+	padding: 0.6rem 1rem;
+	margin-top: 1rem;
+	border: 0.1rem solid #999;
+	background-color: #fff;
+}
+
+.insert_file_list > li {
+	position: relative;
+	line-height: 3rem;
+	font-size: 0;
+}
+
+.insert_file_list .insert_file_name {
+	display: inline-block;
+	max-width: 90%;
+	padding-right: 0.6rem;
+	font-size: 1.4rem;
+	line-height: 3rem;
+	vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.insert_file_list a.insert_file_name:hover {
+	color: #512f83;
+	text-decoration: underline;
+}
+.insert_file_list a::before {
+	content: '';
+	box-sizing: border-box;
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	margin-right: 0.5rem;
+	background-image: url(/img/board/icon_download.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	vertical-align: middle;
+	filter: invert(59%) sepia(6%) saturate(2797%) hue-rotate(222deg) brightness(88%) contrast(95%);
+}
+
+.insert_file_list img.del_btn {
+	display: inline-block;
+    width: 1.8rem;
+    height: auto;
+    vertical-align: middle;
+    filter: invert(8%) sepia(100%) saturate(7028%) hue-rotate(0deg) brightness(108%) contrast(118%);
+    cursor: pointer;
+}
+
+.insert_file_list img.cancel_btn {
+	display: inline-block;
+    width: 1.8rem;
+    height: auto;
+    vertical-align: middle;
+    filter: invert(70%) sepia(84%) saturate(492%) hue-rotate(63deg) brightness(102%) contrast(91%);
+    cursor: pointer;
+}
+
+
+
 
 .board_info_area {
 	position: relative;
