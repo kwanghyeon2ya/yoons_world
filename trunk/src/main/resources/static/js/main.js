@@ -1,10 +1,17 @@
 $(document).ready(function(){
 	getBoardList();
 	
+	/*
 	var currentPosition = parseInt($(".rank_from_readcnt").css("top"));
 	$(window).scroll(function(){
 		var position = $(window).scrollTop();
 	    $(".rank_from_readcnt").stop().animate({"top":position+currentPosition+"px"},10000);
+	});
+	*/
+	
+	$('#rank_more_btn').click(function() {
+		$('.rank_area').css('height', 'auto');
+		$('#rank_more_btn').hide();
 	});
 	
 });

@@ -69,6 +69,7 @@
 }
 
 .rank_area {
+	position: relative;
 	padding: 1rem;
 	border: 0.1rem solid #999;
 	overflow: hidden;
@@ -88,54 +89,66 @@
 	grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
 }
 
+.rank_more_btn {
+	display: none;
+}
+
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
-	.main_wrappper {
-		flex-flow: column;
-	}
+	.main_wrappper {flex-flow: column;}
 	
 	.main_wrappper > div:nth-of-type(1),
 	.main_wrappper > div:nth-of-type(2) {
 		width: 100%;
 	}
+	.main_wrappper > div:nth-of-type(1) {margin-left: 0;}
+	.main_wrappper > div:nth-of-type(1) > h3 {margin-top: 0;}
+	.main_wrappper > div:nth-of-type(2) {margin-top: 3rem;}
 	
-	.main_wrappper > div:nth-of-type(1) {
-		margin-left: 0;
-	}
+	.login_area {display: none;}
 	
-	.main_wrappper > div:nth-of-type(1) > h3 {
-		margin-top: 0;
-	}
-	
-	.main_wrappper > div:nth-of-type(2) {
-		margin-top: 3rem;
-	}
-	
-	.login_area {
-		display: none;
-	}
-	
-	.rank_area {
-		padding: 0 1rem;
-	}
-	
-	.rank_area .table {
-		grid-template-columns: repeat(2, auto 3fr minmax(5.6rem, 1fr));
-	}
-	
-	.rank_area .table div.th {
-		display: none;
-	}
+	.rank_area {padding: 0 1rem;}
+	.rank_area .table {grid-template-columns: repeat(2, auto 3fr minmax(5.6rem, 1fr));}
+	.rank_area .table > div.th {display: none;}
+	.rank_area .table > div:nth-of-type(n+4):nth-of-type(-n+6) {order: 1;}
+	.rank_area .table > div:nth-of-type(n+7):nth-of-type(-n+9) {order: 3;}
+	.rank_area .table > div:nth-of-type(n+10):nth-of-type(-n+12) {order: 5;}
+	.rank_area .table > div:nth-of-type(n+13):nth-of-type(-n+15) {order: 7;}
+	.rank_area .table > div:nth-of-type(n+16):nth-of-type(-n+18) {order: 9;}
+	.rank_area .table > div:nth-of-type(n+19):nth-of-type(-n+21) {order: 2;}
+	.rank_area .table > div:nth-of-type(n+22):nth-of-type(-n+24) {order: 4;}
+	.rank_area .table > div:nth-of-type(n+25):nth-of-type(-n+27) {order: 6;}
+	.rank_area .table > div:nth-of-type(n+28):nth-of-type(-n+30) {order: 8;}
+	.rank_area .table > div:nth-of-type(n+31):nth-of-type(-n+33) {order: 10;}
 }
 
 /* Mobile (가로 480px 이하) */
 @media screen and (max-width: 480px) {
-	.rank_area {
-		height: 18rem;
-	}
-	
+	.rank_area {height: 18rem;}
 	.rank_area .table {
+		display: inline-grid;
 		grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
+		width: calc(100% - 3rem);
+	}
+	.rank_area .table > div {order: 0 !important;}
+	
+	#rank_more_btn {
+		box-sizing: border-box;
+		display: block;
+		width: 100%;
+		padding: 0.6rem;
+		background-color: #ccc;
+    	vertical-align: middle;
+		text-align: center;
+		font-family: 'Noto Sans KR', sans-serif;
+	    font-size: 1.4rem;
+	    font-weight: 600;
+	    color: #fff;
+    	line-height: 1;
+		letter-spacing: 0;
+		overflow: hidden;
+    	white-space: nowrap;
+		cursor: pointer;
 	}
 	
 	.main_board_area .table {
