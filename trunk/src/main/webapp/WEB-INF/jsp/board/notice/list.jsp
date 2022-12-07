@@ -16,6 +16,21 @@
 	
 	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 	
+	<script>
+
+	function searchCheck(){
+		console.log("검색진입");
+		alert("검색 진입");
+		
+		if($("#search_text").val().trim().length == 0){
+			alert("검색창에 내용을 입력하세요");
+			return false;
+		}
+	}
+	
+	</script>
+	
+	
 </head>
 <body>
 	<div id="page-wrapper">
@@ -30,7 +45,7 @@
 				<h2>공지사항</h2>
 				
 				<div class="search_area right">
-					<form action="/board/notice/list" method="get">
+					<form action="/board/notice/list" method="get" onsubmit="return searchCheck();">
 						<input type="hidden" name="boardType" value="1"/>
 						<input type="hidden" name="searchCheck" value="1"/>
 						<select name="search">
@@ -50,12 +65,6 @@
 						<div class="th">작성일</div>
 						<div class="th">조회수</div>
 						
-						<c:if test="${count == 0}">
-						<div class="non_data">작성된 글이 없습니다.</div>
-						</c:if>
-						
-						
-						<c:if test="${count > 0}">
 						<!-- 상단 고정 글 리스트 -->
 						<c:forEach var="fixedBoardList" items="${fixedBoardList}">
 						<div class="txt_red">[중요]</div>
@@ -72,6 +81,11 @@
 						<div>${fixedBoardList.readCnt}</div>
 						</c:forEach>
 						
+						<c:if test="${count == 0}">
+						<div class="non_data">작성된 글이 없습니다.</div>
+						</c:if>
+						
+						<c:if test="${count > 0}">
 						<!-- 일반 글 리스트 -->
 						<c:forEach var="list" items="${boardList}">
 						<div>${list.postNum}</div>

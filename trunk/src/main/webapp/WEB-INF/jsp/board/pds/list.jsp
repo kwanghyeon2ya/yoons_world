@@ -24,6 +24,21 @@
 	</script>
 </c:if>
 
+<script>
+
+	function searchCheck(){
+		
+		alert("검색 진입");
+		
+		
+		if($("#search_text").val().trim().length == 0){
+			alert("검색창에 내용을 입력하세요");
+			return false;
+		}
+	}
+	
+</script>
+
 </head>
 <body>
 	<div id="page-wrapper">
@@ -47,7 +62,7 @@
 				<h2>자료실</h2>
 
 					<div class="search_area right">
-						<form action="/board/pds/list" method="get">
+						<form action="/board/pds/list" method="get" onSubmit="return searchCheck();">
 							<input type="hidden" id="keyword_check" value="${keyword}" /> <input
 								type="hidden" id="search_check" value="${search}" /> <input
 								type="hidden" name="boardType" value="2" /> <input type="hidden"
@@ -69,6 +84,7 @@
 						<div class="pds_board table type_03">
 							<div class="th">번호</div>
 							<div class="th">제목</div>
+							<div class="th">첨부파일</div>
 							<div class="th">글쓴이</div>
 							<div class="th">작성일</div>
 							<div class="th">조회수</div>
@@ -83,9 +99,21 @@
 									<div>${list.postNum}</div>
 									<div>
 										<a href="/board/pds/view?postSeq=${list.postSeq}"> <span><c:out
-													value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
+											value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>
+									<div>
+										<c:if test="${list.attachCnt eq 0}">
+										파일없음
+										</c:if>
+										<c:if test="${list.attachCnt ne 0}">
+											${list.fullFileName} 
+											<c:if test="${list.attachCnt > 1}">
+												외 ${list.attachCnt-1}
+											</c:if>
+										</c:if>
+									</div> <!-- 첨부파일 -->
+									
 									<div>${list.writerName}</div>
 									<div>
 										<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">

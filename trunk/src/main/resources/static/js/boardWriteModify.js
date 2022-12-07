@@ -9,6 +9,7 @@ function WriteBoardCheck(url){
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
 	
+	
 	//임시 사용
 	
 	
@@ -42,11 +43,22 @@ function WriteBoardCheck(url){
 		$("#content").focus();
 		return false;
 	}
-	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
-		if($("#fix_start_dt").val() == "" || $("#fix_end_dt").val() == ""){
+	if ($("input:checkbox[id='board_fix_yn']").is(":checked") == true) {
+
+		if ($("#fix_start_dt").val() == "" || $("#fix_end_dt").val() == "") {
 			alert("날짜를 비워둘 수 없습니다");
 			return false;
 		}
+		if ($("#fix_start_dt").val() > $("#fix_end_dt").val()) {
+			alert("종료일이 시작일보다 과거일 수 없습니다.");
+			return false;
+		}
+		
+		if($("#fix_start_dt").val() == $("#fix_end_dt").val()){
+			alert("시작일자와 종료일자가 같을 수 없습니다");
+			return false;
+		}
+		
 	}
 		
 	
@@ -149,8 +161,17 @@ function modBoardCheck(url){
 		return false;
 	}
 	if($("input:checkbox[id='board_fix_yn']").is(":checked") == true){
+		
 		if($("#fix_start_dt").val() == "" || $("#fix_end_dt").val() == ""){
 			alert("날짜를 비워둘 수 없습니다");
+			return false;
+		}
+		if($("#fix_start_dt").val() > $("#fix_end_dt").val()){
+			alert("종료일이 시작일보다 과거일 수 없습니다.");
+			return false;
+		}
+		if($("#fix_start_dt").val() == $("#fix_end_dt").val()){
+			alert("시작일자와 종료일자가 같을 수 없습니다");
 			return false;
 		}
 	}
@@ -283,6 +304,7 @@ function increasingHeart(post_seq){
 					console.log(data);
 					$(".heart_icon").show(0);
 					$(".blankheart_icon").remove();
+					$("#heart_count").show(0);
 					$("#heart_count").text(data+"개");
 				})
 		}

@@ -9,8 +9,13 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<!-- Header -->
-<jsp:include page="../../common/header.jsp" flush="false"/>
+<!DOCTYPE html>
+<html>
+<head>
+<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
+
+<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
 <script type="text/javascript">
 		$(document).ready(function(){
@@ -135,15 +140,18 @@
 			};
 		};
 </script>
+</head>
+<body>
+	<div id="page-wrapper">
 
-<!-- Main -->
-<div id="main">
-	<div class="container">
-		<div class="col-12">
+		<!-- Header -->
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false" />
+
+		<!-- Main -->
+		<div id="container">
+			<div class="content">
 		
-			<div class="title-page">
 				<h3>회원정보수정</h3>
-			</div>
 			
 			<form action="/admin/member/modifyUser" method="post">
     		
@@ -214,13 +222,13 @@
 				<div class="area-input-info">
 					<label for="userHireDt" >입사일</label>
 					<input id="userHireDt" type="text"/>
-				</div> 
+				</div>
 				 -->
 				 
 				<div class="area-input-info">
 					<div class="area-button area-input-info-sub">
-						<button type="submit" id="updatebtn">수정</button>
-						<button type="button" onclick="location.href='/admin/member/list'">취소</button>
+						<button type="submit" class="btn type_02 size_s bg_purple" id="updatebtn">수정</button>
+						<button type="button" class="btn type_02 size_s bg_purple" onclick="location.href='/admin/member/list'">취소</button>
 					</div>
 				</div>
 			
@@ -231,11 +239,8 @@
 	</div>
 </div>
 
-<script>
-
-	$("#nav a").removeClass("current-page-item");
-	$("#nav").find('a[href*="/member"]').addClass("current-page-item");
-</script>
-
 <!-- Footer -->
-<jsp:include page="../../common/footer.jsp" flush="false"/>
+			<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false" />
+
+</body>
+</html>

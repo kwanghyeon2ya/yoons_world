@@ -30,7 +30,7 @@
 	 첨부 파일명 리스트 가져오기	
 	*/
 	function getFileList(){ /* file태그 onchange function호출함 */
-		
+			
 		var fileTarget = $("input[name=file]"); // 파일
 		var fileLength = $("input[name=file]")[0].files.length; // 파일 갯수
 		
@@ -39,23 +39,37 @@
 		
 		var fileList = "";
 		
+		
 		for(var i = 0;i<fileLength;i++){
-			console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
-			fileList += fileTarget[0].files[i].name + '&nbsp; <img class="delete_file" src="/img/board/x_icon.png" style="cursor:pointer;position:relative;top:3.5px;" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">' + '<br>';
+			if(fileTarget[0].files[i].size > 10000000){
+				alert("첨부파일은 10MB를 초과할 수 없습니다 - "+fileTarget[0].files[i].name);
+				deleteFile(fileTarget[0].files[i].lastModified);
+			}else{
+				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
+				fileList += '<li class="temp_file">';
+				fileList += '	<span class="file_name">'+fileTarget[0].files[i].name+'</span>';
+				fileList += '	<img class="del_btn" src="/img/board/icon_close.png" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">';
+				fileList += '</li>';
+			}
 		}
+		if(fileList == ""){
+			fileLength = 0;
+		}
+		
 		console.log("fileList : "+fileList);
 		console.log("fileLength 재확인 : "+fileLength);
 		if(fileLength > 0){
 			console.log("block 진입");
-			$(".file_list").css("display","block");
-			$(".file_name").html(fileList);
+			$(".file_list").find('.temp_file').remove();
+			$(".file_list").show(0);
+			$(".file_list").append(fileList);
 		}else{
 			console.log("fileList");
 			console.log("none 진입");
-			$(".file_list").css("display","none");
-			$(".file_name").empty();
+			$(".file_list").find('.temp_file').remove();
+			$(".file_list").hide(0);
 		}
-		
+				
 	}
 	
 	
@@ -188,9 +202,9 @@
 					<div class="input_area">
 						<h4>첨부 파일</h4>
 						<ul class="file_list" style="display:none">
-							<li>
-								<span class="file_name"></span>
-							</li>
+						
+						<!-- 첨부파일 목록이 추가 될 곳 -->
+						
 						</ul>
 						<input type="file" name="file" id="file" class="size_full" onchange="getFileList()" multiple="multiple"/>
 					</div>

@@ -9,11 +9,19 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 
-<!-- Header -->
-<jsp:include page="../../common/header.jsp" flush="false"/>
+<!DOCTYPE html>
+<html>
+<head>
+<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
 
-<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
+<c:if test="${sessionScope.sessionSeqForAdmin == null}">
+	<c:redirect url="/login/loginView" />
+</c:if>
+
+	<script>
 		$(document).ready(function(){
 			  document.getElementById('hire_dt').value = new Date().toISOString().substring(0, 10);
 		});
@@ -182,6 +190,7 @@
 		function selectedSelfWriting(value){
 			if(value == 'self_writing'){
 				$("#email_part3").css("display","block");
+				$("#email_part3").focus();
 			}else{
 				$("#email_part3").css("display","none");
 				$("#email_part3").val("");
@@ -229,70 +238,82 @@
 		
 </script>
 
+</head>
 
 
 <!-- Main -->
-<div id="main">
-	<div class="container">
-		<div class="col-12">
+<body>
+
+	<div id="page-wrapper">
+		<!-- Header -->
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false" />
+
+		<div id="container">
+			<div class="content">
 		
-			<div class="title-page">
-				<h3>회원등록</h3>
-			</div>
+			<h3>회원등록</h3>
 			
-			<form method="post" id="insert_user_form" onSubmit="return false">
-    		
-	    		<div class="area-input-info">
-					<label for="userName" >이름</label>
-					<input id="userName" name="userName" type="text" maxlength="5" onkeyup="noSpaceForm(this)"/>
-				</div>
-				<div class="area-input-info">
-					<label for="userId" >아이디</label>
-					<input id="userId" name="userId" type="text" maxlength="15" onkeyup="noSpaceForm(this)"/>
-					<button onclick="DuplicatedIdCheck()">중복확인</button>
-					<p id="dup_id"></p>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userPw" >패스워드</label>
-					<input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userPw2" >패스워드확인</label>
-					<input id="userPw2" type="password" maxlength="12"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="email">이메일</label>
-					<input id="email_part1" style="width:32%;" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)"/>
-					@
-					<select style="width:32%;" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
-						<option value="naver.com">naver.com</option>
-						<option value="daum.net">daum.net</option>
-						<option value="gmail.com">gmail.com</option>
-						<option value="hanmail.com">hanmail.com</option>
-						<option value="yahoo.co.kr">yahoo.co.kr</option>
-						<option value="self_writing">직접입력</option>
-					</select>
-					<input type="text" name="emailpart3" id="email_part3" style="display:none; width:70%; margin-top:3px;"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userType" >권한설정</label>
-					<div class="area-input-info-sub">
-						<input type="radio" name="userType" value="0" checked/>일반회원	
-						<input type="radio" name="userType" value="1"/>관리자
-					</div>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="hire_dt" >입사일</label>
-					<input id="hire_dt" type="date" name="hireDt"/>
-				</div>
-				
+			<form method="post" id="insert_user_form" class="board-inline" onSubmit="return false">
+
+				<div>
+					<table border=1>
+						<tbody>
+							<tr>
+								<th><label for="userName">이름</label></th>
+								<td><input id="userName" name="userName" type="text"
+									maxlength="5" onkeyup="noSpaceForm(this)" /></td>
+							</tr>
+							<tr>
+								<th><label for="userId">아이디</label></th> 
+								<td><input id="userId" name="userId" type="text" maxlength="15" onkeyup="noSpaceForm(this)" />
+								<button class="btn type_02 bg_purple" onclick="DuplicatedIdCheck()">중복확인</button></td>
+								<td><p id="dup_id"></p></td>
+							</tr>
+							<tr>
+								<th><label for="userPw">패스워드</label></th>
+								<td><input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)" /></td>
+							</tr>
+							<tr>
+								<th><label for="userPw2" style="margin-right: 7px;">패스워드확인</label></th>
+								<td><input id="userPw2" type="password" maxlength="12" /></td>
+							</tr>
+							<tr>
+								<th><label for="email">이메일</label></th> 
+								<td>
 								
-<!-- 				<div class="area-input-info">
+								<input id="email_part1" class="email" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)" /> 
+								@ 
+								<select class="email"
+									name="emailpart2" id="email_part2"
+									onchange="selectedSelfWriting(this.value)">
+									<option value="naver.com">naver.com</option>
+									<option value="daum.net">daum.net</option>
+									<option value="gmail.com">gmail.com</option>
+									<option value="hanmail.com">hanmail.com</option>
+									<option value="yahoo.co.kr">yahoo.co.kr</option>
+									<option value="self_writing">직접입력</option>
+								</select>
+								
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;" /><td>
+							</tr>
+							<tr>
+	<!-- 						<th><label for="userType">권한설정</label></th> -->
+								<th><input type="radio" name="userType" value="0" checked />일반회원</th>
+								<th style="text-align:left;"><input type="radio" name="userType" value="1" />관리자</th>
+							</tr>
+							<tr>
+								<th><label for="hire_dt">입사일</label></th>
+								<td><input id="hire_dt" type="date" name="hireDt" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+					<!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>
 				</div>
@@ -319,16 +340,11 @@
 					<input id="userHireDt" type="text"/>
 				</div>
 				 -->
-				 
-				<div class="area-input-info">
-					<div class="area-button area-input-info-sub">
-						<button type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
-						<button type="button" onclick="location.href='/admin/member/list'">취소</button>
-					</div>
+				<div id="create_form_btn">
+					<button class="btn type_02 bg_purple" type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
+					<button class="btn type_02 bg_purple" style="margin-left:1px;" type="button" onclick="location.href='/admin/member/list'">취소</button>
 				</div>
 			</form>
-			
-			
 		</div>
 	</div>
 </div>
@@ -339,4 +355,7 @@
 </script>
 
 <!-- Footer -->
-<jsp:include page="../../common/footer.jsp" flush="false"/>
+<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false" />
+
+</body>
+</html>

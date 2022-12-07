@@ -149,8 +149,8 @@
 
 						<div class="area-button-chk">
 							<c:if test="${count > 0}">
-								<button type="button" id="deleteButton">중단</button>
-								<button type="button" id="modifyStatus">활동</button>
+								<button type="button" class="btn type_02 size_s bg_purple" id="deleteButton">중단</button>
+								<button type="button" class="btn type_02 size_s bg_purple" id="modifyStatus">활동</button>
 							</c:if>
 						</div>
 					</form>
@@ -166,10 +166,8 @@
 					</c:if>
 				</c:if>
 
-				<c:if test="${count > 0}">
-
 					<div class="list_area">
-						<div class="member_list_brd">
+						<div class="member_list_brd table type_03">
 							<div class="th">번호</div>
 							<div class="th">이름</div>
 							<div class="th">ID</div>
@@ -179,11 +177,17 @@
 							<div class="th">권한</div>
 							<div class="th">
 								<input type="checkbox" id="chkAll" />
+								<label for="chkAll"> 
+								</label>
 							</div>
-						</div>
+							
+						<c:if test="${count == 0}">
+							<div class="non_data">회원이 존재하지 않습니다.</div>
+						</c:if>
 
-						<c:forEach var="list" items="${userList}">
-							<div>
+						<c:if test="${count > 0}">
+	
+						<c:forEach var="list" items="${userList}" varStatus="loop">
 								<div>${list.userSeq}</div>
 								<div>
 									<a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userName}</a>
@@ -197,16 +201,19 @@
 
 								<div>${list.userType eq 0?'일반회원':'관리자'}</div>
 								<div>
-									<input type="checkbox" name="chkMember" value="${list.userSeq}" />
+									<input type="checkbox" id="chkMember_${loop.index}" name="chkMember" value="${list.userSeq}" />
+									 
+									<label for="chkMember_${loop.index}"> 
+										
+									</label>
+									
 								</div>
-
-							</div>
-
 						</c:forEach>
-
+						</c:if>
 					</div>
-				</c:if>
-
+				
+				</div>
+				
 				<div class="btn_area right">
 					<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
 						<button class="btn type_02 size_s bg_purple"
@@ -217,17 +224,16 @@
 				<div class="paging_area">
 
 					<c:if test="${count > 0}">
-
 						<c:set var="pageCount"
 							value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}" />
-						<fmt:parseNumber var="pageCount" value="${pageCount}"
-							integerOnly="true" />
 						<fmt:parseNumber var="result" value="${((page.currentPage-1)/10)}"
-							integerOnly="true"></fmt:parseNumber>
+							integerOnly="true"/>
+						<fmt:parseNumber var="pageCount" value="${pageCount}"
+							integerOnly="true" />	
 						<c:set var="startPage" value="${result*10+1}" />
 						<c:set var="pageBlock" value="${10}" />
 						<c:set var="endPage" value="${startPage + pageBlock -1}" />
-						${pageCount}					
+						
 						<c:if test="${endPage > pageCount}">
 							<c:set var="endPage" value="${pageCount}" />
 						</c:if>
@@ -237,15 +243,14 @@
 								href="/admin/member/list?pageNum=${startPage - 10}&search=${page.search}&keyword=${page.keyword}">
 								&lt; </a>
 						</c:if>
-
 						<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-							<c:if test="${currentPage eq i}">
+							<c:if test="${page.currentPage eq i}">
 								<a class="bg_purple txt_white"
-									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&"></a>
+									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
 							</c:if>
-							<c:if test="${currentPage ne i}">
+							<c:if test="${page.currentPage ne i}">
 								<a
-									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&"></a>
+									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
 							</c:if>
 						</c:forEach>
 

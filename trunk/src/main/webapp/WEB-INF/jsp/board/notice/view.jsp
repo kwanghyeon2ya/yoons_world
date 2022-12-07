@@ -52,12 +52,6 @@
 				
 				<h2>공지사항</h2>
 				
-				<c:if test="${vo.expiryDt ne 0}">
-					<div class="input_area" align="right">
-						<span style="font-size: 15px;">앞으로 ${vo.expiryDt}일간 고정됩니다.</span>
-					</div>
-				</c:if>
-				
 				<div class="board_info_area">
 					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
@@ -82,6 +76,15 @@
 								</c:if>
 							</div>
 						</div>
+						<c:if test="${vo.expiryDt gt 0 || vo.expiryHour gt 0}">
+							<div class="input_area" style="text-align:right;">
+								<span style="font-size: 12px;">
+								<c:if test="${vo.expiryDt gt 0}">
+								${vo.expiryDt}일 &nbsp;
+								</c:if> 
+								${vo.expiryHour}시간 후에 고정이 해제됩니다.</span>
+							</div>
+						</c:if>
 					</div>
 					
 					<!-- 첨부파일 영역 -->
@@ -115,6 +118,7 @@
 					</c:if>
 					
 					<button type="button" class="btn type_02 size_s bg_purple" onclick="window.location='/board/notice/list'">목록</button>
+					
 				</div>
 				
 			</div>

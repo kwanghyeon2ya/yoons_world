@@ -24,6 +24,20 @@
 	</script>
 </c:if>
 
+<script>
+
+	function searchCheck(){
+		
+		alert("검색 진입");
+		
+		if($("#search_text").val().trim().length == 0){
+			alert("검색창에 내용을 입력하세요");
+			return false;
+		}
+	}
+	
+</script>
+
 </head>
 <body>
 	<div id="page-wrapper">
@@ -38,7 +52,7 @@
 				<h2>자유게시판</h2>
 
 				<div class="search_area right">
-					<form action="/board/free/list" method="get">
+					<form action="/board/free/list" method="get" onSubmit='return searchCheck();'>
 						<input type="hidden" name="searchCheck" value="1" /> <input
 							type="hidden" name="boardType" value="0" /> <select name="search">
 							<option value="subject_content"
@@ -104,6 +118,7 @@
 								value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
 							<fmt:parseNumber var="result" value="${((currentPage-1)/10)}"
 								integerOnly="true" />
+								
 							<fmt:parseNumber var="pageCount" value="${pageCount}"
 								integerOnly="true" />
 							<c:set var="startPage" value="${result*10+1}" />
@@ -128,7 +143,7 @@
 							<c:if test="${currentPage ne i}">
 								<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${i}&">${i}</a>
 							</c:if>
-						</c:forEach>
+							</c:forEach>
 
 							<c:if test="${endPage < pageCount}">
 								<a href="/board/free/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=0&pageNum=${startPage + 10}">

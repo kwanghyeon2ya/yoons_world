@@ -44,7 +44,9 @@ public class BoardVO {
 	private String fixStartDt; // 공지사항 게시판 상단고정 시작날짜
 	private String fixEndDt; // 공지사항 게시판 상단고정 종료날짜
 	private int heartCount; // 게시글에 대한 좋아요 총 갯수
-	private String heartCheck; // 좋아요를 누른적이 있는지 확인용
+	private int heartCheck; // 좋아요를 누른적이 있는지 확인용
 	private int expiryDt;
+	private int expiryHour;
+	private int expiryMinute;
 	
 }

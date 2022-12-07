@@ -318,15 +318,10 @@ public class BoardController {
 		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
 
 		CommentsVO vo2 = cservice.getComment(vo);
-		System.out.println("sessionSeq : " + sessionSeqForUser);
-		System.out.println("vo2.regrSeq : " + vo2.getRegrSeq());
-		System.out.println("vo2postSeq : " + vo2.getPostSeq());
 		if (sessionSeqForUser == vo2.getRegrSeq()) {
 			vo.setUpdrSeq(sessionSeqForUser);
 			if (cservice.modComment(vo) == 1) {
-				System.out.println("댓글 업데이트 진입 확인");
 				CommentsVO vo3 = cservice.getComment(vo);
-				System.out.println(vo3.getCommContent());
 				return vo3.getCommContent();
 			}
 		}
@@ -337,7 +332,6 @@ public class BoardController {
 	public String getComments(CommentsVO cvo, Model model) {
 
 		if (cvo.getStartIndex() == 0) {
-			System.out.println("StartIndex nullcheck");
 			cvo.setStartIndex(1);
 			cvo.setEndIndex(10);
 		}
@@ -347,7 +341,7 @@ public class BoardController {
 			cvo.setCocoCount(10);
 		} else {
 			cvo.setCocoCount(cvo.getCocoCount() + 10); // 더보기 버튼 필요한지 확인용 +10 - 밑에서 비교함
-		} // view페이지에 처음 접근할 때 는 0이 넘어오지만, 후에는 10단위로 더해져 넘어옴(html 태그 length 값)
+		} // view페이지에 처음 접근할 때 는 0이 넘어오지만, 후에는 10단위로 더해져 넘어옴(html 태그 length(갯수) 값)
 			// ajax후에 태그 갯수를 세는 것이기 때문에 10을 더해서 계산해야함 -> 더보기 버튼 활성화/비활성화 용도
 
 		BoardVO vo = service.getView(cvo.getPostSeq());
@@ -359,7 +353,6 @@ public class BoardController {
 		int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); // 존재하는 댓글의 카운트-status가 1인글
 
 		List<CommentsVO> clist = cservice.getCommentsList(cvo);
-		System.out.println("clist size :" + clist.size());
 		for (CommentsVO comm : clist) {
 			if (comm.getNestedCommentsCnt() >= 1) {// 대댓글 갯수
 				comm.setCocoList(cservice.getNestedCommentsList(comm));// 대댓글을 List로 담음
@@ -376,7 +369,6 @@ public class BoardController {
 
 		if (cvo.getCocoCount() >= maxCommentsCount) { // 더보기 버튼 변화
 			stopMoreCommentsButton = 1;
-			System.out.println("stopMoreCommentsButton : " + stopMoreCommentsButton);
 		}
 
 		model.addAttribute("stopMoreCommentsButton", stopMoreCommentsButton);
@@ -387,7 +379,7 @@ public class BoardController {
 		return "board/comments";
 	}
 
-	@RequestMapping(value = "getMoreCommentsList") // 댓글 더 보기(클릭시)
+	/*@RequestMapping(value = "getMoreCommentsList") // 댓글 더 보기(클릭시)
 	@ResponseBody
 	public String getMoreCommentsList(CommentsVO cvo) {
 
@@ -403,7 +395,7 @@ public class BoardController {
 		String cmlistString = gson.toJson(cmlist); // list를 object로 바꾸고 다시 문자열로 바꿈
 
 		return cmlistString;
-	}
+	}*/
 
 	@RequestMapping("free/view")
 	public String getFreeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
@@ -413,7 +405,7 @@ public class BoardController {
 			int postSeq2 = Integer.parseInt(postSeq);
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			BoardVO vo = service.getView(postSeq2);// DB조회
-
+			System.out.println("free view vo 전체 체크 : "+vo);
 			if (vo == null) { // Null체크 - 뒤로가기시 Null
 				return "redirect:/login/logout"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 			}
@@ -421,21 +413,20 @@ public class BoardController {
 			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
 
 			vo.setPostSeq(postSeq2);
-			vo.setRegrSeq(sessionSeqForUser);
 			vo.setUserSeq(sessionSeqForUser);
 
-			int checkHeart = service.checkHeart(vo);
-			int heartCount = service.getHeartCount(vo);
-
-			System.out.println(checkHeart + ": 좋아요 체크 0 = 하트안누름");
-			System.out.println(heartCount);
+			vo.setHeartCheck(service.checkHeart(vo));
+			vo.setHeartCount(service.getHeartCount(vo));
+			
+			System.out.println(vo.getHeartCheck() + ": 좋아요 체크 0 = 하트안누름");
+			System.out.println(vo.getHeartCount() + " : 좋아요 갯수 체크");
+			System.out.println("vo.getRegrSeq() :"+vo.getRegrSeq());
+			System.out.println("sessionSeqForUser :"+sessionSeqForUser);
 			if (vo.getRegrSeq() != sessionSeqForUser) {
 				service.updateCnt(postSeq2);
 			}
-
+			System.out.println("조회수체크 : "+vo.getReadCnt());
 			model.addAttribute("vo", vo);
-			model.addAttribute("heartCount", heartCount);
-			model.addAttribute("checkHeart", checkHeart);
 			model.addAttribute("anlist", anlist);
 			return "board/free/view";
 
@@ -461,7 +452,7 @@ public class BoardController {
 			int postSeq2 = Integer.parseInt(postSeq);
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			BoardVO vo = service.getView(postSeq2); // DB조회
-
+			System.out.println("notice view vo 전체 체크 : "+vo);
 			if (vo == null) { // Null체크 - 뒤로가기시 Null
 				return "redirect:/board/notice/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 			}
@@ -479,18 +470,19 @@ public class BoardController {
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date startDt = sdf.parse(vo.getFixStartDt());
-			long currentMilliseconds = System.currentTimeMillis();
-			System.out.println("현재밀리초"+currentMilliseconds);
-			System.out.println("시작날짜 밀리초"+startDt.getTime());
-			
 			Date endDt = sdf.parse(vo.getFixEndDt());
+			long currentMilliseconds = System.currentTimeMillis();
 			
-			System.out.println("시작시간확인"+(int)(startDt.getTime()-currentMilliseconds));		
-			
-			if(startDt.getTime()-currentMilliseconds < 0) {
+			if(startDt.getTime()-currentMilliseconds < 0 && endDt.getTime()-currentMilliseconds > 0) {
 				int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000) / (24*60*60);
+				int expiryHour = (int) (((endDt.getTime()-currentMilliseconds) / 1000) % (24*60*60)/60/60);
+				/*System.out.println("expiryDt :"+expiryDt);
+				System.out.println("expiryHour :"+expiryHour);
+				System.out.println("expiryMinute :"+expiryMinute);*/
 				vo.setExpiryDt(expiryDt);
+				vo.setExpiryHour(expiryHour);
 			}
+			
 			model.addAttribute("vo", vo);
 			model.addAttribute("anlist", anlist);
 			return "board/notice/view";

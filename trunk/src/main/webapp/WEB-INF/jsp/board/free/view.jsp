@@ -59,6 +59,7 @@
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
 					
 					<div class="board_title"><c:out escapeXml="" value="${vo.subject}"/></div>
+
 					<div class="board_view_cnt" title="조회수">
 						<span class="view_cnt">${vo.readCnt}</span>
 					</div>
@@ -94,7 +95,29 @@
 					<!-- 게시글 본문 영역 -->
 					${vo.content}
 				</div>
-					
+				
+				<!--  좋아요 DIV  -->
+				<div class="heart_img_div"
+					style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;">
+					<c:if test="${vo.heartCheck eq 0}">
+						<img class="blankheart_icon" style="cursor:pointer;"
+							onclick="increasingHeart(${vo.postSeq})" title="좋아요"
+							src="/img/board/blankheart.png">
+						<img class="heart_icon" title="좋아요" src="/img/board/heart.png"
+							style="display: none">
+					</c:if>
+					<c:if test="${vo.heartCheck ne 0}">
+						<img class="heart_icon" title="좋아요" src="/img/board/heart.png">
+					</c:if>
+					<c:if test="${vo.heartCount eq 0}">
+						<span id="heart_count" style="font-size: 16px;display:none;">${vo.heartCount}개</span>
+					</c:if>
+					<c:if test="${vo.heartCount ne 0}">
+						<span id="heart_count" style="font-size: 16px;">${vo.heartCount}개</span>
+					</c:if>
+				</div>
+				<!-- 좋아요 DIV -->
+
 				<!-- 댓글 영역 -->
 				<div id="reload_div_parent" class="comm_area">
 					<!-- 페이지 분리 구간 -->
