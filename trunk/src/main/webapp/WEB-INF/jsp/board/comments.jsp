@@ -54,7 +54,7 @@
 								<div class="comm_info">
 									<div>
 										<img class="profile" src="/img/common/profile.png">
-										<span class="writer"><c:out value="${clist.commId}"/></span>
+										<span class="writer"><c:out value="${clist.commName}"/></span>
 									</div>
 									<div>
 										<span class="date"><fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
@@ -113,7 +113,7 @@
 								<div class="comm_info">
 									<div>
 										<img class="profile" src="/img/common/profile.png">
-										<span class="writer txt_999"><c:out value="${clist.commId}"/></span>
+										<span class="writer txt_999"><c:out value="${clist.commName}"/></span>
 									</div>
 									<div>
 										<span class="date txt_999"><fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
@@ -150,7 +150,7 @@
 									<div class="comm_info">
 										<div>
 											<img class="profile" src="/img/common/profile.png">
-											<span class="writer"><c:out value="${cocoList.commId}"/></span>
+											<span class="writer"><c:out value="${cocoList.commName}"/></span>
 										</div>
 										<div>
 											<span class="date"><fmt:formatDate value="${cocoList.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
@@ -170,7 +170,7 @@
 						
 								<c:if test="${cocoList.status == 0}"> <!-- 삭제된 댓글 -->
 									<input type="hidden" name="coco_group" id="coco_group_${cocoList.commSeq}" class="coco_group_class" value="${cocoList.commGroup}"/>
-									<p>작성자 : <c:out value="${cocoList.commId}"/></p>
+									<p>작성자 : <c:out value="${cocoList.commName}"/></p>
 									<p>삭제된 댓글입니다</p>
 								</c:if>	
 							
