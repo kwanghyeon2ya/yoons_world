@@ -84,7 +84,7 @@
 									<div>${list.postNum}</div>
 									<div>
 										<a href="/board/free/view?postSeq=${list.postSeq}"> 
-										<span><c:out value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
+										<span><c:out escapeXml="true" value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>
 									<div>${list.writerName}</div>

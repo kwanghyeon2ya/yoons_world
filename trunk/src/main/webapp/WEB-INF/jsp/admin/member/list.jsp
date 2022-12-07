@@ -147,7 +147,7 @@
 						<button type="submit" id="submit_button"
 							class="btn type_02 size_s bg_purple">검색</button>
 
-						<div class="area-button-chk">
+						<div class="area-button-chk" style="margin-top: 2rem;">
 							<c:if test="${count > 0}">
 								<button type="button" class="btn type_02 size_s bg_purple" id="deleteButton">중단</button>
 								<button type="button" class="btn type_02 size_s bg_purple" id="modifyStatus">활동</button>

@@ -28,5 +28,6 @@ public class CommentsVO {
 	private int endIndex; // 댓글 페이징 마지막 갯수
 	private int cocoCount;//게시글 jsp에 for문을 통해 보여지는 댓글 갯수
 	private List<CommentsVO> cocoList; //대댓글 리스트를 List객체로 묶음
+	private String commName;
 	
 }

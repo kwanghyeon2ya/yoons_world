@@ -512,9 +512,21 @@ td{
 tr{
 	margin:1px;
 }
-#userPw2{
-	margin-right: 7px;
+
+.heart_icon{
+    width:40%;
+	height:40%;
+	margin-left: 1.5rem;
+	opacity: 0.8;
 }
+
+.blankheart_icon{
+	cursor:pointer;
+	width:40%;
+	margin-left: 1.5rem;
+	opacity: 0.8;
+}
+
 /* 회원등록 */
 
 #create_form_btn{

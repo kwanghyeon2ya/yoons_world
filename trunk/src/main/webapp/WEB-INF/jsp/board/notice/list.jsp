@@ -70,7 +70,7 @@
 						<div class="txt_red">[중요]</div>
 						<div>
 							<a href="/board/notice/view?postSeq=${fixedBoardList.postSeq}">
-								<span><strong class="tag_m_only txt_red">[중요]&nbsp;</strong><c:out value="${fixedBoardList.subject}"/></span>
+								<span><strong class="tag_m_only txt_red">[중요]&nbsp;</strong><c:out escapeXml="true" value="${fixedBoardList.subject}"/></span>
 								<span class="txt_purple">${fixedBoardList.commentsCnt > 0 ? [fixedBoardList.commentsCnt] : ''}</span>
 							</a>
 						</div>
@@ -91,7 +91,7 @@
 						<div>${list.postNum}</div>
 						<div>
 							<a href="/board/notice/view?postSeq=${list.postSeq}">
-								<span><c:out value="${list.subject}"/></span>
+								<span><c:out escapeXml="true" value="${list.subject}"/></span>
 								<span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 							</a>
 						</div>

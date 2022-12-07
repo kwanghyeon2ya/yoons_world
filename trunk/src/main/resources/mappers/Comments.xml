@@ -16,6 +16,7 @@
 					c.comm_level,
 					c.post_seq,
 					c.regr_seq,
+					(select user_name from user_info ui where c.regr_seq = ui.user_seq) as comm_name,
 					c.first_insert_dt,
 					c.updr_seq,
 					c.last_update_dt,
@@ -30,7 +31,7 @@
 					and c.status in (0,1) 
 					and comm_level = 0
 					)cd
-						where cd.r &gt;= #{startIndex} 
+						where cd.r &gt;= #{startIndex}
 						and cd.r &lt;= #{endIndex}
 	</select>
 	<select id="getNestedCommentsList" resultType="com.iyoons.world.vo.CommentsVO">

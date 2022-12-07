@@ -305,7 +305,7 @@ function increasingHeart(post_seq){
 					$(".heart_icon").show(0);
 					$(".blankheart_icon").remove();
 					$("#heart_count").show(0);
-					$("#heart_count").text(data+"개");
+					$("#heart_count").text(data);
 				})
 		}
 	})

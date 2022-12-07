@@ -34,10 +34,13 @@
 		console.log(fileLength);
 		
 		var fileList = "";
+		var bigFileNameList = "";
 		
 		for(var i = 0;i<fileLength;i++){
 			if(fileTarget[0].files[i].size > 10000000){
-				alert("첨부파일은 10MB를 초과할 수 없습니다");
+				console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
+				console.log("용량초과 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
+				bigFileNameList += fileTarget[0].files[i].name;				
 				deleteFile(fileTarget[0].files[i].lastModified);
 			}else{
 				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
@@ -48,6 +51,10 @@
 				fileList += '	<img class="del_btn" src="/img/board/icon_close.png" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">';
 				fileList += '</li>';
 			}
+		}
+		
+		if(bigFileNameList != ""){
+			alert("첨부파일은 10MB를 초과할 수 없습니다.");
 		}
 		
 		if(fileList == ""){
@@ -143,7 +150,7 @@
 					</div>
 					<div id="word_count">[0/4000자]</div>
 					<h4>첨부 파일</h4>
-					
+					<span style="font-size:10px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
 					<c:if test="${empty anlist}"> <!-- 첨부파일이 없을 때 파일첨부 -->
 						<div class="input_area">
 							<input type="hidden" id="anlist_check" value="1"/>

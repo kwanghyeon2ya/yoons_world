@@ -57,6 +57,9 @@
 									</p>
 									<p>${sessionScope.sessionSeqForAdmin != null ? "관리자" : "일반 회원"}</p>
 								</div>
+								<div>
+									<button type="button" class="btn type_02 size_s bg_purple" onclick="location.href='/admin/member/list'">회원관리</button>
+								</div>
 							</div>
 							<button onClick="location.href='/login/logout'">LOGOUT</button>
 							</c:if>

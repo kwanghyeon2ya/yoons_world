@@ -57,7 +57,7 @@
 					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
 					
-					<div class="board_title"><c:out escapeXml="" value="${vo.subject}"/></div>
+					<div class="board_title"><c:out escapeXml="true" value="${vo.subject}"/></div>
 					<div class="board_view_cnt" title="조회수">
 						<span class="view_cnt">${vo.readCnt}</span>
 					</div>

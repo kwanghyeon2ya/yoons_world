@@ -25,20 +25,39 @@
 
 	<script>
 	
+	/* 
+	 첨부 파일명 리스트 가져오기	
+	*/
 	function getFileList(){ /* file태그 onchange function호출함 */
-		
+			
 		var fileTarget = $("input[name=file]"); // 파일
 		var fileLength = $("input[name=file]")[0].files.length; // 파일 갯수
+		var files = $("input[name=file]")[0].files;
+		
+		/* const dataTransfer = new DataTransfer(); // input file의 FileList를 컨트롤할 예정
+		Array.from(files)
+       .filter(file => fileTarget[0].files.size > 10000000)
+       .forEach(file => {
+   		dataTransfer.items.add(file);
+		}); 
+		
+		files = dataTransfer.files;
+		for(var i = 0;i<files.size;i++){
+			bigFileNameList += '['+(i+1)+'].'+files.name;
+			console.log("bigFileNameList 목록 :"+bigFileNameList);
+		} */
 		
 		console.log(fileTarget);
 		console.log(fileLength);
 		
 		var fileList = "";
-		
+		var bigFileNameList = "";
 		
 		for(var i = 0;i<fileLength;i++){
 			if(fileTarget[0].files[i].size > 10000000){
-				alert("첨부파일은 10MB를 초과할 수 없습니다  - "+fileTarget[0].files[i].name);
+				console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
+				console.log("용량초과 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
+				bigFileNameList += fileTarget[0].files[i].name;				
 				deleteFile(fileTarget[0].files[i].lastModified);
 			}else{
 				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
@@ -48,6 +67,14 @@
 				fileList += '</li>';
 			}
 		}
+		
+		
+		console.log("bigFileNameList 목록 : "+bigFileNameList);
+		
+		if(bigFileNameList != ""){
+			alert("첨부파일은 10MB를 초과할 수 없습니다.");
+		}
+			
 		if(fileList == ""){
 			fileLength = 0;
 		}
@@ -65,7 +92,7 @@
 			$(".file_list").find('.temp_file').remove();
 			$(".file_list").hide(0);
 		}
-			
+				
 	}
 	
 	
@@ -122,6 +149,7 @@
 					
 					<div class="input_area">
 						<h4>첨부 파일</h4>
+						<span style="font-size:10px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
 						<ul class="file_list" style="display:none">
 						
 						

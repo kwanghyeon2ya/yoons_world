@@ -25,6 +25,8 @@
 </c:if>
 
 <script>
+	
+	
 
 	function searchCheck(){
 		
@@ -36,6 +38,11 @@
 			return false;
 		}
 	}
+	
+	$(document).ready(function(){
+				
+		
+	})
 	
 </script>
 
@@ -98,7 +105,7 @@
 								<c:forEach var="list" items="${boardList}">
 									<div>${list.postNum}</div>
 									<div>
-										<a href="/board/pds/view?postSeq=${list.postSeq}"> <span><c:out
+										<a href="/board/pds/view?postSeq=${list.postSeq}"> <span><c:out escapeXml="true"
 											value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>

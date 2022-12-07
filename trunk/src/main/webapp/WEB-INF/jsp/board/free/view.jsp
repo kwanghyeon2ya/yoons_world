@@ -58,7 +58,7 @@
 					<input type="hidden" id="view_regr_seq" value="${vo.regrSeq}"/>
 					<input type="hidden" id="post_seq" value="${vo.postSeq}"/>
 					
-					<div class="board_title"><c:out escapeXml="" value="${vo.subject}"/></div>
+					<div class="board_title"><c:out escapeXml="true" value="${vo.subject}"/></div>
 
 					<div class="board_view_cnt" title="조회수">
 						<span class="view_cnt">${vo.readCnt}</span>
@@ -68,7 +68,7 @@
 						<div class="between">
 							<div>
 								<img class="profile" src="/img/common/profile.png">
-								<span class="writer"><c:out value="${vo.writerName}"/></span>
+								<span class="writer"><c:out escapeXml="true" value="${vo.writerName}"/></span>
 							</div>
 							<div>
 								<span class="date"><fmt:formatDate value="${vo.firstInsertDt}" type="date" pattern="yyyy-MM-dd HH:mm" /></span>
@@ -94,30 +94,27 @@
 				<div class="board_content_area">
 					<!-- 게시글 본문 영역 -->
 					${vo.content}
+					
+					<!--  좋아요 DIV  -->
+					<div class="heart_img_div"
+						style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;min-height: 18rem;">
+						<div style="border:1px solid #c4c4c4;opacity:0.8;">
+							<div style="margin-left:5rem;margin-right:5rem;margin-top:2rem;padding-bottom:1rem;">
+								<strong id="heart_count" style="font-size: 16px;">${vo.heartCount}</strong>
+								<c:if test="${vo.heartCheck eq 0}">
+									<img class="blankheart_icon" onclick="increasingHeart(${vo.postSeq})" title="좋아요"
+										src="/img/board/blankheart.png">
+									<img class="heart_icon" title="좋아요" src="/img/board/heart.png"
+										style="display:none">
+								</c:if>
+								<c:if test="${vo.heartCheck ne 0}">
+									<img class="heart_icon" title="좋아요" src="/img/board/heart.png">
+								</c:if>
+							</div>
+						</div>
+					</div>
+					<!-- 좋아요 DIV -->
 				</div>
-				
-				<!--  좋아요 DIV  -->
-				<div class="heart_img_div"
-					style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;">
-					<c:if test="${vo.heartCheck eq 0}">
-						<img class="blankheart_icon" style="cursor:pointer;"
-							onclick="increasingHeart(${vo.postSeq})" title="좋아요"
-							src="/img/board/blankheart.png">
-						<img class="heart_icon" title="좋아요" src="/img/board/heart.png"
-							style="display: none">
-					</c:if>
-					<c:if test="${vo.heartCheck ne 0}">
-						<img class="heart_icon" title="좋아요" src="/img/board/heart.png">
-					</c:if>
-					<c:if test="${vo.heartCount eq 0}">
-						<span id="heart_count" style="font-size: 16px;display:none;">${vo.heartCount}개</span>
-					</c:if>
-					<c:if test="${vo.heartCount ne 0}">
-						<span id="heart_count" style="font-size: 16px;">${vo.heartCount}개</span>
-					</c:if>
-				</div>
-				<!-- 좋아요 DIV -->
-
 				<!-- 댓글 영역 -->
 				<div id="reload_div_parent" class="comm_area">
 					<!-- 페이지 분리 구간 -->
