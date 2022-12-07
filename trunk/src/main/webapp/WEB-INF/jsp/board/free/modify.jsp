@@ -93,8 +93,8 @@
 
 
 	function MoveAction(){
-		var url = "/board/pds/list";
-		document.getElementById("board_type").value = 2;
+		var url = "/board/free/list";
+		document.getElementById("board_type").value = 0;
 		modBoardCheck(url);
 	}
 	
