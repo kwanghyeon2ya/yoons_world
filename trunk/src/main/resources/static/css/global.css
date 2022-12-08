@@ -444,6 +444,7 @@ input.size_full, select.size_full {width: 100%;}
 	
 	#gnb nav a {
 		width: 9rem;
+		letter-spacing: -0.2rem;
 	}
 	
 	#gnb .btn_logout {
