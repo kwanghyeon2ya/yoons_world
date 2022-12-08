@@ -527,18 +527,35 @@ tr{
 	opacity: 0.8;
 }
 
+.page_title{
+	text-align:center;
+	margin-right: 3.5rem;
+}
+
+
 /* 회원등록 */
 
 #create_form_btn{
-	text-align:center;	
+ 	text-align: center;
+ 	margin-top: 1rem;
+    margin-right: 4rem;
 }
 #hire_dt{
 	width: 57%;	
 }
 #insertbtn{
-	width: 19.5rem;
+	width: 11.9rem;
+}
+#cancelbtn{
+	margin-left: 1px;
+    width: 5rem;
 }
 
+/* 회원수정 */
+
+#updatebtn{
+	width: 11.9rem;
+}
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
