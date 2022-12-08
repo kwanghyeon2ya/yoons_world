@@ -89,7 +89,7 @@
 	grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
 }
 
-.rank_more_btn {
+#rank_more_btn {
 	display: none;
 }
 
