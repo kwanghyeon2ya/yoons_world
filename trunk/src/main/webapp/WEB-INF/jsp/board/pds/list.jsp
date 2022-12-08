@@ -27,24 +27,23 @@
 <script>
 	
 	
-
-	function searchCheck(){
-		
-		alert("검색 진입");
-		
-		
-		if($("#search_text").val().trim().length == 0){
-			alert("검색창에 내용을 입력하세요");
-			return false;
-		}
-	}
+	<c:if test="${sessionScope.sessionSeqForUser == null}">
+		<script>
+			alert("로그인이 필요합니다");
+			window.location.href = "/login/loginView";
+		</script>
+	</c:if>
 	
-	$(document).ready(function(){
-				
-		
-	})
-	
-</script>
+	<script>
+	$(document).ready(function() {
+		$("#search_frm").submit(function(){
+			if ($("#search_text").val().trim().length == 0) {
+				alert("검색창에 내용을 입력하세요");
+				return false;
+			};
+		});
+	});
+	</script>
 
 </head>
 <body>
@@ -93,7 +92,7 @@
 							<div class="th">글쓴이</div>
 							<div class="th">작성일</div>
 							<div class="th">조회수</div>
-
+							
 							<c:if test="${count == 0}">
 								<div class="non_data">작성된 글이 없습니다.</div>
 							</c:if>
