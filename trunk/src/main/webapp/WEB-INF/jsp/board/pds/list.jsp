@@ -24,9 +24,6 @@
 	</script>
 </c:if>
 
-<script>
-	
-	
 	<c:if test="${sessionScope.sessionSeqForUser == null}">
 		<script>
 			alert("로그인이 필요합니다");
