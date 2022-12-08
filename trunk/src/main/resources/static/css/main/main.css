@@ -9,11 +9,11 @@
 	vertical-align: top;
 }
 .main_wrappper > div:nth-of-type(1) {
-	width: 33%;
-	margin-left: 2%; 
+	width: 32%;
+	margin-left: 4%;
 }
 .main_wrappper > div:nth-of-type(2) {
-	width: 65%;
+	width: 64%;
 }
 
 .main_board_area:nth-child(n+2) {
@@ -30,7 +30,7 @@
 	box-sizing: border-box;
 	width: 100%;
 	padding: 3rem;
-	margin: 0;
+	margin: 3.4rem 0 0 0;
 	border: 0.1rem solid #999;
 }
 .login_info {
@@ -128,7 +128,6 @@
 	.rank_area .table {
 		display: inline-grid;
 		grid-template-columns: auto 3fr minmax(5.6rem, 1fr);
-		width: calc(100% - 3rem);
 	}
 	.rank_area .table > div {order: 0 !important;}
 	

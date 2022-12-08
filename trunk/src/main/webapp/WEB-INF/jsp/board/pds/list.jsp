@@ -70,20 +70,18 @@
 
 					<div class="search_area right">
 						<form action="/board/pds/list" method="get" onSubmit="return searchCheck();">
-							<input type="hidden" id="keyword_check" value="${keyword}" /> <input
-								type="hidden" id="search_check" value="${search}" /> <input
-								type="hidden" name="boardType" value="2" /> <input type="hidden"
-								name="searchCheck" value="1" />
-								<select id="search" name="search">
-									<option value="subject_content"
-										${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
-									<option value="comments"
-										${search == 'comments'?'selected="selected"':''}>댓글</option>
-									<option value="attach_file"
-										${search == 'attach_file' ? 'selected="selected"' :''}>첨부파일</option>
-								</select> 
-								<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
-								<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
+							<input type="hidden" id="keyword_check" value="${keyword}" />
+							<input type="hidden" id="search_check" value="${search}" />
+							<input type="hidden" name="boardType" value="2" />
+							<input type="hidden" name="searchCheck" value="1" />
+							
+							<select id="search" name="search">
+								<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
+								<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
+								<option value="attach_file" ${search == 'attach_file' ? 'selected="selected"' :''}>첨부파일</option>
+							</select>
+							<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
+							<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
 						</form>
 					</div>
 
@@ -105,31 +103,25 @@
 								<c:forEach var="list" items="${boardList}">
 									<div>${list.postNum}</div>
 									<div>
-										<a href="/board/pds/view?postSeq=${list.postSeq}"> <span><c:out escapeXml="true"
-											value="${list.subject}" /></span> <span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
+										<a href="/board/pds/view?postSeq=${list.postSeq}">
+											<span><c:out escapeXml="true" value="${list.subject}" /></span>
+											<span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>
-									<div>
-										<c:if test="${list.attachCnt eq 0}">
-										파일없음
-										</c:if>
-										<c:if test="${list.attachCnt ne 0}">
-											${list.fullFileName} 
-											<c:if test="${list.attachCnt > 1}">
-												외 ${list.attachCnt-1}
-											</c:if>
-										</c:if>
-									</div> <!-- 첨부파일 -->
+									<c:if test="${list.attachCnt eq 0}">
+									<div class="no_file">파일없음</div>
+									</c:if>
+									<c:if test="${list.attachCnt ne 0}">
+									<div>${list.fullFileName}<c:if test="${list.attachCnt > 1}"> 외 ${list.attachCnt-1}</c:if></div> <!-- 첨부파일 -->
+									</c:if>
 									
 									<div>${list.writerName}</div>
 									<div>
 										<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
-											<fmt:formatDate value="${list.firstInsertDt}" type="date"
-												pattern="yyyy-MM-dd" />
+											<fmt:formatDate value="${list.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 										</c:if>
 										<c:if test="${list.firstInsertDt < list.lastUpdateDt}">
-											<fmt:formatDate value="${list.lastUpdateDt}" type="date"
-												pattern="yyyy-MM-dd" />
+											<fmt:formatDate value="${list.lastUpdateDt}" type="date" pattern="yyyy-MM-dd" />
 											<!--수정필요-->
 										</c:if>
 									</div>
@@ -146,43 +138,38 @@
 
 
 					<div class="paging_area">
-								<c:if test="${count > 0}">
-									<c:set var="pageCount"
-										value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
-									<fmt:parseNumber var="result" value="${((currentPage-1)/10)}"
-										integerOnly="true" />
-									<fmt:parseNumber var="pageCount" value="${pageCount}"
-										integerOnly="true" />
-									<c:set var="startPage" value="${result*10+1}" />
-									<c:set var="pageBlock" value="${10}" />
-									<c:set var="endPage" value="${startPage + pageBlock - 1}" />
+						<c:if test="${count > 0}">
+							<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
+							<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
+							<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true" />
+							<c:set var="startPage" value="${result*10+1}" />
+							<c:set var="pageBlock" value="${10}" />
+							<c:set var="endPage" value="${startPage + pageBlock - 1}" />
 
-									<c:if test="${endPage > pageCount}">
-										<c:set var="endPage" value="${pageCount}" />
-									</c:if>
+							<c:if test="${endPage > pageCount}">
+								<c:set var="endPage" value="${pageCount}" />
+							</c:if>
 
-									<c:if test="${startPage > 10}">
-										<a href="/board/pds/list?boardType=2&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">&lt;</a>
-									</c:if>
+							<c:if test="${startPage > 10}">
+								<a href="/board/pds/list?boardType=2&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">&lt;</a>
+							</c:if>
 
-									<c:forEach var="i" begin="${startPage}" end="${endPage}"
-										step="1">
-										<c:if test="${currentPage eq i}">
-											<a class="bg_purple txt_white"
-												href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">${i}</a>
-										</c:if>
-										<c:if test="${currentPage ne i}">
-											<a href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">${i}</a>
-										</c:if>
-									</c:forEach>
-
-									<c:if test="${endPage < pageCount}">
-										<a href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${startPage + 10}">&gt;</a>
-									</c:if>
+							<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+								<c:if test="${currentPage eq i}">
+									<a class="bg_purple txt_white" href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">${i}</a>
 								</c:if>
-							</div>
-						</div>
+								<c:if test="${currentPage ne i}">
+									<a href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${i}&">${i}</a>
+								</c:if>
+							</c:forEach>
+
+							<c:if test="${endPage < pageCount}">
+								<a href="/board/pds/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=2&pageNum=${startPage + 10}">&gt;</a>
+							</c:if>
+						</c:if>
 					</div>
+				</div>
+			</div>
 
 		<!-- Footer -->
 		<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/>

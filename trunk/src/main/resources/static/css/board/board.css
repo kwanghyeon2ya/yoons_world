@@ -467,7 +467,7 @@
 .pds_board > div > a > span {
 	display: inline-block;
 	overflow: hidden;
-/* 	text-overflow: ellipsis; */
+	text-overflow: ellipsis;
 }
 .pds_board > div > a > span:nth-child(1) {padding-right: 0.5rem;}
 .pds_board > div > a > span:nth-child(2) {width: 5rem;}
@@ -545,19 +545,14 @@ tr{
 	/* 공지사항 */
 	.notice_board {grid-template-columns: 4fr 4fr auto auto;}
 	
-	.notice_board > div:nth-of-type(5n-4) {
-		display: none;
-	}
+	.notice_board > div:nth-of-type(5n-4) {display: none;}
 	.notice_board > div:nth-of-type(5n-3) {
 		grid-column: span 4;
 		border-bottom: 0;
+		font-weight: 600;
 	}
-	.notice_board > div:nth-of-type(5n-2) {
-		text-align: left;
-	}
-	.notice_board > div:nth-of-type(5n-1) {
-		text-align: right;
-	}
+	.notice_board > div:nth-of-type(5n-2) {text-align: left;}
+	.notice_board > div:nth-of-type(5n-1) {text-align: right;}
 	.notice_board > div:nth-of-type(5n-1)::before {
 		content: '';
 		box-sizing: border-box;
@@ -586,22 +581,19 @@ tr{
 		background-size: cover;
 		vertical-align: middle;
 	}
+	
+	
 	/*자유게시판*/
 	.free_board {grid-template-columns: 4fr 4fr auto auto;}
 	
-	.free_board > div:nth-of-type(5n-4) {
-		display: none;
-	}
+	.free_board > div:nth-of-type(5n-4) {display: none;}
 	.free_board > div:nth-of-type(5n-3) {
 		grid-column: span 4;
 		border-bottom: 0;
+		font-weight: 600;
 	}
-	.free_board > div:nth-of-type(5n-2) {
-		text-align: left;
-	}
-	.free_board > div:nth-of-type(5n-1) {
-		text-align: right;
-	}
+	.free_board > div:nth-of-type(5n-2) {text-align: left;}
+	.free_board > div:nth-of-type(5n-1) {text-align: right;}
 	.free_board > div:nth-of-type(5n-1)::before {
 		content: '';
 		box-sizing: border-box;
@@ -632,25 +624,35 @@ tr{
 	}
 	
 	
-	
-	
 	/*자료실*/
 	.pds_board {grid-template-columns: 4fr 4fr auto auto;}
 	
-	.pds_board > div:nth-of-type(5n-4) {
-		display: none;
-	}
-	.pds_board > div:nth-of-type(5n-3) {
+	.pds_board > div:nth-of-type(6n-5) {display: none;}
+	.pds_board > div:nth-of-type(6n-4) {
 		grid-column: span 4;
 		border-bottom: 0;
+		font-weight: 600;
 	}
-	.pds_board > div:nth-of-type(5n-2) {
+	.pds_board > div:nth-of-type(6n-3) {
+		grid-column: span 4;
+		border-bottom: 0;
 		text-align: left;
 	}
-	.pds_board > div:nth-of-type(5n-1) {
-		text-align: right;
+	.pds_board > div:nth-of-type(6n-3)::before {
+		content: '';
+		box-sizing: border-box;
+		display: inline-block;
+		width: 1.5rem;
+		height: 1.5rem;
+		margin-right: 0.4rem;
+		background-image: url(/img/board/icon_download.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		vertical-align: middle;
 	}
-	.pds_board > div:nth-of-type(5n-1)::before {
+	.pds_board > div:nth-of-type(6n-2) {text-align: left;}
+	.pds_board > div:nth-of-type(6n-1) {text-align: right;}
+	.pds_board > div:nth-of-type(6n-1)::before {
 		content: '';
 		box-sizing: border-box;
 		display: inline-block;
@@ -662,11 +664,11 @@ tr{
 		background-size: cover;
 		vertical-align: middle;
 	}
-	.pds_board > div:nth-of-type(5n) {
+	.pds_board > div:nth-of-type(6n) {
 		grid-column: span 2;
 		text-align: left;
 	}
-	.pds_board > div:nth-of-type(5n)::before {
+	.pds_board > div:nth-of-type(6n)::before {
 		content: '';
 		box-sizing: border-box;
 		display: inline-block;
@@ -677,9 +679,8 @@ tr{
 		background-repeat: no-repeat;
 		background-size: cover;
 		vertical-align: middle;
-	
 	}
-	
+	.pds_board > div.no_file {display: none;}
 	
 	
 	/*회원리스트*/
