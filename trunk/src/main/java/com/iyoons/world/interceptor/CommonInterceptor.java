@@ -78,7 +78,6 @@ public class CommonInterceptor implements HandlerInterceptor {
 							UserAutoLoginVO alvo = userService.getCookieInfo(c.getValue());
 
 							if (alvo != null) {
-								logger.debug("bkh cookie db 조회 완료" + alvo);
 								session.setAttribute("sessionSeqForUser", alvo.getUserSeq());
 								session.setAttribute("sessionIdForUser", alvo.getUserId());
 								session.setAttribute("sessionNameForUser", alvo.getUserName());

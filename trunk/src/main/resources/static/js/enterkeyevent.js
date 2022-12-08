@@ -8,22 +8,22 @@
 
 /*window.onload = function(){*/
 
-	console.log('kgh : off event key up')
-  
-  
-  $(document).ready(function(){ //4번씩 작동
-	  
+  $(document).ready(function(){ //4번씩 작동(이벤트 버블링)
   
 	  $("#commContent").keyup(function(e){
-	  console.log('kgh : keyup event! ');
 //	console.log("onload");
 //	console.log("commcont : "+$("#commContent"));
 //		console.log("댓글 진입성공");
 		if(e.keyCode == 13){
-			console.log('kgh : keycode is 13');
 			$("#write_comments").click();
 		}
 	  });
+	  
+	  $(".comm_textarea").keyup(function(e){
+		if(e.keyCode == 13){
+			
+		}  
+	  })
 		
 	  
 	  $(".note-editable").keyup(function(e){

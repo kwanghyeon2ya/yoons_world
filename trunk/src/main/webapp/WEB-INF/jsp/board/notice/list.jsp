@@ -17,20 +17,15 @@
 	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 	
 	<script>
-
-	function searchCheck(){
-		console.log("검색진입");
-		alert("검색 진입");
-		
-		if($("#search_text").val().trim().length == 0){
-			alert("검색창에 내용을 입력하세요");
-			return false;
-		}
-	}
-	
+		$(document).ready(function() {
+			$("#search_frm").submit(function(){
+				if ($("#search_text").val().trim().length == 0) {
+					alert("검색창에 내용을 입력하세요");
+					return false;
+				};
+			});
+		});
 	</script>
-	
-	
 </head>
 <body>
 	<div id="page-wrapper">
@@ -45,7 +40,7 @@
 				<h2>공지사항</h2>
 				
 				<div class="search_area right">
-					<form action="/board/notice/list" method="get" onsubmit="return searchCheck();">
+					<form action="/board/notice/list" id="search_frm" method="get">
 						<input type="hidden" name="boardType" value="1"/>
 						<input type="hidden" name="searchCheck" value="1"/>
 						<select name="search">

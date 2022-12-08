@@ -55,7 +55,7 @@
 		<c:if test="${!empty freeBoardList}">
 		<c:forEach var="list" items="${freeBoardList}">
 		<div>
-			<a class="title_href" title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a>
+			<a class="title_href" title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}"><c:out escapeXml="true" value="${list.subject}"/></a>
 		</div>
 		<div class="right">
 			<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">
@@ -85,7 +85,7 @@
 		<c:forEach var="list" items="${pdsBoardList}">
 		<div>
 			<a title="${list.subject}" href="/board/pds/view?postSeq=${list.postSeq}">
-			<c:out value="${list.subject}"/>
+			<c:out escapeXml="true" value="${list.subject}"/>
 			<c:if test="${list.attachCnt != 0}">
 			/${list.fullFileName} 
 			<c:if test="${list.attachCnt > 1}">

@@ -60,9 +60,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int insertBoard(BoardVO vo,MultipartFile[] files) { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
-		System.out.println("서비스vo확인 : "+vo);
 		int result = dao.insertBoard(vo);
-		System.out.println(vo+"입력넣을때");
 		
 		for(MultipartFile f : files) {
 			if(!f.isEmpty()) {
@@ -218,9 +216,7 @@ public class BoardServiceImpl implements BoardService {
 					String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 					
 					File f = FileUtils.getFile(originalFilePath);
-					System.out.println(f.toString());
 					File df = FileUtils.getFile(newFilePath);
-					System.out.println(df.toString());
 					
 					try {
 						FileUtils.moveFile(f, df);
@@ -229,12 +225,9 @@ public class BoardServiceImpl implements BoardService {
 						e.printStackTrace();
 					}
 					
-					
 					System.out.println("view 수정페이지 삭제 진입확인");
-					System.out.println("uuid : "+file);
 					adao.deleteSelectedAttach(vo2);
 					System.out.println("view 수정페이지 삭제 완료 확인");
-					
 				}
 			}
 		}
@@ -246,7 +239,6 @@ public class BoardServiceImpl implements BoardService {
 		}else {
 			vo.setFileAttachYn("N");
 		}
-		System.out.println("여긴 impl vo.getBoardFixYn :"+vo.getBoardFixYn());
 		return dao.modView(vo);
 	}
 	@Override
@@ -275,19 +267,14 @@ public class BoardServiceImpl implements BoardService {
 		cdao.delAllCommentsByPostSeq(cvo);
 		
 		
-		System.out.println(vo.getPostSeq());
 		List<BoardAttachVO> alist = adao.getAttachList(vo.getPostSeq());
-		System.out.println(alist.toString());
 		for(BoardAttachVO avo : alist) {
-			System.out.println(avo.toString());
 			
 			String originalFilePath = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 			String newFilePath = DELETED_FILE_PATH+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
 				
 			File f = FileUtils.getFile(originalFilePath);
-			System.out.println(f.toString());
 			File df = FileUtils.getFile(newFilePath);
-			System.out.println(df.toString());
 			
 			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
 			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름

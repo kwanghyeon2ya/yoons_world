@@ -72,6 +72,10 @@
 				<img src="/img/common/icon_archive.png">
 				<span>자료실</span>
 			</a>
+			<a href="javascript:alert('서비스 준비중입니다.');">
+				<img src="/img/common/icon_appointment.png">
+				<span>회의실 예약</span>
+			</a>
 			<c:if test="${sessionScope.sessionSeqForAdmin != null}">
 			<a href="/admin/member/list">
 				<img src="/img/common/icon_members.png">

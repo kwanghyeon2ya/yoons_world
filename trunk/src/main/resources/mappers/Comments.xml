@@ -41,6 +41,7 @@
 				c.comm_group,
 				c.comm_level,
 				c.post_seq,
+				(select user_name from user_info ui where c.regr_seq = ui.user_seq) as comm_name,
 				c.regr_seq,
 				c.first_insert_dt,
 				c.updr_seq,

@@ -147,7 +147,7 @@ function getFileList(){ /* file태그 onchange function호출함 */
 					</div>
 					<div id="word_count">[0/4000자]</div>
 					<h4>첨부 파일</h4>
-					<span style="font-size:10px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
+					<span style="font-size:12px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
 					<c:if test="${empty anlist}"> <!-- 첨부파일이 없을 때 파일첨부 -->
 						<div class="input_area">
 							<input type="hidden" id="anlist_check" value="1"/>

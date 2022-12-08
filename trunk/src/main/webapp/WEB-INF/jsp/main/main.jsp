@@ -50,17 +50,20 @@
 							<%-- 로그인 후 --%>
 							<c:if test="${sessionScope.sessionSeqForUser != null}">
 							<div class="login_info">
+								<div style="display:align-items">
+								
+								</div>
 								<img class="profile" src="/img/common/profile.png">
 								<div>
 									<p>
 										<strong>${sessionScope.sessionNameForUser}</strong>님 환영합니다.
 									</p>
-									<p>${sessionScope.sessionSeqForAdmin != null ? "관리자" : "일반 회원"}</p>
+									<div style="display:flex;align-items: center;">
+										<p style="display:inline">${sessionScope.sessionSeqForAdmin != null ? "관리자" : "일반 회원"}</p>
+										<button type="button" style="margin-left:2.5rem;height:1.8rem;" class="btn type_03 bg_purple" onclick="location.href='/admin/member/list'">회원관리</button>
+									</div>
 								</div>
-								<div>
-									<button type="button" class="btn type_02 size_s bg_purple" onclick="location.href='/admin/member/list'">회원관리</button>
-								</div>
-							</div>
+							</div>							
 							<button onClick="location.href='/login/logout'">LOGOUT</button>
 							</c:if>
 						</div>

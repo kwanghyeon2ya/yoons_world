@@ -156,7 +156,18 @@
 			where 
 				c1.comm_content like '%${keyword}%')ic		 
 		 	on 
-		 	  pb.post_seq = ic.post_seq</if> 
+		 	  pb.post_seq = ic.post_seq</if>
+		 <if test="searchCheck != null and search.equals('attach_file')">
+		 inner join (
+			select DISTINCT
+			  	ba.post_seq
+			from 
+			 	board_attach ba
+			where 
+				ba.file_name like '%${keyword}%')ic		 
+		 	on 
+		 	  pb.post_seq = ic.post_seq
+		 </if>	   
 		 where pb.status = 1 and pb.board_type=#{boardType}
 		 <if test="searchCheck != null and search != null and search.equals('subject_content')">
 			and (pb.subject like '%${keyword}%' 

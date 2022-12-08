@@ -12,32 +12,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
-<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
-
-<link rel="stylesheet" type="text/css" href="/css/board/board.css">
-
-<c:if test="${sessionScope.sessionSeqForUser == null}">
-	<script>
-		alert("로그인이 필요합니다")
-		window.location.href = "/login/loginView";
-	</script>
-</c:if>
-
-<script>
-
-	function searchCheck(){
-		
-		alert("검색 진입");
-		
-		if($("#search_text").val().trim().length == 0){
-			alert("검색창에 내용을 입력하세요");
-			return false;
-		}
-	}
+	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+	<jsp:include page="/WEB-INF/jsp/inc/boardImport.jsp" flush="false" />
 	
-</script>
-
+	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
+	
+	<c:if test="${sessionScope.sessionSeqForUser == null}">
+		<script>
+			alert("로그인이 필요합니다")
+			window.location.href = "/login/loginView";
+		</script>
+	</c:if>
+	
+	<script>
+		$(document).ready(function() {
+			$("#search_frm").submit(function() {
+				if ($("#search_text").val().trim().length == 0) {
+					alert("검색창에 내용을 입력하세요");
+					return false;
+				};
+			});
+		});
+	</script>
 </head>
 <body>
 	<div id="page-wrapper">
@@ -52,7 +48,7 @@
 				<h2>자유게시판</h2>
 
 				<div class="search_area right">
-					<form action="/board/free/list" method="get" onSubmit='return searchCheck();'>
+					<form id="search_frm" action="/board/free/list" method="get">
 						<input type="hidden" name="searchCheck" value="1" /> <input
 							type="hidden" name="boardType" value="0" /> <select name="search">
 							<option value="subject_content"

@@ -43,13 +43,10 @@
 				var hire_dt = $("#hire_dt").val();
 				var user_type = $("input[name=userType]:checked").val();
 				
-				console.log("user_type : "+user_type);
-				
 				var param = {userName : user_name , userId : user_id , 
 							 userPw : user_pw, emailPart1 : email_part1, 
 							 emailPart2 : email_part2, emailPart3 : email_part3,
 							 hireDt : hire_dt , userType : user_type};
-				console.log("param : "+param);
 				
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
@@ -250,18 +247,16 @@
 
 		<div id="container">
 			<div class="content">
-		
-			<h3>회원등록</h3>
+			
+			<h3 class="page_title">회원등록</h3>
 			
 			<form method="post" id="insert_user_form" class="board-inline" onSubmit="return false">
 
-				<div>
 					<table border=1>
 						<tbody>
 							<tr>
 								<th><label for="userName">이름</label></th>
-								<td><input id="userName" name="userName" type="text"
-									maxlength="5" onkeyup="noSpaceForm(this)" /></td>
+								<td><input id="userName" name="userName" type="text" maxlength="5" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
 							<tr>
 								<th><label for="userId">아이디</label></th> 
@@ -282,10 +277,8 @@
 								<td>
 								
 								<input id="email_part1" class="email" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)" /> 
-								@ 
-								<select class="email"
-									name="emailpart2" id="email_part2"
-									onchange="selectedSelfWriting(this.value)">
+								@
+								<select class="email" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
 									<option value="naver.com">naver.com</option>
 									<option value="daum.net">daum.net</option>
 									<option value="gmail.com">gmail.com</option>
@@ -299,12 +292,17 @@
 							<tr>
 								<td>
 								</td>
-								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;" /><td>
+								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;"/><td>
 							</tr>
 							<tr>
 	<!-- 						<th><label for="userType">권한설정</label></th> -->
-								<th><input type="radio" name="userType" value="0" checked />일반회원</th>
-								<th style="text-align:left;"><input type="radio" name="userType" value="1" />관리자</th>
+								<th>
+								<label for="user_type_0">일반회원</label>
+								<input type="radio" id="user_type_0" name="userType" value="0" checked/></th>
+								<th style="text-align:left;">
+								<label for="user_type_1">관리자</label>
+								<input type="radio" id="user_type_1" name="userType" value="1" />
+								</th>
 							</tr>
 							<tr>
 								<th><label for="hire_dt">입사일</label></th>
@@ -312,7 +310,6 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
 					<!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>
@@ -342,7 +339,7 @@
 				 -->
 				<div id="create_form_btn">
 					<button class="btn type_02 bg_purple" type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
-					<button class="btn type_02 bg_purple" style="margin-left:1px;" type="button" onclick="location.href='/admin/member/list'">취소</button>
+					<button class="btn type_02 bg_purple" id="cancelbtn" type="button" onclick="location.href='/admin/member/list'">취소</button>
 				</div>
 			</form>
 		</div>

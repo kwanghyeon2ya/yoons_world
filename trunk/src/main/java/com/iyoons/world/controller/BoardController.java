@@ -174,8 +174,6 @@ public class BoardController {
 		
 		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCount(startRow, endRow);
 		
-		logger.debug("boardList : " +boardList);
-		
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("boardList",boardList);
 		return "board/pds/list";
@@ -189,8 +187,6 @@ public class BoardController {
 		int pageSize = 10;
 		
 		List<BoardVO> boardList = service.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
-		
-		logger.debug("boardList : " +boardList);
 		
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("boardList",boardList);

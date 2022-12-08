@@ -197,7 +197,7 @@
 					
 					<div class="input_area">
 						<h4>첨부 파일</h4>
-						<span style="font-size:10px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
+						<span style="font-size:12px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
 						<ul class="file_list" style="display:none">
 						
 						<!-- 첨부파일 목록이 추가 될 곳 -->

@@ -65,7 +65,7 @@
 				<h2>자료실</h2>
 
 					<div class="search_area right">
-						<form action="/board/pds/list" method="get" onSubmit="return searchCheck();">
+						<form id="search_frm" action="/board/pds/list" method="get" onSubmit="return searchCheck();">
 							<input type="hidden" id="keyword_check" value="${keyword}" />
 							<input type="hidden" id="search_check" value="${search}" />
 							<input type="hidden" name="boardType" value="2" />
@@ -105,7 +105,7 @@
 										</a>
 									</div>
 									<c:if test="${list.attachCnt eq 0}">
-									<div class="no_file">파일없음</div>
+									<div class="no_file">&nbsp;</div>
 									</c:if>
 									<c:if test="${list.attachCnt ne 0}">
 									<div>${list.fullFileName}<c:if test="${list.attachCnt > 1}"> 외 ${list.attachCnt-1}</c:if></div> <!-- 첨부파일 -->

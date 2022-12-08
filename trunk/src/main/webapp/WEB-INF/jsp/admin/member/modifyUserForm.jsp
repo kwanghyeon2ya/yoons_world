@@ -151,52 +151,55 @@
 		<div id="container">
 			<div class="content">
 		
-				<h3>회원정보수정</h3>
+			<h3 class="page_title">회원정보수정</h3>
 			
 			<form action="/admin/member/modifyUser" method="post">
-    		
-	    		<div class="area-input-info">
-					<label for="userName" >이름</label>
-					<input id="userName" name="userName" type="text" maxlength="5" value="${userVO.userName}" onkeyup="noSpaceForm(this)"/>
-				</div>
-				
-
-				<div class="area-input-info">
-					<label for="userSeq" >회원번호</label>
-					<input id="userSeq" name="userSeq" type="text" value="${userVO.userSeq}" readonly="readonly" onkeyup="noSpaceForm(this)"/>
-				</div>
-				
-
-				<div class="area-input-info">
-					<label for="userId" >아이디</label>
-					<input id="userId" name="userId" type="text" value="${userVO.userId}" onkeyup="noSpaceForm(this)" readonly="readonly"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userPw" >패스워드</label>
-					<input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="userPw2" >패스워드 확인</label>
-					<input id="userPw2" name="userPw2" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/>
-				</div>
-				
-				<div class="area-input-info">
-					<label for="email_part1">이메일</label>
-					<input id="email_part1" style="width:32%;" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
-					@
-					<select style="width:32%;" name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
-						<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
-						<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
-						<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
-						<option value="hanmail.com" ${userVO.emailPart2 eq 'hanmail.com'?'selected="selected"':''}>hanmail.com</option>
-						<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
-						<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
-					</select>
-					<input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;width:70%;"/>
-				</div>
-				
+    			<table border=1>
+						<tbody>
+							<tr>
+								<th><label for="userName" >이름</label></th>
+								<td><input id="userName" name="userName" type="text" maxlength="5" value="${userVO.userName}" onkeyup="noSpaceForm(this)"/></td>
+							</tr>			
+							<tr>
+								<th><label for="userSeq" >회원번호</label></th>
+								<td><input id="userSeq" name="userSeq" type="text" value="${userVO.userSeq}" readonly="readonly" onkeyup="noSpaceForm(this)"/></td>
+							</tr>
+							<tr>
+								<th><label for="userId" >아이디</label></th>
+								<td><input id="userId" name="userId" type="text" value="${userVO.userId}" onkeyup="noSpaceForm(this)" readonly="readonly"/></td>
+							</tr>
+							<tr>
+								<th><label for="userPw" >패스워드</label></th>
+								<td><input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/></td>
+							</tr>
+							<tr>	
+								<th><label for="userPw2" style="margin-right: 7px;">패스워드 확인</label></th>
+								<td><input id="userPw2" name="userPw2" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/></td>
+							</tr>
+							<tr>
+								<th><label for="email_part1">이메일</label></th>
+								<td>
+								
+								<input id="email_part1" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
+								@
+								<select name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+									<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
+									<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
+									<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
+									<option value="hanmail.com" ${userVO.emailPart2 eq 'hanmail.com'?'selected="selected"':''}>hanmail.com</option>
+									<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
+									<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
+								</select>
+								
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>	
+								<td><input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;"/></td>
+							</tr>	
+						</tbody>
+					</table>		
 <!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>
@@ -225,13 +228,10 @@
 				</div>
 				 -->
 				 
-				<div class="area-input-info">
-					<div class="area-button area-input-info-sub">
+					<div id="create_form_btn">
 						<button type="submit" class="btn type_02 size_s bg_purple" id="updatebtn">수정</button>
-						<button type="button" class="btn type_02 size_s bg_purple" onclick="location.href='/admin/member/list'">취소</button>
+						<button type="button" class="btn type_02 size_s bg_purple" id="cancelbtn" onclick="location.href='/admin/member/list'">취소</button>
 					</div>
-				</div>
-			
 			</form>
 			
 			
