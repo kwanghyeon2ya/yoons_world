@@ -80,55 +80,55 @@ function showHideNestedCocoList(index,comm_seq){ // 다시짜야할듯 ..
 		}
 		*/
 		
-		if(!$(".coco_list_hidden_div_"+comm_seq).is(':visible')){
-			$(".coco_list_hidden_div_"+comm_seq).show();
-		}else{
-			$(".coco_list_hidden_div_"+comm_seq).hide();
-		}
+	if(!$(".coco_list_hidden_div_"+comm_seq).is(':visible')){
+		$(".coco_list_hidden_div_"+comm_seq).show();
+	}else{
+		$(".coco_list_hidden_div_"+comm_seq).hide();
+	}
 }
 
 function getCommentsList(post_seq){
 	
-		$.ajax({
-			url : '/board/comments?postSeq='+post_seq,
-			type : 'POST',
-			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-			dataType : "html",
-			async : false,
-		 	success : function(data){
-						$('#reload_div_parent').append(data);
-			}
-		})
+	$.ajax({
+		url : '/board/comments?postSeq='+post_seq,
+		type : 'POST',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		dataType : "html",
+		async : false,
+	 	success : function(data){
+					$('#reload_div_parent').append(data);
+		}
+	})
 }
 
 
 function showMoreComments(post_seq){ //댓글 더보기 추가
 			
-			var more_comments_div = Array.from(document.getElementsByClassName("more_comments_div"));
-			var coco_count = document.getElementsByClassName("coco_count_check").length;
-			console.log("coco_count : "+coco_count); // 더보기 누르고 추가되는 것이기 떄문에 순서 생각
-			var start_index = coco_count + 1;
-			var end_index = coco_count + 10;
-			
-			console.log("start_index : "+start_index);
-			console.log("end_index : "+end_index);
-			
-			var param = {postSeq:post_seq,startIndex:start_index,endIndex:end_index,cocoCount:coco_count};
-			
-			$.ajax({
-				url : '/board/comments',
-				type : 'GET',
-				contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-				data : param,
-				dataType : "html",
-				async : false,
-			 	success : function(data){
-			 		
-			 					$("#more_comments_list").remove();
-			 				
-			 				$('#reload_div_parent').append($(data).find("#comments_div"));
-							+$("#more_comments_page").val() + 1;
-							console.log("after plus : "+$("#more_comments_page").val());
-				}
-			})
+	var more_comments_div = Array.from(document.getElementsByClassName("more_comments_div"));
+	var coco_count = document.getElementsByClassName("coco_count_check").length;
+	console.log("coco_count : "+coco_count); // 더보기 누르고 추가되는 것이기 떄문에 순서 생각
+	var start_index = coco_count + 1;
+	var end_index = coco_count + 10;
+	
+	console.log("start_index : "+start_index);
+	console.log("end_index : "+end_index);
+	
+	var param = {postSeq:post_seq,startIndex:start_index,endIndex:end_index,cocoCount:coco_count};
+	
+	$.ajax({
+		url : '/board/comments',
+		type : 'GET',
+		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+		data : param,
+		dataType : "html",
+		async : false,
+	 	success : function(data){
+	 		
+	 					$("#more_comments_list").remove();
+	 				
+	 				$('#reload_div_parent').append($(data).find("#comments_div"));
+					+$("#more_comments_page").val() + 1;
+					console.log("after plus : "+$("#more_comments_page").val());
+		}
+	})
 	}

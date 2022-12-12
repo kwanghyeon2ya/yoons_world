@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%
 	response.setHeader("Cache-Control", "no-store");
@@ -21,8 +22,7 @@
 <div class="area-board-comm">
 	<form id="comm_insert_form" class="comm_form" method="post" onSubmit="return false" style="margin-top: 0;">
 	
-		<input type="textarea" class="comm_textarea" name="commContent" id="commContent" placeholder="새로운 댓글을 등록해보세요"/>
-		
+		<textArea class="comm_textarea" name="commContent" id="commContent" placeholder="새로운 댓글을 등록해보세요"></textArea>		
 		<div class="area-board-comm-btn">
 			<input type="hidden" name="postSeq" id="postSeq" value="${vo.postSeq}" />
 			<button id="write_comments" type="button" onClick="writeCommentsCheck(${vo.postSeq})">등록</button>
@@ -30,6 +30,8 @@
 	</form>
 </div>
 
+<%-- <% pageContext.setAttribute("LF", "\n"); %>
+<c:out escapeXml = "false" value = "$(fn:replace(stringvalue, LF, '<br>')"></c:out> --%>
 
 
 <div id="comments_div_parent"><!-- 댓글전체div 부모 -->
@@ -80,14 +82,16 @@
 								
 								
 								<div class="area-board-comm-mod">
-									<form id="coco_insert_form_${clist.commSeq}" class="comm_form" method="post" style="display:none">
+									<form id="coco_insert_form_${clist.commSeq}" name="coco_insert_form_${clist.commSeq}" class="comm_form" method="post" style="display:none">
 										<input type="hidden" id="coco_comm_seq_${clist.commSeq}" value="${clist.commSeq}"/>
 										<input type="hidden" id="coco_comm_group_${clist.commSeq}" value="${clist.commGroup}"/>
+										<input type="text" style="display:none;">
 										
-										<input type="text" id="coco_comm_content_${clist.commSeq}" class="comm_textarea" placeholder="댓글에 대한 의견을 남겨보세요" />
+										<%-- <input type="text" onkeyup="cocoKeyup(event,${clist.commSeq})" id="coco_comm_content_${clist.commSeq}" class="comm_textarea" placeholder="댓글에 대한 의견을 남겨보세요" /> --%>
+										<textarea id="coco_comm_content_${clist.commSeq}" class="comm_textarea" placeholder="댓글에 대한 의견을 남겨보세요" ></textarea>  
 										<div class="area-board-comm-btn">
 											<input type="hidden" id="coco_post_seq_${clist.commSeq}" value="${vo.postSeq}" />
-											<button type="button" id="insert_coco_${clist.commSeq}" onclick="insertCocoCheck(${clist.commSeq})">등록</button>
+											<button type="button" id="insert_coco_${clist.commSeq}" name="insert_coco_${clist.commSeq}" onclick="insertCocoCheck(${clist.commSeq})">등록</button>
 										</div> 
 									</form>
 								</div>
@@ -115,7 +119,7 @@
 										<img class="profile" src="/img/common/profile.png">
 										<span class="writer txt_999"><c:out value="${clist.commName}"/></span>
 									</div>
-									<div>
+									`<div>
 										<span class="date txt_999"><fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
 									</div>
 								</div>

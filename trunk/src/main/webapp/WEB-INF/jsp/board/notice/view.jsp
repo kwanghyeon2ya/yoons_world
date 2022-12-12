@@ -79,10 +79,11 @@
 						<c:if test="${vo.expiryDt gt 0 || vo.expiryHour gt 0}">
 							<div class="input_area" style="text-align:right;">
 								<span style="font-size: 12px;">
+								
 								<c:if test="${vo.expiryDt gt 0}">
-								${vo.expiryDt}일 &nbsp;
+								${vo.expiryDt}일
 								</c:if> 
-								${vo.expiryHour}시간 후에 고정이 해제됩니다.</span>
+								${vo.expiryHour}시간 ${vo.expiryMinute}분 후에 고정이 해제됩니다.</span>
 							</div>
 						</c:if>
 					</div>

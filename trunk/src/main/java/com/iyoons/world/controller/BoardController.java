@@ -469,14 +469,23 @@ public class BoardController {
 			Date endDt = sdf.parse(vo.getFixEndDt());
 			long currentMilliseconds = System.currentTimeMillis();
 			
-			if(startDt.getTime()-currentMilliseconds < 0 && endDt.getTime()-currentMilliseconds > 0) {
-				int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000) / (24*60*60);
-				int expiryHour = (int) (((endDt.getTime()-currentMilliseconds) / 1000) % (24*60*60)/60/60);
-				/*System.out.println("expiryDt :"+expiryDt);
+			System.out.println("currentMilliseconds : "+currentMilliseconds);
+			System.out.println("endDt : "+endDt.getTime());
+			
+			if(startDt.getTime()-currentMilliseconds < 0 && endDt.getTime()-currentMilliseconds > 0) { //현재 시간보다 고정 시작 날짜가 과거여야만 작동
+				
+				int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000)/60/60/24;
+				int expiryHour = (int) ((endDt.getTime()-currentMilliseconds) / 1000) /60/60%24;
+				int expiryMinute = (int) (((endDt.getTime()-currentMilliseconds) / 1000) /60/60%60);
+				
+				Date expiry = new Date(endDt.getTime()-currentMilliseconds); // 분 뽑아내기
+				
+				System.out.println(((endDt.getTime()-currentMilliseconds) / 1000) % (24*60*60));
 				System.out.println("expiryHour :"+expiryHour);
-				System.out.println("expiryMinute :"+expiryMinute);*/
+				System.out.println("expiryMinute :"+expiryMinute);
 				vo.setExpiryDt(expiryDt);
 				vo.setExpiryHour(expiryHour);
+				vo.setExpiryMinute(expiry.getMinutes());
 			}
 			
 			model.addAttribute("vo", vo);

@@ -8,10 +8,41 @@
 
 /*window.onload = function(){*/
 
+/*function cocoKeyup(e,cocoSeq){//대댓글 작성 시 작동
+	console.log("e :"+e.keyCode);
+	console.log("e value:"+e.value);
+	if(event.keyCode == 13){//대댓글 작성 후  엔터시 진입
+		e.stopPropagation();
+		alert("엔터누름 - 키코드"+event.keyCode);
+		insertCocoCheck(cocoSeq);//대댓글 작성 function 호출
+		event.keyCode = 0; //enterkey 무력화 
+		console.log("버튼과 cocoSeq 결합 - 엔터누른뒤 : "+$("#coco_comm_content_"+cocoSeq));
+		$("#insert_coco_"+cocoSeq).click(); //대댓글 작성 버튼 클릭
+		$("#coco_comm_content_"+cocoSeq).off().on("click", function(){
+			  //click 시 수행할 동작
+		});
+	}
+}*/
+
+/*function cocoKeyup(e,cocoSeq){//대댓글 작성 시 작동
+	console.log("e :"+e.keyCode);
+	console.log("e value:"+e.value);
+	if(event.keyCode == 13){//대댓글 작성 후  엔터시 진입
+		e.stopPropagation();
+		alert("엔터누름 - 키코드"+event.keyCode);
+		insertCocoCheck(cocoSeq);//대댓글 작성 function 호출
+		event.keyCode = 0; //enterkey 무력화 
+		console.log("버튼과 cocoSeq 결합 - 엔터누른뒤 : "+$("#coco_comm_content_"+cocoSeq));
+		
+	}
+}*/
+
+
   $(document).ready(function(){ //4번씩 작동(이벤트 버블링)
   
-	  $("#commContent").keyup(function(e){
-//	console.log("onload");
+	  /*$("#commContent").keyup(function(e){
+		console.log("e :"+e);
+		console.log("e"+e.keyCode);
 //	console.log("commcont : "+$("#commContent"));
 //		console.log("댓글 진입성공");
 		if(e.keyCode == 13){
@@ -19,20 +50,13 @@
 		}
 	  });
 	  
-	  $(".comm_textarea").keyup(function(e){
-		if(e.keyCode == 13){
-			
-		}  
-	  })
-		
-	  
 	  $(".note-editable").keyup(function(e){
 		  if(e.keyCode == 13){
 			  $("#move_action_button").click();
 		  }
 	  });
 	  
-	  /*$(".note-editable").keyup(function(e){
+	  $(".note-editable").keyup(function(e){
 		  if(e.keyCode == 13){
 			  $("#move_action_button").click();
 		  }
