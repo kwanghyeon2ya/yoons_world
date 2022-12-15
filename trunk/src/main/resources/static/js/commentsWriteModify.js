@@ -92,15 +92,20 @@ function modifyCommentsCheck(index){
 	/* processData: false, */
 		/* contentType: false, */
 	 	success : function(data){
-	 		console.log("data 확인 : "+data);
 					if(data == '') {
 						alert("댓글이 수정되지 않았습니다");
 					}else{
 						alert("댓글이 수정되었습니다");
 						console.log("data : "+data);
 						/*$('.reload_comment_parent_'+index).html();*/
-						$("#ptag_commContent_"+index).text(data);
-						/*$("#ptag_commContent_"+index).html("<p><c:out escaperXml='ture' value="+data+"/>"+data+"</p>");*/
+						var str = data;
+						console.log("str before : "+str);
+						
+						str = str.replace(/\r\n/ig, '<br>');
+			            str = data.replace(/\n/ig, '<br>');
+			            console.log("str after : "+str);
+						$("#ptag_commContent_"+index).html(str);
+						/*$("#ptag_commContent_"+index).html("<p><c:out escaperXml='false' value="+data+"/>"+data+"</p>");*/
 						$("#comment_mod_form_"+index).css("display","none");
 					}
 				}

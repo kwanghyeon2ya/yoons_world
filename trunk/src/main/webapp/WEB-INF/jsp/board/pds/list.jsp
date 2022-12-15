@@ -24,13 +24,6 @@
 	</script>
 </c:if>
 
-	<c:if test="${sessionScope.sessionSeqForUser == null}">
-		<script>
-			alert("로그인이 필요합니다");
-			window.location.href = "/login/loginView";
-		</script>
-	</c:if>
-	
 	<script>
 	$(document).ready(function() {
 		$("#search_frm").submit(function(){

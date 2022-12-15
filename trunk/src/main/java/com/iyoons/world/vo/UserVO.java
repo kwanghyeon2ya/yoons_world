@@ -33,5 +33,10 @@ public class UserVO {
 	private String depName;
 	private List<String> userSeqArray; // 관리자페이지 - 회원관리리스트에서 삭제or수정에 체크된 회원
 	private String checkTokenYn; // 로그인 페이지에서 자동로그인 checkbox의 value값 확인용
-	
+	private String phone; // 핸드폰번호
+	private int phone1; // 핸드폰번호 첫번째칸
+	private int phone2; // 핸드폰번호 두번째
+	private int phone3; // 핸드폰번호 세번째칸
+	private int extension; // 내선번호
+	private String depSeq; // 부서고유번호
 }

@@ -88,7 +88,8 @@ public class UserServiceImpl implements UserService {
 	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
-		
+		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
+		System.out.println("userVO 번호확인 : "+userVO.getPhone());
 		userVO.setUserPw(getHashPw(userVO));
 		
 		return userDAO.insertUser(userVO);

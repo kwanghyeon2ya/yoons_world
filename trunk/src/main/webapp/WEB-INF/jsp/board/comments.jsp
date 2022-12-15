@@ -4,6 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<% pageContext.setAttribute("CRLF", "\r\n");%>
+<% pageContext.setAttribute("LF", "\n"); %>
+
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -30,9 +33,6 @@
 	</form>
 </div>
 
-<%-- <% pageContext.setAttribute("LF", "\n"); %>
-<c:out escapeXml = "false" value = "$(fn:replace(stringvalue, LF, '<br>')"></c:out> --%>
-
 
 <div id="comments_div_parent"><!-- 댓글전체div 부모 -->
 
@@ -46,7 +46,7 @@
 					
 					<input type="hidden" class="coco_count_check" value="0"/><!-- 대댓 갯수 확인용 -->
 					
-					<input type="hidden" class="coco_check_variable_${clist.commSeq}" value="0"/><!-- 대댓 확인용 --> 
+					<input type="hidden" class="coco_check_variable_${clist.commSeq}" value="0"/><!-- 대댓 확인용 -->
 					
 					
 					<!-- 스크롤 시작부분 -->
@@ -63,7 +63,7 @@
 									</div>
 								</div>
 								<div id="ptag_commContent_${clist.commSeq}" class="comm_txt">
-									<p><c:out value="${clist.commContent}"/></p>
+									<p>${fn:replace(fn:replace(fn:escapeXml(clist.commContent), CRLF, '<br/>'), LF, '<br/>')}</p>
 								</div>
 								<div class="comm_btn">
 									<c:if test="${clist.nestedCommentsCnt != 0}">
@@ -119,7 +119,7 @@
 										<img class="profile" src="/img/common/profile.png">
 										<span class="writer txt_999"><c:out value="${clist.commName}"/></span>
 									</div>
-									`<div>
+									<div>
 										<span class="date txt_999"><fmt:formatDate value="${clist.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
 									</div>
 								</div>
@@ -160,8 +160,8 @@
 											<span class="date"><fmt:formatDate value="${cocoList.firstInsertDt}" type="date" pattern="yyyy-MM-dd hh:mm"/></span>
 										</div>
 									</div>
-									<div id="ptag_commContent_${clist.commSeq}" class="comm_txt">
-										<p><c:out value="${cocoList.commContent}"/></p>
+									<div id="ptag_commContent_${cocoList.commSeq}" class="comm_txt">
+										${fn:replace(fn:replace(fn:escapeXml(cocoList.commContent), CRLF, '<br/>'), LF, '<br/>')}
 									</div>
 									<div class="comm_btn">
 										<c:if test="${sessionScope.sessionSeqForUser == cocoList.regrSeq}">
@@ -176,7 +176,7 @@
 									<input type="hidden" name="coco_group" id="coco_group_${cocoList.commSeq}" class="coco_group_class" value="${cocoList.commGroup}"/>
 									<p>작성자 : <c:out value="${cocoList.commName}"/></p>
 									<p>삭제된 댓글입니다</p>
-								</c:if>	
+								</c:if>
 							
 							<div class="area-board-comm-mod">
 								<form id="comment_mod_form_${cocoList.commSeq}" class="comm_form" method="post" style="display:none"><!-- 댓글 수정폼 -->

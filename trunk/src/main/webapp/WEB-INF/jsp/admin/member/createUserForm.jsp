@@ -33,7 +33,10 @@
 				var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
 				var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
 				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
-				
+				var phone1_confirm = RegExp(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})$/);
+			    var phone2_confirm = RegExp(/^[0-9]{3,4}$/);
+			    var phone3_confirm = RegExp(/^[0-9]{4}$/);
+			    
 				var user_name = $("#userName").val();
 				var user_id = $("#userId").val();
 				var user_pw = $("#userPw").val();
@@ -42,11 +45,19 @@
 				var email_part3 = $("#email_part3").val();
 				var hire_dt = $("#hire_dt").val();
 				var user_type = $("input[name=userType]:checked").val();
+				var phone1 = $("#phone1").val();
+				var phone2 = $("#phone1").val();
+				var phone3 = $("#phone1").val();
+				var extension = $("#extension").val();
+				var dep_seq = $("#dep_seq").val();
 				
 				var param = {userName : user_name , userId : user_id , 
 							 userPw : user_pw, emailPart1 : email_part1, 
 							 emailPart2 : email_part2, emailPart3 : email_part3,
-							 hireDt : hire_dt , userType : user_type};
+							 hireDt : hire_dt , userType : user_type,
+							 phone1 : phone1 , phone2 : phone2, 
+							 phone3 : phone3 , extension : extension,
+							 depSeq : dep_seq};
 				
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
@@ -141,6 +152,51 @@
 					
 				};
 				
+				//번호 유효성 검사
+		        if($("#phone1").val() == ""){
+		        	alert("전화번호를 비워둘 수 없습니다.")
+		        	$("#phone1").focus();
+		        	return false;
+		        }
+		        if(!phone1_confirm.test($("#phone1").val())){
+		        	alert("전화번호를 정확히 입력해주세요.")
+		        	$("#phone1").val("");
+		        	$("#phone1").focus();
+		        	return false;
+		        }
+		        if($("#phone2").val() == ""){
+		        	alert("전화번호를 비워둘 수 없습니다.")
+		        	$("#phone2").focus();
+		        	return false;
+		        }
+		        if(!phone2_confirm.test($("#phone2").val())){
+		        	alert("전화번호를 정확히 입력해주세요.")
+		        	$("#phone2").val("");
+		        	$("#phone2").focus();
+		        	return false;
+		        }
+		        if($("#phone3").val() == ""){
+		        	alert("전화번호를 비워둘 수 없습니다.")
+		        	$("#phone3").focus();
+		        	return false;
+		        }
+		       	if(!phone3_confirm.test($("#phone3").val())){
+		       		alert("전화번호를 정확히 입력해주세요");
+		       		$("#phone3").val("");
+		       		$("#phone3").focus();
+		       		return false;
+		       	}
+		       	if($("#extension").val() == ""){
+		        	alert("내선번호를 비워둘 수 없습니다.")
+		        	$("#extension").focus();
+		        	return false;
+		        }
+		       	if(!phone3_confirm.test($("#extension").val())){
+		       		alert("내선번호를 정확히 입력해주세요.");
+		       		$("#extension").val("");
+		       		$("#extension").focus();
+		       	}
+			
 				$.ajax({
 					url : '/admin/member/createUser',
 					type : 'POST',
@@ -307,6 +363,30 @@
 							<tr>
 								<th><label for="hire_dt">입사일</label></th>
 								<td><input id="hire_dt" type="date" name="hireDt" /></td>
+							</tr>
+							<tr>
+								<th><label for="phone1">핸드폰 번호</label></th>
+								<td>
+								<input id="phone1" name="phone1" type="text" maxlength="3" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
+								<input id="phone2" name="phone2" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
+								<input id="phone3" name="phone3" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="extension">내선 번호</label></th>
+								<td><input id="extension" name="extension" type="text" maxlength="4" onkeyup="noSpaceForm(this)" /></td>
+							</tr>
+							<tr>
+								<th>부서 고유번호</th>
+								<td><select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
+									<option value="A1">기술지원팀</option>
+									<option value="A2">기술개발팀</option>
+									<option value="A3">기술기획팀</option>
+									<option value="B1">총무팀</option>
+									<option value="B2">라이브팀</option>
+									<option value="B3">방송팀</option>
+								</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
