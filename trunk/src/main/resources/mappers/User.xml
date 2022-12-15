@@ -106,7 +106,7 @@
 			email,
 			phone,
 			extension,
-			dep_seq,
+			dep_id,
 			hire_dt,
 			user_type,
 			user_status,
@@ -120,7 +120,7 @@
 			#{email},
 			#{phone},
 			#{extension},
-			#{depSeq},
+			#{depId},
 			#{hireDt},
 			#{userType},
 			1,
@@ -136,7 +136,10 @@
 		SET
 			user_name = #{userName},
 			user_pw = #{userPw},
-			email = #{email}
+			email = #{email},
+			dep_id = #{depId},
+			extension = #{extension},
+			phone = #{phone}
 		WhERE
 			user_seq = #{userSeq} <!-- 일련번호로 수정 -->
 	</update>
@@ -147,7 +150,10 @@
 			user_id,
 			user_name,
 			email,
-			user_seq
+			user_seq,
+			phone,
+			extension,
+			dep_id
 		FROM
 			user_info
 		WhERE

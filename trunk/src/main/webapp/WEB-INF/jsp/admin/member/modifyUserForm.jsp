@@ -239,37 +239,62 @@
 									<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
 									<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
 								</select>
-								
 								</td>
 							</tr>
+							
+							<tr>
+								<td>
+								</td>
+								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;"/><td>
+							</tr>
+							
 							<tr>
 								<th><label for="phone1">핸드폰 번호</label></th>
 								<td>
-								<input id="phone1" name="phone1" type="text" maxlength="3" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone2" name="phone2" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone3" name="phone3" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>
+								<input id="phone1" name="phone1" value="${userVO.phone1}" type="text" maxlength="3" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
+								<input id="phone2" name="phone2" value="${userVO.phone2}" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
+								<input id="phone3" name="phone3" value="${userVO.phone3}" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>
 								</td>
 							</tr>
 							<tr>
 								<th><label for="extension">내선 번호</label></th>
-								<td><input id="extension" name="extension" type="text" maxlength="4" onkeyup="noSpaceForm(this)" /></td>
+								<td><input id="extension" name="extension" type="text" value="${userVO.extension}" maxlength="4" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
 							<tr>
-								<th>부서 고유번호</th>
-								<td><select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
-									<option value="A1">기술지원팀</option>
-									<option value="A2">기술개발팀</option>
-									<option value="A3">기술기획팀</option>
-									<option value="B1">총무팀</option>
-									<option value="B2">라이브팀</option>
-									<option value="B3">방송팀</option>
+								<th>부서</th>
+								<td>
+								<select name="depId" id="dep_id" style="width:17rem;margin-right:0.5rem;">
+									<option value="01" ${userVO.depId eq '01'?'selected="selected"':''}>재경팀</option>
+									<option value="02" ${userVO.depId eq '02'?'selected="selected"':''}>재무예상팀</option>
+									<option value="03" ${userVO.depId eq '03'?'selected="selected"':''}>경영기획팀</option>
+									<option value="04" ${userVO.depId eq '04'?'selected="selected"':''}>홍보팀</option>
+									<option value="05" ${userVO.depId eq '05'?'selected="selected"':''}>인사팀</option>
+									<option value="06" ${userVO.depId eq '06'?'selected="selected"':''}>비서팀</option>
+									<option value="07" ${userVO.depId eq '07'?'selected="selected"':''}>고객지원팀</option>
+									<option value="08" ${userVO.depId eq '08'?'selected="selected"':''}>법무팀</option>
+									<option value="09" ${userVO.depId eq '09'?'selected="selected"':''}>영업지원팀</option>
+									<option value="10" ${userVO.depId eq '10'?'selected="selected"':''}>사업지원팀</option>
+									<option value="11" ${userVO.depId eq '11'?'selected="selected"':''}>총무/제작팀</option>
+									<option value="12" ${userVO.depId eq '12'?'selected="selected"':''}>자산관리팀</option>
+									<option value="13" ${userVO.depId eq '13'?'selected="selected"':''}>시설관리팀</option>
+									<option value="14" ${userVO.depId eq '14'?'selected="selected"':''}>교육팀</option>
+									<option value="15" ${userVO.depId eq '15'?'selected="selected"':''}>상품연구팀</option>
+									<option value="16" ${userVO.depId eq '16'?'selected="selected"':''}>비주얼디자인팀</option>
+									<option value="17" ${userVO.depId eq '17'?'selected="selected"':''}>사운드디자인팀</option>
+									<option value="18" ${userVO.depId eq '18'?'selected="selected"':''}>영상디자인팀</option>
+									<option value="19" ${userVO.depId eq '19'?'selected="selected"':''}>콘텐츠개발팀</option>
+									<option value="20" ${userVO.depId eq '20'?'selected="selected"':''}>기술기획팀</option>
+									<option value="21" ${userVO.depId eq '21'?'selected="selected"':''}>기술개발팀</option>
+									<option value="22" ${userVO.depId eq '22'?'selected="selected"':''}>기술지원팀</option>
+									<option value="23" ${userVO.depId eq '23'?'selected="selected"':''}>B2C사업팀</option>
+									<option value="24" ${userVO.depId eq '24'?'selected="selected"':''}>홈사업팀</option>
+									<option value="25" ${userVO.depId eq '25'?'selected="selected"':''}>학원사업팀</option>
 								</select>
 								</td>
 							</tr>
 							<tr>
 								<td>
 								</td>	
-								<td><input type="text" name="emailPart3" id="email_part3" value="${userVO.emailPart3}" style="display:none;"/></td>
 							</tr>	
 						</tbody>
 					</table>		

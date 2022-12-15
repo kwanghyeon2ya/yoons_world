@@ -46,18 +46,10 @@
 				var hire_dt = $("#hire_dt").val();
 				var user_type = $("input[name=userType]:checked").val();
 				var phone1 = $("#phone1").val();
-				var phone2 = $("#phone1").val();
-				var phone3 = $("#phone1").val();
+				var phone2 = $("#phone2").val();
+				var phone3 = $("#phone3").val();
 				var extension = $("#extension").val();
-				var dep_seq = $("#dep_seq").val();
-				
-				var param = {userName : user_name , userId : user_id , 
-							 userPw : user_pw, emailPart1 : email_part1, 
-							 emailPart2 : email_part2, emailPart3 : email_part3,
-							 hireDt : hire_dt , userType : user_type,
-							 phone1 : phone1 , phone2 : phone2, 
-							 phone3 : phone3 , extension : extension,
-							 depSeq : dep_seq};
+				var dep_id = $("#dep_id").val();
 				
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
@@ -196,6 +188,14 @@
 		       		$("#extension").val("");
 		       		$("#extension").focus();
 		       	}
+		       	
+		       	var param = {userName : user_name , userId : user_id , 
+							 userPw : user_pw, emailPart1 : email_part1, 
+							 emailPart2 : email_part2, emailPart3 : email_part3,
+							 hireDt : hire_dt , userType : user_type,
+							 phone1 : phone1 , phone2 : phone2, 
+							 phone3 : phone3 , extension : extension,
+							 depId : dep_id};
 			
 				$.ajax({
 					url : '/admin/member/createUser',
@@ -317,8 +317,8 @@
 							<tr>
 								<th><label for="userId">아이디</label></th> 
 								<td><input id="userId" name="userId" type="text" maxlength="15" onkeyup="noSpaceForm(this)" />
-								<button class="btn type_02 bg_purple" onclick="DuplicatedIdCheck()">중복확인</button></td>
-								<td><p id="dup_id"></p></td>
+								<button class="btn type_02 bg_purple" onclick="DuplicatedIdCheck()">중복확인</button>
+								<p id="dup_id"></p></td>
 							</tr>
 							<tr>
 								<th><label for="userPw">패스워드</label></th>
@@ -342,7 +342,6 @@
 									<option value="yahoo.co.kr">yahoo.co.kr</option>
 									<option value="self_writing">직접입력</option>
 								</select>
-								
 								</td>
 							</tr>
 							<tr>
@@ -377,14 +376,34 @@
 								<td><input id="extension" name="extension" type="text" maxlength="4" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
 							<tr>
-								<th>부서 고유번호</th>
-								<td><select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
-									<option value="A1">기술지원팀</option>
-									<option value="A2">기술개발팀</option>
-									<option value="A3">기술기획팀</option>
-									<option value="B1">총무팀</option>
-									<option value="B2">라이브팀</option>
-									<option value="B3">방송팀</option>
+								<th>부서</th>
+								<td>
+								<select name="depId" id="dep_id" style="width:17rem;margin-right:0.5rem;">
+									<option value="01">재경팀</option>
+									<option value="02">재무예상팀</option>
+									<option value="03">경영기획팀</option>
+									<option value="04">홍보팀</option>
+									<option value="05">인사팀</option>
+									<option value="06">비서팀</option>
+									<option value="07">고객지원팀</option>
+									<option value="08">법무팀</option>
+									<option value="09">영업지원팀</option>
+									<option value="10">사업지원팀</option>
+									<option value="11">총무/제작팀</option>
+									<option value="12">자산관리팀</option>
+									<option value="13">시설관리팀</option>
+									<option value="14">교육팀</option>
+									<option value="15">상품연구팀</option>
+									<option value="16">비주얼디자인팀</option>
+									<option value="17">사운드디자인팀</option>
+									<option value="18">영상디자인팀</option>
+									<option value="19">콘텐츠개발팀</option>
+									<option value="20">기술기획팀</option>
+									<option value="21">기술개발팀</option>
+									<option value="22">기술지원팀</option>
+									<option value="23">B2C사업팀</option>
+									<option value="24">홈사업팀</option>
+									<option value="25">학원사업팀</option>
 								</select>
 								</td>
 							</tr>

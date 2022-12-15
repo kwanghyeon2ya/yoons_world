@@ -90,6 +90,7 @@ public class UserAdminController {
 		if(userService.checkId(userVO) == 1) {
 			return 2;
 		}
+		System.out.println("컨트롤러 - 번호검사 : "+userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		System.out.println(userVO.getEmailPart2());
 		if("self_writing".equals(userVO.getEmailPart2())) {
 			userVO.setEmailPart2(userVO.getEmailPart3());
@@ -116,6 +117,12 @@ public class UserAdminController {
 				userVO.setEmailPart2(email);
 			}
 		}
+		
+		String [] phone = userVO.getPhone().split("-");
+		userVO.setPhone1(phone[0]);
+		userVO.setPhone2(phone[1]);
+		userVO.setPhone3(phone[2]);
+		
 		if(userVO.getEmailPart2() == null) {
 			userVO.setEmailPart2("self_writing");
 			userVO.setEmailPart3(userVO.getEmail().split("@")[1]);

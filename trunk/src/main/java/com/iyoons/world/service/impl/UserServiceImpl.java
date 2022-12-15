@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
 	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		
 		userVO.setUserPw(getHashPw(userVO));
 		

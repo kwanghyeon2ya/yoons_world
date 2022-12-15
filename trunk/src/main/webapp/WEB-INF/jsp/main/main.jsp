@@ -68,6 +68,10 @@
 							</c:if>
 						</div>
 						
+						<div>
+							<span style="font-size:3rem;">전화번호 검색</span>
+						</div>
+						
 						<!-- 조회수 TOP 리스트 -->
 						<h3>조회수 TOP (한달)</h3>
 						<div id="rank_board_list" class="rank_area"></div>
