@@ -190,10 +190,10 @@
 						<c:forEach var="list" items="${userList}" varStatus="loop">
 								<div>${list.userSeq}</div>
 								<div>
-									<a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userName}</a>
+									<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userName}</a>
 								</div>
 								<div>
-									<a href="/admin/member/modifyUserForm?userId=${list.userId}">${list.userId}</a>
+									<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userId}</a>
 								</div>
 								<div>${list.email}</div>
 								<%-- <div class="mem-dep">${list.depName}</div> --%>

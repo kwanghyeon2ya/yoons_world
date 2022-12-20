@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.iyoons.world.vo.UserVO;
+import com.iyoons.world.vo.DepVO;
 import com.iyoons.world.vo.PageVO;
 import com.iyoons.world.vo.UserAutoLoginVO;
 
@@ -16,7 +17,7 @@ public interface UserDAO {
 	
 	public int updateUser(UserVO userVO) throws SQLException;
 	
-	public UserVO userDetail(String userId) throws SQLException;
+	public UserVO userDetail(UserVO userVOFromParam) throws SQLException;
 
 	public int deleteUser(UserVO userVO) throws SQLException;
 	
@@ -41,4 +42,14 @@ public interface UserDAO {
 	public int deleteCookie(String cookieKey);
 	
 	public int deleteCookieWhenLogin(UserAutoLoginVO alvo);
+	
+	public int insertDepUser(DepVO depVO);
+	
+	public int deleteDepUser(DepVO depVO);
+	
+	public int recoverDepUserStatus(DepVO depVO);
+	
+	public List<UserVO> getUserInfoList(UserVO userVO);
+	
+	public int getUserCount(UserVO userVO);
 }

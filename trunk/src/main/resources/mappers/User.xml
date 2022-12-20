@@ -106,27 +106,57 @@
 			email,
 			phone,
 			extension,
-			dep_id,
 			hire_dt,
 			user_type,
 			user_status,
 			regr_seq
 		)
 		VALUES (
-			user_seq.nextval,
+			#{userSeq},
 			#{userId},
 			#{userPw},
 			#{userName},
 			#{email},
 			#{phone},
 			#{extension},
-			#{depId},
 			#{hireDt},
 			#{userType},
 			1,
 			#{regrSeq}
 		)
+		<selectKey resultType="int" keyProperty="userSeq" order="BEFORE" keyColumn="int">
+			select user_seq.nextval from dual
+		</selectKey>
 	</insert>
+	
+	<insert id="insertDepUser"
+		parameterType="com.iyoons.world.vo.DepVO">
+		insert into dep_user(
+			dep_id,
+			user_seq,
+			status,
+			regr_seq,
+			first_insert_dt
+		)
+		values(
+			#{depId},
+			#{userSeq},
+			1,
+			#{regrSeq},
+			sysdate
+		)
+	</insert>
+	<update id="updateDepUser">
+		update 
+			dep_user
+		set
+			dep_id=#{depId},
+			updr_seq=#{updrSeq},
+			last_update_dt = sysdate
+		where
+			status = 1
+	</update>
+	
 
 	<!-- 회원 수정 -->
 	<update id="updateUser"
@@ -137,7 +167,6 @@
 			user_name = #{userName},
 			user_pw = #{userPw},
 			email = #{email},
-			dep_id = #{depId},
 			extension = #{extension},
 			phone = #{phone}
 		WhERE
@@ -147,17 +176,17 @@
 	<!-- 회원 상세 페이지 -->
 	<select id="userDetail" resultType="com.iyoons.world.vo.UserVO">
 		SELECT
-			user_id,
-			user_name,
-			email,
-			user_seq,
-			phone,
-			extension,
-			dep_id
+			ui.user_id,
+			ui.user_name,
+			ui.email,
+			ui.user_seq,
+			ui.phone,
+			ui.extension,
+			(select dep_id from dep_user du where du.user_seq = ui.user_seq) as dep_id
 		FROM
-			user_info
-		WhERE
-			user_id = #{userId} <!-- 일련번호로 수정 -->
+			user_info ui
+		WHERE
+			user_seq = #{userSeq} <!-- 일련번호로 수정 -->
 	</select>
 
 	<!-- 회원 삭제 -->
@@ -175,6 +204,18 @@
 				#{userSeq} <!-- 일련번호로 수정 -->
 			</foreach>
 	</update>
+	<update id="deleteDepUser">
+		UPDATE
+			DEP_USER
+		SET
+			STATUS = 0,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		WHERE
+			USER_SEQ = #{userSeq}
+			and status = 1
+	</update>
+
 	<!-- 회원 삭제 -->
 	<update id="recoverUserStatus">
 		UPDATE
@@ -189,6 +230,17 @@
 		<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
 			#{userSeq} <!-- 일련번호로 수정 -->
 		</foreach>
+	</update>
+	<update id="recoverDepUserStatus">
+		UPDATE
+			dep_user
+		set
+			status = 1,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		where
+			user_seq=#{userSeq}
+			and status = 0
 	</update>
 	
 	<insert id="insertAutoLoginInfo" parameterType="com.iyoons.world.vo.UserAutoLoginVO">
@@ -243,5 +295,32 @@
 			user_seq = #{userSeq}
 			and user_browser = #{userBrowser}
 	</update>
-
+	
+	<select id="getUserInfoList" resultType="com.iyoons.world.vo.UserVO">
+		select
+			ui.user_name,
+			ui.phone,
+			ui.extension,
+            du.dep_name
+		from
+			user_info ui
+	        inner join
+	            (select
+	            	d.dep_name,
+	            	de.user_seq
+	            from
+	            	dep d 
+	            	inner join 
+	            		dep_user de on d.dep_id = de.dep_id
+	        )du on ui.user_seq = du.user_seq
+		where
+      	    ui.user_status = 1
+      	    <if test='search != null and "user_name".equals(search)'>
+   		    and ui.user_name like '%${keyword}%'
+   		    </if>
+   		    <if test='search != null and "dep".equals(search)'>
+   		    and du.dep_name like '%${keyword}%'
+   		    </if>
+	</select>
+	
 </mapper>

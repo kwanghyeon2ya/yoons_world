@@ -2,6 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<% pageContext.setAttribute("CRLF", "\r\n");%>
+<% pageContext.setAttribute("LF", "\n"); %>
+
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -34,7 +39,6 @@
 		});
 	});
 	</script>
-
 </head>
 <body>
 	<div id="page-wrapper">
@@ -65,7 +69,6 @@
 							<input type="hidden" name="searchCheck" value="1" />
 							
 							<select id="search" name="search">
-								<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
 								<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
 								<option value="attach_file" ${search == 'attach_file' ? 'selected="selected"' :''}>첨부파일</option>
 							</select>
@@ -93,7 +96,7 @@
 									<div>${list.postNum}</div>
 									<div>
 										<a href="/board/pds/view?postSeq=${list.postSeq}">
-											<span><c:out escapeXml="true" value="${list.subject}" /></span>
+											<span>${fn:replace(fn:replace(fn:escapeXml(list.subject}), CRLF, '<br/>'), LF, '<br/>')}/></span>
 											<span class="txt_purple">${list.commentsCnt > 0 ? [list.commentsCnt] : ''}</span>
 										</a>
 									</div>

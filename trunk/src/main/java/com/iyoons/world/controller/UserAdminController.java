@@ -103,11 +103,15 @@ public class UserAdminController {
 	
 	// 회원 수정 페이지
 	@RequestMapping(value = "/member/modifyUserForm", method = RequestMethod.GET)
-	public String userDetail(String userId, Model model) throws SQLException {	
+	public String userDetail(UserVO userVOFromParam, Model model) throws SQLException {	
 		
 		//System.out.println("클릭한 아이디: "+ userId); //확인은 항상 위에서 하기
 		
-		UserVO userVO = userService.userDetail(userId);
+		UserVO userVO = userService.userDetail(userVOFromParam);
+		/*if(userVO != null) {*/
+			
+		System.out.println("userVO :"+userVO);
+		
 		userVO.setEmailPart1(userVO.getEmail().split("@")[0]);
 		String [] emailList = {"naver.com","daum.net","gmail.com","hanmail.com","yahoo.co.kr"};
 		for(String email : emailList) {
@@ -144,7 +148,14 @@ public class UserAdminController {
 			}
 			
 			try {
-				userService.updateUser(userVO);
+				int result = userService.updateUser(userVO);
+				if(result == 1) {
+					model.addAttribute("msg", "수정 되었습니다!");
+					model.addAttribute("loc", "/admin/member/list");
+				}else {
+					model.addAttribute("msg", "수정 되지않았습니다!");
+					model.addAttribute("loc", "/admin/member/modifyUser");
+				}
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

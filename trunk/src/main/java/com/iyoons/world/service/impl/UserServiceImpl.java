@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -14,10 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.iyoons.world.dao.UserDAO;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserVO;
+import com.iyoons.world.vo.DepVO;
 import com.iyoons.world.vo.PageVO;
 import com.iyoons.world.vo.UserAutoLoginVO;
 
@@ -83,32 +86,54 @@ public class UserServiceImpl implements UserService {
 		
 		return userDAO.findUser(userVO);
 	}
-
+	
 	@Override
+	@Transactional
 	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
-		
+		DepVO depVO = new DepVO();
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		System.out.println("userVO 번호확인 : "+userVO.getPhone());
 		userVO.setUserPw(getHashPw(userVO));
 		
-		return userDAO.insertUser(userVO);
+		System.out.println("userVO.getRegrSeq() :"+userVO.getRegrSeq());
+		
+		int result = userDAO.insertUser(userVO);
+		
+		depVO.setDepId(userVO.getDepId());
+		depVO.setUserSeq(userVO.getUserSeq());
+		depVO.setRegrSeq(userVO.getRegrSeq());
+		
+		userDAO.insertDepUser(depVO);
+		
+		
+		return result;
 	}
 
 	@Override
+	@Transactional
 	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
+		
+		int result = userDAO.updateUser(userVO);
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		
 		userVO.setUserPw(getHashPw(userVO));
 		
-		return userDAO.updateUser(userVO);
+		return result;
 	}
 
 	@Override
+	@Transactional
 	public int deleteUser(UserVO userVO) throws SQLException {
-
+		
+		for(String userSeq : userVO.getUserSeqArray()) {
+			DepVO depVO = new DepVO();
+			depVO.setUpdrSeq(userVO.getUpdrSeq());
+			depVO.setUserSeq(Integer.parseInt(userSeq));
+			userDAO.deleteDepUser(depVO);
+		}
 		return userDAO.deleteUser(userVO);
 	}
 
@@ -125,9 +150,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO userDetail(String userId) throws SQLException {
-
-		return userDAO.userDetail(userId);
+	public UserVO userDetail(UserVO userVOFromParam) throws SQLException {
+		
+		return userDAO.userDetail(userVOFromParam);
 	}
 
 	@Override
@@ -136,8 +161,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public int recoverUserStatus(UserVO userVO) {
 		
+		for(String userSeq : userVO.getUserSeqArray()) {
+			DepVO depVO = new DepVO();
+			depVO.setUpdrSeq(userVO.getUpdrSeq());
+			depVO.setUserSeq(Integer.parseInt(userSeq));
+			userDAO.recoverDepUserStatus(depVO);
+		}
 		return userDAO.recoverUserStatus(userVO);
 	}
 
@@ -164,6 +196,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int deleteCookieWhenLogin(UserAutoLoginVO alvo) {
 		return userDAO.deleteCookieWhenLogin(alvo);
+	}
+
+	@Override
+	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException,NullPointerException{
+		return userDAO.getUserInfoList(userVO);
+	}
+
+	@Override
+	public int getUserCount(UserVO userVO) {
+		return userDAO.getUserCount(userVO);
 	}
 	
 }

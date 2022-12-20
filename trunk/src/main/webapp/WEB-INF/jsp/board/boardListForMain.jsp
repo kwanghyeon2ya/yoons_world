@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+ 
+<% pageContext.setAttribute("s", "\"");%>
 <div id="notice_board_list" class="main_board_area">
 	<h3>
 		<a class="board_title_color" href="/board/notice/list">공지사항</a>
@@ -55,7 +57,7 @@
 		<c:if test="${!empty freeBoardList}">
 		<c:forEach var="list" items="${freeBoardList}">
 		<div>
-			<a class="title_href" title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}"><c:out escapeXml="true" value="${list.subject}"/></a>
+			<a title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}">${fn:replace(fn:escapeXml(list.subject), s, "'")}/></a>
 		</div>
 		<div class="right">
 			<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">

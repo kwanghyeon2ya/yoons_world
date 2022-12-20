@@ -17,7 +17,7 @@ public interface UserService {
 	
 	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException;
 	
-	public UserVO userDetail(String userId) throws SQLException;
+	public UserVO userDetail(UserVO userVOFromParam) throws SQLException;
 
 	public int deleteUser(UserVO userVO) throws SQLException;
 	
@@ -38,5 +38,9 @@ public interface UserService {
 	public int deleteCookie(String cookieKey);
 	
 	public int deleteCookieWhenLogin (UserAutoLoginVO alvo);
+	
+	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException;
+	
+	public int getUserCount(UserVO userVO);
 	
 }

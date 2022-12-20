@@ -68,10 +68,23 @@
 							</c:if>
 						</div>
 						
-						<div>
-							<span style="font-size:3rem;">전화번호 검색</span>
+						<!-- <div>
+							<span style="font-size:2rem;">회원 검색</span>
+						</div> -->
+						<div class="search_area right" style="margin-top:1rem;">
+							<form action="/main/userSearchList" id="search_frm" method="get">
+								<select name="search">
+									<option value="user_name">성명</option>
+									<option value="dep">소속</option>
+								</select> 
+								<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
+								<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
+							</form>
 						</div>
-						
+						<div id="search_result">
+							
+						</div>
+
 						<!-- 조회수 TOP 리스트 -->
 						<h3>조회수 TOP (한달)</h3>
 						<div id="rank_board_list" class="rank_area"></div>

@@ -18,6 +18,7 @@
 <script src="/js/browser.min.js"></script>
 <script src="/js/breakpoints.min.js"></script>	
 
+
 <script>
 	window.onpageshow = function(event){ // 뒤로가기 공부
 		if(event.persisted){ //캐시 남아있는지 확인 후 남아있다면 true
