@@ -48,7 +48,7 @@
 							<option value="user_name" ${userVO.search == 'userName'?'selected="selected"':''}>이름</option>
 							<option value="dep" ${userVO.search == 'dep'?'selected="selected"':''}>소속 부서</option>
 						</select> 
-						<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"/>
+						<input type="text" id="search_text" class="size_s" name="keyword" value="${userVO.keyword}"/>
 						<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
 					</form>
 				</div>
@@ -56,7 +56,7 @@
 				<div class="list_area">
 					<div class="member_search_list table type_03">
 						<div class="th">이름</div>
-						<div class="th">소숙 부서</div>
+						<div class="th">소속 부서</div>
 						<div class="th">내선번호</div>
 						<div class="th">휴대폰 번호</div>
 						<!-- <div class="mem-dep">부서</div> -->
