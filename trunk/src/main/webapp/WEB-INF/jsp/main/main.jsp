@@ -17,6 +17,17 @@
 	
 	<script src="/js/main.js"></script>
 	
+	<script>
+	$(document).ready(function() {
+		$("#search_frm").submit(function(){
+			if ($("#search_text").val().trim().length == 0) {
+				alert("검색창에 내용을 입력하세요");
+				return false;
+			};
+		});
+	});
+	</script>
+	
 </head>
 <body>
 	<div id="page-wrapper">
