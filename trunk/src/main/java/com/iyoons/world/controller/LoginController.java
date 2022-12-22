@@ -1,6 +1,7 @@
 package com.iyoons.world.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,104 +80,126 @@ public class LoginController {
 
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public int login(UserVO userVO, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	public String login(UserVO userVO, HttpSession session, HttpServletResponse response, HttpServletRequest request,Model model) {
 
-		UserVO userInfovo = null;
 		try {
+			UserVO userInfovo = null;
 			userInfovo = userService.findUser(userVO);
+				// TODO Auto-generated catch block
+			logger.debug("login시 vo 정보 " + userInfovo);
+	
+			if (userInfovo != null) {
+				if (userInfovo.getUserStatus() == 1) {
+	
+					if (userVO.getCheckTokenYn() != null && "Y".equals(userVO.getCheckTokenYn())) {
+	
+						logger.debug("getCheckTokenYn : " + userVO.getCheckTokenYn());
+	
+						String agent = request.getHeader("User-Agent");
+						String userBrowser = null;
+	
+						String userIp = request.getHeader("X-FORWARDED-FOR");
+	
+						if (userIp == null) {
+							userIp = request.getHeader("Proxy-Client-IP");
+						}
+						if (userIp == null) {
+							userIp = request.getHeader("WL-Proxy-Client-IP");
+						}
+						if (userIp == null) {
+							userIp = request.getHeader("HTTP_CLIENT_IP");
+						}
+						if (userIp == null) {
+							userIp = request.getHeader("HTTP_X_FORWARDED_FOR");
+						}
+						if (userIp == null) {
+							userIp = request.getRemoteAddr(); // ip 외부 주소
+						}
+						
+						logger.debug("아이피정보 :" + userIp); //localhost에서 하면 0:0:0:0:0:0:0:1 뜨는데 개발할 때 만 이렇고 ip주소 사용해서
+																// 접속하면 제대로 뜸(확인o)
+	
+						if (agent != null) {
+							if (agent.indexOf("Trident") > -1) {
+								userBrowser = "MSIE";
+							} else if (agent.indexOf("Chrome") > -1) {
+								userBrowser = "Chrome";
+							} else if (agent.indexOf("Opera") > -1) {
+								userBrowser = "Opera";
+							} else if (agent.indexOf("iPhone") > -1 && agent.indexOf("Mobile") > -1) {
+								userBrowser = "iPhone";
+							} else if (agent.indexOf("Android") > -1 && agent.indexOf("Mobile") > -1) {
+								userBrowser = "Android";
+							}
+						}
+						logger.debug("bkh 브라우저 정보 :" + userBrowser);
+	
+						UserAutoLoginVO alvo = new UserAutoLoginVO();
+						alvo.setUserSeq(userInfovo.getUserSeq());
+						alvo.setUserBrowser(userBrowser);
+						alvo.setUserIp(userIp);
+						userService.deleteCookieWhenLogin(alvo); // 유저 고유번호+브라우저 정보로 db기존 데이터 status 0
+																	// 만료
+	
+						String token = createJWT(userInfovo.getUserId(), userInfovo.getUserSeq());
+						logger.debug("bkh 토큰 확인 : " + token);
+	
+						Cookie cookie = new Cookie("auth", token);
+						cookie.setPath("/");
+						cookie.setMaxAge(60 * 60 * 60 * 24 * 30); // 한달
+						cookie.setHttpOnly(true);
+						response.addCookie(cookie);
+	
+						alvo.setCookieKey(token);
+	
+						userService.insertAutoLoginInfo(alvo);
+						logger.info("bkh 로그인 vo 정보  : " + alvo);
+	
+					}
+	
+					session.setAttribute("userInfovo", userInfovo);
+					session.setAttribute("sessionIdForUser", userInfovo.getUserId());
+					session.setAttribute("sessionNameForUser", userInfovo.getUserName());
+					session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
+	
+					session.setMaxInactiveInterval(serverSessTime);
+	
+					if (userInfovo.getUserType() == 1) {
+						session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
+						session.setMaxInactiveInterval(serverSessTime);
+					}
+				} else {
+					return "2";
+				}
+				return "1";
+			} else {
+				return "0";
+			}
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-		}
-		logger.debug("login시 vo 정보 " + userInfovo);
-
-		if (userInfovo != null) {
-			if (userInfovo.getUserStatus() == 1) {
-
-				if (userVO.getCheckTokenYn() != null && "Y".equals(userVO.getCheckTokenYn())) {
-
-					logger.debug("getCheckTokenYn : " + userVO.getCheckTokenYn());
-
-					String agent = request.getHeader("User-Agent");
-					String userBrowser = null;
-
-					String userIp = request.getHeader("X-FORWARDED-FOR");
-
-					if (userIp == null) {
-						userIp = request.getHeader("Proxy-Client-IP");
-					}
-					if (userIp == null) {
-						userIp = request.getHeader("WL-Proxy-Client-IP");
-					}
-					if (userIp == null) {
-						userIp = request.getHeader("HTTP_CLIENT_IP");
-					}
-					if (userIp == null) {
-						userIp = request.getHeader("HTTP_X_FORWARDED_FOR");
-					}
-					if (userIp == null) {
-						userIp = request.getRemoteAddr(); // ip 외부 주소
-					}
-
-					System.out.println("아이피정보 :" + userIp); // localhost에서 하면 0:0:0:0:0:0:0:1 뜨는데 개발할 때 만 이렇고 ip주소 사용해서
-															// 접속하면 제대로 뜸(확인o)
-
-					if (agent != null) {
-						if (agent.indexOf("Trident") > -1) {
-							userBrowser = "MSIE";
-						} else if (agent.indexOf("Chrome") > -1) {
-							userBrowser = "Chrome";
-						} else if (agent.indexOf("Opera") > -1) {
-							userBrowser = "Opera";
-						} else if (agent.indexOf("iPhone") > -1 && agent.indexOf("Mobile") > -1) {
-							userBrowser = "iPhone";
-						} else if (agent.indexOf("Android") > -1 && agent.indexOf("Mobile") > -1) {
-							userBrowser = "Android";
-						}
-					}
-					System.out.println("브라우저 정보 :" + userBrowser);
-
-					UserAutoLoginVO alvo = new UserAutoLoginVO();
-					alvo.setUserSeq(userInfovo.getUserSeq());
-					alvo.setUserBrowser(userBrowser);
-					alvo.setUserIp(userIp);
-					userService.deleteCookieWhenLogin(alvo); // 유저 고유번호+브라우저 정보로 db기존 데이터 status 0
-																// 만료
-
-					String token = createJWT(userInfovo.getUserId(), userInfovo.getUserSeq());
-					System.out.println("토큰 확인 : " + token);
-
-					Cookie cookie = new Cookie("auth", token);
-					cookie.setPath("/");
-					cookie.setMaxAge(60 * 60 * 60 * 24 * 30); // 한달
-					cookie.setHttpOnly(true);
-					response.addCookie(cookie);
-
-					alvo.setCookieKey(token);
-
-					userService.insertAutoLoginInfo(alvo);
-					logger.info("로그인 vo 정보 : " + alvo);
-
-				}
-
-				session.setAttribute("userInfovo", userInfovo);
-				session.setAttribute("sessionIdForUser", userInfovo.getUserId());
-				session.setAttribute("sessionNameForUser", userInfovo.getUserName());
-				session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
-
-				session.setMaxInactiveInterval(serverSessTime);
-
-				if (userInfovo.getUserType() == 1) {
-					session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
-					session.setMaxInactiveInterval(serverSessTime);
-				}
-			} else {
-				return 2;
-			}
-			return 1;
-		} else {
-			return 0;
+			logger.error("NoSuchAlgorithmException"+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (SQLException e) {
+			logger.error("SQLException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
 	}
 
@@ -195,18 +218,28 @@ public class LoginController {
 						c.setMaxAge(0);
 						response.addCookie(c);
 						userService.deleteCookie(c.getValue());
-						System.out.println("쿠키 벨류? : " + c.getValue());
+						logger.debug("cookie value : " + c.getValue());
 					}
 				}
 			}
-		} catch (NullPointerException np) {
-			logger.error("nullexception " + np);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
+			
+			return "redirect:/login/loginView";
+			
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		} catch (Exception e) {
-			logger.info("exception " + e);
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
 
-		return "redirect:/login/loginView";
+	
 	}
 	
 	 /*@ExceptionHandler

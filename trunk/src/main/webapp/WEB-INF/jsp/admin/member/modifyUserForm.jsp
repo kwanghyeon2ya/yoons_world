@@ -263,32 +263,32 @@
 							<tr>
 								<th>부서</th>
 								<td>
-								<select name="depId" id="dep_id" style="width:17rem;margin-right:0.5rem;">
-									<option value="01" ${userVO.depId eq '01'?'selected="selected"':''}>재경팀</option>
-									<option value="02" ${userVO.depId eq '02'?'selected="selected"':''}>재무예상팀</option>
-									<option value="03" ${userVO.depId eq '03'?'selected="selected"':''}>경영기획팀</option>
-									<option value="04" ${userVO.depId eq '04'?'selected="selected"':''}>홍보팀</option>
-									<option value="05" ${userVO.depId eq '05'?'selected="selected"':''}>인사팀</option>
-									<option value="06" ${userVO.depId eq '06'?'selected="selected"':''}>비서팀</option>
-									<option value="07" ${userVO.depId eq '07'?'selected="selected"':''}>고객지원팀</option>
-									<option value="08" ${userVO.depId eq '08'?'selected="selected"':''}>법무팀</option>
-									<option value="09" ${userVO.depId eq '09'?'selected="selected"':''}>영업지원팀</option>
-									<option value="10" ${userVO.depId eq '10'?'selected="selected"':''}>사업지원팀</option>
-									<option value="11" ${userVO.depId eq '11'?'selected="selected"':''}>총무/제작팀</option>
-									<option value="12" ${userVO.depId eq '12'?'selected="selected"':''}>자산관리팀</option>
-									<option value="13" ${userVO.depId eq '13'?'selected="selected"':''}>시설관리팀</option>
-									<option value="14" ${userVO.depId eq '14'?'selected="selected"':''}>교육팀</option>
-									<option value="15" ${userVO.depId eq '15'?'selected="selected"':''}>상품연구팀</option>
-									<option value="16" ${userVO.depId eq '16'?'selected="selected"':''}>비주얼디자인팀</option>
-									<option value="17" ${userVO.depId eq '17'?'selected="selected"':''}>사운드디자인팀</option>
-									<option value="18" ${userVO.depId eq '18'?'selected="selected"':''}>영상디자인팀</option>
-									<option value="19" ${userVO.depId eq '19'?'selected="selected"':''}>콘텐츠개발팀</option>
-									<option value="20" ${userVO.depId eq '20'?'selected="selected"':''}>기술기획팀</option>
-									<option value="21" ${userVO.depId eq '21'?'selected="selected"':''}>기술개발팀</option>
-									<option value="22" ${userVO.depId eq '22'?'selected="selected"':''}>기술지원팀</option>
-									<option value="23" ${userVO.depId eq '23'?'selected="selected"':''}>B2C사업팀</option>
-									<option value="24" ${userVO.depId eq '24'?'selected="selected"':''}>홈사업팀</option>
-									<option value="25" ${userVO.depId eq '25'?'selected="selected"':''}>학원사업팀</option>
+								<select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
+									<option value="1001" ${userVO.depSeq eq '1001'?'selected="selected"':''}>재경팀</option>
+									<option value="1002" ${userVO.depSeq eq '1002'?'selected="selected"':''}>재무예상팀</option>
+									<option value="1003" ${userVO.depSeq eq '1003'?'selected="selected"':''}>경영기획팀</option>
+									<option value="1004" ${userVO.depSeq eq '1004'?'selected="selected"':''}>홍보팀</option>
+									<option value="1005" ${userVO.depSeq eq '1005'?'selected="selected"':''}>인사팀</option>
+									<option value="1006" ${userVO.depSeq eq '1006'?'selected="selected"':''}>비서팀</option>
+									<option value="1007" ${userVO.depSeq eq '1007'?'selected="selected"':''}>고객지원팀</option>
+									<option value="1008" ${userVO.depSeq eq '1008'?'selected="selected"':''}>법무팀</option>
+									<option value="1009" ${userVO.depSeq eq '1009'?'selected="selected"':''}>영업지원팀</option>
+									<option value="1010" ${userVO.depSeq eq '1010'?'selected="selected"':''}>사업지원팀</option>
+									<option value="1011" ${userVO.depSeq eq '1011'?'selected="selected"':''}>총무/제작팀</option>
+									<option value="1012" ${userVO.depSeq eq '1012'?'selected="selected"':''}>자산관리팀</option>
+									<option value="1013" ${userVO.depSeq eq '1013'?'selected="selected"':''}>시설관리팀</option>
+									<option value="1014" ${userVO.depSeq eq '1014'?'selected="selected"':''}>교육팀</option>
+									<option value="1015" ${userVO.depSeq eq '1015'?'selected="selected"':''}>상품연구팀</option>
+									<option value="1016" ${userVO.depSeq eq '1016'?'selected="selected"':''}>비주얼디자인팀</option>
+									<option value="1017" ${userVO.depSeq eq '1017'?'selected="selected"':''}>사운드디자인팀</option>
+									<option value="1018" ${userVO.depSeq eq '1018'?'selected="selected"':''}>영상디자인팀</option>
+									<option value="1019" ${userVO.depSeq eq '1019'?'selected="selected"':''}>콘텐츠개발팀</option>
+									<option value="1020" ${userVO.depSeq eq '1020'?'selected="selected"':''}>기술기획팀</option>
+									<option value="1021" ${userVO.depSeq eq '1021'?'selected="selected"':''}>기술개발팀</option>
+									<option value="1022" ${userVO.depSeq eq '1022'?'selected="selected"':''}>기술지원팀</option>
+									<option value="1023" ${userVO.depSeq eq '1023'?'selected="selected"':''}>B2C사업팀</option>
+									<option value="1024" ${userVO.depSeq eq '1024'?'selected="selected"':''}>홈사업팀</option>
+									<option value="1025" ${userVO.depSeq eq '1025'?'selected="selected"':''}>학원사업팀</option>
 								</select>
 								</td>
 							</tr>
@@ -328,7 +328,7 @@
 				 
 					<div id="create_form_btn">
 						<button type="submit" class="btn type_02 size_s bg_purple" id="updatebtn">수정</button>
-						<button type="button" class="btn type_02 size_s bg_purple" id="cancelbtn" onclick="location.href='/admin/member/list'">취소</button>
+						<button type="button" class="btn type_02 size_s bg_aaa" id="cancelbtn" onclick="location.href='/admin/member/list'">취소</button>
 					</div>
 			</form>
 			

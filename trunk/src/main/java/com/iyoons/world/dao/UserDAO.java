@@ -17,6 +17,8 @@ public interface UserDAO {
 	
 	public int updateUser(UserVO userVO) throws SQLException;
 	
+	public int updateDepUser(DepVO depVO);
+	
 	public UserVO userDetail(UserVO userVOFromParam) throws SQLException;
 
 	public int deleteUser(UserVO userVO) throws SQLException;

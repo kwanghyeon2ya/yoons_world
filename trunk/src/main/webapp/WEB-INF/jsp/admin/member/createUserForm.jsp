@@ -49,7 +49,7 @@
 				var phone2 = $("#phone2").val();
 				var phone3 = $("#phone3").val();
 				var extension = $("#extension").val();
-				var dep_id = $("#dep_id").val();
+				var dep_seq = $("#dep_seq").val();
 				
 				if($("#userName").val()==""){
 					alert("이름을 입력해주세요.");
@@ -195,7 +195,7 @@
 							 hireDt : hire_dt , userType : user_type,
 							 phone1 : phone1 , phone2 : phone2, 
 							 phone3 : phone3 , extension : extension,
-							 depId : dep_id};
+							 depSeq : dep_seq};
 			
 				$.ajax({
 					url : '/admin/member/createUser',
@@ -378,32 +378,32 @@
 							<tr>
 								<th>부서</th>
 								<td>
-								<select name="depId" id="dep_id" style="width:17rem;margin-right:0.5rem;">
-									<option value="01">재경팀</option>
-									<option value="02">재무예상팀</option>
-									<option value="03">경영기획팀</option>
-									<option value="04">홍보팀</option>
-									<option value="05">인사팀</option>
-									<option value="06">비서팀</option>
-									<option value="07">고객지원팀</option>
-									<option value="08">법무팀</option>
-									<option value="09">영업지원팀</option>
-									<option value="10">사업지원팀</option>
-									<option value="11">총무/제작팀</option>
-									<option value="12">자산관리팀</option>
-									<option value="13">시설관리팀</option>
-									<option value="14">교육팀</option>
-									<option value="15">상품연구팀</option>
-									<option value="16">비주얼디자인팀</option>
-									<option value="17">사운드디자인팀</option>
-									<option value="18">영상디자인팀</option>
-									<option value="19">콘텐츠개발팀</option>
-									<option value="20">기술기획팀</option>
-									<option value="21">기술개발팀</option>
-									<option value="22">기술지원팀</option>
-									<option value="23">B2C사업팀</option>
-									<option value="24">홈사업팀</option>
-									<option value="25">학원사업팀</option>
+								<select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
+									<option value="1001">재경팀</option>
+									<option value="1002">재무예상팀</option>
+									<option value="1003">경영기획팀</option>
+									<option value="1004">홍보팀</option>
+									<option value="1005">인사팀</option>
+									<option value="1006">비서팀</option>
+									<option value="1007">고객지원팀</option>
+									<option value="1008">법무팀</option>
+									<option value="1009">영업지원팀</option>
+									<option value="1010">사업지원팀</option>
+									<option value="1011">총무/제작팀</option>
+									<option value="1012">자산관리팀</option>
+									<option value="1013">시설관리팀</option>
+									<option value="1014">교육팀</option>
+									<option value="1015">상품연구팀</option>
+									<option value="1016">비주얼디자인팀</option>
+									<option value="1017">사운드디자인팀</option>
+									<option value="1018">영상디자인팀</option>
+									<option value="1019">콘텐츠개발팀</option>
+									<option value="1020">기술기획팀</option>
+									<option value="1021">기술개발팀</option>
+									<option value="1022">기술지원팀</option>
+									<option value="1023">B2C사업팀</option>
+									<option value="1024">홈사업팀</option>
+									<option value="1025">학원사업팀</option>
 								</select>
 								</td>
 							</tr>
@@ -438,7 +438,7 @@
 				 -->
 				<div id="create_form_btn">
 					<button class="btn type_02 bg_purple" type="button" id="insertbtn" onclick="insertForm()">등록 완료</button>
-					<button class="btn type_02 bg_purple" id="cancelbtn" type="button" onclick="location.href='/admin/member/list'">취소</button>
+					<button class="btn type_02 bg_aaa" id="cancelbtn" type="button" onclick="location.href='/admin/member/list'">취소</button>
 				</div>
 			</form>
 		</div>

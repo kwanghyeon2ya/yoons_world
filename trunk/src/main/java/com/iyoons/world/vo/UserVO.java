@@ -38,7 +38,7 @@ public class UserVO {
 	private String phone2; // 핸드폰번호 두번째
 	private String phone3; // 핸드폰번호 세번째칸
 	private String extension; // 내선번호
-	private String depId; // 부서고유id
+	private int depSeq; // 부서고유 seq
 	private String search; // 메인페이지 유저검색
 	private String keyword; // 메인페이지 유저검색 키워드
 }

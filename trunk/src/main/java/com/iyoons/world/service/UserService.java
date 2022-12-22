@@ -13,34 +13,34 @@ public interface UserService {
 	
 	public UserVO findUser(UserVO userVO) throws NoSuchAlgorithmException;
 	
-	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException;
+	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception;
 	
-	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException;
+	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception;
 	
-	public UserVO userDetail(UserVO userVOFromParam) throws SQLException;
+	public UserVO userDetail(UserVO userVOFromParam) throws SQLException, Exception;
 
-	public int deleteUser(UserVO userVO) throws SQLException;
+	public int deleteUser(UserVO userVO) throws SQLException, Exception;
 	
-	public List<UserVO> userList(PageVO page);
+	public List<UserVO> userList(PageVO page) throws Exception;
 	
-	public UserVO viewUser();
+	public UserVO viewUser() throws Exception;
 
-	public int getCountUser();
+	public int getCountUser() throws Exception;
 
-	public int recoverUserStatus(UserVO userVO);
+	public int recoverUserStatus(UserVO userVO) throws Exception;
 
-	public int getSearchedUserCount(PageVO page);
+	public int getSearchedUserCount(PageVO page) throws Exception;
 
-	public int insertAutoLoginInfo(UserAutoLoginVO alvo);
+	public int insertAutoLoginInfo(UserAutoLoginVO alvo) throws Exception;
 	
-	public UserAutoLoginVO getCookieInfo(String cookieKey);
+	public UserAutoLoginVO getCookieInfo(String cookieKey) throws Exception;
 	
-	public int deleteCookie(String cookieKey);
+	public int deleteCookie(String cookieKey) throws Exception;
 	
-	public int deleteCookieWhenLogin (UserAutoLoginVO alvo);
+	public int deleteCookieWhenLogin (UserAutoLoginVO alvo) throws Exception;
 	
-	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException;
+	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException, NullPointerException, Exception;
 	
-	public int getUserCount(UserVO userVO);
+	public int getUserCount(UserVO userVO) throws Exception;
 	
 }

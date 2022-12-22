@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 
@@ -36,7 +38,8 @@ public class BoardServiceImpl implements BoardService {
 	final String REAL_PATH="C:/yoons_world/files";
 	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";
 	
-	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private BoardDAO dao;
 
@@ -58,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	@Override
-	public int insertBoard(BoardVO vo,MultipartFile[] files) { //게시글 작성
+	public int insertBoard(BoardVO vo,MultipartFile[] files) throws IllegalStateException, IOException, Exception { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
 		int result = dao.insertBoard(vo);
 		
@@ -87,16 +90,12 @@ public class BoardServiceImpl implements BoardService {
 				
 				String savePath = REAL_PATH + uploadFileName;
 				
-				try {
 					
 				File saveFile = new File(savePath);
 				f.transferTo(saveFile); 
 				
 				blist.add(bavo);
 				
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
 				
 			}
 		}
@@ -111,15 +110,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> getBoardList( //게시글 리스트 불러오기
+	public List<BoardVO> getBoardList(  //게시글 리스트 불러오기
 			String search,
 			String keyword,
 			String searchCheck,
 			int startRow,
 			int endRow,
-			String boardType) {
-		
-		System.out.println("서비스");
+			String boardType) throws Exception {
 		
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("search",search);
@@ -132,7 +129,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getBoardCount(String boardType) { //게시글의 총 갯수
+	public int getBoardCount(String boardType) throws Exception { //게시글의 총 갯수
 		return dao.getBoardCount(boardType);
 	}
 
@@ -142,7 +139,7 @@ public class BoardServiceImpl implements BoardService {
 			String searchCheck, 
 			int startRow, 
 			int endRow,
-			String boardType) { //글 검색 후 검색된 글의 총 갯수
+			String boardType) throws Exception { //글 검색 후 검색된 글의 총 갯수
 		
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("search",search);
@@ -155,14 +152,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardVO getView(int postSeq) { //게시글 읽기
+	public BoardVO getView(int postSeq) throws Exception { //게시글 읽기
 		return dao.getView(postSeq);
 	}
 
 	@Override
 	@Transactional
-	public int modView(BoardVO vo,MultipartFile[] files) { //게시글 수정
+	public int modView(BoardVO vo,MultipartFile[] files) throws IllegalStateException, IOException , Exception { //게시글 수정
 /*		List<BoardAttachVO> blist = new ArrayList<>();*/	
+	
+		
 	for(MultipartFile f : files){
 			if(!f.isEmpty()) {
 				BoardAttachVO bavo = new BoardAttachVO();
@@ -186,12 +185,8 @@ public class BoardServiceImpl implements BoardService {
 				
 				uploadFileName = File.separator + uuid + uploadFileName;
 				
-				try {
-					f.transferTo(new File(REAL_PATH + uploadFileName));
-					adao.insertAttach(bavo);
-				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
-				}
+				f.transferTo(new File(REAL_PATH + uploadFileName));
+				adao.insertAttach(bavo);
 			}
 		}
 	
@@ -218,22 +213,15 @@ public class BoardServiceImpl implements BoardService {
 					File f = FileUtils.getFile(originalFilePath);
 					File df = FileUtils.getFile(newFilePath);
 					
-					try {
-						FileUtils.moveFile(f, df);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					System.out.println("view 수정페이지 삭제 진입확인");
+					FileUtils.moveFile(f, df);
+					logger.debug("view 수정페이지 삭제 진입확인");
 					adao.deleteSelectedAttach(vo2);
-					System.out.println("view 수정페이지 삭제 완료 확인");
+					logger.debug("view 수정페이지 삭제 처리 완료 확인");
 				}
 			}
 		}
 		
 		int attachCount = adao.getAttachCount(vo.getPostSeq()); //첨부파일 카운트
-		System.out.println(attachCount);
 		if(attachCount != 0) { //카운트 확인 후 post_board에 첨부파일 여부 컬럼 입력
 			vo.setFileAttachYn("Y");
 		}else {
@@ -242,14 +230,14 @@ public class BoardServiceImpl implements BoardService {
 		return dao.modView(vo);
 	}
 	@Override
-	public void updateCnt(int postSeq) { //게시글 조회수 업데이트
+	public void updateCnt(int postSeq) throws Exception { //게시글 조회수 업데이트
 		dao.updateCnt(postSeq);
 	}
 	
 	
 	@Transactional
 	@Override
-	public int delView(BoardVO vo) { //게시글 삭제
+	public int delView(BoardVO vo) throws IllegalStateException , IOException , Exception { //게시글 삭제
 		/*List<BoardAttachVO> list = adao.getAttachList(vo.getPostSeq()); //물리경로 보존위해 주석
 		System.out.println(vo);*/
 //		for(BoardAttachVO avo : list) { 
@@ -277,13 +265,8 @@ public class BoardServiceImpl implements BoardService {
 			File df = FileUtils.getFile(newFilePath);
 			
 			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
-			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름
-*/			try {
-				FileUtils.moveFile(f, df);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			File df = new File(newFilePath); //새 파일 위치+옮길 파일이름*/		
+			FileUtils.moveFile(f, df);
 		}
 		
 		adao.delAttach(vo);
@@ -291,31 +274,31 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.delView(vo);
 	}
-	public int findUser(int regrSeq) {//입력받은 유저 db검색
+	public int findUser(int regrSeq) throws Exception {//입력받은 유저 db검색
 		return dao.findUser(regrSeq);
 	}
 
 	@Override
-	public List<BoardVO> getNoticeFixedBoard(String boardType) {
+	public List<BoardVO> getNoticeFixedBoard(String boardType) throws Exception {
 		return dao.getNoticeFixedBoard(boardType);
 	}
 
 	@Override
-	public List<BoardVO> getAllBoardListOrderedByReadCount(int startRow,int endRow) {
+	public List<BoardVO> getAllBoardListOrderedByReadCount(int startRow,int endRow) throws Exception {
 		return dao.getAllBoardListOrderedByReadCount(startRow,endRow);
 	}
 
 	@Override
-	public int getAllBoardCount() {
+	public int getAllBoardCount() throws Exception {
 		return dao.getAllBoardCount();
 	}
 
 	@Override
-	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow, int endRow) {
+	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow, int endRow) throws Exception {
 		return dao.getAllBoardListOrderedByReadCountForMonth(startRow, endRow);
 	}
 	@Override
-	public BoardVO getListForMain(){ // 메인페이지 게시판 리스트
+	public BoardVO getListForMain() throws Exception { // 메인페이지 게시판 리스트
 		
 		HashMap<String,Object> freeMap = new HashMap<>();
 		BoardVO vo = new BoardVO();
@@ -354,7 +337,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int increasingHeart(BoardVO vo) { // 좋아요 입력
+	public int increasingHeart(BoardVO vo) throws Exception { // 좋아요 입력
 		
 		UserActionVO uavo = new UserActionVO();
 		uavo.setUserSeq(vo.getUserSeq());
@@ -366,7 +349,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int checkHeart(BoardVO vo) {
+	public int checkHeart(BoardVO vo) throws Exception {
 		
 		UserActionVO uavo = new UserActionVO();
 		uavo.setUserSeq(vo.getUserSeq());
@@ -378,7 +361,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getHeartCount(BoardVO vo) {
+	public int getHeartCount(BoardVO vo) throws Exception {
 		
 		UserActionVO uavo = new UserActionVO();
 		uavo.setTargetSeq(vo.getPostSeq());

@@ -132,14 +132,16 @@
 	<insert id="insertDepUser"
 		parameterType="com.iyoons.world.vo.DepVO">
 		insert into dep_user(
-			dep_id,
+			dep_user_seq,
+			dep_seq,
 			user_seq,
 			status,
 			regr_seq,
 			first_insert_dt
 		)
 		values(
-			#{depId},
+			dep_user_seq.nextval,
+			#{depSeq},
 			#{userSeq},
 			1,
 			#{regrSeq},
@@ -147,16 +149,16 @@
 		)
 	</insert>
 	<update id="updateDepUser">
-		update 
+		update
 			dep_user
 		set
-			dep_id=#{depId},
+			dep_seq=#{depSeq},
 			updr_seq=#{updrSeq},
 			last_update_dt = sysdate
 		where
-			status = 1
+			user_seq = #{userSeq}
+			and status = 1
 	</update>
-	
 
 	<!-- 회원 수정 -->
 	<update id="updateUser"
@@ -182,7 +184,7 @@
 			ui.user_seq,
 			ui.phone,
 			ui.extension,
-			(select dep_id from dep_user du where du.user_seq = ui.user_seq) as dep_id
+			(select dep_seq from dep_user du where du.user_seq = ui.user_seq) as dep_seq
 		FROM
 			user_info ui
 		WHERE
@@ -212,8 +214,11 @@
 			last_update_dt = sysdate,
 			updr_seq = #{updrSeq}
 		WHERE
-			USER_SEQ = #{userSeq}
-			and status = 1
+			status = 1
+			and user_seq in
+			<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+				#{userSeq}
+			</foreach>
 	</update>
 
 	<!-- 회원 삭제 -->
@@ -299,6 +304,7 @@
 	<select id="getUserInfoList" resultType="com.iyoons.world.vo.UserVO">
 		select
 			ui.user_name,
+			ui.email,
 			ui.phone,
 			ui.extension,
             du.dep_name
@@ -311,7 +317,7 @@
 	            from
 	            	dep d 
 	            	inner join 
-	            		dep_user de on d.dep_id = de.dep_id
+	            		dep_user de on d.dep_seq = de.dep_seq
 	        )du on ui.user_seq = du.user_seq
 		where
       	    ui.user_status = 1

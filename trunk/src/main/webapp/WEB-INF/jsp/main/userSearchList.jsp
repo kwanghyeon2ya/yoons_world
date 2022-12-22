@@ -24,8 +24,14 @@
 	$(document).ready(function() {
 		$("#search_frm").submit(function(){
 			if ($("#search_text").val().trim().length == 0) {
-				alert("검색창에 내용을 입력하세요");
-				return false;
+				if($("#search_select_id").val() == 'user_name'){
+					alert("검색창에 성명을 입력하세요");
+					return false;
+				}
+				if($("#search_select_id").val() == 'dep'){
+					alert("검색창에 소속 부서명을 입력하세요");
+					return false;
+				}
 			};
 		});
 	});
@@ -56,8 +62,9 @@
 				<div class="list_area">
 					<div class="member_search_list table type_03">
 						<div class="th">이름</div>
-						<div class="th">소속 부서</div>
-						<div class="th">내선번호</div>
+						<div class="th">소속 부서명</div>
+						<div class="th">이메일</div>
+						<div class="th">내선 전화번호</div>
 						<div class="th">휴대폰 번호</div>
 						<!-- <div class="mem-dep">부서</div> -->
 					<c:if test="${count == 0}">
@@ -69,8 +76,9 @@
 					<c:forEach var="list" items="${uslist}" varStatus="loop">
 							<div>${list.userName}</div>
 							<div>${list.depName}</div>
+							<div>${list.email}</div>
 							<%-- <div class="mem-dep">${list.depName}</div> --%>
-							<div>${list.extension}</div>
+							<div>02-2225-${list.extension}</div>
 							<div>${list.phone}</div>
 					</c:forEach>
 					</c:if>

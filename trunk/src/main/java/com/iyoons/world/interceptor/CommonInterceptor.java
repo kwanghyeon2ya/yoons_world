@@ -32,7 +32,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 // 리다이렉트 처리 (로그아웃, 오류메세지 출력, ...)
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) { // controller전에
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { // controller전에
 																											// 실행되며
 																											// false 일 때
 																											// controller를

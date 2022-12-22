@@ -89,18 +89,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
+	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception {
 		DepVO depVO = new DepVO();
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
-		System.out.println("userVO 번호확인 : "+userVO.getPhone());
+		logger.debug("userVO 번호확인 : "+userVO.getPhone());
 		userVO.setUserPw(getHashPw(userVO));
-		
-		System.out.println("userVO.getRegrSeq() :"+userVO.getRegrSeq());
 		
 		int result = userDAO.insertUser(userVO);
 		
-		depVO.setDepId(userVO.getDepId());
+		depVO.setDepSeq(userVO.getDepSeq());
 		depVO.setUserSeq(userVO.getUserSeq());
 		depVO.setRegrSeq(userVO.getRegrSeq());
 		
@@ -111,58 +109,63 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
-	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException {
-		
-		int result = userDAO.updateUser(userVO);
+	@Transactional(rollbackFor = {Exception.class})
+	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		
 		userVO.setUserPw(getHashPw(userVO));
 		
+		int result = userDAO.updateUser(userVO);
+		
+		DepVO depVO = new DepVO();
+		depVO.setDepSeq(userVO.getDepSeq());
+		depVO.setUpdrSeq(userVO.getUpdrSeq());
+		
+		userDAO.updateDepUser(depVO);
+		
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public int deleteUser(UserVO userVO) throws SQLException {
+	public int deleteUser(UserVO userVO) throws SQLException,Exception {
 		
-		for(String userSeq : userVO.getUserSeqArray()) {
-			DepVO depVO = new DepVO();
-			depVO.setUpdrSeq(userVO.getUpdrSeq());
-			depVO.setUserSeq(Integer.parseInt(userSeq));
-			userDAO.deleteDepUser(depVO);
-		}
+		DepVO depVO = new DepVO();
+		depVO.setUpdrSeq(userVO.getUpdrSeq());
+		depVO.setUserSeqArray(userVO.getUserSeqArray());
+		
+		userDAO.deleteDepUser(depVO);
 		return userDAO.deleteUser(userVO);
 	}
 
 	@Override
-	public List<UserVO> userList(PageVO page) {
+	public List<UserVO> userList(PageVO page) throws Exception {
 
 		return userDAO.userList(page);
 	}
 
 	@Override
-	public UserVO viewUser() {
+	public UserVO viewUser() throws Exception {
 
 		return userDAO.viewUser();
 	}
 
 	@Override
-	public UserVO userDetail(UserVO userVOFromParam) throws SQLException {
+	public UserVO userDetail(UserVO userVOFromParam) throws SQLException, Exception {
 		
 		return userDAO.userDetail(userVOFromParam);
 	}
 
 	@Override
-	public int getCountUser() {
+	public int getCountUser() throws Exception {
 		return userDAO.getCountUser();
 	}
 
 	@Override
 	@Transactional
-	public int recoverUserStatus(UserVO userVO) {
+	public int recoverUserStatus(UserVO userVO) throws Exception {
 		
 		for(String userSeq : userVO.getUserSeqArray()) {
 			DepVO depVO = new DepVO();
@@ -174,37 +177,37 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int getSearchedUserCount(PageVO page) {
+	public int getSearchedUserCount(PageVO page) throws Exception {
 		return userDAO.getSearchedUserCount(page);
 	}
 
 	@Override
-	public int insertAutoLoginInfo(UserAutoLoginVO alvo) {
+	public int insertAutoLoginInfo(UserAutoLoginVO alvo) throws Exception {
 		return userDAO.insertAutoLoginInfo(alvo);
 	}
 
 	@Override
-	public UserAutoLoginVO getCookieInfo(String cookieKey) {
+	public UserAutoLoginVO getCookieInfo(String cookieKey) throws Exception {
 		return userDAO.getCookieInfo(cookieKey);
 	}
 
 	@Override
-	public int deleteCookie(String cookieKey) {
+	public int deleteCookie(String cookieKey) throws Exception {
 		return userDAO.deleteCookie(cookieKey);
 	}
 
 	@Override
-	public int deleteCookieWhenLogin(UserAutoLoginVO alvo) {
+	public int deleteCookieWhenLogin(UserAutoLoginVO alvo) throws Exception {
 		return userDAO.deleteCookieWhenLogin(alvo);
 	}
 
 	@Override
-	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException,NullPointerException{
+	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException,NullPointerException,Exception{
 		return userDAO.getUserInfoList(userVO);
 	}
 
 	@Override
-	public int getUserCount(UserVO userVO) {
+	public int getUserCount(UserVO userVO) throws Exception {
 		return userDAO.getUserCount(userVO);
 	}
 	

@@ -543,7 +543,7 @@ tr{
 	width: 57%;	
 }
 #insertbtn{
-	width: 11.9rem;
+	width: 14.5rem;
 }
 #cancelbtn{
 	margin-left: 1px;
@@ -552,11 +552,12 @@ tr{
 
 /* 메인에서 검색하는 회원 정보 리스트 */
 
-.member_search_list {grid-template-columns: auto auto auto auto;}
-.member_search_list > div:nth-of-type(4n-3) {text-align: center;}
-.member_search_list > div:nth-of-type(4n-2) {text-align: center;}
-.member_search_list > div:nth-of-type(4n-1) {text-align: center;}
-.member_search_list > div:nth-of-type(4n) {text-align: center;}
+.member_search_list {grid-template-columns: auto auto auto auto auto;}
+.member_search_list > div:nth-of-type(5n-4) {text-align: center;}
+.member_search_list > div:nth-of-type(5n-3) {text-align: center;}
+.member_search_list > div:nth-of-type(5n-2) {text-align: center;}
+.member_search_list > div:nth-of-type(5n-1) {text-align: center;}
+.member_search_list > div:nth-of-type(5n) {text-align: center;}
 .member_search_list > div.non_data {text-align: center;}
 
 .member_search_list > div > a {
@@ -578,7 +579,7 @@ tr{
 /* 회원수정 */
 
 #updatebtn{
-	width: 11.9rem;
+	width: 14.5rem;
 }
 
 /* Mobile (가로 800px 이하) */

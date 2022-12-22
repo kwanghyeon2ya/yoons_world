@@ -38,117 +38,190 @@ public class UserAdminController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
-	public String userList(PageVO pagevo,Model model) {
+	public String userList(PageVO pagevo,Model model,HttpServletRequest request) {
 		//pagevo는 검색어,pageNum 받아오는 용도
-		int count = userService.getCountUser();
-		int pageSize = 10;
-		PageVO page2 = pageService.getPaging(pageSize,pagevo.getPageNum());
-		//service를 통해 jsp에서 사용할 pageSize,currentPage,startRow,endRow 세팅
 		
-		pagevo.setStartRow(page2.getStartRow());
-		pagevo.setEndRow(page2.getEndRow());
-		pagevo.setPageSize(pageSize);
-		pagevo.setCurrentPage(page2.getCurrentPage());
+		try {
+			int count = userService.getCountUser();
+			int pageSize = 10;
+			PageVO page2 = pageService.getPaging(pageSize,pagevo.getPageNum());
+			//service를 통해 jsp에서 사용할 pageSize,currentPage,startRow,endRow 세팅
+			
+			pagevo.setStartRow(page2.getStartRow());
+			pagevo.setEndRow(page2.getEndRow());
+			pagevo.setPageSize(pageSize);
+			pagevo.setCurrentPage(page2.getCurrentPage());
+			
+			if(!pagevo.getSearch().equals("")) {
+				count = userService.getSearchedUserCount(pagevo);
+			}
+			
+			List<UserVO> userList = userService.userList(pagevo);
+			model.addAttribute("userList",userList);
+			model.addAttribute("page",pagevo); //페이징용 page객체
+			model.addAttribute("count",count);
+			
+			return "admin/member/list";
 		
-		if(!pagevo.getSearch().equals("")) {
-			count = userService.getSearchedUserCount(pagevo);
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
-		
-		System.out.println("page2 : "+page2);
-		System.out.println("pagevo : "+pagevo);
-		List<UserVO> userList = userService.userList(pagevo);
-		model.addAttribute("userList",userList);
-		model.addAttribute("page",pagevo); //페이징용 page객체
-		model.addAttribute("count",count);
-		
-		return "admin/member/list";
 	}
 	
 	
 	// 회원 등록 페이지
 	@RequestMapping(value = "/member/createUserForm", method = RequestMethod.GET)
- 	public String userCreate() throws SQLException {
+ 	public String userCreate(){
      	
  		return "admin/member/createUserForm";
  	}
 	
 	@RequestMapping(value = "/member/duplicatedIdCheck", method = RequestMethod.GET)
-	@ResponseBody public int checkDuplicatedId(UserVO vo) throws SQLException {
+	@ResponseBody public String checkDuplicatedId(UserVO vo,Model model,HttpServletRequest request){
 		
-		if(userService.checkId(vo) == 1) {
-			return 0;	
-		}else {
-			return 1;
+		try {
+			
+			if(userService.checkId(vo) == 1) {
+				return "0";	
+			}else {
+				return "1";
+			}
+			
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
 		
 	}
 	
 	// 회원 등록 처리
 	@RequestMapping(value = "/member/createUser", method = RequestMethod.POST)
-	@ResponseBody public int userInsert(@RequestBody UserVO userVO, HttpSession session) throws SQLException, NoSuchAlgorithmException {
+	@ResponseBody public String userInsert(@RequestBody UserVO userVO, HttpSession session,HttpServletRequest request,Model model){
 		
-		if(userService.checkId(userVO) == 1) {
-			return 2;
-		}
-		System.out.println("컨트롤러 - 번호검사 : "+userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
-		System.out.println(userVO.getEmailPart2());
-		if("self_writing".equals(userVO.getEmailPart2())) {
-			userVO.setEmailPart2(userVO.getEmailPart3());
-		}
-		int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
-		userVO.setRegrSeq(sessionSeqForAdmin);
+		try {
+			
+			if(userService.checkId(userVO) == 1) {
+				return "2";
+			}
+			if("self_writing".equals(userVO.getEmailPart2())) {
+				userVO.setEmailPart2(userVO.getEmailPart3());
+			}
+			int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
+			userVO.setRegrSeq(sessionSeqForAdmin);
+			
+			
+			return userService.insertUser(userVO)+"";
 		
-		return userService.insertUser(userVO);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			logger.error("NoSuchAlgorithmException"+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (SQLException e) {
+			logger.error("SQLException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		}
 	}
 	
 	// 회원 수정 페이지
 	@RequestMapping(value = "/member/modifyUserForm", method = RequestMethod.GET)
-	public String userDetail(UserVO userVOFromParam, Model model) throws SQLException {	
+	public String userDetail(UserVO userVOFromParam, Model model,HttpServletRequest request){	
 		
-		//System.out.println("클릭한 아이디: "+ userId); //확인은 항상 위에서 하기
-		
-		UserVO userVO = userService.userDetail(userVOFromParam);
-		/*if(userVO != null) {*/
+		try {
 			
-		System.out.println("userVO :"+userVO);
-		
-		userVO.setEmailPart1(userVO.getEmail().split("@")[0]);
-		String [] emailList = {"naver.com","daum.net","gmail.com","hanmail.com","yahoo.co.kr"};
-		for(String email : emailList) {
-			System.out.println("이메일 목록 : "+email);
-			if(userVO.getEmail().split("@")[1].equals(email)) {
-				System.out.println("매칭된 if문 속 email :"+email);
-				userVO.setEmailPart2(email);
+			UserVO userVO = userService.userDetail(userVOFromParam);
+			/*if(userVO != null) {*/
+				
+			userVO.setEmailPart1(userVO.getEmail().split("@")[0]);
+			String [] emailList = {"naver.com","daum.net","gmail.com","hanmail.com","yahoo.co.kr"};
+			for(String email : emailList) {
+				if(userVO.getEmail().split("@")[1].equals(email)) {
+					userVO.setEmailPart2(email);
+				}
 			}
-		}
+			
+			String [] phone = userVO.getPhone().split("-");
+			userVO.setPhone1(phone[0]);
+			userVO.setPhone2(phone[1]);
+			userVO.setPhone3(phone[2]);
+			
+			if(userVO.getEmailPart2() == null) {
+				userVO.setEmailPart2("self_writing");
+				userVO.setEmailPart3(userVO.getEmail().split("@")[1]);
+			}
+			model.addAttribute("userVO",userVO);
+			return "admin/member/modifyUserForm";
 		
-		String [] phone = userVO.getPhone().split("-");
-		userVO.setPhone1(phone[0]);
-		userVO.setPhone2(phone[1]);
-		userVO.setPhone3(phone[2]);
-		
-		if(userVO.getEmailPart2() == null) {
-			userVO.setEmailPart2("self_writing");
-			userVO.setEmailPart3(userVO.getEmail().split("@")[1]);
+		} catch (SQLException e) {
+			logger.error("SQLException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/loginView");
+			return "common/msg";
 		}
-		System.out.println(userVO.getEmailPart2());
-		System.out.println(userVO.getEmail());
-		model.addAttribute("userVO",userVO);
-		return "admin/member/modifyUserForm";
 		
 	}
 
 	// 회원 수정 처리
 		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
-		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request) throws SQLException, IOException {
+		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request){
 			
-			System.out.println(userVO);
 			if("self_writing".equals(userVO.getEmailPart2())) {
 				userVO.setEmailPart2(userVO.getEmailPart3());
 			}
 			
 			try {
+				
 				int result = userService.updateUser(userVO);
+				
 				if(result == 1) {
 					model.addAttribute("msg", "수정 되었습니다!");
 					model.addAttribute("loc", "/admin/member/list");
@@ -156,17 +229,38 @@ public class UserAdminController {
 					model.addAttribute("msg", "수정 되지않았습니다!");
 					model.addAttribute("loc", "/admin/member/modifyUser");
 				}
+			
+				model.addAttribute("msg", "수정 되었습니다!");
+				model.addAttribute("loc", "/admin/member/list");
+			
+				return "common/msg";
+			
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 				logger.error("NoSuchAlgorithmException"+e);
-				response.sendRedirect(request.getContextPath()+"/login/loginView");
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (SQLException e) {
+				logger.error("SQLException "+e);
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (NullPointerException e) {
+				logger.error("NullPointerException "+e);
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (Exception e) {
+				logger.error("Exception" + e);
+				logger.debug(" Request URI \t:  " + request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
 			}
-			model.addAttribute("msg", "수정 되었습니다!");
-			model.addAttribute("loc", "/admin/member/list");
-			
-			return "common/msg";
-			
 			
 			/*return "redirect:/admin/member/list";*/ //회원 목록으로 이동
 		
@@ -175,40 +269,72 @@ public class UserAdminController {
 	
 		@ResponseBody
 		@RequestMapping(value = "/member/recoverUserStatus", method = RequestMethod.POST)
-		 public int recoverUserStatus (UserVO userVO,HttpSession session) throws SQLException {
+		 public String recoverUserStatus (UserVO userVO,HttpSession session,HttpServletRequest request,Model model){
 			
-			System.out.println("=========================아이디 배열 확인: " +userVO.getUserSeqArray().size());
-			System.out.println("=========================아이디 배열 확인: " +userVO.getUserSeqArray().get(0));
-			int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
-			userVO.setUpdrSeq(sessionSeqForAdmin);
-			int recoverUserStatusResult = userService.recoverUserStatus(userVO);
-			
-			if(recoverUserStatusResult != 0 ) {
-				return 1;
-    		}else{
-				return 0;
-    		}
-			
-	}
+			try {
+				logger.debug("=========================아이디 배열 확인: " +userVO.getUserSeqArray().size());
+				logger.debug("=========================아이디 배열 확인: " +userVO.getUserSeqArray().get(0));
+				int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
+				userVO.setUpdrSeq(sessionSeqForAdmin);
+				int recoverUserStatusResult = userService.recoverUserStatus(userVO);
+				
+				if(recoverUserStatusResult != 0 ) {
+					return "1";
+	    		}else{
+					return "0";
+	    		}
+			} catch (NullPointerException e) {
+				logger.error("NullPointerException "+e);
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (Exception e) {
+				logger.error("Exception" + e);
+				logger.debug(" Request URI \t:  " + request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			}
+		}
 		
 		
 	// 회원 정지 처리
 		@ResponseBody 
 		@RequestMapping(value = "/member/deleteUser", method = RequestMethod.POST)
-		public int deleteUser(UserVO vo,HttpSession session) throws SQLException {
+		public String deleteUser(UserVO vo,HttpSession session,HttpServletRequest request,Model model){
 			
-			System.out.println("=========================아이디 배열 확인: " +vo.getUserSeqArray().size());
-			System.out.println("=========================아이디 배열 확인: " +vo.getUserSeqArray().get(0));
-			int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
-			vo.setUpdrSeq(sessionSeqForAdmin);
-			int deleteUserResult = userService.deleteUser(vo);
-			
-			if(deleteUserResult != 0 ) {
-				return 1;
-    		}else{
-				return 0;
-    		}
-			
+			try {
+				logger.debug("=========================아이디 배열 확인: " +vo.getUserSeqArray().size());
+				logger.debug("=========================아이디 배열 확인: " +vo.getUserSeqArray().get(0));
+				int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
+				vo.setUpdrSeq(sessionSeqForAdmin);
+				int deleteUserResult = userService.deleteUser(vo);
+				
+				if(deleteUserResult != 0 ) {
+					return "1";
+	    		}else{
+					return "0";
+	    		}
+			} catch (SQLException e) {
+				logger.error("SQLException "+e);
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (NullPointerException e) {
+				logger.error("NullPointerException "+e);
+				logger.error("Request URL :"+request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			} catch (Exception e) {
+				logger.error("Exception" + e);
+				logger.debug(" Request URI \t:  " + request.getRequestURI());
+				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+				model.addAttribute("loc", "/login/loginView");
+				return "common/msg";
+			}
+		}
 	}		
 		
-}

@@ -21,8 +21,14 @@
 	$(document).ready(function() {
 		$("#search_frm").submit(function(){
 			if ($("#search_text").val().trim().length == 0) {
-				alert("검색창에 내용을 입력하세요");
-				return false;
+				if($("#search_select_id").val() == 'user_name'){
+					alert("검색창에 성명을 입력하세요");
+					return false;
+				}
+				if($("#search_select_id").val() == 'dep'){
+					alert("검색창에 소속 부서명을 입력하세요");
+					return false;
+				}
 			};
 		});
 	});
@@ -84,9 +90,9 @@
 						</div> -->
 						<div class="search_area right" style="margin-top:1rem;">
 							<form action="/main/userSearchList" id="search_frm" method="get">
-								<select name="search">
+								<select name="search" id="search_select_id">
 									<option value="user_name">성명</option>
-									<option value="dep">소속</option>
+									<option value="dep">소속 부서명</option>
 								</select> 
 								<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
 								<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
