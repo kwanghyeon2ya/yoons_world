@@ -74,6 +74,9 @@
 						alert("선택하신 회원이 정지되었습니다.");
 						window.location.href = "/admin/member/list"; // 정지 후 회원 목록으로 
 						break;
+					case 9999:
+						alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+						location.href="/login/loginView";
 					default:
 						alert("상태가 변경되지 않았습니다.");
 						break;

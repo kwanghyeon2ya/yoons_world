@@ -61,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	@Override
-	public int insertBoard(BoardVO vo,MultipartFile[] files) throws IllegalStateException, IOException, Exception { //게시글 작성
+	public int insertBoard(BoardVO vo,MultipartFile[] files) throws Exception { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
 		int result = dao.insertBoard(vo);
 		
@@ -158,7 +158,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	@Transactional
-	public int modView(BoardVO vo,MultipartFile[] files) throws IllegalStateException, IOException , Exception { //게시글 수정
+	public int modView(BoardVO vo,MultipartFile[] files) throws Exception { //게시글 수정
 /*		List<BoardAttachVO> blist = new ArrayList<>();*/	
 	
 		
@@ -237,7 +237,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Transactional
 	@Override
-	public int delView(BoardVO vo) throws IllegalStateException , IOException , Exception { //게시글 삭제
+	public int delView(BoardVO vo) throws Exception { //게시글 삭제
 		/*List<BoardAttachVO> list = adao.getAttachList(vo.getPostSeq()); //물리경로 보존위해 주석
 		System.out.println(vo);*/
 //		for(BoardAttachVO avo : list) { 

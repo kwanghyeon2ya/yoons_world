@@ -539,17 +539,18 @@ public class BoardController {
 	@RequestMapping("free/view")
 	public String getFreeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		
 		try {
 
 			int postSeq2 = Integer.parseInt(postSeq);
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			BoardVO vo = service.getView(postSeq2);// DB조회
 			
-			logger.info("free view vo 전체 체크 : "+vo);
+			logger.debug("free view vo 전체 체크 : "+vo);
 			if (vo == null) { // Null체크 - 뒤로가기시 Null
 				return "redirect:/login/logout"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 			}
-
+			
 			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
 
 			vo.setPostSeq(postSeq2);
@@ -564,6 +565,10 @@ public class BoardController {
 				service.updateCnt(postSeq2);
 			}
 			logger.debug("조회수체크 : "+vo.getReadCnt());
+			
+			
+			model.addAttribute("vo", vo);
+			model.addAttribute("anlist", anlist);
 			return "board/free/view";
 
 		} catch (NullPointerException ne) {
@@ -590,6 +595,7 @@ public class BoardController {
 			int postSeq2 = Integer.parseInt(postSeq);
 			List<BoardAttachVO> anlist = aservice.getAttachList(postSeq2);
 			BoardVO vo = service.getView(postSeq2); // DB조회
+			
 			logger.debug("notice view vo 전체 체크 : "+vo);
 			if (vo == null) { // Null체크 - 뒤로가기시 Null
 				return "redirect:/board/notice/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x

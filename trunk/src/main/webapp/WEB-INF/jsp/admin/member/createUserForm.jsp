@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -216,10 +217,15 @@
 						case 2:
 							alert("아이디의 중복을 확인해주세요");
 							break;
+						case 9999:
+							alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+							location.href="/login/loginView";
 						default : break; 
 						}
-					},error : function (a1, a2, a3){
-						console.log(a1, a2, a3);
+					},error : function (result,code){
+						console.log("result.status : "+result.status," code : "+code);
+						alert(code+result.status+"잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+						location.href="/login/loginView";
 					}
 										
 				});

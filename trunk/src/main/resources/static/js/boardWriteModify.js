@@ -38,8 +38,8 @@ function WriteBoardCheck(url){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
-	if($("#content").val().length > 4000){
-		alert("본문은 4000자 이상 작성할 수 없습니다");
+	if($("#content").val().length > 900){
+		alert("본문은 900자 이상 작성할 수 없습니다");
 		$("#content").focus();
 		return false;
 	}
@@ -155,8 +155,8 @@ function modBoardCheck(url){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
-	if($("#content").val().length > 4000){
-		alert("본문은 4000자 이상 작성할 수 없습니다");
+	if($("#content").val().length > 900){
+		alert("본문은 900자 이상 작성할 수 없습니다");
 		$("#content").focus();
 		return false;
 	}
@@ -231,16 +231,16 @@ $(document).ready(function(){
 				length += 2
 			}
 		}*/
-		var str = "["+content_len+"/4000자]";
+		var str = "["+content_len+"/900자]";
 		
-		if(content_len > 4000){
+		if(content_len > 900){
 			
 			$("#word_count").html(str);
 			$("#word_count").addClass("txt_red");
 			
 			/*alert("더이상 입력하실 수 없습니다");*/
 //			$('.note-editable').text().substring(0,3999);
-			$("#content").val($("#content").val().substring(0,3999));
+			$("#content").val($("#content").val().substring(0,899));
 			
 		}else{
 			
@@ -263,7 +263,7 @@ function getBoardList(){
 		dataType : "html",
 		async : true,
 	 	success : function(data){
-					$('.left_main_page').append($(data).find("#every_board_list"));
+			$('.left_main_page').append($(data).find("#every_board_list"));
 		}
 	})
 	
@@ -274,7 +274,7 @@ function getBoardList(){
 		dataType : "html",
 		async : true,
 	 	success : function(data){
-					$('.get_all_board_list_for_month').append($(data).find(".board_list"));
+			$('.get_all_board_list_for_month').append($(data).find(".board_list"));
 		}
 	})
 	

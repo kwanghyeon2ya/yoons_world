@@ -68,7 +68,6 @@
 							<c:if test="${sessionScope.sessionSeqForUser != null}">
 							<div class="login_info">
 								<div style="display:align-items">
-								
 								</div>
 								<img class="profile" src="/img/common/profile.png">
 								<div>
@@ -77,29 +76,25 @@
 									</p>
 									<div style="display:flex;align-items: center;">
 										<p style="display:inline">${sessionScope.sessionSeqForAdmin != null ? "관리자" : "일반 회원"}</p>
-										<button type="button" style="margin-left:2.5rem;height:1.8rem;" class="btn type_03 bg_purple" onclick="location.href='/admin/member/list'">회원관리</button>
 									</div>
 								</div>
+								<button type="button" class="btn type_03 bg_purple" onclick="location.href='/admin/member/list'">Admin</button>
 							</div>							
 							<button onClick="location.href='/login/logout'">LOGOUT</button>
 							</c:if>
 						</div>
 						
-						<!-- <div>
-							<span style="font-size:2rem;">회원 검색</span>
-						</div> -->
-						<div class="search_area right" style="margin-top:1rem;">
+							<h3>회원 검색</h3>
+					
+						<div class="search_area right" id="main_search_form">
 							<form action="/main/userSearchList" id="search_frm" method="get">
 								<select name="search" id="search_select_id">
 									<option value="user_name">성명</option>
-									<option value="dep">소속 부서명</option>
+									<option value="dep">부서명</option>
 								</select> 
-								<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
-								<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
+								<input type="text" id="search_text" name="keyword" value="${keyword}"></input>
+								<button type="submit" id="submit_button" class="btn type_02 bg_purple">검색</button>
 							</form>
-						</div>
-						<div id="search_result">
-							
 						</div>
 
 						<!-- 조회수 TOP 리스트 -->

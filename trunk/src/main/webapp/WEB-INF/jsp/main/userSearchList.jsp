@@ -52,7 +52,7 @@
 					<form action="/main/userSearchList" id="search_frm" method="get">
 						<select name="search">
 							<option value="user_name" ${userVO.search == 'userName'?'selected="selected"':''}>이름</option>
-							<option value="dep" ${userVO.search == 'dep'?'selected="selected"':''}>소속 부서</option>
+							<option value="dep" ${userVO.search == 'dep'?'selected="selected"':''}>부서명</option>
 						</select> 
 						<input type="text" id="search_text" class="size_s" name="keyword" value="${userVO.keyword}"/>
 						<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
@@ -64,7 +64,7 @@
 						<div class="th">이름</div>
 						<div class="th">소속 부서명</div>
 						<div class="th">이메일</div>
-						<div class="th">내선 전화번호</div>
+						<div class="th">전화번호</div>
 						<div class="th">휴대폰 번호</div>
 						<!-- <div class="mem-dep">부서</div> -->
 					<c:if test="${count == 0}">

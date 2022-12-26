@@ -57,7 +57,7 @@
 		<c:if test="${!empty freeBoardList}">
 		<c:forEach var="list" items="${freeBoardList}">
 		<div>
-			<a title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}">${fn:replace(fn:escapeXml(list.subject), s, "'")}/></a>
+			<a title="${list.subject}" href="/board/free/view?postSeq=${list.postSeq}">${fn:replace(fn:escapeXml(list.subject), s, "'")}</a>
 		</div>
 		<div class="right">
 			<c:if test="${list.firstInsertDt >= list.lastUpdateDt}">

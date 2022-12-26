@@ -148,7 +148,7 @@
                        	
                        	<textarea name="content" id="content" style="display:none;"></textarea>
 					</div>
-					<div id="word_count">[0/4000자]</div>
+					<div id="word_count">[0/900자]</div>
 					<h4>첨부 파일</h4>
 					<span style="font-size:12px;">※첨부파일은 10MB이상 업로드 할 수 없습니다</span>
 					<c:if test="${empty anlist}"> <!-- 첨부파일이 없을 때 파일첨부 -->

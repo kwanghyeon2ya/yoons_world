@@ -76,7 +76,7 @@
 																	
 									<c:if test="${sessionScope.sessionSeqForUser == clist.regrSeq}">
 									<a href="javascript:void(0)" id="modifyCommButton_${clist.commSeq}" onclick="modCommFormShowHide(${clist.commSeq})">수정</a><!-- 댓글수정폼 보이기 -->
-									<a href="javascript:void(0)" id="deleteCommButton_${clist.commSeq}" onclick="deleteCommentsCheck(${clist.commSeq})">삭제</a><!-- 댓글삭제 -->
+									<a href="javascript:void(0)" id="deleteCommButton_${clist.commSeq}" onclick="deleteCommentsCheck(${clist.commSeq},${clist.commGroup})">삭제</a><!-- 댓글삭제 -->
 									</c:if>
 								</div>
 								
@@ -139,7 +139,7 @@
 					
 					
 					
-					
+					<div class="cocoList_div_${clist.commGroup}">
 				 <!-- 본 댓글의 대댓글 -->
 					<c:if test="${clist.nestedCommentsCnt != 0}"><!-- 만약 대댓글에 대한 갯수 카운트가 있다면 -->
 						<c:forEach var="cocoList" items="${clist.cocoList}" varStatus="loop"><!-- clist안의 cocoList객체 꺼냄 -->
@@ -166,7 +166,7 @@
 									<div class="comm_btn">
 										<c:if test="${sessionScope.sessionSeqForUser == cocoList.regrSeq}">
 										<a href="javascript:void(0)" id="modifyCommButton_${cocoList.commSeq}" onclick="modCommFormShowHide(${cocoList.commSeq})">수정</a><!-- 댓글수정폼 보이기 -->
-										<a href="javascript:void(0)" id="deleteCommButton_${cocoList.commSeq}" onclick="deleteCommentsCheck(${cocoList.commSeq})">삭제</a><!-- 댓글삭제 -->
+										<a href="javascript:void(0)" id="deleteCommButton_${cocoList.commSeq}" onclick="deleteCommentsCheck(${cocoList.commSeq},${cocoList.commGroup})">삭제</a><!-- 댓글삭제 -->
 										</c:if>
 									</div>
 										
@@ -197,7 +197,7 @@
 						</c:if>
 						</c:forEach>
 					</c:if>
-				
+				</div>
 					
 				</div><!-- reload_comment_index -->
 				

@@ -10,12 +10,12 @@ import com.iyoons.world.vo.CommentsVO;
 
 public interface BoardService {
 	
-	public int insertBoard(BoardVO vo, MultipartFile[] files) throws IllegalStateException, IOException,Exception;
+	public int insertBoard(BoardVO vo, MultipartFile[] files) throws Exception;
 	public List<BoardVO> getBoardList(String search,String keyword,String searchCheck,int startRow, int endRow, String boardType) throws Exception;
 	public int getBoardCount(String boardType)throws Exception;
 	public int getSearchCount(String search,String keyword,String searchCheck,int startRow, int endRow, String boardType)throws Exception;
 	public BoardVO getView(int postSeq)throws Exception;
-	public int modView(BoardVO vo,MultipartFile[] files) throws IllegalStateException, IOException,Exception;
+	public int modView(BoardVO vo,MultipartFile[] files) throws Exception;
 	public void updateCnt(int postSeq)throws Exception;
 	public int delView(BoardVO vo)throws Exception;
 	public int findUser(int postSeq)throws Exception;

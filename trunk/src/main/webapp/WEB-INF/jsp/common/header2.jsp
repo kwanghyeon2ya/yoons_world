@@ -79,7 +79,7 @@
 			<c:if test="${sessionScope.sessionSeqForAdmin != null}">
 			<a href="/admin/member/list">
 				<img src="/img/common/icon_members.png">
-				<span>회원관리</span>
+				<span>Admin</span>
 			</a>
 			</c:if>
 		</nav>

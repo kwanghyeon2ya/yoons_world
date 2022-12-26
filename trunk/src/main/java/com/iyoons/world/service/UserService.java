@@ -13,13 +13,13 @@ public interface UserService {
 	
 	public UserVO findUser(UserVO userVO) throws NoSuchAlgorithmException;
 	
-	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception;
+	public int insertUser(UserVO userVO) throws Exception;
 	
-	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception;
+	public int updateUser(UserVO userVO) throws Exception;
 	
-	public UserVO userDetail(UserVO userVOFromParam) throws SQLException, Exception;
+	public UserVO userDetail(UserVO userVOFromParam) throws Exception;
 
-	public int deleteUser(UserVO userVO) throws SQLException, Exception;
+	public int deleteUser(UserVO userVO) throws Exception;
 	
 	public List<UserVO> userList(PageVO page) throws Exception;
 	
@@ -39,7 +39,7 @@ public interface UserService {
 	
 	public int deleteCookieWhenLogin (UserAutoLoginVO alvo) throws Exception;
 	
-	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException, NullPointerException, Exception;
+	public List<UserVO> getUserInfoList(UserVO userVO) throws Exception;
 	
 	public int getUserCount(UserVO userVO) throws Exception;
 	

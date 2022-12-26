@@ -205,6 +205,7 @@ a {
 	text-decoration: none;
 }
 
+
 /*
 a:hover {
 	text-decoration: none;
@@ -249,6 +250,7 @@ section:last-child, article:last-child {
 	.input-wrap {
 		width: calc(100% - 70px);
 	}
+	
 }
 
 @media screen and (max-width: 980px) {

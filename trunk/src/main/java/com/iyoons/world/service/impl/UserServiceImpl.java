@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public int insertUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception {
+	public int insertUser(UserVO userVO) throws Exception {
 		DepVO depVO = new DepVO();
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
@@ -97,20 +97,21 @@ public class UserServiceImpl implements UserService {
 		userVO.setUserPw(getHashPw(userVO));
 		
 		int result = userDAO.insertUser(userVO);
-		
-		depVO.setDepSeq(userVO.getDepSeq());
+		logger.debug("transactional 실험중(에러 전)");
+		depVO.setDepSeq(Integer.parseInt(null));
+		/*depVO.setDepSeq(userVO.getDepSeq());*/
 		depVO.setUserSeq(userVO.getUserSeq());
 		depVO.setRegrSeq(userVO.getRegrSeq());
 		
 		userDAO.insertDepUser(depVO);
-		
+		logger.debug("transactional 실험중(에러 후)");
 		
 		return result;
 	}
 
 	@Override
 	@Transactional(rollbackFor = {Exception.class})
-	public int updateUser(UserVO userVO) throws SQLException, NoSuchAlgorithmException, Exception {
+	public int updateUser(UserVO userVO) throws Exception {
 		
 		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
@@ -120,17 +121,22 @@ public class UserServiceImpl implements UserService {
 		int result = userDAO.updateUser(userVO);
 		
 		DepVO depVO = new DepVO();
+		depVO.setUserSeq(userVO.getUserSeq());
 		depVO.setDepSeq(userVO.getDepSeq());
 		depVO.setUpdrSeq(userVO.getUpdrSeq());
 		
-		userDAO.updateDepUser(depVO);
+		logger.debug("UpdateUser userServiceImpl depVO : "+depVO);
+		
+		int depResult = userDAO.updateDepUser(depVO);
+		
+		logger.debug("UpdateUser userServiceImpl dep_user업데이트 확인  1 - 성공 : "+depResult);
 		
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public int deleteUser(UserVO userVO) throws SQLException,Exception {
+	public int deleteUser(UserVO userVO) throws Exception {
 		
 		DepVO depVO = new DepVO();
 		depVO.setUpdrSeq(userVO.getUpdrSeq());
@@ -153,7 +159,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO userDetail(UserVO userVOFromParam) throws SQLException, Exception {
+	public UserVO userDetail(UserVO userVOFromParam) throws Exception {
 		
 		return userDAO.userDetail(userVOFromParam);
 	}
@@ -202,7 +208,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> getUserInfoList(UserVO userVO) throws SQLException,NullPointerException,Exception{
+	public List<UserVO> getUserInfoList(UserVO userVO) throws Exception{
 		return userDAO.getUserInfoList(userVO);
 	}
 
