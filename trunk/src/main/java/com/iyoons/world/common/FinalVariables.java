@@ -27,6 +27,7 @@ public class FinalVariables {
 	public final static String NULLPOINT_CODE = "1111";
 	public final static String NOSUCHALGORITH_CODE = "2222";
 	public final static String NUMBERFORMAT_CODE = "3333";
+	public final static String SQL_CODE = "4444";
 	public final static String EXCEPTION_CODE = "9999";
 	
 	

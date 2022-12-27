@@ -1,6 +1,9 @@
 package com.iyoons.world.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -25,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import com.google.gson.Gson;
+import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.service.AttachService;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.service.CommentsService;
@@ -738,7 +742,7 @@ public class BoardController {
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
 			HttpSession session,HttpServletResponse response,Model model
 			){
-		int result = 0;
+		String result = "0";
 		
 		try {
 		
@@ -759,39 +763,23 @@ public class BoardController {
 			vo.setFileAttachYn("N");
 			vo.setRegrSeq(sessionSeqForUser);
 			if(!files[0].isEmpty()) {
-			vo.setFileAttachYn("Y");
-			
+				vo.setFileAttachYn("Y");
 			}
-			
-			result = service.insertBoard(vo,files);
 		
-			return result+"";	
+			result = service.insertBoard(vo,files,request)+"";
 		
-		} catch (IllegalStateException ie) {
-			logger.error("IllegalStateException" + ie);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
-		} catch (IOException ioe) {
-			logger.error("IOException" + ioe);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
-		} catch (NullPointerException ne) {
-			logger.error("nullpointException" + ne);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (Exception e) {
-			logger.error("Exception" + e);
+			result = FinalVariables.EXCEPTION_CODE;
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+			logger.debug("게시글 작성 catch절 진입확인 : "+result);
 		}
+			logger.debug("게시글 작성result : "+result);
+			
+		return result;
+		
 	}
 	
 	@RequestMapping("notice/write")
@@ -808,62 +796,65 @@ public class BoardController {
 	@RequestMapping(value="deleteViewProc",method=RequestMethod.POST)
 	@ResponseBody public String deleteViewProc(BoardVO vo,HttpSession session,Model model,HttpServletRequest request) { //게시판 글 삭제
 			
+		String result = "0";
+		
 		try {
 			/*int dbRegrSeq = service.findUser(vo.getPostSeq());*/
 			int sessionSeqForUser = (Integer)session.getAttribute("sessionSeqForUser");
 			BoardVO vo2 = service.getView(vo.getPostSeq());
 			if(sessionSeqForUser == vo2.getRegrSeq()) {
 				vo.setUpdrSeq(sessionSeqForUser);
-				return service.delView(vo)+"";
+				result = service.delView(vo)+""; 
 			}
 			// 세션에 있는 아이디 (= 접속한 사람)랑 
 			
 			// 제거하려고하는 게시판 글의 작성자랑 비교
 				// db select regerSeq from board by post_seq (파라미터로 넘긴)
-			return "0";
-		} catch (NullPointerException ne) {
-			logger.error("nullpointException" + ne);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (Exception e) {
-			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+			result = FinalVariables.EXCEPTION_CODE;
 		}
+		return result;
 	}
 	@RequestMapping(value="insertCommentsProc",method=RequestMethod.POST)
-	@ResponseBody public String insertCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request) {
+	@ResponseBody public String insertCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request){
 		/*String version = org.springframework.core.SpringVersion.getVersion();
 		System.out.println(version);*/
 //		5.3.17
+		
+		String result = "0";
+		
 		try {
 			int sessionSeqForUser = (Integer) session.getAttribute("sessionSeqForUser");
 			String sessionIdForUser = (String) session.getAttribute("sessionIdForUser");
 			vo.setRegrSeq(sessionSeqForUser);
 			vo.setCommId(sessionIdForUser);
-			int result = cservice.insertComments(vo);
-			return result+"";
-		} catch (NullPointerException ne) {
-			logger.error("nullpointException" + ne);
+			result = cservice.insertComments(vo)+"";
+		} catch (SQLException se) {
+			logger.debug("sql오류 에러코드 :"+se.getErrorCode());
+			StringWriter sw = new StringWriter();
+			se.printStackTrace(new PrintWriter(sw));
+			logger.error(sw.toString());
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			result = FinalVariables.SQL_CODE;
 		} catch (Exception e) {
-			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+			result = FinalVariables.EXCEPTION_CODE;
 		}
+		logger.debug("본 댓글 작성 result : "+result);
+		return result;
 	}
 	
 	@RequestMapping(value="deleteCommentsProc",method=RequestMethod.POST)
 	@ResponseBody public String deleteCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request) {
+		
+		String result = "0";
 		
 		try {
 			int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
@@ -871,22 +862,16 @@ public class BoardController {
 			if(sessionSeqForUser == vo2.getRegrSeq()) {
 				vo.setRegrSeq(vo2.getRegrSeq());
 				vo.setUpdrSeq(vo2.getRegrSeq());
-				return cservice.delComment(vo)+"";
+				result = cservice.delComment(vo)+""; 
 			}
-			return "0";
-		} catch (NullPointerException ne) {
-			logger.error("nullpointException" + ne);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (Exception e) {
-			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+			result = FinalVariables.EXCEPTION_CODE;
 		}
+		return result;
 	}
 	
 }

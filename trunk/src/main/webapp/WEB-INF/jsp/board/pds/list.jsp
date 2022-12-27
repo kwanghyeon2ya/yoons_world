@@ -105,7 +105,7 @@
 									<div class="no_file">&nbsp;</div>
 									</c:if>
 									<c:if test="${list.attachCnt ne 0}">
-									<div>${list.fullFileName}<c:if test="${list.attachCnt > 1}">외 ${list.attachCnt-1}</c:if></div> <!-- 첨부파일 -->
+									<div title="${list.fullFileName}<c:if test="${list.attachCnt > 1}">외 ${list.attachCnt-1}</c:if>">${list.fullFileName}<c:if test="${list.attachCnt > 1}">외 ${list.attachCnt-1}</c:if></div> <!-- 첨부파일 -->
 									</c:if>
 									
 									<div>${list.writerName}</div>

@@ -40,6 +40,7 @@ function writeCommentsCheck(post_seq){
 					$("#reload_div_parent").load('/board/comments ',{postSeq:post_seq});
 					break;
 				default:
+					alert("댓글이 작성되지 않았습니다");
 					break;
 				}
 			}
@@ -94,6 +95,11 @@ function modifyCommentsCheck(index){
 	 	success : function(data){
 					if(data == '') {
 						alert("댓글이 수정되지 않았습니다");
+					}else if(data == "4444"){
+						alert("글자 수가 너무 많습니다");
+					}else if(data == "9999"){
+						alert("잘못된 요청입니다 로그인 페이지로 이동합니다");
+						location.href="/login/loginView";
 					}else{
 						alert("댓글이 수정되었습니다");
 						console.log("data : "+data);

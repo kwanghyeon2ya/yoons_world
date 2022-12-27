@@ -81,6 +81,11 @@ function WriteBoardCheck(url){
 	 				alert("게시글이 작성되었습니다");
 	 				location.href=url;
 	 				rtn = true;
+	 				break;
+		 		case 9999:
+					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+					location.href="/login/loginView";
+					break;
 		 		default:
 		 			break;
 	 			}

@@ -2,6 +2,8 @@ package com.iyoons.world.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,10 +62,11 @@ public class BoardServiceImpl implements BoardService {
 		return str;
 	}*/
 	
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int insertBoard(BoardVO vo,MultipartFile[] files) throws Exception { //게시글 작성
+	public int insertBoard(BoardVO vo,MultipartFile[] files,HttpServletRequest request)throws Exception { //게시글 작성
 		List<BoardAttachVO> blist = new ArrayList<>();
+		
 		int result = dao.insertBoard(vo);
 		
 		for(MultipartFile f : files) {
@@ -89,12 +93,28 @@ public class BoardServiceImpl implements BoardService {
 				bavo.setRegrSeq(vo.getRegrSeq());
 				
 				String savePath = REAL_PATH + uploadFileName;
-				
 					
 				File saveFile = new File(savePath);
-				f.transferTo(saveFile); 
 				
-				blist.add(bavo);
+				/*int i =+ 1; 예외 실험용*/
+				
+				try {
+					
+					f.transferTo(saveFile);
+					blist.add(bavo);
+					
+				} catch (Exception e) {
+					
+					logger.debug("파일처리 catch 진입");
+						for(BoardAttachVO avo : blist) { 
+							String path = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+							File file = new File(path);
+							file.delete();
+						}
+						
+					logger.error("저장소의 첨부파일 삭제 후 controller로 예외 되던짐 ");
+					throw e;
+				} 
 				
 				
 			}
