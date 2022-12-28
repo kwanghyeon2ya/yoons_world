@@ -96,13 +96,15 @@ public class BoardServiceImpl implements BoardService {
 					
 				File saveFile = new File(savePath);
 				
-				/*int i =+ 1; 예외 실험용*/
-				
+				/*int i =+ 1;  //예외처리 실험용
+*/				
 				try {
 					
 					f.transferTo(saveFile);
 					blist.add(bavo);
-					
+					/*if(i < 2) { //예외처리 실험용
+						throw new Exception();
+					}*/
 				} catch (Exception e) {
 					
 					logger.debug("파일처리 catch 진입");
@@ -113,7 +115,7 @@ public class BoardServiceImpl implements BoardService {
 						}
 						
 					logger.error("저장소의 첨부파일 삭제 후 controller로 예외 되던짐 ");
-					throw e;
+					throw new Exception(e);
 				} 
 				
 				

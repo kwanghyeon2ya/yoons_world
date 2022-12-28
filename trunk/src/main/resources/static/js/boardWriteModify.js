@@ -3,12 +3,14 @@
  */
 function WriteBoardCheck(url){
 
+	var subject_repl = $("#subject").val().replace(/\"/gi,"'");
+	$("#subject").val(subject_repl);
+	
 	$("#content").val($('#summernote').summernote('code'));
 	/*$("#content").val($('.note-editable').summernote('code'));*/
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
-	
 	
 	//임시 사용
 	
@@ -60,7 +62,6 @@ function WriteBoardCheck(url){
 		}
 		
 	}
-		
 	
 	  $.ajax({
 		url : '/board/writeProc',
@@ -84,7 +85,7 @@ function WriteBoardCheck(url){
 	 				break;
 		 		case 9999:
 					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
-					location.href="/login/loginView";
+					location.href="/login/logout";
 					break;
 		 		default:
 		 			break;
@@ -134,6 +135,9 @@ function WriteBoardCheck(url){
 function modBoardCheck(url){
 	console.log($("#regrSeq"));
 	$("#content").val($('#summernote').summernote('code'));
+	
+	var subject_repl = $("#subject").val().replace(/\"/gi,"'");
+	$("#subject").val(subject_repl);
 	/*$("#content").val($('#summernote').text());*/
 	
 //	<p>test &lt;script&gt;dfjksalkdjls</script>"
