@@ -91,15 +91,20 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public int insertUser(UserVO userVO) throws Exception {
 		DepVO depVO = new DepVO();
-		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		
+		if("self_writing".equals(userVO.getEmailPart2())) {
+			userVO.setEmail(userVO.getEmailPart1());
+		}else {
+			userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		}
+		
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		logger.debug("userVO 번호확인 : "+userVO.getPhone());
 		userVO.setUserPw(getHashPw(userVO));
 		
 		int result = userDAO.insertUser(userVO);
 		logger.debug("transactional 실험중(에러 전)");
-		depVO.setDepSeq(Integer.parseInt(null));
-		/*depVO.setDepSeq(userVO.getDepSeq());*/
+		depVO.setDepSeq(userVO.getDepSeq());
 		depVO.setUserSeq(userVO.getUserSeq());
 		depVO.setRegrSeq(userVO.getRegrSeq());
 		
@@ -113,7 +118,12 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = {Exception.class})
 	public int updateUser(UserVO userVO) throws Exception {
 		
-		userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		if("self_writing".equals(userVO.getEmailPart2())) {
+			userVO.setEmail(userVO.getEmailPart1());
+		}else {
+			userVO.setEmail(userVO.getEmailPart1()+"@"+userVO.getEmailPart2());
+		}
+		
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		
 		userVO.setUserPw(getHashPw(userVO));

@@ -27,11 +27,16 @@
 			var name_confirm = RegExp(/^[가-힣]{2,5}$/);
 			var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
 			var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
-			var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
 			var phone1_confirm = RegExp(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})$/);
 		    var phone2_confirm = RegExp(/^[0-9]{3,4}$/);
 		    var phone3_confirm = RegExp(/^[0-9]{4}$/);
-			
+		    
+		    if($("#email_part2 option:selected").val() == 'self_writing'){
+				var email_confirm = RegExp(/^[A-Za-z0-9]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
+			}else{
+				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
+			}
+		    
 			$("#updatebtn").on("click", function(){
 
 
@@ -95,7 +100,11 @@
 				};
 				
 				if(!email_confirm.test($("#email_part1").val())){
-					alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+					if($("#email_part2 option:selected").val() == 'self_writing'){
+						alert("올바른 이메일 형식으로 작성해주세요");
+					}else{
+						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+					}
 					$("#email_part1").val("");
 					$("#email_part1").focus();
 					return false;
@@ -103,7 +112,7 @@
 				
 				console.log("email.part2 : "+$("#email_part2 option:selected").val());
 				
-				if($("#email_part2 option:selected").val() == 'self_writing'){
+				/* if($("#email_part2 option:selected").val() == 'self_writing'){
 					
 					if($("#email_part3").val()==""){
 						alert("이메일을 입력해주세요.");
@@ -117,7 +126,8 @@
 						$("#email_part3").focus();
 						return false;
 					};
-				};
+				}; */
+				
 				
 				//번호 유효성 검사
 		        if($("#phone1").val() == ""){
@@ -180,14 +190,14 @@
 				
 			}
 		
-		function selectedSelfWriting(value){
+		/* function selectedSelfWriting(value){
 			if(value == 'self_writing'){
 				$("#email_part3").css("display","block");
 			}else{
 				$("#email_part3").css("display","none");
 				$("#email_part3").val("");
 			};
-		};
+		}; */
 </script>
 </head>
 <body>
@@ -231,7 +241,7 @@
 								
 								<input id="email_part1" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
 								@
-								<select name="emailPart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+								<select name="emailPart2" id="email_part2">
 									<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
 									<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
 									<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
@@ -242,11 +252,11 @@
 								</td>
 							</tr>
 							
-							<tr>
+							<!-- <tr>
 								<td>
 								</td>
 								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;"/><td>
-							</tr>
+							</tr> -->
 							
 							<tr>
 								<th><label for="phone1">핸드폰 번호</label></th>

@@ -141,9 +141,6 @@ public class UserAdminController {
 		@ResponseBody public String userInsert(@RequestBody UserVO userVO, HttpSession session,HttpServletRequest request,Model model){
 			
 
-			if("self_writing".equals(userVO.getEmailPart2())) {
-				userVO.setEmailPart2(userVO.getEmailPart3());
-			}
 			int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
 			userVO.setRegrSeq(sessionSeqForAdmin);
 			
@@ -156,11 +153,10 @@ public class UserAdminController {
 					result = userService.insertUser(userVO)+"";
 				} catch (Exception e) {
 					result = FinalVariables.EXCEPTION_CODE;
-					logger.error("Exception" + e.getStackTrace()[0]);
 					logger.error(" Request URI \t:  " + request.getRequestURI());
 					StringWriter sw = new StringWriter();
 					e.printStackTrace(new PrintWriter(sw));
-					logger.error(sw.toString());
+					logger.error("Exception "+sw.toString());
 				}
 			}
 		
@@ -242,7 +238,7 @@ public class UserAdminController {
 			
 			if(userVO.getEmailPart2() == null) {
 				userVO.setEmailPart2("self_writing");
-				userVO.setEmailPart3(userVO.getEmail().split("@")[1]);
+				userVO.setEmailPart1(userVO.getEmail());
 			}
 			model.addAttribute("userVO",userVO);
 			return "admin/member/modifyUserForm";
@@ -272,10 +268,6 @@ public class UserAdminController {
 	// 회원 수정 처리
 		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
 		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request){
-			
-			if("self_writing".equals(userVO.getEmailPart2())) {
-				userVO.setEmailPart2(userVO.getEmailPart3());
-			}
 			
 			try {
 				

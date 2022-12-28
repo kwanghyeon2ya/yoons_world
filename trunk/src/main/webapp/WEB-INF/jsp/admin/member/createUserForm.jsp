@@ -33,7 +33,6 @@
 				var name_confirm = RegExp(/^[가-힣]{2,5}$/);
 				var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
 				var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
-				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
 				var phone1_confirm = RegExp(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})$/);
 			    var phone2_confirm = RegExp(/^[0-9]{3,4}$/);
 			    var phone3_confirm = RegExp(/^[0-9]{4}$/);
@@ -41,9 +40,16 @@
 				var user_name = $("#userName").val();
 				var user_id = $("#userId").val();
 				var user_pw = $("#userPw").val();
+				
+				if($("#email_part2 option:selected").val() == 'self_writing'){
+					var email_confirm = RegExp(/^[A-Za-z0-9]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
+				}else{
+					var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
+				}
+				
 				var email_part1 = $("#email_part1").val();
 				var email_part2 = $("#email_part2").val();
-				var email_part3 = $("#email_part3").val();
+				/* var email_part3 = $("#email_part3").val(); */
 				var hire_dt = $("#hire_dt").val();
 				var user_type = $("input[name=userType]:checked").val();
 				var phone1 = $("#phone1").val();
@@ -120,15 +126,19 @@
 				};
 				
 				if(!email_confirm.test($("#email_part1").val())){
-					alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+					if($("#email_part2 option:selected").val() == 'self_writing'){
+						alert("올바른 이메일 형식으로 작성해주세요");
+					}else{
+						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+					}
 					$("#email_part1").val("");
 					$("#email_part1").focus();
 					return false;
 				};
-				
+			
 				console.log("email.part2 : "+$("#email_part2 option:selected").val());
 				
-				if($("#email_part2 option:selected").val() == 'self_writing'){
+				/* if($("#email_part2 option:selected").val() == 'self_writing'){
 					
 					if($("#email_part3").val()==""){
 						alert("이메일을 입력해주세요.");
@@ -143,7 +153,7 @@
 						return false;
 					};
 					
-				};
+				}; */
 				
 				//번호 유효성 검사
 		        if($("#phone1").val() == ""){
@@ -192,7 +202,7 @@
 		       	
 		       	var param = {userName : user_name , userId : user_id , 
 							 userPw : user_pw, emailPart1 : email_part1, 
-							 emailPart2 : email_part2, emailPart3 : email_part3,
+							 emailPart2 : email_part2,
 							 hireDt : hire_dt , userType : user_type,
 							 phone1 : phone1 , phone2 : phone2, 
 							 phone3 : phone3 , extension : extension,
@@ -246,7 +256,7 @@
 				
 			}
 			
-		function selectedSelfWriting(value){
+		/* function selectedSelfWriting(value){
 			if(value == 'self_writing'){
 				$("#email_part3").css("display","block");
 				$("#email_part3").focus();
@@ -254,7 +264,7 @@
 				$("#email_part3").css("display","none");
 				$("#email_part3").val("");
 			};
-		};
+		}; */
 		
 		function DuplicatedIdCheck(){
 			
@@ -339,8 +349,8 @@
 								<td>
 								
 								<input id="email_part1" class="email" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)" /> 
-								@
-								<select class="email" name="emailpart2" id="email_part2" onchange="selectedSelfWriting(this.value)">
+								<span>@</span>
+								<select class="email" name="emailpart2" id="email_part2">
 									<option value="naver.com">naver.com</option>
 									<option value="daum.net">daum.net</option>
 									<option value="gmail.com">gmail.com</option>
@@ -350,11 +360,11 @@
 								</select>
 								</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td>
 								</td>
 								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;"/><td>
-							</tr>
+							</tr> -->
 							<tr>
 	<!-- 						<th><label for="userType">권한설정</label></th> -->
 								<th>
