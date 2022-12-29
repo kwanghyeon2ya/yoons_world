@@ -3,6 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="java.util.List"%>
 <%
 	response.setHeader("Cache-Control", "no-store");
@@ -11,6 +12,10 @@
 	if (request.getProtocol().equals("HTTP/1.1"))
 		response.setHeader("Cache-Control", "no-cache");
 %>
+
+<% pageContext.setAttribute("CRLF", "\r\n");%>
+<% pageContext.setAttribute("LF", "\n"); %>
+
 <jsp:useBean id="today" class="java.util.Date" />
 
 <!DOCTYPE html>
@@ -91,7 +96,8 @@
 					
 				<div class="board_content_area">
 					<!-- 게시글 본문 영역 -->
-					${vo.content}
+					${fn:replace(fn:replace(fn:escapeXml(vo.content), CRLF, '<br/>'), LF, '<br/>')}
+					
 				</div>
 					
 				<!-- 댓글 영역 -->

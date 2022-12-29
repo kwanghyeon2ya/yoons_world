@@ -61,6 +61,7 @@
 			  $("#move_action_button").click();
 		  }
 	  });*/
+	
 	  
 	  
 	$("#search_text").keyup(function(e){ // 검색창 작성시

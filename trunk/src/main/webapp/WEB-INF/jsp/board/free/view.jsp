@@ -3,7 +3,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="java.util.List"%>
+
+<% pageContext.setAttribute("CRLF", "\r\n");%>
+<% pageContext.setAttribute("LF", "\n"); %>
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -93,7 +97,7 @@
 					
 				<div class="board_content_area">
 					<!-- 게시글 본문 영역 -->
-					${vo.content}
+					${fn:replace(fn:replace(fn:escapeXml(vo.content), CRLF, '<br/>'), LF, '<br/>')}
 					
 					<!--  좋아요 DIV  -->
 					<div class="heart_img_div"

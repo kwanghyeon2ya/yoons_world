@@ -18,12 +18,27 @@
 <link rel="stylesheet" type="text/css" href="/css/board/board.css">
 
 <script type="text/javascript">
-		$(document).ready(function(){
 			
-			<c:if test="${userVO.emailPart2 eq 'self_writing'}">
+			/* <c:if test="${userVO.emailPart2 eq 'self_writing'}">
 				$("#email_part3").css("display","block");
-			</c:if>
+			</c:if> */
+	
+	$(document).ready(function(){
+		$("#email_part1").keyup(function(e){
 			
+			 var email_console = "0";
+			    
+			    if($("#email_part2 option:selected").val() == 'self_writing'){
+			    	 email_console = "1";
+				}
+			
+			console.log("email_console :"+email_console);
+		})
+	})
+			
+				
+	function updateForm(){
+				
 			var name_confirm = RegExp(/^[가-힣]{2,5}$/);
 			var id_confirm = RegExp(/^[a-zA-Z0-9]{4,15}$/);
 			var password_confirm = RegExp(/^[a-zA-Z0-9]{4,12}$/);
@@ -31,152 +46,156 @@
 		    var phone2_confirm = RegExp(/^[0-9]{3,4}$/);
 		    var phone3_confirm = RegExp(/^[0-9]{4}$/);
 		    
+		    var email_console = "0";
+		    
 		    if($("#email_part2 option:selected").val() == 'self_writing'){
 				var email_confirm = RegExp(/^[A-Za-z0-9]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
 			}else{
 				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
 			}
 		    
-			$("#updatebtn").on("click", function(){
+		    email_console = "1";
+		    
+		    console.log("email_console :"+email_console);
 
-
-				if($("#userName").val()==""){
-					alert("이름을 입력해주세요.");
-					$("#userName").focus();
-					return false;
-				};
-				
-				if(!name_confirm.test($("#userName").val())){
-					alert("이름은 2~5글자 이내의 한글로만 작성할 수 있습니다");
-					$("#userName").val("");
-					$("#userName").focus();
-					return false;
-				};
-				
-				if($("#userId").val()==""){
-					alert("아이디를 입력해주세요.");
-					$("#userId").focus();
-					return false;
-				};
-				
-				if(!id_confirm.test($("#userId").val())){
-					alert("아이디는 영문과 숫자의 조합으로 4-15자 이내로 작성해주세요");
-					$("#userId").val("");
-					$("#userId").focus();
-					return false;
-				};
-				
-				if($("#userPw").val()==""){
-					alert("비밀번호를 입력해주세요.");
-					$("#userPw").focus();
-					return false;
-				};
+			if($("#userName").val()==""){
+				alert("이름을 입력해주세요.");
+				$("#userName").focus();
+				return false;
+			};
 			
-				if(!password_confirm.test($("#userPw").val())){
-					alert("비밀번호는 영문과 숫자의 조합으로 4-12자 이내로 작성해주세요");
-					$("#userPw").val("");
-					$("#userPw").focus();
-					return false;
-				};
+			if(!name_confirm.test($("#userName").val())){
+				alert("이름은 2~5글자 이내의 한글로만 작성할 수 있습니다");
+				$("#userName").val("");
+				$("#userName").focus();
+				return false;
+			};
+			
+			if($("#userId").val()==""){
+				alert("아이디를 입력해주세요.");
+				$("#userId").focus();
+				return false;
+			};
+			
+			if(!id_confirm.test($("#userId").val())){
+				alert("아이디는 영문과 숫자의 조합으로 4-15자 이내로 작성해주세요");
+				$("#userId").val("");
+				$("#userId").focus();
+				return false;
+			};
+			
+			if($("#userPw").val()==""){
+				alert("비밀번호를 입력해주세요.");
+				$("#userPw").focus();
+				return false;
+			};
+		
+			if(!password_confirm.test($("#userPw").val())){
+				alert("비밀번호는 영문과 숫자의 조합으로 4-12자 이내로 작성해주세요");
+				$("#userPw").val("");
+				$("#userPw").focus();
+				return false;
+			};
+			
+			if($("#userPw2").val()==""){
+				alert("비밀번호를 확인해주세요.");
+				$("#userPw").focus();
+				return false;
+			};
+			
+			if(!($("#userPw").val() == $("#userPw2").val())){
+				alert("비밀번호가 일치하지 않습니다");
+				$("#userPw").val("");
+				$("#userPw2").val("");
+				$("#userPw").focus();
+				return false;
+			};
+			
+			if($("#email_part1").val()==""){
+				alert("이메일을 입력해주세요.");
+				$("#email").focus();
+				return false;
+			};
+			
+			if(!email_confirm.test($("#email_part1").val())){
+				if($("#email_part2 option:selected").val() == 'self_writing'){
+					alert("올바른 이메일 형식으로 작성해주세요");
+				}else{
+					alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+				}
+			$("#email_part1").val("");
+			$("#email_part1").focus();
+			
+			return false;
+			};
+			
+			console.log("email.part2 : "+$("#email_part2 option:selected").val());
+			
+			/* if($("#email_part2 option:selected").val() == 'self_writing'){
 				
-				if($("#userPw2").val()==""){
-					alert("비밀번호를 확인해주세요.");
-					$("#userPw").focus();
-					return false;
-				};
-				
-				if(!($("#userPw").val() == $("#userPw2").val())){
-					alert("비밀번호가 일치하지 않습니다");
-					$("#userPw").val("");
-					$("#userPw2").val("");
-					$("#userPw").focus();
-					return false;
-				};
-				
-				if($("#email_part1").val()==""){
+				if($("#email_part3").val()==""){
 					alert("이메일을 입력해주세요.");
 					$("#email").focus();
 					return false;
 				};
 				
-				if(!email_confirm.test($("#email_part1").val())){
-					if($("#email_part2 option:selected").val() == 'self_writing'){
-						alert("올바른 이메일 형식으로 작성해주세요");
-					}else{
-						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
-					}
-					$("#email_part1").val("");
-					$("#email_part1").focus();
+				if(!email_confirm.test($("#email_part3").val())){
+					alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+					$("#email_part3").val("");
+					$("#email_part3").focus();
 					return false;
 				};
-				
-				console.log("email.part2 : "+$("#email_part2 option:selected").val());
-				
-				/* if($("#email_part2 option:selected").val() == 'self_writing'){
-					
-					if($("#email_part3").val()==""){
-						alert("이메일을 입력해주세요.");
-						$("#email").focus();
-						return false;
-					};
-					
-					if(!email_confirm.test($("#email_part3").val())){
-						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
-						$("#email_part3").val("");
-						$("#email_part3").focus();
-						return false;
-					};
-				}; */
-				
-				
-				//번호 유효성 검사
-		        if($("#phone1").val() == ""){
-		        	alert("전화번호를 비워둘 수 없습니다.")
-		        	$("#phone1").focus();
-		        	return false;
-		        }
-		        if(!phone1_confirm.test($("#phone1").val())){
-		        	alert("전화번호를 정확히 입력해주세요.")
-		        	$("#phone1").val("");
-		        	$("#phone1").focus();
-		        	return false;
-		        }
-		        if($("#phone2").val() == ""){
-		        	alert("전화번호를 비워둘 수 없습니다.")
-		        	$("#phone2").focus();
-		        	return false;
-		        }
-		        if(!phone2_confirm.test($("#phone2").val())){
-		        	alert("전화번호를 정확히 입력해주세요.")
-		        	$("#phone2").val("");
-		        	$("#phone2").focus();
-		        	return false;
-		        }
-		        if($("#phone3").val() == ""){
-		        	alert("전화번호를 비워둘 수 없습니다.")
-		        	$("#phone3").focus();
-		        	return false;
-		        }
-		       	if(!phone3_confirm.test($("#phone3").val())){
-		       		alert("전화번호를 정확히 입력해주세요");
-		       		$("#phone3").val("");
-		       		$("#phone3").focus();
-		       		return false;
-		       	}
-		       	if($("#extension").val() == ""){
-		        	alert("내선번호를 비워둘 수 없습니다.")
-		        	$("#extension").focus();
-		        	return false;
-		        }
-		       	if(!phone3_confirm.test($("#extension").val())){
-		       		alert("내선번호를 정확히 입력해주세요.");
-		       		$("#extension").val("");
-		       		$("#extension").focus();
-		       	}
-				
-			});
+			}; */
 			
-		});
+			
+			//번호 유효성 검사
+	        if($("#phone1").val() == ""){
+	        	alert("전화번호를 비워둘 수 없습니다.")
+	        	$("#phone1").focus();
+	        	return false;
+	        }
+	        if(!phone1_confirm.test($("#phone1").val())){
+	        	alert("전화번호를 정확히 입력해주세요.")
+	        	$("#phone1").val("");
+	        	$("#phone1").focus();
+	        	return false;
+	        }
+	        if($("#phone2").val() == ""){
+	        	alert("전화번호를 비워둘 수 없습니다.")
+	        	$("#phone2").focus();
+	        	return false;
+	        }
+	        if(!phone2_confirm.test($("#phone2").val())){
+	        	alert("전화번호를 정확히 입력해주세요.")
+	        	$("#phone2").val("");
+	        	$("#phone2").focus();
+	        	return false;
+	        }
+	        if($("#phone3").val() == ""){
+	        	alert("전화번호를 비워둘 수 없습니다.")
+	        	$("#phone3").focus();
+	        	return false;
+	        }
+	       	if(!phone3_confirm.test($("#phone3").val())){
+	       		alert("전화번호를 정확히 입력해주세요");
+	       		$("#phone3").val("");
+	       		$("#phone3").focus();
+	       		return false;
+	       	}
+	       	if($("#extension").val() == ""){
+	        	alert("내선번호를 비워둘 수 없습니다.")
+	        	$("#extension").focus();
+	        	return false;
+	        }
+	       	if(!phone3_confirm.test($("#extension").val())){
+	       		alert("내선번호를 정확히 입력해주세요.");
+	       		$("#extension").val("");
+	       		$("#extension").focus();
+	       		return false;
+	       	}
+			
+	};
+			
 		
 		function noSpaceForm(obj){
 				var str_space = /\s/;
@@ -212,7 +231,7 @@
 		
 			<h3 class="page_title">회원정보수정</h3>
 			
-			<form action="/admin/member/modifyUser" method="post">
+			<form action="/admin/member/modifyUser" method="post" onSubmit="return updateForm();">
     			<table border=1>
 						<tbody>
 							<tr>

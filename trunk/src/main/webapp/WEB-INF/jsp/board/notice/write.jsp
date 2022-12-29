@@ -190,8 +190,8 @@
                     </div>
                     
 					<div class="editor_area">
-                       	<textarea id="summernote" name="editordata"></textarea>
-                       	<textarea name="content" id="content" style="display:none;"></textarea>
+                       	<!-- <textarea id="summernote" name="editordata"></textarea> -->
+                       	<textarea name="content" id="content" class="board_content"></textarea>
 					</div>
 					<div id="word_count">[0/900자]</div>
 					

@@ -6,14 +6,13 @@ function WriteBoardCheck(url){
 	var subject_repl = $("#subject").val().replace(/\"/gi,"'");
 	$("#subject").val(subject_repl);
 	
-	$("#content").val($('#summernote').summernote('code'));
+	/*$("#content").val($('#summernote').summernote('code'));*/
 	/*$("#content").val($('.note-editable').summernote('code'));*/
 	var insert_board_form = $('#insert_board_form')[0];
 	var rtn = false;
 	var form_data = new FormData(insert_board_form);
 	
 	//임시 사용
-	
 	
 	if($("#subject").val() == ""){
 		alert("제목을 작성해주세요");
@@ -36,10 +35,13 @@ function WriteBoardCheck(url){
 		$("#summernote").focus();
 		return false;
 	}
-	if($('.note-editable').text().trim().length == 0){
+	
+	if($("#content").val().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
+	
+	
 	if($("#content").val().length > 900){
 		alert("본문은 900자 이상 작성할 수 없습니다");
 		$("#content").focus();
@@ -133,9 +135,9 @@ function WriteBoardCheck(url){
 
 
 function modBoardCheck(url){
-	console.log($("#regrSeq"));
+/*	console.log($("#regrSeq"));
 	$("#content").val($('#summernote').summernote('code'));
-	
+*/	
 	var subject_repl = $("#subject").val().replace(/\"/gi,"'");
 	$("#subject").val(subject_repl);
 	/*$("#content").val($('#summernote').text());*/
@@ -160,7 +162,7 @@ function modBoardCheck(url){
 		alert("본문 내용을 작성해주세요");
 		return false;
 	}
-	if($('.note-editable').text().trim().length == 0){
+	if($('#content').val().trim().length == 0){
 		alert("공백만으로 내용을 작성할 수 없습니다.");
 		return false;
 	}
@@ -223,12 +225,16 @@ function modBoardCheck(url){
 
 
 $(document).ready(function(){
-	$(".note-editable").keyup(function() {
+	
+	var content_len = $("#content").val().length;
+	var str = "["+content_len+"/900자]";
+	$("#word_count").html(str);
+	$("#content").keyup(function() {
 		
+		content_len = $("#content").val().length;
 		/*var chk = "`!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ` ";*/
 		//내 오라클은 한글 2BYTE 확인
-		$("#content").val($('.note-editable').text());
-		var content_len = $("#content").val().length;
+		/*var content_len = $("#content").val().length;*/
 		var length = 0;
 		
 		console.log("content value :"+ $("#content").val());
@@ -240,7 +246,8 @@ $(document).ready(function(){
 				length += 2
 			}
 		}*/
-		var str = "["+content_len+"/900자]";
+		
+		str = "["+content_len+"/900자]";
 		
 		if(content_len > 900){
 			

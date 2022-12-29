@@ -213,8 +213,8 @@ function getFileList(){ /* file태그 onchange function호출함 */
 					
 					
 					<div class="editor_area">
-                       	<textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea>
-                       	<textarea name="content" id="content" style="display:none;"></textarea>
+                       	<%-- <textarea id="summernote" name="editordata"><c:out escapeXml="true" value="${vo.content}"/></textarea> --%>
+                       	<textarea name="content" id="content" class="board_content">${vo.content}</textarea>
 					</div>
 					<div id="word_count">[0/900자]</div>
 					<h4>첨부 파일</h4>

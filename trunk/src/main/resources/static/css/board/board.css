@@ -6,6 +6,12 @@
 	margin-bottom: 1rem;
 	font-size: 0;
 }
+
+.board_content{
+	width : 100%;
+	height : 300px;
+}
+
 .search_area.left {text-align: left;}
 .search_area.center {text-align: center;}
 .search_area.right {text-align: right;}
