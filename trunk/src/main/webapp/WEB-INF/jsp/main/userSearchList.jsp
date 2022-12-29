@@ -60,7 +60,7 @@
 				</div>
 
 				<div class="list_area">
-					<div class="member_search_list table type_03">
+					<div class="member_search_list table type_02">
 						<div class="th">이름</div>
 						<div class="th">소속 부서명</div>
 						<div class="th">이메일</div>

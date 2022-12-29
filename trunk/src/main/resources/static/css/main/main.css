@@ -93,6 +93,40 @@
 	display: none;
 }
 
+
+/* 메인페이지 관리자 버튼 */
+.login_info button{
+	position: absolute;
+    top: 69%;
+    right: 0%;
+    padding: 6px 10px 6px 10px;
+    background-color: #ccd0d4;
+    -webkit-border-radius: 14px;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Fredoka One', cursive;
+}
+
+
+
+/* 메인페이지 검색창 */
+#main_search_form{
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+	
+#main_search_form select{
+	width:25%;
+}
+#main_search_form input{
+	width:60%;
+}
+#main_search_form button{
+	width:15%;
+}
+
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
 	.main_wrappper {flex-flow: column;}
