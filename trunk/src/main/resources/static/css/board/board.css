@@ -520,19 +520,6 @@
 .member_list_brd > div > a > span:nth-child(1) {padding-right: 0.5rem;}
 .member_list_brd > div > a > span:nth-child(2) {width: 5rem;}
 
-table{
-	width: 100%;
-	border-collapse: separate;
-  	border-spacing: 0 10px;
-  	display:flex;
-  	justify-content:center;
-}
-td{
-	margin : 2%;
-}
-tr{
-	margin:1px;
-}
 
 .heart_icon{
     width:40%;
@@ -541,7 +528,7 @@ tr{
 	opacity: 0.8;
 }
 
-.blankheart_icon{
+.blankheart_icon{ 
 	cursor:pointer;
 	width:40%;
 	margin-left: 1.5rem;
@@ -550,27 +537,72 @@ tr{
 
 .page_title{
 	text-align:center;
-	margin-right: 3.5rem;
 }
+
+th{
+	white-space:nowrap;
+}
+
 
 
 /* 회원등록 */
 
 #create_form_btn{
- 	text-align: center;
  	margin-top: 1rem;
     margin-right: 4rem;
+    text-align: center;
+    margin-left: 2.6rem;
 }
 #hire_dt{
-	width: 57%;	
+	width: 32.5%;	
 }
 #insertbtn{
-	width: 14.5rem;
+	width: 20.5rem;
+	height:4rem;
 }
 #cancelbtn{
 	margin-left: 1px;
-    width: 5rem;
+    width: 6rem;
+    height:4rem;
 }
+
+table{
+	width: 500px;
+	border-collapse: separate;
+  	border-spacing: 10px 30px;
+  	display: table;
+}
+td{
+	margin-bottom : 2%;
+	margin-left : 10%;
+}
+
+#insert_user_form{
+	width:500px;
+	margin:0 auto;
+}
+
+#insert_user_form label{
+	vertical-align : middle;
+}
+
+#insert_user_form input{
+	width:70%;
+}
+#insert_user_form select{
+	width:70%;
+}
+
+#insert_user_form .phone_text{
+	width:22%;
+} 
+
+#updatebtn{
+	width: 20.5rem;
+	height:4rem;
+}
+
+
 
 /* 메인에서 검색하는 회원 정보 리스트 */
 
@@ -596,13 +628,6 @@ tr{
 .member_search_list > div > a > span:nth-child(2) {width: 5rem;}
 
 
-
-
-/* 회원수정 */
-
-#updatebtn{
-	width: 14.5rem;
-}
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {

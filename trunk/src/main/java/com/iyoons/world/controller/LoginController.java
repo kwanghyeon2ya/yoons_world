@@ -90,7 +90,7 @@ public class LoginController {
 	
 			if (userInfovo != null) {
 				if (userInfovo.getUserStatus() == 1) {
-	
+					
 					if (userVO.getCheckTokenYn() != null && "Y".equals(userVO.getCheckTokenYn())) {
 	
 						logger.debug("getCheckTokenYn : " + userVO.getCheckTokenYn());
@@ -157,6 +157,8 @@ public class LoginController {
 	
 					}
 	
+					userService.updateLoginDt(userInfovo.getUserSeq());
+					
 					session.setAttribute("userInfovo", userInfovo);
 					session.setAttribute("sessionIdForUser", userInfovo.getUserId());
 					session.setAttribute("sessionNameForUser", userInfovo.getUserName());

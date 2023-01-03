@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
+import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserVO;
 
@@ -42,6 +45,37 @@ public class MainController {
 	public String getNuguruman() {
 		
 		return "common/nuguruman"; 
+	}
+	
+	@RequestMapping(value="/main/changePw")
+	public String changePw() {
+		return "/main/changePw";
+	}
+	
+	
+	@RequestMapping(value="/main/changePwProc")
+	@ResponseBody public String changePw(UserVO userVO,HttpServletRequest request,HttpSession session) {
+		logger.debug("changePw 진입");
+		
+		logger.debug("changePw userVO확인 : "+userVO);
+		
+		String result = "0";
+		
+		try {
+			int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			userVO.setUserSeq(sessionSeqForUser);
+			
+			if(userService.checkPw(userVO) == 1) {
+				result = userService.changePw(userVO)+"";
+			};
+		} catch (Exception e) {
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+			result = FinalVariables.EXCEPTION_CODE;
+		}
+		return result;
 	}
 	
 	@RequestMapping(value="/main/userSearchList")

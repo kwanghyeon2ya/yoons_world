@@ -81,6 +81,7 @@
 								<button type="button" class="btn type_03 bg_purple" onclick="location.href='/admin/member/list'">Admin</button>
 							</div>							
 							<button onClick="location.href='/login/logout'">LOGOUT</button>
+							<a href="javascript:window.open('/main/changePw','비밀번호 변경','width=500,height=270')">비밀번호 변경</a>
 							</c:if>
 						</div>
 						

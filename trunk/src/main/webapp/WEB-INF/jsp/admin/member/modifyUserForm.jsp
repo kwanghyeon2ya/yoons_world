@@ -49,9 +49,9 @@
 		    var email_console = "0";
 		    
 		    if($("#email_part2 option:selected").val() == 'self_writing'){
-				var email_confirm = RegExp(/^[A-Za-z0-9]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
+				var email_confirm = RegExp(/^[A-Za-z0-9.]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
 			}else{
-				var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
+				var email_confirm = RegExp(/^[A-Za-z0-9.]+$/);
 			}
 		    
 		    email_console = "1";
@@ -231,12 +231,13 @@
 		
 			<h3 class="page_title">회원정보수정</h3>
 			
-			<form action="/admin/member/modifyUser" method="post" onSubmit="return updateForm();">
+			<form action="/admin/member/modifyUser" id="insert_user_form" method="post" onSubmit="return updateForm();">
+				<div style="text-align: left;">
     			<table border=1>
 						<tbody>
 							<tr>
 								<th><label for="userName" >이름</label></th>
-								<td><input id="userName" name="userName" type="text" maxlength="5" value="${userVO.userName}" onkeyup="noSpaceForm(this)"/></td>
+								<td><input id="userName" name="userName" type="text" placeholder="2~5자 한글" maxlength="5" value="${userVO.userName}" onkeyup="noSpaceForm(this)"/></td>
 							</tr>			
 							<tr>
 								<th><label for="userSeq" >회원번호</label></th>
@@ -244,11 +245,11 @@
 							</tr>
 							<tr>
 								<th><label for="userId" >아이디</label></th>
-								<td><input id="userId" name="userId" type="text" value="${userVO.userId}" onkeyup="noSpaceForm(this)" readonly="readonly"/></td>
+								<td><input id="userId" name="userId" type="text" value="${userVO.userId}" placeholder="4-15자 영문과 숫자의 조합" onkeyup="noSpaceForm(this)" readonly="readonly"/></td>
 							</tr>
 							<tr>
 								<th><label for="userPw" >패스워드</label></th>
-								<td><input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)"/></td>
+								<td><input id="userPw" name="userPw" type="password" placeholder="4-12자 영문과 숫자의 조합" maxlength="12" onkeyup="noSpaceForm(this)"/></td>
 							</tr>
 							<tr>	
 								<th><label for="userPw2" style="margin-right: 7px;">패스워드 확인</label></th>
@@ -259,13 +260,12 @@
 								<td>
 								
 								<input id="email_part1" name="emailPart1" type="text" value="${userVO.emailPart1}" maxlength="30" onkeyup="noSpaceForm(this)"/>
-								@
 								<select name="emailPart2" id="email_part2">
-									<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>naver.com</option>
-									<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>daum.net</option>
-									<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>gmail.com</option>
-									<option value="hanmail.com" ${userVO.emailPart2 eq 'hanmail.com'?'selected="selected"':''}>hanmail.com</option>
-									<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>yahoo.co.kr</option>
+									<option value="naver.com" ${userVO.emailPart2 eq 'naver.com'?'selected="selected"':''}>@naver.com</option>
+									<option value="daum.net" ${userVO.emailPart2 eq 'daum.net'?'selected="selected"':''}>@daum.net</option>
+									<option value="gmail.com" ${userVO.emailPart2 eq 'gmail.com'?'selected="selected"':''}>@gmail.com</option>
+									<option value="hanmail.com" ${userVO.emailPart2 eq 'hanmail.com'?'selected="selected"':''}>@hanmail.com</option>
+									<option value="yahoo.co.kr" ${userVO.emailPart2 eq 'yahoo.co.kr'?'selected="selected"':''}>@yahoo.co.kr</option>
 									<option value="self_writing" ${userVO.emailPart2 eq 'self_writing'?'selected="selected"':''}>직접입력</option>
 								</select>
 								</td>
@@ -280,9 +280,9 @@
 							<tr>
 								<th><label for="phone1">핸드폰 번호</label></th>
 								<td>
-								<input id="phone1" name="phone1" value="${userVO.phone1}" type="text" maxlength="3" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone2" name="phone2" value="${userVO.phone2}" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone3" name="phone3" value="${userVO.phone3}" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>
+								<input id="phone1" name="phone1" class="phone_text" value="${userVO.phone1}" type="text" maxlength="3" onkeyup="noSpaceForm(this)"/>-
+								<input id="phone2" name="phone2" class="phone_text" value="${userVO.phone2}" type="text" maxlength="4" onkeyup="noSpaceForm(this)"/>-
+								<input id="phone3" name="phone3" class="phone_text" value="${userVO.phone3}" type="text" maxlength="4" onkeyup="noSpaceForm(this)"/>
 								</td>
 							</tr>
 							<tr>
@@ -292,7 +292,7 @@
 							<tr>
 								<th>부서</th>
 								<td>
-								<select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
+								<select name="depSeq" id="dep_seq">
 									<option value="1001" ${userVO.depSeq eq '1001'?'selected="selected"':''}>재경팀</option>
 									<option value="1002" ${userVO.depSeq eq '1002'?'selected="selected"':''}>재무예상팀</option>
 									<option value="1003" ${userVO.depSeq eq '1003'?'selected="selected"':''}>경영기획팀</option>
@@ -326,7 +326,9 @@
 								</td>	
 							</tr>	
 						</tbody>
-					</table>		
+						
+					</table>
+					</div>		
 <!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>

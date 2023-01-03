@@ -36,10 +36,10 @@ import com.iyoons.world.vo.UserActionVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";
-	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
-	final String REAL_PATH="C:/yoons_world/files";
-	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";
+	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files";
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";
+	/*final String REAL_PATH="C:/yoons_world/files";
+	final String DELETED_FILE_PATH="C:/yoons_world/deletedfiles";*/
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

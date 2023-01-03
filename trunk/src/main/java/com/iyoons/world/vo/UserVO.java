@@ -12,7 +12,8 @@ public class UserVO {
 	
 	private String userId;
 	private int userSeq; 
-	private String userPw; 
+	private String userPw;
+	private String changeUserPw;
 	private String userName;
 	private String email;
 	private String emailPart1;

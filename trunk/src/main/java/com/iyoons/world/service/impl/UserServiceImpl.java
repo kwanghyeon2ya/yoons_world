@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 		
 		return userDAO.checkId(userVO);
 	}
-
+	
 	@Override
 	public UserVO findUser(UserVO userVO) throws NoSuchAlgorithmException {
 		
@@ -225,6 +225,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int getUserCount(UserVO userVO) throws Exception {
 		return userDAO.getUserCount(userVO);
+	}
+
+	@Override
+	public int updateLoginDt(int userSeq) {
+		return userDAO.updateLoginDt(userSeq);
+	}
+
+	@Override
+	public int changePw(UserVO userVO) throws NoSuchAlgorithmException {
+		userVO.setUserPw(getHashPw(userVO));
+		return userDAO.changePw(userVO);
+	}
+
+	@Override
+	public int checkPw(UserVO userVO) throws NoSuchAlgorithmException {
+		userVO.setUserPw(getHashPw(userVO));
+		return userDAO.checkPw(userVO);
 	}
 	
 }

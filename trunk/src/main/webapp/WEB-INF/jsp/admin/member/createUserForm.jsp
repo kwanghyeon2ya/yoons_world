@@ -42,16 +42,16 @@
 				var user_pw = $("#userPw").val();
 				
 				if($("#email_part2 option:selected").val() == 'self_writing'){
-					var email_confirm = RegExp(/^[A-Za-z0-9]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
+					var email_confirm = RegExp(/^[A-Za-z0-9.-_]+[@]{1}[A-Za-z0-9]+[.]{1}[A-Za-z]+[.]?[A-Za-z]+$/);
 				}else{
-					var email_confirm = RegExp(/^[A-Za-z0-9]+$/);
+					var email_confirm = RegExp(/^[A-Za-z0-9.-_]+$/);
 				}
 				
 				var email_part1 = $("#email_part1").val();
 				var email_part2 = $("#email_part2").val();
 				/* var email_part3 = $("#email_part3").val(); */
 				var hire_dt = $("#hire_dt").val();
-				var user_type = $("input[name=userType]:checked").val();
+				var user_type = $("select[name=userType]").val();
 				var phone1 = $("#phone1").val();
 				var phone2 = $("#phone2").val();
 				var phone3 = $("#phone3").val();
@@ -129,7 +129,7 @@
 					if($("#email_part2 option:selected").val() == 'self_writing'){
 						alert("올바른 이메일 형식으로 작성해주세요");
 					}else{
-						alert("이메일은 영문과 숫자로만 작성할 수 있습니다.");
+						alert("이메일은 영문과 숫자 .-_의 특수문자로 작성할 수 있습니다.");
 					}
 					$("#email_part1").val("");
 					$("#email_part1").focus();
@@ -230,7 +230,8 @@
 						case 9999:
 							alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
 							location.href="/login/loginView";
-						default : break; 
+						default : 
+							break; 
 						}
 					},error : function (result,code){
 						console.log("result.status : "+result.status," code : "+code);
@@ -323,39 +324,38 @@
 			<h3 class="page_title">회원등록</h3>
 			
 			<form method="post" id="insert_user_form" class="board-inline" onSubmit="return false">
-
+					<div style="text-align: left;">
 					<table border=1>
 						<tbody>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="userName">이름</label></th>
-								<td><input id="userName" name="userName" type="text" maxlength="5" onkeyup="noSpaceForm(this)" /></td>
+								<td><input id="userName" name="userName" type="text" placeholder="2~5자 한글" maxlength="5" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="userId">아이디</label></th> 
-								<td><input id="userId" name="userId" type="text" maxlength="15" onkeyup="noSpaceForm(this)" />
+								<td><input id="userId" name="userId" type="text" placeholder="4-15자 영문과 숫자의 조합" maxlength="15" onkeyup="noSpaceForm(this)" />
 								<button class="btn type_02 bg_purple" onclick="DuplicatedIdCheck()">중복확인</button>
 								<p id="dup_id"></p></td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="userPw">패스워드</label></th>
-								<td><input id="userPw" name="userPw" type="password" maxlength="12" onkeyup="noSpaceForm(this)" /></td>
+								<td><input id="userPw" name="userPw" type="password" placeholder="4-12자 영문과 숫자의 조합" maxlength="12" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="userPw2" style="margin-right: 7px;">패스워드확인</label></th>
 								<td><input id="userPw2" type="password" maxlength="12" /></td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="email">이메일</label></th> 
 								<td>
 								
 								<input id="email_part1" class="email" name="emailpart1" type="text" maxlength="30" onkeyup="noSpaceForm(this)" /> 
-								<span>@</span>
 								<select class="email" name="emailpart2" id="email_part2">
-									<option value="naver.com">naver.com</option>
-									<option value="daum.net">daum.net</option>
-									<option value="gmail.com">gmail.com</option>
-									<option value="hanmail.com">hanmail.com</option>
-									<option value="yahoo.co.kr">yahoo.co.kr</option>
+									<option value="naver.com">@naver.com</option>
+									<option value="daum.net">@daum.net</option>
+									<option value="gmail.com">@gmail.com</option>
+									<option value="hanmail.com">@hanmail.com</option>
+									<option value="yahoo.co.kr">@yahoo.co.kr</option>
 									<option value="self_writing">직접입력</option>
 								</select>
 								</td>
@@ -365,36 +365,26 @@
 								</td>
 								<td><input type="text" name="emailpart3" id="email_part3" style="display: none;"/><td>
 							</tr> -->
-							<tr>
-	<!-- 						<th><label for="userType">권한설정</label></th> -->
-								<th>
-								<label for="user_type_0">일반회원</label>
-								<input type="radio" id="user_type_0" name="userType" value="0" checked/></th>
-								<th style="text-align:left;">
-								<label for="user_type_1">관리자</label>
-								<input type="radio" id="user_type_1" name="userType" value="1" />
-								</th>
-							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="hire_dt">입사일</label></th>
 								<td><input id="hire_dt" type="date" name="hireDt" /></td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="phone1">핸드폰 번호</label></th>
 								<td>
-								<input id="phone1" name="phone1" type="text" maxlength="3" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone2" name="phone2" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>-
-								<input id="phone3" name="phone3" type="text" maxlength="4" onkeyup="noSpaceForm(this)" style="width:5rem;"/>
+								<input id="phone1" class="phone_text" name="phone1" type="text" maxlength="3" onkeyup="noSpaceForm(this)"/>-
+								<input id="phone2" class="phone_text" name="phone2" type="text" maxlength="4" onkeyup="noSpaceForm(this)"/>-
+								<input id="phone3" class="phone_text" name="phone3" type="text" maxlength="4" onkeyup="noSpaceForm(this)"/>
 								</td>
 							</tr>
-							<tr>
+							<tr class="tr_space">
 								<th><label for="extension">내선 번호</label></th>
 								<td><input id="extension" name="extension" type="text" maxlength="4" onkeyup="noSpaceForm(this)" /></td>
 							</tr>
-							<tr>
-								<th>부서</th>
+							<tr class="tr_space">
+								<th><label for="dep_seq">부서</label></th>
 								<td>
-								<select name="depSeq" id="dep_seq" style="width:17rem;margin-right:0.5rem;">
+								<select name="depSeq" id="dep_seq">
 									<option value="1001">재경팀</option>
 									<option value="1002">재무예상팀</option>
 									<option value="1003">경영기획팀</option>
@@ -423,8 +413,18 @@
 								</select>
 								</td>
 							</tr>
+							<tr class="tr_space">
+							<th><label for="author_type">권한</label></th>
+								<td>
+								<select name="userType" id="author_type">
+									<option value="0">일반회원</option>
+									<option value="1">관리자</option>
+								</select>
+								</td>
+							</tr>
 						</tbody>
 					</table>
+					</div>
 					<!-- 				<div class="area-input-info">
 					<label for="userDep" >부서</label>
 					<input id="userDep" type="text"/>
@@ -471,3 +471,4 @@
 
 </body>
 </html>
+									

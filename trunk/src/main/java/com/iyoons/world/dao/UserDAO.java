@@ -54,4 +54,10 @@ public interface UserDAO {
 	public List<UserVO> getUserInfoList(UserVO userVO);
 	
 	public int getUserCount(UserVO userVO);
+	
+	public int updateLoginDt(int userSeq);
+	
+	public int changePw(UserVO userVO);
+	
+	public int checkPw(UserVO userVO);
 }

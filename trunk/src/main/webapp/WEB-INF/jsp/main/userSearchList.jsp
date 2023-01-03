@@ -50,7 +50,7 @@
 
 				<div class="search_area right">
 					<form action="/main/userSearchList" id="search_frm" method="get">
-						<select name="search">
+						<select name="search" id="search_select_id">
 							<option value="user_name" ${userVO.search == 'userName'?'selected="selected"':''}>이름</option>
 							<option value="dep" ${userVO.search == 'dep'?'selected="selected"':''}>부서명</option>
 						</select> 

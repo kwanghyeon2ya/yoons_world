@@ -43,4 +43,10 @@ public interface UserService {
 	
 	public int getUserCount(UserVO userVO) throws Exception;
 	
+	public int updateLoginDt(int userSeq);
+	
+	public int changePw(UserVO userVO) throws NoSuchAlgorithmException;
+	
+	public int checkPw(UserVO userVO) throws NoSuchAlgorithmException;
+	
 }

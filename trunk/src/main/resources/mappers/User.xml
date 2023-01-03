@@ -329,4 +329,30 @@
    		    </if>
 	</select>
 	
+	<update id="updateLoginDt">
+		update 
+			user_info
+		set
+			last_login_dt = sysdate
+		where
+			user_seq = #{userSeq}
+	</update>
+	<select id="checkPw" resultType="int">
+		select 
+			count(user_seq)
+		from
+			user_info
+		where
+			user_seq = ${userSeq}
+			and user_pw = ${userPw}
+	</select>
+	
+	<update id="changePw">
+		update
+			user_info
+		set
+			user_pw = #{changeUserPw}
+		where
+			userStatus = 1
+	</update>
 </mapper>
