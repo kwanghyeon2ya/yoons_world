@@ -35,8 +35,21 @@ public class MainController {
 	@Autowired UserService userService;
 	
 	@RequestMapping(value= {"/main","/"})
-	public String callMain(HttpServletRequest request) {
+	public String callMain(HttpServletRequest request,HttpSession session,Model model) {
 		
+		logger.debug("메인 세션확인입니다 : "+String.valueOf(session.getAttribute("sessionSeqForUser")));
+		try {
+		
+		if(session.getAttribute("sessionSeqForUser") != null) {
+			int pwCheck = userService.getPwConfirmNum(Integer.parseInt(String.valueOf(session.getAttribute("sessionSeqForUser"))));
+			model.addAttribute("pwCheck",pwCheck);
+			logger.debug("pwCheck :"+pwCheck);
+		}
+		
+		} catch (Exception e) {
+			logger.error("Exception : " + e);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+		}
 		return "/main/main";
 		
 	}
@@ -48,7 +61,10 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/main/changePw")
-	public String changePw() {
+	public String changePw(HttpSession session,Model model) {
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		
+		model.addAttribute("pwCheck",userService.getPwConfirmNum(sessionSeqForUser));
 		return "/main/changePw";
 	}
 	
@@ -82,6 +98,8 @@ public class MainController {
 	public String getUserSearchList(UserVO userVO,HttpServletRequest request,Model model) {
 		
 		try {
+			logger.debug("메인 유저 검색 키워드 : "+userVO.getKeyword());
+			
 			List<UserVO> uslist = userService.getUserInfoList(userVO);
 			model.addAttribute("uslist",uslist);
 			model.addAttribute("userVO",userVO);

@@ -12,7 +12,8 @@
 			user_pw,
 			user_name,
 			user_type,
-			user_status
+			user_status,
+			first_update_pw
 		from
 			user_info 
 		where
@@ -343,16 +344,27 @@
 		from
 			user_info
 		where
-			user_seq = ${userSeq}
-			and user_pw = ${userPw}
+			user_seq = #{userSeq}
+			and user_pw = #{userPw}
 	</select>
 	
 	<update id="changePw">
 		update
 			user_info
 		set
-			user_pw = #{changeUserPw}
+			user_pw = #{userPw},
+			first_update_pw = 1
 		where
-			userStatus = 1
+			user_status = 1
+			and user_seq = #{userSeq}
 	</update>
+	<select id="getPwConfirmNum" resultType="int">
+		select
+			first_update_pw
+		from
+			user_info
+		where
+			user_seq = #{userSeq}
+	</select>
+	
 </mapper>

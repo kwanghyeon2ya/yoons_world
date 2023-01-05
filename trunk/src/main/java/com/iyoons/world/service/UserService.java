@@ -49,4 +49,6 @@ public interface UserService {
 	
 	public int checkPw(UserVO userVO) throws NoSuchAlgorithmException;
 	
+	public int getPwConfirmNum(int userSeq);
+	
 }

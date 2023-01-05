@@ -28,7 +28,7 @@
 	/* 
 	 첨부 파일명 리스트 가져오기	
 	*/
-	function getFileList(){ /* file태그 onchange function호출함 */
+	function getFileList(fileValue){ /* file태그 onchange function호출함 */
 			
 		var fileTarget = $("input[name=file]"); // 파일
 		var fileLength = $("input[name=file]")[0].files.length; // 파일 갯수
@@ -52,14 +52,21 @@
 		
 		var fileList = "";
 		var bigFileNameList = "";
-		
+		var forbidden_extension = ["x-msdownload","x-zip-compressed","zip","ade","adp","apk","appx","appxbundle","bat","cab","chm","cmd","com","cpl","diagcab","diagcfg","diagpack","dll","dmg","ex","ex_","exe","hta","img","ins","iso","isp","jar","jnlp","js","jse","lib","lnk","mde","msc","msi","msix","msixbundle","msp","mst","nsh","pif","ps1","scr","sct","shb","sys","vb","vbe","vbs","vhd","vxd","wsc","wsf","wsh","xll"];
+		console.log("fileValue: "+fileValue);
+		console.log("fileValue index: "+fileValue.lastIndexOf("."));
 		for(var i = 0;i<fileLength;i++){
-			if(fileTarget[0].files[i].size > 10000000){
+			alert(forbidden_extension.includes(fileTarget[0].files[i].type));
+			alert(fileTarget[0].files[i].type);
+			if(fileTarget[0].files[i].size > 10000000 || forbidden_extension.includes(fileTarget[0].files[i].type.split('/')[1])){
 				console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
 				console.log("용량초과 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
 				bigFileNameList += fileTarget[0].files[i].name;				
-				deleteFile(fileTarget[0].files[i].lastModified);
+				deleteFile(fileTarget[0].files[i].lastModified,fileValue);
+				console.log(fileTarget[0].files[i].type.split('/')[1]);
+				alert(forbidden_extension.includes(fileTarget[0].files[i].type.split('/')[1]));
 			}else{
+				console.log(fileTarget[0].files[i].type.split('/')[1]);
 				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
 				fileList += '<li class="temp_file">';
 				fileList += '	<span class="file_name">'+fileTarget[0].files[i].name+'</span>';
@@ -96,7 +103,7 @@
 	}
 	
 	
-	function deleteFile(file_number){
+	function deleteFile(file_number,fileValue){
 		
 		const files = $("input[name=file]")[0].files;
 		const dataTransfer = new DataTransfer();
@@ -109,7 +116,7 @@
 		
 		$("input[name=file]")[0].files = dataTransfer.files;
 		
-		getFileList();
+		getFileList(fileValue);
 		
 	}
 	
@@ -157,7 +164,7 @@
 								
 								
 						</ul>
-						<input type="file" name="file" id="file" class="size_full" onchange="getFileList()" multiple="multiple"/>
+						<input type="file" name="file" id="file" class="size_full" accept="image/*" onchange="getFileList(this.value)" multiple="multiple"/>
 					</div>
 					
 					<div class="btn_area right">

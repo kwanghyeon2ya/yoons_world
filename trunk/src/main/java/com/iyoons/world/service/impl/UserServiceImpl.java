@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {Exception.class})
 	public int insertUser(UserVO userVO) throws Exception {
 		DepVO depVO = new DepVO();
 		
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {Exception.class})
 	public int deleteUser(UserVO userVO) throws Exception {
 		
 		DepVO depVO = new DepVO();
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {Exception.class})
 	public int recoverUserStatus(UserVO userVO) throws Exception {
 		
 		for(String userSeq : userVO.getUserSeqArray()) {
@@ -234,6 +234,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int changePw(UserVO userVO) throws NoSuchAlgorithmException {
+		userVO.setUserPw(userVO.getChangeUserPw());
 		userVO.setUserPw(getHashPw(userVO));
 		return userDAO.changePw(userVO);
 	}
@@ -242,6 +243,11 @@ public class UserServiceImpl implements UserService {
 	public int checkPw(UserVO userVO) throws NoSuchAlgorithmException {
 		userVO.setUserPw(getHashPw(userVO));
 		return userDAO.checkPw(userVO);
+	}
+
+	@Override
+	public int getPwConfirmNum(int userSeq) {
+		return userDAO.getPwConfirmNum(userSeq);
 	}
 	
 }

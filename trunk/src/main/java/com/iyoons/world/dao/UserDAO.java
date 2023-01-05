@@ -60,4 +60,6 @@ public interface UserDAO {
 	public int changePw(UserVO userVO);
 	
 	public int checkPw(UserVO userVO);
+	
+	public int getPwConfirmNum(int userSeq);
 }

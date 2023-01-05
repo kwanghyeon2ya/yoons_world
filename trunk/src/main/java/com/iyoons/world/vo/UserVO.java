@@ -42,4 +42,5 @@ public class UserVO {
 	private int depSeq; // 부서고유 seq
 	private String search; // 메인페이지 유저검색
 	private String keyword; // 메인페이지 유저검색 키워드
+	private String firstUpdatePw;
 }

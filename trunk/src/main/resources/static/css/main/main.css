@@ -110,6 +110,10 @@
     font-family: 'Fredoka One', cursive;
 }
 
+table{
+    border-collapse: separate;
+    border-spacing: 13px 29px;
+}
 
 
 /* 메인페이지 검색창 */
@@ -118,8 +122,12 @@
 	margin-bottom: 1rem;
 }
 	
-#main_search_form select{
+#search_frm > select{
 	width:25%;
+}
+
+#search_dep_select{
+	width:60%;
 }
 #main_search_form input{
 	width:60%;
@@ -127,6 +135,65 @@
 #main_search_form button{
 	width:15%;
 }
+
+/* 메인페이지 비밀번호 찾기  */
+
+#mask {  
+	position:absolute;  
+	left:0;
+	top:0;
+	z-index:1050;  
+	background-color:#000;  
+	display:none;  
+}
+
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+  display:none;
+}
+
+.show {
+  display: block;
+  z-index: 1000;
+  transition: all 0.5s;
+}
+
+.window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+
+  /* 임시 지정 */
+    width: 40rem;
+    height: 27rem;
+
+  /* 초기에 약간 아래에 배치 */
+  transform: translate(-50%, -40%);
+}
+
+.show .popup {
+  transform: translate(-50%, -70%);
+  transition: all 0.5s;
+}
+
+
+
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {

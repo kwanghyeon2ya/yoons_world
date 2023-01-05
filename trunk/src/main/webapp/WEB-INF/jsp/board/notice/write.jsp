@@ -52,7 +52,7 @@
 		
 		var fileList = "";
 		var bigFileNameList = "";
-		
+		// && fileTarget[0].files[i].type 
 		for(var i = 0;i<fileLength;i++){
 			if(fileTarget[0].files[i].size > 10000000){
 				console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
@@ -203,7 +203,7 @@
 						<!-- 첨부파일 목록이 추가 될 곳 -->
 						
 						</ul>
-						<input type="file" name="file" id="file" class="size_full" onchange="getFileList()" multiple="multiple"/>
+						<input type="file" name="file" id="file" class="size_full" accept="image/*,text/plain" onchange="getFileList()" multiple="multiple"/>
 					</div>
 					
 					<div class="btn_area right">

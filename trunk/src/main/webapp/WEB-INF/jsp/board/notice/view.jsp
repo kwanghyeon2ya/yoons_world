@@ -98,7 +98,7 @@
 				    <ul class="file_list">
 						<c:forEach var="dlist" items="${anlist}">
 						<li>
-							<a class="file_name" href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download>${dlist.fileName}.${dlist.fileType}</a>
+							<a class="file_name" href="<%=File.separator%>yoons_world<%=File.separator%>files${dlist.fullPath}" download="${dlist.fileName}.${dlist.fileType}">${dlist.fileName}.${dlist.fileType}</a>
 						</li>
 						</c:forEach>
 					</ul>

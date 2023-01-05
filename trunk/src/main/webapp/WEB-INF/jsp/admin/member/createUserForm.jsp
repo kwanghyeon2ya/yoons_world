@@ -246,16 +246,15 @@
 			$("#userHireDt").datepicker();*/
 		
 		function noSpaceForm(obj){
-				var str_space = /\s/;
-				console.log(str_space.exec(obj.value));
-				if(str_space.exec(obj.value)){  //
-					alert("공백을 사용할 수 없습니다");
-					obj.focus();
-					obj.value = obj.value.replace(' ','');
-					return false
-				}
-				
+			var str_space = /\s/;
+			console.log(str_space.exec(obj.value));
+			if(str_space.exec(obj.value)){  //
+				alert("공백을 사용할 수 없습니다");
+				obj.focus();
+				obj.value = obj.value.replace(' ','');
+				return false
 			}
+		}
 			
 		/* function selectedSelfWriting(value){
 			if(value == 'self_writing'){
