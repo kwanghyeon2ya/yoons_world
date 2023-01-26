@@ -71,7 +71,12 @@
 					<div class="board_info">
 						<div class="between">
 							<div>
-								<img class="profile" src="/img/common/profile.png">
+								<c:if test="${vo.picture eq null}">
+									<img class="profile" src="/img/common/profile.png">
+								</c:if>
+								<c:if test="${vo.picture ne null}">
+									<img class="profile" src="<%=File.separator%>yoons_world<%=File.separator%>profile<%=File.separator%>${vo.picture}" />
+								</c:if>
 								<span class="writer"><c:out escapeXml="true" value="${vo.writerName}"/></span>
 							</div>
 							<div>

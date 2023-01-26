@@ -8,7 +8,6 @@
 
 	<script>
 		$(document).ready(function(){
-			
 			$("#login_btn").click(function(){
 				//console.log($("#userId").val());	
 				login();
@@ -30,6 +29,7 @@
 		
 		// 로그인
 		function login() {
+			
 			var checkTokenValue = "N";
 			
 			if($("#userID").val() == '' || $("#userID").val() == null) {
@@ -113,7 +113,7 @@
 		</div>
 		
 		<!-- Footer -->
-		<jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/>
+		<%-- <jsp:include page="/WEB-INF/jsp/common/footer.jsp" flush="false"/> --%>
 		
 	</div>
 </body>

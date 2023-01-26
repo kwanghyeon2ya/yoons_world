@@ -71,7 +71,12 @@
 					<div class="board_info">
 						<div class="between">
 							<div>
-								<img class="profile" src="/img/common/profile.png">
+								<c:if test="${vo.picture eq null}">
+									<img class="profile" src="/img/common/profile.png">
+								</c:if>
+								<c:if test="${vo.picture ne null}">
+									<img class="profile" src="<%=File.separator%>yoons_world<%=File.separator%>profile<%=File.separator%>${vo.picture}" />
+								</c:if>
 								<span class="writer"><c:out escapeXml="true" value="${vo.writerName}"/></span>
 							</div>
 							<div>
@@ -100,16 +105,13 @@
 					${fn:replace(fn:replace(fn:escapeXml(vo.content), CRLF, '<br/>'), LF, '<br/>')}
 					
 					<!--  좋아요 DIV  -->
-					<div class="heart_img_div"
-						style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;min-height: 18rem;">
+					<div class="heart_img_div" style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;min-height: 18rem;">
 						<div style="border:1px solid #c4c4c4;opacity:0.8;">
 							<div style="margin-left:5rem;margin-right:5rem;margin-top:2rem;padding-bottom:1rem;">
 								<strong id="heart_count" style="font-size: 16px;">${vo.heartCount}</strong>
 								<c:if test="${vo.heartCheck eq 0}">
-									<img class="blankheart_icon" onclick="increasingHeart(${vo.postSeq})" title="좋아요"
-										src="/img/board/blankheart.png">
-									<img class="heart_icon" title="좋아요" src="/img/board/heart.png"
-										style="display:none">
+									<img class="blankheart_icon" onclick="increasingHeart(${vo.postSeq})" title="좋아요" src="/img/board/blankheart.png">
+									<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none">
 								</c:if>
 								<c:if test="${vo.heartCheck ne 0}">
 									<img class="heart_icon" title="좋아요" src="/img/board/heart.png">

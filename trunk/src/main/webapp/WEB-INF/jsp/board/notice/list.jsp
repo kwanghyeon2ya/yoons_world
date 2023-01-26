@@ -44,10 +44,10 @@
 						<input type="hidden" name="boardType" value="1"/>
 						<input type="hidden" name="searchCheck" value="1"/>
 						<select name="search">
-							<option value="subject_content" ${search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
-							<option value="comments" ${search == 'comments'?'selected="selected"':''}>댓글</option>
+							<option value="subject_content" ${boardVO.search == 'subject_content'?'selected="selected"':''}>제목+내용</option>
+							<option value="comments" ${boardVO.search == 'comments'?'selected="selected"':''}>댓글</option>
 						</select>
-						<input type="text" id="search_text" class="size_s" name="keyword" value="${keyword}"></input>
+						<input type="text" id="search_text" class="size_s" name="keyword" value="${boardVO.keyword}"></input>
 						<button type="submit" id="submit_button" class="btn type_02 size_s bg_purple">검색</button>
 					</form>
 				</div>					
@@ -114,8 +114,8 @@
 						
 				<div class="paging_area">
 					<c:if test="${count > 0}">
-						<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}"/>
-						<fmt:parseNumber var="result" value="${((currentPage-1)/10)}" integerOnly="true" />
+						<c:set var="pageCount" value="${count / pageVO.pageSize + (count % pageVO.pageSize == 0 ? 0 : 1)}"/>
+						<fmt:parseNumber var="result" value="${((pageVO.currentPage-1)/10)}" integerOnly="true" />
 						<fmt:parseNumber var="pageCount" value="${pageCount}" integerOnly="true" />
 						<c:set var="startPage" value="${result*10+1}"/>
 						<c:set var="pageBlock" value="${10}"/>
@@ -126,20 +126,20 @@
 						</c:if>
 						
 						<c:if test="${startPage > 10}">
-							<a href="/board/notice/list?boardType=1&pageNum=${startPage - 10}&search=${search}&keyword=${keyword}&searchCheck=${searchCheck}">&lt;</a>
+							<a href="/board/notice/list?boardType=1&pageNum=${startPage - 10}&search=${boardVO.search}&keyword=${boardVO.keyword}&searchCheck=${boardVO.searchCheck}">&lt;</a>
 						</c:if>
 						
 						<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-							<c:if test="${currentPage eq i}">
-							<a class="bg_purple txt_white" href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${i}&">${i}</a>
+							<c:if test="${pageVO.currentPage eq i}">
+							<a class="bg_purple txt_white" href="/board/notice/list?search=${boardVO.search}&keyword=${boardVO.keyword}&searchCheck=${boardVO.searchCheck}&boardType=1&pageNum=${i}&">${i}</a>
 							</c:if>
-							<c:if test="${currentPage ne i}">
-							<a href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${i}&">${i}</a>
+							<c:if test="${pageVO.currentPage ne i}">
+							<a href="/board/notice/list?search=${boardVO.search}&keyword=${boardVO.keyword}&searchCheck=${boardVO.searchCheck}&boardType=1&pageNum=${i}&">${i}</a>
 							</c:if>
 						</c:forEach> 
 						
 						<c:if test="${endPage < pageCount}">
-							<a href="/board/notice/list?search=${search}&keyword=${keyword}&searchCheck=${searchCheck}&boardType=1&pageNum=${startPage + 10}">&gt;</a>
+							<a href="/board/notice/list?search=${boardVO.search}&keyword=${boardVO.keyword}&searchCheck=${boardVO.searchCheck}&boardType=1&pageNum=${startPage + 10}">&gt;</a>
 						</c:if>
 					</c:if>
 				</div>

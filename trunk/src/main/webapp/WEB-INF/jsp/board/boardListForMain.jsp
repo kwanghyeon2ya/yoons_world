@@ -25,7 +25,8 @@
 			<fmt:formatDate value="${fixedBoardList.firstInsertDt}" type="date" pattern="yyyy-MM-dd" />
 		</div>
 		</c:forEach>
-	
+		</c:if>
+		<c:if test="${!empty noticeBoardList}">
 		<c:forEach var="list" items="${noticeBoardList}">
 		<div>
 			<a class="title_href" title="${list.subject}" href="/board/notice/view?postSeq=${list.postSeq}"><c:out value="${list.subject}"/></a>

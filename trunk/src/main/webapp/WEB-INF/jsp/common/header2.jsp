@@ -8,7 +8,6 @@
 		response.setHeader("Cache-Control", "no-cache");
 %>
 <header id="header">
-	
 	<!-- 상단 메뉴 -->
 	<div id="gnb">
 		<div id="btn_side_menu" class="btn_menu tag_m_only">

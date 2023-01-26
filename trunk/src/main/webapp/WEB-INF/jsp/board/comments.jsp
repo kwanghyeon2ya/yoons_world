@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="java.io.File"%>
 
 <% pageContext.setAttribute("CRLF", "\r\n");%>
 <% pageContext.setAttribute("LF", "\n"); %>
@@ -55,7 +56,12 @@
 							<c:if test="${clist.status == 1}"> <!-- 살아있는글 -->
 								<div class="comm_info">
 									<div>
-										<img class="profile" src="/img/common/profile.png">
+										<c:if test="${vo.picture eq null}">
+											<img class="profile" src="/img/common/profile.png">
+										</c:if>
+										<c:if test="${vo.picture ne null}">
+											<img class="profile" src="<%=File.separator%>yoons_world<%=File.separator%>profile<%=File.separator%>${vo.picture}"/>
+										</c:if>
 										<span class="writer"><c:out value="${clist.commName}"/></span>
 									</div>
 									<div>

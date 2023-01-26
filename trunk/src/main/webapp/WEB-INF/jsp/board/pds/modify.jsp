@@ -24,77 +24,127 @@
 	</c:if>
 
 	<script>
-function getFileList(){ /* file태그 onchange function호출함 */
+	function getFileList(){ /* file태그 onchange function호출함 */
 		
 		var fileTarget = $("input[name=file]"); // 파일
 		var fileLength = $("input[name=file]")[0].files.length; // 파일 갯수
+		var files = $("input[name=file]")[0].files;
 		
 		console.log(fileTarget);
-		console.log(fileLength);
+		console.log("for문 밖 파일 갯수 확인 : "+fileLength);
 		
 		var fileList = "";
 		var bigFileNameList = "";
-		
+		var forExList = ""; 
+		var forbidden_extension = ["jsp","zip","ade","adp","apk","appx","appxbundle","bat","cab","chm","cmd","com","cpl","diagcab","diagcfg","diagpack","dll","dmg","ex","ex_","exe","hta","img","ins","iso","isp","jar","jnlp","js","jse","lib","lnk","mde","msc","msi","msix","msixbundle","msp","mst","nsh","pif","ps1","scr","sct","shb","sys","vb","vbe","vbs","vhd","vxd","wsc","wsf","wsh","xll","%00","0x00"];
+		/* try{ */
 		for(var i = 0;i<fileLength;i++){
-			if(fileTarget[0].files[i].size > 10000000){
-				console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
-				console.log("용량초과 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
-				bigFileNameList += fileTarget[0].files[i].name;				
-				deleteFile(fileTarget[0].files[i].lastModified);
+			if(fileTarget[0].files[i] == undefined){
+				console.log("언디파인드 진입확인");
+				break; 
+			} 
+			console.log("반복 진행 상황 : "+i+"/"+fileLength);
+			console.log("몇번째 파일인지 : "+fileTarget[0].files[i]);
+			
+			var nameLength = fileTarget[0].files[i].name.length;
+			console.log("파일 갯수 로그 : "+fileLength);
+			var fileDot = fileTarget[0].files[i].name.lastIndexOf(".");
+			var fileType = fileTarget[0].files[i].name.substring(fileDot+1,nameLength).toLowerCase();
+			console.log("파일 타입 로그 : "+fileType);
+			
+			if(fileTarget[0].files[i].size > 10000000 || forbidden_extension.includes(fileType)){
+				if(forbidden_extension.includes(fileType)){
+					console.log("확장자 제한 첨부파일 이름 : "+fileTarget[0].files[i].name);
+					console.log("확장자 제한 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
+					forExList += fileTarget[0].files[i].name+"\n";
+					filterFile(fileTarget[0].files[i].lastModified);
+					i -=1;
+					fileLength -=1;
+					/* $("input[name=file]").val(""); */
+				}else{
+					console.log("용량초과 첨부파일 이름 : "+fileTarget[0].files[i].name);
+					console.log("용량초과 첨부파일 고유번호 : "+fileTarget[0].files[i].lastModified);
+					bigFileNameList += fileTarget[0].files[i].name+"\n";				
+					filterFile(fileTarget[0].files[i].lastModified);
+					i -=1;
+					fileLength -=1;
+					/* $("input[name=file]").val(""); */ 
+				}
 			}else{
-				console.log("이름 붙이기 "+(i+1)+"번 째 진행중");
-				//fileList +='<span style="font-size:10px;color:#9900CC;">(추가 등록)</span> '+fileTarget[0].files[i].name + ' &nbsp; <img class="del_btn" src="/img/board/icon_close.png" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">' + '<br>';
 				fileList += '<li class="temp_file">';
-				fileList += '	<span class="new_txt txt_purple">(추가 등록)</span>';
 				fileList += '	<span class="file_name">'+fileTarget[0].files[i].name+'</span>';
-				fileList += '	<img class="del_btn" src="/img/board/icon_close.png" onclick="deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">';
+				fileList += '	<img class="del_btn" src="/img/board/icon_close.png" onclick="return deleteFile('+fileTarget[0].files[i].lastModified+');" alt="x">';
 				fileList += '</li>';
 			}
 		}
+		/* }catch(e){
+			console.log("에러메세지 : ${e.message} , ${e.name}");
+			breakCheck = 1;
+		} */
 		
-		if(bigFileNameList != ""){
-			alert("첨부파일은 10MB를 초과할 수 없습니다.");
-		}
 		
 		if(fileList == ""){
 			fileLength = 0;
 		}
-		if(fileLength > 0 && $("#anlist_check").val() == 1){
+		
+		console.log("bigFileNameList : "+bigFileNameList);
+		console.log("forExList : "+forExList);
+		console.log("for문 후 파일확인 : ");
+		console.log(fileTarget);
+		
+		if(bigFileNameList != ""||forExList != ""){
+			alert("확장자 및 용량(10MB)문제로 아래의 첨부파일은 제외되었습니다. \n"+forExList+bigFileNameList);
+		}
+		
+		console.log("fileList : "+fileList);
+		console.log("fileLength 재확인 : "+fileLength);
+		if(fileLength > 0){
+			console.log("block 진입 - function작동 끝");
+			$(".file_list").find('.temp_file').remove();
 			$(".file_list").show(0);
+			$(".file_list").append(fileList);
+		}else{
+			console.log("fileList");
+			console.log("none 진입");
+			$(".file_list").find('.temp_file').remove();
+			if(${empty anlist}){
+				$(".file_list").hide(0);	
+			}
 		}
-		
-		if(fileLength == 0 && ($("#anlist_check").val() == 1)){
-			$(".file_list").hide(0);
-		}
-			
-		$(".file_list").find('.temp_file').remove();
-		$(".file_list").append(fileList);
+		return false;	
+		event.preventDefault();
 	}
-		
-		
-	function deleteFile(file_number){ // 파일 삭제 버튼을 누를시에 호출 - 인자를 getFileList(첨부파일명 리스트호출 메서드)에 넣으며 호출
-		
-		console.log("deleteFile 메서드 진입");
-		console.log("file_number : "+file_number);
-		console.log("파일삭제 버튼  : "+$("input[name=file]"));
-
+	
+	function filterFile(file_number){
+		console.log("filterFile 호출 확인");
 		const files = $("input[name=file]")[0].files;
-		const dataTransfer = new DataTransfer(); // input file의 FileList를 컨트롤할 예정
-
+		const dataTransfer = new DataTransfer();
+		
 		Array.from(files)
-	        .filter(file => file.lastModified != file_number)
-	        .forEach(file => {
-        	dataTransfer.items.add(file);
-     	});
+			.filter(file => file.lastModified != file_number)
+			.forEach(file => {
+				dataTransfer.items.add(file);
+		})
+		
+		$("input[name=file]")[0].files = dataTransfer.files;
+	}
+	
+	
+	function deleteFile(file_number){//x버튼 누를시
+		console.log("deleteFile 호출 확인");
+		const files = $("input[name=file]")[0].files;
+		const dataTransfer = new DataTransfer();
+		
+		Array.from(files)
+			.filter(file => file.lastModified != file_number)
+			.forEach(file => {
+				dataTransfer.items.add(file);
+		})
 		
 		$("input[name=file]")[0].files = dataTransfer.files;
 		
-		getFileList(); // input의 file에 들어가 있는 파일 변경후 파일 목록 변화를 위해 메서드를 호출
-		//파일선택을 직접적으로 누르지 않기때문에 onchange 작동안하기때문
-		
-		
-		
-		/* fileArray.splice(file_number,1); */
+		getFileList();
+		return false;
 	}
 
 	function MoveAction(){
