@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.PageVO;
 
 public interface BoardService {
 	
@@ -29,4 +30,6 @@ public interface BoardService {
 	public int checkHeart(BoardVO vo)throws Exception;
 	public int getHeartCount(BoardVO vo)throws Exception;
 	public int insertBoard(BoardVO vo, MultipartFile[] files, HttpServletRequest request) throws Exception;
+	public int getSearchCount(BoardVO boardVO, PageVO pageVO) throws Exception;
+	public List<BoardVO> getBoardList(BoardVO boardVO, PageVO pageVO)throws Exception;
 }

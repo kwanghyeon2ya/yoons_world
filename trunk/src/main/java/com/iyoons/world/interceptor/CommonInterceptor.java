@@ -99,7 +99,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 			}
 			if (!returnValue) {
 
-				response.sendRedirect(request.getContextPath() + "/login/logout"); // 프로젝트 이름만 가져온 후 uri더해줌
+				response.sendRedirect(request.getContextPath() + "/login/loginView"); // 프로젝트 이름만 가져온 후 uri더해줌
 
 			}
 			logger.info("쿠키를 통해 진입성공");

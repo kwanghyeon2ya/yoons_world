@@ -35,7 +35,7 @@ public class MainController {
 	@Autowired UserService userService;
 	
 	@RequestMapping(value= {"/main","/"})
-	public String callMain(HttpServletRequest request,HttpSession session,Model model) {
+	public String callMain(HttpServletRequest request,HttpSession session,Model model) { // 메인페이지 진입
 		
 		logger.debug("메인 세션확인입니다 : "+String.valueOf(session.getAttribute("sessionSeqForUser")));
 		try {
@@ -61,7 +61,7 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/main/changePw")
-	public String changePw(HttpSession session,Model model) {
+	public String changePw(HttpSession session,Model model) { // 초기 비밀번호 변경 팝업창 진입 
 		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
 		
 		model.addAttribute("pwCheck",userService.getPwConfirmNum(sessionSeqForUser));
@@ -70,7 +70,7 @@ public class MainController {
 	
 	
 	@RequestMapping(value="/main/changePwProc")
-	@ResponseBody public String changePw(UserVO userVO,HttpServletRequest request,HttpSession session) {
+	@ResponseBody public String changePw(UserVO userVO,HttpServletRequest request,HttpSession session) { // 비밀번호 변경 DB 저장
 		logger.debug("changePw 진입");
 		
 		logger.debug("changePw userVO확인 : "+userVO);
@@ -95,7 +95,7 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/main/userSearchList")
-	public String getUserSearchList(UserVO userVO,HttpServletRequest request,Model model) {
+	public String getUserSearchList(UserVO userVO,HttpServletRequest request,Model model) { // 메인페이지 회원 검색 
 		
 		try {
 			logger.debug("메인 유저 검색 키워드 : "+userVO.getKeyword());
@@ -111,19 +111,19 @@ public class MainController {
 			logger.error("SQLException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException e) {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}

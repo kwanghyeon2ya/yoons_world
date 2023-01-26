@@ -1,16 +1,11 @@
 package com.iyoons.world.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,9 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.service.UserService;
+import com.iyoons.world.service.impl.PagingService;
 import com.iyoons.world.vo.UserVO;
 import com.iyoons.world.vo.PageVO;
 
@@ -47,20 +40,9 @@ public class UserAdminController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	
-	String traceErrorPrint(Exception e) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		PrintStream printStream = new PrintStream(out);
-		e.printStackTrace(printStream);
-		
-		return out.toString();
-		
-	}
-	
-	
-	
+
 	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
-	public String userList(PageVO pagevo,Model model,HttpServletRequest request) {
+	public String userList(PageVO pagevo,Model model,HttpServletRequest request) { // 회원 리스트 페이지 
 		//pagevo는 검색어,pageNum 받아오는 용도
 		
 		try {
@@ -89,13 +71,13 @@ public class UserAdminController {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
@@ -103,13 +85,13 @@ public class UserAdminController {
 	
 	// 회원 등록 페이지
 	@RequestMapping(value = "/member/createUserForm", method = RequestMethod.GET)
- 	public String userCreate(){
+ 	public String userCreate(){ // 회원 등록 페이지
      	
  		return "admin/member/createUserForm";
  	}
 	
 	@RequestMapping(value = "/member/duplicatedIdCheck", method = RequestMethod.GET)
-	@ResponseBody public String checkDuplicatedId(UserVO vo,Model model,HttpServletRequest request){
+	@ResponseBody public String checkDuplicatedId(UserVO vo,Model model,HttpServletRequest request){ //아이디 중복 체크
 		
 		try {
 			
@@ -123,13 +105,13 @@ public class UserAdminController {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 		
@@ -138,7 +120,7 @@ public class UserAdminController {
 	
 	// 회원 등록 처리
 		@RequestMapping(value = "/member/createUser", method = RequestMethod.POST)
-		@ResponseBody public String userInsert(@RequestBody UserVO userVO, HttpSession session,HttpServletRequest request,Model model){
+		@ResponseBody public String userInsert(@RequestBody UserVO userVO, HttpSession session,HttpServletRequest request,Model model){ //회원 등록 DB 저장 
 			
 
 			int sessionSeqForAdmin = (int)session.getAttribute("sessionSeqForAdmin");
@@ -191,13 +173,13 @@ public class UserAdminController {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 		} catch (Exception e) {
@@ -212,7 +194,7 @@ public class UserAdminController {
 	
 	// 회원 수정 페이지
 	@RequestMapping(value = "/member/modifyUserForm", method = RequestMethod.GET)
-	public String userDetail(UserVO userVOFromParam, Model model,HttpServletRequest request){	
+	public String userDetail(UserVO userVOFromParam, Model model,HttpServletRequest request){ // 유저 정보 수정 페이지 진입
 		
 		try {
 			
@@ -247,19 +229,19 @@ public class UserAdminController {
 			logger.error("SQLException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException e) {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 		
@@ -267,7 +249,7 @@ public class UserAdminController {
 
 	// 회원 수정 처리
 		@RequestMapping(value = "/member/modifyUser", method = RequestMethod.POST)
-		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request){
+		public String userUpdate(UserVO userVO,Model model,HttpServletResponse response,HttpServletRequest request){ // 유저 정보 수정 DB 업데이트 
 			
 			try {
 				
@@ -290,25 +272,25 @@ public class UserAdminController {
 				logger.error("NoSuchAlgorithmException"+e);
 				logger.error("Request URL :"+request.getRequestURI());
 				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-				model.addAttribute("loc", "/login/loginView");
+				model.addAttribute("loc", "/login/logout");
 				return "common/msg";
 			} catch (SQLException e) {
 				logger.error("SQLException "+e);
 				logger.error("Request URL :"+request.getRequestURI());
 				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-				model.addAttribute("loc", "/login/loginView");
+				model.addAttribute("loc", "/login/logout");
 				return "common/msg";
 			} catch (NullPointerException e) {
 				logger.error("NullPointerException "+e);
 				logger.error("Request URL :"+request.getRequestURI());
 				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-				model.addAttribute("loc", "/login/loginView");
+				model.addAttribute("loc", "/login/logout");
 				return "common/msg";
 			} catch (Exception e) {
 				logger.error("Exception" + e);
 				logger.debug(" Request URI \t:  " + request.getRequestURI());
 				model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-				model.addAttribute("loc", "/login/loginView");
+				model.addAttribute("loc", "/login/logout");
 				return "common/msg";
 			}
 			
@@ -319,7 +301,7 @@ public class UserAdminController {
 	
 		@ResponseBody
 		@RequestMapping(value = "/member/recoverUserStatus", method = RequestMethod.POST)
-		 public String recoverUserStatus (UserVO userVO,HttpSession session,HttpServletRequest request,Model model){
+		 public String recoverUserStatus (UserVO userVO,HttpSession session,HttpServletRequest request,Model model){ // 회원 정지 해제 DB 업데이트
 			
 
 				String result = "0";
@@ -353,7 +335,7 @@ public class UserAdminController {
 	// 회원 정지 처리
 		@ResponseBody 
 		@RequestMapping(value = "/member/deleteUser", method = RequestMethod.POST)
-		public String deleteUser(UserVO vo,HttpSession session,HttpServletRequest request,Model model){
+		public String deleteUser(UserVO vo,HttpSession session,HttpServletRequest request,Model model){ // 회원 정지 DB 업데이트 
 			
 			String result = "0";
 			

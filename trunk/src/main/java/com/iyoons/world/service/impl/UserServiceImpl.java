@@ -1,5 +1,7 @@
 package com.iyoons.world.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -8,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.dao.UserDAO;
 import com.iyoons.world.service.UserService;
@@ -31,6 +36,12 @@ public class UserServiceImpl implements UserService {
 	UserDAO userDAO;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"profile";
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedprofile";*/
+	final String REAL_PATH="C:/yoons_world/profile";
+	final String DELETED_FILE_PATH="C:/yoons_world/deletedprofile";
+	
 
 	public String getShaAlgorithm(String password , String salt_key) throws NoSuchAlgorithmException {
 		String hashString = "";
@@ -248,6 +259,78 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int getPwConfirmNum(int userSeq) {
 		return userDAO.getPwConfirmNum(userSeq);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int updateMypage(UserVO userVO,MultipartFile multifile)throws Exception {
+		int result = 0;
+		userVO.setUpdrSeq(userVO.getUserSeq());
+		UserVO picVO = userDAO.getPicture(userVO); // 기존 프로필사진 불러오기  
+		
+		logger.debug("서비스 진입 로그");
+		
+		if(picVO != null) {
+			if(picVO.getPicture() != null) {//프로필 사진이 존재한다면
+				
+				File f = FileUtils.getFile(picVO.getPicturePath()+File.separator+picVO.getPicture());//현재저장폴더
+				File df = FileUtils.getFile(DELETED_FILE_PATH+File.separator+picVO.getPicture());//삭제폴더이동
+				FileUtils.moveFile(f, df);
+			}
+		}
+		
+		
+		logger.debug("기존파일 삭제전 로그");
+		logger.debug("multifile : "+multifile);
+		logger.debug("파일 이름 : "+multifile.getName());
+		if(!multifile.isEmpty()) { // 기존파일 삭제폴더 이동후 파일등록  // 경로까지 저장할 필요가 있는가? 
+			
+			logger.debug("");
+			
+			String uploadFileName = multifile.getOriginalFilename();
+			
+			userVO.setPicturePath(REAL_PATH);
+			logger.debug("file name : "+multifile.getOriginalFilename());
+			
+			String uuid = UUID.randomUUID().toString();
+			
+			userVO.setPicture(uuid + uploadFileName);
+			
+			uploadFileName = REAL_PATH + File.separator + uuid + uploadFileName; 
+			
+			File saveFile = new File(uploadFileName);
+		
+			try {
+				
+				if(!saveFile.exists()) {
+					saveFile.mkdir();
+				}
+				
+				multifile.transferTo(saveFile);
+				userVO.setUpdrSeq(userVO.getUserSeq());
+				
+				result = userDAO.updateMypage(userVO);
+	
+				
+			} catch (Exception e) {
+				/*File file = new File(uploadFileName);
+				file.delete();
+				logger.error("저장소의 첨부파일 삭제 후 controller로 예외 되던짐 ");*/
+				logger.debug("에러메시지 service: "+e.getMessage());
+				throw new Exception(e);
+			}
+		
+		}else {// 프로필사진 null입력시
+			userVO.setPicture(null);
+			userVO.setPicturePath(null);
+			result = userDAO.updateMypage(userVO);
+		}
+		return result;
+	}
+
+	@Override
+	public UserVO getPicture(UserVO userVO) {
+		return userDAO.getPicture(userVO);
 	}
 	
 }

@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class BoardVO {
 	
-	private int postNum;
+	private int postNum; //작성시간에 따라 내림차순으로 매겨진 살아있는 글에 대한 번호
 	private int postSeq; //글 고유번호
 	private int userSeq; //유저 고유번호
 	private String writerName; //글 작성자(Client가 보는 작성자이름)
@@ -18,7 +18,7 @@ public class BoardVO {
 	private String content; //글 내용
 	private int status; // 글 상태(일반1/삭제0)
 	private int readCnt; //조회수
-	private int boardType; //게시판 타입
+	private String boardType; //게시판 타입
 	private String fileAttachYn; //첨부파일 여부
 	private String boardFixYn;
 	private int regrSeq; //작성자 고유번호
@@ -45,8 +45,9 @@ public class BoardVO {
 	private String fixEndDt; // 공지사항 게시판 상단고정 종료날짜
 	private int heartCount; // 게시글에 대한 좋아요 총 갯수
 	private int heartCheck; // 좋아요를 누른적이 있는지 확인용
-	private int expiryDt;
-	private int expiryHour;
-	private int expiryMinute;
-	
+	private int expiryDt; // 고정 종료까지 남은 날짜
+	private int expiryHour; // 고정 종료까지 남은 시간
+	private int expiryMinute; // 고정 종료까지 남은 분
+	private String picture; // 글 작성자의 프로필사진
+	private String searchCheck;
 }

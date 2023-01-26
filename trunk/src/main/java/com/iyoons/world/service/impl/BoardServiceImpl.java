@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.iyoons.world.service.BoardService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.PageVO;
 import com.iyoons.world.vo.UserActionVO;
 
 @Service(value = "BoardService")
@@ -62,6 +64,17 @@ public class BoardServiceImpl implements BoardService {
 		return str;
 	}*/
 	
+	public int confirmFileType(String fileType) {
+		int result = 0; 
+		String [] forbidden_extension = {"jsp","zip","ade","adp","apk","appx","appxbundle","bat","cab","chm","cmd","com","cpl","diagcab","diagcfg","diagpack","dll","dmg","ex","ex_","exe","hta","img","ins","iso","isp","jar","jnlp","js","jse","lib","lnk","mde","msc","msi","msix","msixbundle","msp","mst","nsh","pif","ps1","scr","sct","shb","sys","vb","vbe","vbs","vhd","vxd","wsc","wsf","wsh","xll","%00","0x00"};
+		ArrayList<String> fileTypeArry = new ArrayList<>(Arrays.asList(forbidden_extension));
+		if(fileTypeArry.indexOf(fileType) == -1) { // 발견 못 할시 1 / 발견되면 0
+			result = 1;
+		}
+		logger.debug("파일타입 확인 0이면 금지파일 : "+result);
+		return result;
+	}
+	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public int insertBoard(BoardVO vo,MultipartFile[] files,HttpServletRequest request)throws Exception { //게시글 작성
@@ -78,34 +91,54 @@ public class BoardServiceImpl implements BoardService {
 					uploadPath.mkdir();
 				}
 					
-				String uploadFileName = f.getOriginalFilename();
-				String FileType = f.getContentType(); 
-				bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
-				bavo.setFileType(FileType.split("/")[1]);
-				String uuid = UUID.randomUUID().toString();
+			String uploadFileName = f.getOriginalFilename();
+			logger.debug("file name : "+f.getOriginalFilename());
+			String FileType = f.getContentType(); 
+			logger.debug("file type : "+f.getContentType());
+			bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
+			bavo.setFileType(FileType.split("/")[1]);
+			String uuid = UUID.randomUUID().toString();
+			
+			uploadFileName = File.separator + uuid + uploadFileName;
+			
+			bavo.setPostSeq(vo.getPostSeq());
+			bavo.setFileUuid(uuid);
+			bavo.setFileSize(f.getSize());
+			bavo.setFilePath(REAL_PATH);
+			bavo.setRegrSeq(vo.getRegrSeq());
 				
-				uploadFileName = File.separator + uuid + uploadFileName;
+			try {
+				int fileLength = f.getOriginalFilename().length();
+				int fileLastIndex = f.getOriginalFilename().lastIndexOf('.');
+				logger.debug("파일 타입 확인 : "+f.getOriginalFilename().substring(fileLastIndex+1,fileLength));
 				
-				bavo.setPostSeq(vo.getPostSeq());
-				bavo.setFileUuid(uuid);
-				bavo.setFileSize(f.getSize());
-				bavo.setFilePath(REAL_PATH);
-				bavo.setRegrSeq(vo.getRegrSeq());
+				int fileCheck = confirmFileType(f.getOriginalFilename().substring(fileLastIndex+1,fileLength));// 파일 타입 확인
 				
+				logger.debug("fileCheck : "+fileCheck);
+				if(fileCheck == 0) {
+					logger.debug("serviceImpl fileType 오류 발생");
+					throw new Exception("forbidden_file_type");
+				}
+				
+				if(bavo.getFileSize() > 1000000) {
+					throw new Exception("over_the_file_size");
+				}
+			
 				String savePath = REAL_PATH + uploadFileName;
 					
 				File saveFile = new File(savePath);
+
+				f.transferTo(saveFile);
+				blist.add(bavo);
 				
 				/*int i =+ 1;  //예외처리 실험용
-*/				
-				try {
+				
+				
+				/*if(i < 2) { //예외처리 실험용
+					throw new Exception();
+				}*/
+			} catch (Exception e) {
 					
-					f.transferTo(saveFile);
-					blist.add(bavo);
-					/*if(i < 2) { //예외처리 실험용
-						throw new Exception();
-					}*/
-				} catch (Exception e) {
 					
 					logger.debug("파일처리 catch 진입");
 						for(BoardAttachVO avo : blist) { 
@@ -115,14 +148,16 @@ public class BoardServiceImpl implements BoardService {
 						}
 						
 					logger.error("저장소의 첨부파일 삭제 후 controller로 예외 되던짐 ");
+					logger.debug("에러메시지 service: "+e.getMessage());
 					throw new Exception(e);
-				} 
-				
+			} 
+			
 				
 			}
 		}
 		
 		if(blist.size() > 0) {
+			logger.debug("글작성 첨부파일 확인 : "+blist.toString());
 			for(BoardAttachVO attach : blist) {
 				adao.insertAttach(attach);
 			}
@@ -131,6 +166,20 @@ public class BoardServiceImpl implements BoardService {
 			return result;
 	}
 
+	@Override
+	public List<BoardVO> getBoardList(  //게시글 리스트 불러오기
+			BoardVO boardVO, PageVO pageVO) throws Exception {
+		
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("search",boardVO.getSearch());
+		map.put("keyword",boardVO.getKeyword());
+		map.put("searchCheck",boardVO.getKeyword());
+		map.put("startRow",pageVO.getStartRow());
+		map.put("endRow",pageVO.getEndRow());
+		map.put("boardType",boardVO.getBoardType());
+		return dao.getBoardList(map);
+	}
+	
 	@Override
 	public List<BoardVO> getBoardList(  //게시글 리스트 불러오기
 			String search,
@@ -155,6 +204,21 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getBoardCount(boardType);
 	}
 
+	
+	@Override
+	public int getSearchCount(BoardVO boardVO, PageVO pageVO) throws Exception { //글 검색 후 검색된 글의 총 갯수
+		
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("search",boardVO.getSearch());
+		map.put("keyword",boardVO.getKeyword());
+		map.put("searchCheck",boardVO.getKeyword());
+		map.put("startRow",pageVO.getStartRow());
+		map.put("endRow",pageVO.getEndRow());
+		map.put("boardType",boardVO.getBoardType());
+		return dao.getSearchCount(map);
+	}
+	
+	
 	@Override
 	public int getSearchCount(String search, 
 			String keyword, 
@@ -179,39 +243,79 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public int modView(BoardVO vo,MultipartFile[] files) throws Exception { //게시글 수정
 /*		List<BoardAttachVO> blist = new ArrayList<>();*/	
-	
+	List<BoardAttachVO> blist = new ArrayList<>();
 		
 	for(MultipartFile f : files){
 			if(!f.isEmpty()) {
 				BoardAttachVO bavo = new BoardAttachVO();
+				try {
+					File uploadPath = new File(REAL_PATH);
+					if(!uploadPath.exists()) {
+						uploadPath.mkdir();
+					}
+					
+					String uploadFileName = f.getOriginalFilename();
+					logger.debug("file name : "+f.getOriginalFilename());
+					bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
+					String fileType = f.getContentType();
+					bavo.setFileType(fileType.split("/")[1]);
+					logger.debug("file type : "+f.getContentType());
+					String uuid = UUID.randomUUID().toString();
+					bavo.setFileSize(f.getSize());
+					bavo.setFileUuid(uuid);
+					bavo.setPostSeq(vo.getPostSeq());
+					bavo.setFilePath(REAL_PATH);
+					bavo.setUpdrSeq(vo.getUpdrSeq());
+					bavo.setRegrSeq(vo.getRegrSeq());
+					
+					
+					int fileLength = f.getOriginalFilename().length();
+					int fileLastIndex = f.getOriginalFilename().lastIndexOf('.');
+					logger.debug("파일 타입 확인 : "+f.getOriginalFilename().substring(fileLastIndex+1,fileLength));
+					
+					int fileCheck = confirmFileType(f.getOriginalFilename().substring(fileLastIndex+1,fileLength));
+					
+					logger.debug("fileCheck : "+fileCheck);
+					if(fileCheck == 0) {
+						logger.debug("serviceImpl fileType 오류 발생");
+						throw new Exception("forbidden_file_type");
+					}
+					if(bavo.getFileSize() > 1000000) {
+						throw new Exception("over_the_file_size");
+					}
+					
+					
+					uploadFileName = File.separator + uuid + uploadFileName;
+					
+					f.transferTo(new File(REAL_PATH + uploadFileName));
+					blist.add(bavo);
+				} catch (Exception e) {
 				
-				File uploadPath = new File(REAL_PATH);
-				if(!uploadPath.exists()) {
-					uploadPath.mkdir();
+				
+				logger.debug("파일처리 catch 진입");
+					for(BoardAttachVO avo : blist) { 
+						String path = avo.getFilePath()+File.separator+avo.getFileUuid()+avo.getFileName()+"."+avo.getFileType();
+						File file = new File(path);
+						file.delete();
+					}
+					
+				logger.error("저장소의 첨부파일 삭제 후 controller로 예외 되던짐 ");
+				logger.debug("에러메시지 : "+e.getMessage());
+				throw new Exception(e);
 				}
-				
-				String uploadFileName = f.getOriginalFilename();
-				bavo.setFileName(uploadFileName.substring(0,uploadFileName.lastIndexOf(".")));
-				String fileType = f.getContentType();
-				bavo.setFileType(fileType.split("/")[1]);
-				String uuid = UUID.randomUUID().toString();
-				bavo.setFileSize(f.getSize());
-				bavo.setFileUuid(uuid);
-				bavo.setPostSeq(vo.getPostSeq());
-				bavo.setFilePath(REAL_PATH);
-				bavo.setUpdrSeq(vo.getUpdrSeq());
-				bavo.setRegrSeq(vo.getRegrSeq());
-				
-				uploadFileName = File.separator + uuid + uploadFileName;
-				
-				f.transferTo(new File(REAL_PATH + uploadFileName));
-				adao.insertAttach(bavo);
 			}
 		}
 	
+		if(blist.size() > 0) {
+			logger.debug("글작성 첨부파일 확인 : "+blist.toString());
+			for(BoardAttachVO attach : blist) {
+				adao.insertAttach(attach);
+			}
+		}
+		
 		
 			
 			/*File f = new File(originalFilePath); //기존 파일 위치+저장된 파일이름
@@ -391,4 +495,6 @@ public class BoardServiceImpl implements BoardService {
 		uavo.setActionType(FinalVariables.ACTION_TYPE_LIKE);
 		return dao.getHeartCount(uavo);
 	}
+
+
 }

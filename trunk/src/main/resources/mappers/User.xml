@@ -13,7 +13,9 @@
 			user_name,
 			user_type,
 			user_status,
-			first_update_pw
+			first_update_pw,
+			picture,
+			picture_path
 		from
 			user_info 
 		where
@@ -366,5 +368,26 @@
 		where
 			user_seq = #{userSeq}
 	</select>
+	<select id="getPicture" resultType="com.iyoons.world.vo.UserVO">
+		select
+			picture,
+			picture_path
+		from
+			user_info
+		where 
+			user_seq = #{userSeq}
+	</select>
+	<update id="updateMypage">
+		update
+			user_info
+		set 
+			picture = #{picture,jdbcType=VARCHAR},
+			picture_path = #{picturePath,jdbcType=VARCHAR},
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq} 
+		where
+			user_seq = #{userSeq}
+			and user_status = 1
+	</update>
 	
 </mapper>

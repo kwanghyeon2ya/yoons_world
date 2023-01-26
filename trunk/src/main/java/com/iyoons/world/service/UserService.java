@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.iyoons.world.vo.UserVO;
 import com.iyoons.world.vo.PageVO;
 import com.iyoons.world.vo.UserAutoLoginVO;
@@ -50,5 +52,9 @@ public interface UserService {
 	public int checkPw(UserVO userVO) throws NoSuchAlgorithmException;
 	
 	public int getPwConfirmNum(int userSeq);
+	
+	public int updateMypage(UserVO userVO,MultipartFile Nultifile) throws Exception;
+	
+	public UserVO getPicture(UserVO userVO);
 	
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-function WriteBoardCheck(url){
+function WriteBoardCheck(url){ // 게시글 작성 ajax 
 
 	var subject_repl = $("#subject").val().replace(/\"/gi,"'");
 	$("#subject").val(subject_repl);
@@ -85,6 +85,12 @@ function WriteBoardCheck(url){
 	 				location.href=url;
 	 				rtn = true;
 	 				break;
+		 		case 5555:
+		 			alert("금지된 확장자의 파일은 업로드할 수 없습니다. 파일을 확인해주세요.(exe,jsp 등)");
+	 				break;
+		 		case 6666:
+		 			alert("첨부파일의 크기가 너무 큽니다. 첨부파일을 확인해주세요.");
+	 				break;
 		 		case 9999:
 					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
 					location.href="/login/logout";
@@ -134,7 +140,7 @@ function WriteBoardCheck(url){
 }) */
 
 
-function modBoardCheck(url){
+function modBoardCheck(url){ // 게시글 수정 ajax
 /*	console.log($("#regrSeq"));
 	$("#content").val($('#summernote').summernote('code'));
 */	
@@ -206,11 +212,19 @@ function modBoardCheck(url){
 		 			alert("수정되었습니다");
 		 			location.href=url;
 		 			break;
+		 		case 5555:
+	 				alert("유효하지 않은 첨부파일입니다. 첨부파일을 확인해주세요. (exe,jsp 등)");
+	 				break;
+		 		case 6666:
+		 			alert("첨부파일의 크기가 너무 큽니다. 첨부파일을 확인해주세요.");
+	 				break;
+		 		case 9999:
+					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+					location.href="/login/logout";
+					break;
 		 		default:
-		 			alert("수정되지 않았습니다");
-		 			break;	
-		 		}
-		 		
+		 			break;
+	 			}
 			},
 			error : function (a1, a2, a3){
 				console.log(a1, a2, a3);

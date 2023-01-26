@@ -52,16 +52,8 @@
 									sysdate,
 									0,
 									sysdate,
-									<choose>
-										<when test='"Y".equals(boardFixYn)'>
-											nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
-											nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
-										</when>
-										<otherwise>
-											sysdate-1,
-											sysdate-1
-										</otherwise>									
-									</choose>
+									TO_DATE(#{fixStartDt,jdbcType=VARCHAR},'YYYY/MM/DD'),
+									TO_DATE(#{fixEndDt,jdbcType=VARCHAR},'YYYY/MM/DD')
 									)
 		<selectKey  resultType="int" keyProperty="postSeq" order="BEFORE" keyColumn="int">
 			select post_seq.nextval from dual
@@ -144,9 +136,9 @@
 		select 
 			count(post_seq) 
 		from (select 
-			pb.post_seq
-		from 
-			post_board pb
+				pb.post_seq
+			  from 
+				post_board pb
 		 <if test="searchCheck != null and search.equals('comments')">
 		inner join (
 			select DISTINCT
@@ -192,13 +184,16 @@
 			pb.updr_seq,
 			pb.last_update_dt,
 			pb.fix_start_dt,
-			pb.fix_end_dt
+			pb.fix_end_dt,
+			(select ui.picture from user_info ui where user_seq = pb.regr_seq) as picture
 		from
 			post_board pb
 		where 
 			pb.post_seq = #{postSeq} 
 			and status = 1
 	</select>
+	
+	<!-- <select id="getProfile" -->
 	
 	<update id="modView">
 		update 

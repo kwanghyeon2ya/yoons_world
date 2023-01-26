@@ -122,9 +122,6 @@ table{
 	margin-bottom: 1rem;
 }
 	
-#search_frm > select{
-	width:25%;
-}
 
 #search_dep_select{
 	width:60%;
@@ -160,7 +157,7 @@ table{
 }
 
 .show {
-  display: block;
+  display:block;
   z-index: 1000;
   transition: all 0.5s;
 }
@@ -177,14 +174,26 @@ table{
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  border:2px solid rgb(92, 53, 148);
+  border-radius:0.2rem;
 
   /* 임시 지정 */
     width: 40rem;
     height: 27rem;
 
-  /* 초기에 약간 아래에 배치 */
-  transform: translate(-50%, -40%);
+  /* /* 초기에 약간 아래에 배치 */
+  transform: translate(-50%, -40%); */
+}
+
+/* 메인페이지 변경 a 버튼*/
+.change_info{
+	display:flex;
+	justify-content: space-between;
+}
+
+.blur_page{
+	filter:blur(0.2rem);
 }
 
 .show .popup {
@@ -193,7 +202,85 @@ table{
 }
 
 
+/* 마이페이지 */
 
+.mypage_content{
+	display:flex;
+	height:60rem;
+	justify-content:center;
+	flex-direction:column;
+}
+.profile_kind_div{
+	display:flex;
+	width:34.5rem;
+	align-items:flex-end;
+	justify-content:space-around;
+}
+.profile_kind{
+	font-size:2rem;
+	color:#512f83;
+	width:50%;
+	margin:10px;
+}
+.img_div{
+	display:flex;
+	width:34.5rem;
+	align-items:flex-end;
+	justify-content:space-around;	
+}
+.origin_img_div{
+	width:50%;
+	height:15rem;
+}
+.new_img_div{
+	width:50%;
+	height:15rem;
+}
+.profile_img{
+	width:15rem;
+	height:15rem;
+	padding:10px;
+}
+.mypage_frm .upload_name{
+	display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 25vh;
+    color: #999999;
+}
+.mypage_frm label{
+	display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+}
+.mypage_frm input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+.mypage_frm{
+	text-align:center;
+}
+
+#mypage_tap{
+	font-weight:600;
+	border-top:2px solid;
+	border-bottom:2px solid;
+	padding: 8px;
+}
+#mypage_tap a{
+	margin:10px;
+}
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
@@ -222,6 +309,14 @@ table{
 	.rank_area .table > div:nth-of-type(n+25):nth-of-type(-n+27) {order: 6;}
 	.rank_area .table > div:nth-of-type(n+28):nth-of-type(-n+30) {order: 8;}
 	.rank_area .table > div:nth-of-type(n+31):nth-of-type(-n+33) {order: 10;}
+	
+	/* 마이페이지 프로필 */
+	.mypage_frm .upload_name{
+	width: 45%;
+	}
+	.mypage_frm label{
+	width:21vh;
+	}
 }
 
 /* Mobile (가로 480px 이하) */

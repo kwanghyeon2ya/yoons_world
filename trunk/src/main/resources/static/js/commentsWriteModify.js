@@ -99,7 +99,7 @@ function modifyCommentsCheck(index){
 						alert("글자 수가 너무 많습니다");
 					}else if(data == "9999"){
 						alert("잘못된 요청입니다 로그인 페이지로 이동합니다");
-						location.href="/login/loginView";
+						location.href="/login/logout";
 					}else{
 						alert("댓글이 수정되었습니다");
 						console.log("data : "+data);

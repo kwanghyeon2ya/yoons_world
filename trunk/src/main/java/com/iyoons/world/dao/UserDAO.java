@@ -62,4 +62,8 @@ public interface UserDAO {
 	public int checkPw(UserVO userVO);
 	
 	public int getPwConfirmNum(int userSeq);
+	
+	public int updateMypage(UserVO userVO);
+	
+	public UserVO getPicture(UserVO userVO);
 }

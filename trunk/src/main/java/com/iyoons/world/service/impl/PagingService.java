@@ -1,4 +1,4 @@
-package com.iyoons.world.controller;
+package com.iyoons.world.service.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,6 @@ public class PagingService{
 		};
 		
 		page.setCurrentPage(pageNum);
-		
 		int startRow = (pageNum - 1) * pageSize + 1;	
 		int endRow = pageSize * pageNum;
 		
@@ -30,11 +29,5 @@ public class PagingService{
 		
 		return page;
 	}
-	
-	
-	
-	
-
-	
 	
 }

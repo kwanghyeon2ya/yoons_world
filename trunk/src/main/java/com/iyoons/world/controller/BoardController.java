@@ -32,9 +32,11 @@ import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.service.AttachService;
 import com.iyoons.world.service.BoardService;
 import com.iyoons.world.service.CommentsService;
+import com.iyoons.world.service.impl.PagingService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
+import com.iyoons.world.vo.PageVO;
 import com.iyoons.world.vo.UserVO;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
@@ -51,6 +53,9 @@ public class BoardController {
 	
 	@Autowired
 	public AttachService aservice;
+	
+	@Autowired 
+	PagingService pageService;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -108,25 +113,59 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 		}
 	}
 	
-	
 	@RequestMapping(value="free/list",method=RequestMethod.GET)
-	public String getFreeList(
+	public String getFreeList(BoardVO boardVO,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,Model model,HttpServletRequest request) {
+		boardVO.setBoardType(boardType);
+		try {
+			int pageSize = 10;
+			int count = service.getBoardCount(boardType);
+			logger.debug("count 확인 : "+count);
+			List<BoardVO> boardList = null;
+			logger.debug("페이징 vo return 전");
+			PageVO pageVO = pageService.getPaging(pageSize,Integer.parseInt(pageNum));
+			logger.debug("pageVO 값 : "+pageVO.toString());
+			if(boardVO.getSearchCheck() != null && boardVO.getSearch() != null && boardVO.getKeyword() != null) {
+				count = service.getSearchCount(boardVO,pageVO);
+				logger.debug("keyword : "+boardVO.getKeyword());
+			}
+			/*if(count != 0) boardList = service.getBoardList(search,keyword,searchCheck,startRow, endRow, boardType);*/
+			if(count != 0) boardList = service.getBoardList(boardVO,pageVO);
+			logger.debug("boardList : "+boardList);
+			model.addAttribute("count",count);
+			model.addAttribute("boardList",boardList);
+			model.addAttribute("pageVO",pageVO);
+			model.addAttribute("boardVO",boardVO);
+			
+		} catch (Exception e) {
+			logger.error("request uri \t:"+request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.debug("Exception :"+sw.toString());
+		}
+		
+		return "board/free/list";
+	}
+	
+	/*@RequestMapping(value="free/list",method=RequestMethod.GET)
+	public String getFreeList( // 자유게시판
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
 			@RequestParam(value="boardType",required=false,defaultValue="0")String boardType,
 			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,Model model,HttpServletRequest request){
 			
-		boardList(search,keyword,searchCheck,boardType,pageNum,model, request);
+		boardList(search,keyword,searchCheck,boardType,pageNum,model,request);
 		model.addAttribute("boardType",boardType);
 		model.addAttribute("pageNum",pageNum);
 		model.addAttribute("keyword",keyword);
@@ -134,10 +173,69 @@ public class BoardController {
 		model.addAttribute("search",search);
 		return "board/free/list";
 		
-	}
+	}*/
+	
 	
 	@RequestMapping(value="notice/list",method=RequestMethod.GET)
-	public String getNoticeList(
+	public String getNoticeList(@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+			@RequestParam(value="boardType",required=false,defaultValue="1")String boardType,
+			BoardVO boardVO,HttpServletRequest request,Model model) {
+		
+			boardVO.setBoardType(boardType);
+		try {
+			int pageSize = 10;
+			List<BoardVO> boardList = null;
+			List<BoardVO> fixedBoardList = service.getNoticeFixedBoard(boardType);
+			PageVO pageVO = pageService.getPaging(pageSize,Integer.parseInt(pageNum));
+			int count = service.getBoardCount(boardType);
+			
+			if(boardVO.getSearchCheck() != null && boardVO.getSearch() != null && boardVO.getKeyword() != null) {
+				count = service.getSearchCount(boardVO,pageVO);
+				logger.debug("keyword : "+boardVO.getKeyword());
+			}
+			
+			logger.debug("공지사항 pageVO 값 : "+pageVO.toString());
+			logger.debug("fixedBoardList : "+fixedBoardList);
+			if(count != 0) {
+				boardList = service.getBoardList(boardVO,pageVO);
+			}
+			
+			logger.debug("boardType 값 :  "+boardType);
+			logger.debug("공지사항 게시판 카운트 : "+count);
+			logger.debug("공지사항 boardList : "+boardList);
+			logger.debug("boardVO 값 : "+boardVO);
+			model.addAttribute("pageVO",pageVO);
+			model.addAttribute("fixedBoardList",fixedBoardList);
+			model.addAttribute("boardVO",boardVO);
+			model.addAttribute("count",count);
+			model.addAttribute("boardList",boardList);
+			
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException  어떻게 출력될까?" + ne);
+			logger.error("request uri \t  :"+request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			ne.printStackTrace(new PrintWriter(sw));
+			logger.error("nullpointException : "+sw.toString());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("request uri \t  :"+request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception : "+sw.toString());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		}
+		
+		
+		return "board/notice/list";
+	}
+	
+	
+	/*@RequestMapping(value="notice/list",method=RequestMethod.GET)
+	public String getNoticeList( // 공지사항게시판
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
@@ -159,19 +257,57 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
-	}
+	}*/
+	
 	
 	@RequestMapping(value="pds/list",method=RequestMethod.GET)
-	public String PdsList(
+	public String PdsList( // 첨부파일게시판
+			@RequestParam(value="boardType",required=false,defaultValue="2")String boardType,
+			@RequestParam(value="pageNum",required=false,defaultValue="1")String pageNum,
+			BoardVO boardVO,Model model,HttpServletRequest request){
+		boardVO.setBoardType(boardType);
+		
+		try {
+			int pageSize = 10;
+			int count = service.getBoardCount(boardType);
+			List<BoardVO> boardList = null;
+			PageVO pageVO = pageService.getPaging(pageSize, Integer.parseInt(pageNum));
+			
+			boardList = service.getBoardList(boardVO,pageVO);
+			
+			model.addAttribute("pageNum",pageNum);
+			model.addAttribute("count",count);
+			model.addAttribute("boardVO",boardVO);
+			model.addAttribute("boardList",boardList);
+			model.addAttribute("pageVO",pageVO);
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		}
+			return "board/pds/list";
+	}
+	
+	
+	/*@RequestMapping(value="pds/list",method=RequestMethod.GET)
+	public String PdsList( // 첨부파일게시판
 			@RequestParam(value="search",required=false)String search,
 			@RequestParam(value="keyword",required=false)String keyword,
 			@RequestParam(value="searchCheck",required=false)String searchCheck,
@@ -186,7 +322,7 @@ public class BoardController {
 		model.addAttribute("search",search);
 		return "board/pds/list";
 			
-	}
+	}*/
 	
 	@RequestMapping(value="getListForMain",method=RequestMethod.GET)
 	public String getListForMain(Model model,HttpServletRequest request) {// 각 게시판을 가져옴 
@@ -206,13 +342,13 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}	
 	}
@@ -232,7 +368,7 @@ public class BoardController {
 	}*/
 	
 	@RequestMapping(value="getAllBoardListForReadCountForMonth",method=RequestMethod.GET)
-	public String getAllBoardListForReadCountForMonth(Model model,HttpServletRequest request) {
+	public String getAllBoardListForReadCountForMonth(Model model,HttpServletRequest request) { // 한달 조회수 랭킹
 		
 		try {
 			
@@ -250,13 +386,13 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	
@@ -264,7 +400,7 @@ public class BoardController {
 	
 	@RequestMapping("free/modify")
 	public String FreeModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
-			HttpServletResponse response){
+			HttpServletResponse response){ // 자유게시판 글수정 페이지 진입
 
 		try {
 			int postSeq2 = Integer.parseInt(postSeq);
@@ -282,19 +418,19 @@ public class BoardController {
 			logger.error("IllegalStateException" + ie);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException ne) {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 
@@ -302,7 +438,7 @@ public class BoardController {
 
 	@RequestMapping("notice/modify")
 	public String NoticeModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
-			HttpServletResponse response){
+			HttpServletResponse response){ // 공지사항게시판 글수정 페이지 진입
 		
 		try {
 			
@@ -322,26 +458,26 @@ public class BoardController {
 			logger.error("IllegalStateException" + ie);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException ne) {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 
 	@RequestMapping("pds/modify")
 	public String PdsModify(String postSeq, Model model, HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) { // 자료 게시판 글수정 페이지 진입
 		
 		try {
 			
@@ -360,19 +496,19 @@ public class BoardController {
 			logger.error("IllegalStateException" + ie);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException ne) {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
@@ -380,7 +516,10 @@ public class BoardController {
 	@RequestMapping(value = "modifyViewProc", method = RequestMethod.POST)
 	@ResponseBody
 	public String modViewProc(BoardVO vo, HttpSession session,
-			@RequestParam(value = "file", required = false) MultipartFile[] files,HttpServletRequest request,Model model) {
+			@RequestParam(value = "file", required = false) MultipartFile[] files,
+			HttpServletRequest request,Model model) { // 게시글수정 DB 저장
+		
+		String result = "0";
 		
 		try {
 			
@@ -399,38 +538,37 @@ public class BoardController {
 				return service.modView(vo, files)+"";
 			}
 	
-			return "0";
-			
 		} catch (IllegalStateException ie) {
 			logger.error("IllegalStateException" + ie);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (IOException ioe) {
 			logger.error("IOException" + ioe);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (NullPointerException ne) {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		} catch (Exception e) {
+			logger.debug("에러메시지(controller) : "+e.getMessage());
+			if("java.lang.Exception: forbidden_file_type".equals(e.getMessage())) {
+				result = FinalVariables.FORBIDDEN_FILE_TYPE_CODE;
+				logger.debug("FinalVariables.FORBIDDEN_FILE_TYPE_CODE");
+			}
+			if("java.lang.Exception: over_the_file_size".equals(e.getMessage())){
+				result = FinalVariables.OVER_THE_FILE_SIZE_CODE;
+				logger.debug("FinalVariables.OVER_THE_FILE_SIZE_CODE");
+			}else {
+				result = FinalVariables.EXCEPTION_CODE;
+				logger.debug("FinalVariables.EXCEPTION_CODE");
+			}
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
 		}
+		return result;
 	}
 
 	@RequestMapping(value = "modifyCommentProc", method = RequestMethod.POST)
 	@ResponseBody
-	public String modCommentProc(CommentsVO vo, HttpSession session,Model model,HttpServletRequest request) {
+	public String modCommentProc(CommentsVO vo, HttpSession session,Model model,HttpServletRequest request) { // 댓글 수정 DB저장
 		try {
 			
 			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
@@ -449,22 +587,21 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 
 	@RequestMapping(value = "comments")
-	public String getComments(CommentsVO cvo, Model model,HttpServletRequest request) {
+	public String getComments(CommentsVO cvo, Model model,HttpServletRequest request) { // 댓글 리스트 
 
 		try {
-		
 			if (cvo.getStartIndex() == 0) {
 				cvo.setStartIndex(1);
 				cvo.setEndIndex(10);
@@ -511,13 +648,13 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
@@ -542,7 +679,7 @@ public class BoardController {
 
 	@RequestMapping("free/view")
 	public String getFreeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
-			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) { // 자유게시판 View(글 내용)
 		
 		try {
 
@@ -579,20 +716,20 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 	
 	@RequestMapping("notice/view")
 	public String getNoticeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
-			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) { // 공지사항 게시판 View(글 내용)
 		
 		try {
 			
@@ -615,23 +752,26 @@ public class BoardController {
 				service.updateCnt(postSeq2);
 			}
 			
-			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date startDt = sdf.parse(vo.getFixStartDt());
-			Date endDt = sdf.parse(vo.getFixEndDt());
-			long currentMilliseconds = System.currentTimeMillis();
-			
-			if(startDt.getTime()-currentMilliseconds < 0 && endDt.getTime()-currentMilliseconds > 0) { //현재 시간보다 고정 시작 날짜가 과거여야만 작동
+			logger.debug("vo.getFixStartDt() : "+vo.getFixStartDt());
+			if(vo.getFixStartDt() != null) {
+				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date startDt = sdf.parse(vo.getFixStartDt());
+				Date endDt = sdf.parse(vo.getFixEndDt());
+				long currentMilliseconds = System.currentTimeMillis();
 				
-				int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000)/60/60/24;
-				int expiryHour = (int) ((endDt.getTime()-currentMilliseconds) / 1000) /60/60%24;
-				int expiryMinute = (int) (((endDt.getTime()-currentMilliseconds) / 1000) /60/60%60);
-				
-				Date expiry = new Date(endDt.getTime()-currentMilliseconds); // 분 뽑아내기
-				
-				vo.setExpiryDt(expiryDt);
-				vo.setExpiryHour(expiryHour);
-				vo.setExpiryMinute(expiry.getMinutes());
+				if(startDt.getTime()-currentMilliseconds < 0 && endDt.getTime()-currentMilliseconds > 0) { //현재 시간보다 고정 시작 날짜가 과거여야만 작동
+					
+					int expiryDt = (int) ((endDt.getTime()-currentMilliseconds) / 1000)/60/60/24;
+					int expiryHour = (int) ((endDt.getTime()-currentMilliseconds) / 1000) /60/60%24;
+					int expiryMinute = (int) (((endDt.getTime()-currentMilliseconds) / 1000) /60/60%60);
+					
+					Date expiry = new Date(endDt.getTime()-currentMilliseconds); // 분 뽑아내기
+					
+					vo.setExpiryDt(expiryDt);
+					vo.setExpiryHour(expiryHour);
+					vo.setExpiryMinute(expiry.getMinutes());
+				}
 			}
 			
 			model.addAttribute("vo", vo);
@@ -641,20 +781,20 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 
 	@RequestMapping("pds/view")
 	public String getPdsView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
-			HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+			HttpSession session, HttpServletRequest request, HttpServletResponse response) { // 자료 게시판 View(글 내용)
 		try {
 
 			int postSeq2 = Integer.parseInt(postSeq);
@@ -662,7 +802,7 @@ public class BoardController {
 			BoardVO vo = service.getView(postSeq2);// DB조회
 
 			if (vo == null) { // Null체크 - 뒤로가기시 Null
-				return "redirect:/board/free/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+				return "redirect:/board/pds/list"; // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
 			}
 
 			if (session.getAttribute("sessionSeqForUser") == null) {
@@ -682,19 +822,21 @@ public class BoardController {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 	
 	@RequestMapping(value="increasingHeartProc",method=RequestMethod.GET)
-	@ResponseBody public String increasingHeartProc(BoardVO boardVO,HttpSession session,Model model,HttpServletRequest request) {
+	@ResponseBody public String increasingHeartProc(BoardVO boardVO,HttpSession session,Model model,HttpServletRequest request) { // 좋아요 클릭시 갯수 증가 
+			
+			int heartCount = 0;
 		
 		try {
 									/*UserVO userVO = (UserVO)session.getAttribute("userInfovo");*/
@@ -712,21 +854,17 @@ public class BoardController {
 			vo.setUserSeq(userSeq);
 			
 			service.increasingHeart(vo);
-			int heartCount = service.getHeartCount(vo);
+			heartCount = service.getHeartCount(vo);
 			return ""+heartCount;			
 			
 		} catch (NullPointerException ne) {
 			logger.error("nullpointException" + ne);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			return FinalVariables.NULLPOINT_CODE;
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.error(" Request URI \t:  " + request.getRequestURI());
-			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
-			return "common/msg";
+			return FinalVariables.EXCEPTION_CODE;
 		}
 	}
 	
@@ -737,7 +875,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "writeProc" , method=RequestMethod.POST)
-	@ResponseBody public String WriteCheck(
+	@ResponseBody public String WriteCheck( // 게시글 작성 DB 저장
 			@RequestParam(value="file",required=false) MultipartFile[] files,
 			@ModelAttribute(value="BoardVO") BoardVO vo,HttpServletRequest request,
 			HttpSession session,HttpServletResponse response,Model model
@@ -769,7 +907,19 @@ public class BoardController {
 			result = service.insertBoard(vo,files,request)+"";
 		
 		} catch (Exception e) {
-			result = FinalVariables.EXCEPTION_CODE;
+			logger.debug("에러메시지(controller) : "+e.getMessage());
+			if("java.lang.Exception: forbidden_file_type".equals(e.getMessage())) {
+				result = FinalVariables.FORBIDDEN_FILE_TYPE_CODE;
+				logger.debug("FinalVariables.FORBIDDEN_FILE_TYPE_CODE");
+			}
+			if("java.lang.Exception: over_the_file_size".equals(e.getMessage())){
+				result = FinalVariables.OVER_THE_FILE_SIZE_CODE;
+				logger.debug("FinalVariables.OVER_THE_FILE_SIZE_CODE");
+			}else {
+				result = FinalVariables.EXCEPTION_CODE;
+				logger.debug("FinalVariables.EXCEPTION_CODE");
+			}
+			
 			logger.error(" Request URI \t:  " + request.getRequestURI());
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
@@ -783,12 +933,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping("notice/write")
-	public String NoticeWrite() {
+	public String NoticeWrite() { // 공자사항글 작성 페이지 진입
 		return "board/notice/write";
 	}
 
 	@RequestMapping("pds/write")
-	public String PdsWrite() {
+	public String PdsWrite() { // 자료글 작성 페이지 진입
 	
 		return "board/pds/write";
 	}
@@ -820,7 +970,7 @@ public class BoardController {
 		return result;
 	}
 	@RequestMapping(value="insertCommentsProc",method=RequestMethod.POST)
-	@ResponseBody public String insertCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request){
+	@ResponseBody public String insertCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request){ // 댓글 작성 DB 저장
 		/*String version = org.springframework.core.SpringVersion.getVersion();
 		System.out.println(version);*/
 //		5.3.17
@@ -852,7 +1002,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="deleteCommentsProc",method=RequestMethod.POST)
-	@ResponseBody public String deleteCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request) {
+	@ResponseBody public String deleteCommentsProc(CommentsVO vo,HttpSession session,Model model,HttpServletRequest request) { // 댓글 삭제 DB 저장
 		
 		String result = "0";
 		

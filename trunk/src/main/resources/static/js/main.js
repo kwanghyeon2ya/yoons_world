@@ -92,7 +92,7 @@ function changePwForm(){ //메인페이지 비밀번호 변경 ajax
 					break;
 				case 9999 : 
 					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
-					opener.parent.location="/login/loginView";
+					opener.parent.location="/login/logout";
 					window.close();
 				default :
 					break;

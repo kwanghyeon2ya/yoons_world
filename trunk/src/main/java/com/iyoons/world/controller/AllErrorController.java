@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AllErrorController implements ErrorController{
 
 	@RequestMapping(value="/error")
-	public String error(HttpServletRequest request,Model model) {
+	public String error(HttpServletRequest request,Model model) { // 에러 페이지 이동
 		
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		HttpStatus httpstatus = HttpStatus.valueOf(Integer.valueOf(status.toString()));//httpstatus enum의 값으로

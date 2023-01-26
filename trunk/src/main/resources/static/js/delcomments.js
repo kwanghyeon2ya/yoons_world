@@ -32,7 +32,7 @@ function deleteCommentsCheck(index,group_number){
 					break;
 				case 9999:
 					alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
-					location.href="/login/loginView";
+					location.href="/login/logout";
 					break;
 				default:
 					alert("댓글이 삭제되지 않았습니다");

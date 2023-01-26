@@ -24,11 +24,13 @@ public class FinalVariables {
 	/*
 	 * UnCheckedException에 대한 상수
 	 * */
-	public final static String NULLPOINT_CODE = "1111";
-	public final static String NOSUCHALGORITH_CODE = "2222";
-	public final static String NUMBERFORMAT_CODE = "3333";
-	public final static String SQL_CODE = "4444";
-	public final static String EXCEPTION_CODE = "9999";
+	public final static String NULLPOINT_CODE = "1111"; // 널포인트 예외 코드
+	public final static String NOSUCHALGORITH_CODE = "2222"; // 알고리즘 예외 코드
+	public final static String NUMBERFORMAT_CODE = "3333"; //넘버포맷 예외 코드
+	public final static String SQL_CODE = "4444"; // SQL 예외 코드
+	public final static String FORBIDDEN_FILE_TYPE_CODE = "5555"; // 금지된 파일 타입 예외 코드
+	public final static String OVER_THE_FILE_SIZE_CODE = "6666"; // 금지된 파일 타입 예외 코드
+	public final static String EXCEPTION_CODE = "9999"; // 최상위 익셉션 코드
 	
 	
 	

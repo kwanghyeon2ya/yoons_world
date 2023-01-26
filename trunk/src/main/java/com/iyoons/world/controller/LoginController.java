@@ -1,5 +1,6 @@
 package com.iyoons.world.controller;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -73,14 +74,13 @@ public class LoginController {
 	}
 
 	@RequestMapping("/loginView")
-	public String loginView() {
-
+	public String loginView(HttpSession session) { // 로그인 페이지 진입
 		return "login/login";
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(UserVO userVO, HttpSession session, HttpServletResponse response, HttpServletRequest request,Model model) {
+	public String login(UserVO userVO, HttpSession session, HttpServletResponse response, HttpServletRequest request,Model model) { // 로그인 정보 DB 조회 및 쿠키생성
 
 		try {
 			UserVO userInfovo = null;
@@ -160,9 +160,11 @@ public class LoginController {
 					userService.updateLoginDt(userInfovo.getUserSeq());
 					
 					session.setAttribute("userInfovo", userInfovo);
+					session.setAttribute("sessionPicForUser",userInfovo.getPicture());
 					session.setAttribute("sessionIdForUser", userInfovo.getUserId());
 					session.setAttribute("sessionNameForUser", userInfovo.getUserName());
 					session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
+					session.setAttribute("sessionPwCheck",userInfovo.getFirstUpdatePw());
 	
 					session.setMaxInactiveInterval(serverSessTime);
 	
@@ -182,31 +184,31 @@ public class LoginController {
 			logger.error("NoSuchAlgorithmException"+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (SQLException e) {
 			logger.error("SQLException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (NullPointerException e) {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response,Model model) {
+	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response,Model model) { // 로그아웃 - 쿠키 만료 및  세션 무효화
 
 		session.invalidate();
 
@@ -231,13 +233,13 @@ public class LoginController {
 			logger.error("NullPointerException "+e);
 			logger.error("Request URL :"+request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		} catch (Exception e) {
 			logger.error("Exception" + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
-			model.addAttribute("loc", "/login/loginView");
+			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
 		}
 
