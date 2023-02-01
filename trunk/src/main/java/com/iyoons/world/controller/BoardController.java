@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,12 +32,14 @@ import com.google.gson.Gson;
 import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.service.AttachService;
 import com.iyoons.world.service.BoardService;
+import com.iyoons.world.service.UserActionService;
 import com.iyoons.world.service.CommentsService;
 import com.iyoons.world.service.impl.PagingService;
 import com.iyoons.world.vo.BoardAttachVO;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
 import com.iyoons.world.vo.PageVO;
+import com.iyoons.world.vo.UserActionVO;
 import com.iyoons.world.vo.UserVO;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
@@ -47,6 +50,9 @@ public class BoardController {
 	
 	@Autowired
 	public BoardService service;
+	
+	@Autowired
+	public UserActionService uaservice;
 	
 	@Autowired
 	public CommentsService cservice;
@@ -677,7 +683,164 @@ public class BoardController {
 		return cmlistString;
 	}*/
 
-	@RequestMapping("free/view")
+	/*
+	 * 좋아요 버튼 활성화 여부를 위해 좋아요 누른 기록 조회
+	 * */
+	@RequestMapping("checkLikeAction") // 
+	@ResponseBody public int checkLike(UserActionVO uavo,HttpSession session,HttpServletRequest request) {
+		int heartCheck = 1;
+		
+		try {
+			int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			uavo.setUserSeq(sessionSeqForUser);
+			logger.debug("checkLikeAction postSeq check : "+uavo.getTargetSeq()); //  targetSeq - 게시글 고유번호(postSeq)
+			heartCheck = uaservice.checkUserAction(uavo);
+			logger.debug("heartCheck :"+heartCheck);
+		} catch (Exception e) {
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+		}
+		return heartCheck;
+	
+	}
+	
+	
+	/*
+	 * 조회수를 업데이트할지 여부를 위해 조회 이력 체크 ,조회이력없다면 조회수업데이트
+	 * */
+	@RequestMapping("checkViewAction") 
+	@ResponseBody public int checkView(UserActionVO uavo,HttpSession session,HttpServletRequest request) {
+		
+		int viewCheck = 1;
+		try {
+			
+		int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+		uavo.setUserSeq(sessionSeqForUser);
+		logger.debug("checkViewAction postSeq check : "+uavo.getTargetSeq()); //  targetSeq - 게시글 고유번호(postSeq)
+		viewCheck = uaservice.checkUserAction(uavo);
+		if(viewCheck == 0) {
+			uaservice.insertUserAction(uavo);	
+			service.updateCnt(uavo.getTargetSeq()); // 페이지 조회수 업데이트  targetSeq - 게시글 고유번호(postSeq)
+			logger.debug("viewCheck :"+viewCheck);
+		}
+		
+		} catch (Exception e) {
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+		}
+		return viewCheck;
+		
+	}
+	
+	/*
+	 * 좋아요 클릭시 갯수 증가 
+	 * */
+	@RequestMapping(value="increasingHeartProc",method=RequestMethod.GET)
+	@ResponseBody public String increasingHeartProc(UserActionVO uavo,HttpSession session,Model model,HttpServletRequest request) { 
+			
+			int heartCount = 0;
+		
+		try {
+									/*UserVO userVO = (UserVO)session.getAttribute("userInfovo");*/
+			BoardVO vo = service.getView(uavo.getTargetSeq()); // targetSeq - 게시글 고유번호(postSeq)
+			
+			if(vo == null) { // Null체크 - 뒤로가기시 Null
+				 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
+			}
+			if(session.getAttribute("sessionSeqForUser") == null) {
+				 return "redirect:/board/free/list";
+			 }
+			
+			int userSeq = (int)session.getAttribute("sessionSeqForUser");
+			
+			uavo.setUserSeq(userSeq);
+			
+			uaservice.insertUserAction(uavo);
+			heartCount = uaservice.getHeartCount(uavo);
+			logger.debug("heartCount : "+heartCount);
+			return ""+heartCount;			
+			
+		} catch (NullPointerException ne) {
+			logger.error("nullpointException" + ne);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			return FinalVariables.NULLPOINT_CODE;
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			return FinalVariables.EXCEPTION_CODE;
+		}
+	}
+	
+	
+	/*
+	
+	 * 1. 조회수 올림
+	 * 		A. 조회했을 시 : 
+	 * 		B. 조회 없다면 :
+	 
+	@RequestMapping("checkUserAction") // 페이지활동이력(좋아요,조회이력)조회 , 조회수 update , 활동기록(user_action) insert
+	@ResponseBody public String checkUserAction(String postSeq,HttpSession session,HttpServletRequest request) {
+		
+			BoardVO vo = new BoardVO();
+			
+			int typeCheck = 0; // action_type의 확장성을 고려해 조회수 중복검사 변수 생성 - 0일시 첫 조회
+			
+			int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			int postSeq2 = Integer.parseInt(postSeq);
+			
+			vo.setPostSeq(postSeq2);
+			vo.setUserSeq(sessionSeqForUser);
+			List<UserActionVO> uaList = uaservice.checkAction(vo); //좋아요 및 글에 접속한적 있는지 확인(최대 row 2줄)
+			List<UserActionVO> uaList = uaservice.checkActionByTargetType(vo); //좋아요 및 글에 접속한적 있는지 확인(최대 row 2줄)
+			// 조회 이력 확인 1번
+			
+			// 좋아요 이력 확인 1번
+			
+			uaservice.beforeViewCheck(vo);
+			
+			
+			if(CollectionUtils.isEmpty(uaList)) {
+				service.updateCnt(postSeq2); // 페이지 조회수 업데이트
+				uaservice.insertUserAction(vo); // 유저 활동 DB입력
+				vo.setHeartCount(service.getHeartCount(vo));
+				vo.setReadCnt(service.getViewCount(postSeq2));
+				logger.debug("free view count update check bkh before 'for'");
+			}else {
+				logger.debug("free view ualist confirm bkh");
+				for(UserActionVO uavo : uaList) {
+					logger.debug("uavo for confirm bkh");
+					logger.debug("uavo.getTargetType : "+uavo.getTargetType());
+					if(FinalVariables.TARGET_BOARD.equals(uavo.getTargetType())) {
+						logger.debug("free view target confirm bkh");
+						
+						// 좋아요 : 좋아요 했음 저장			
+						if(FinalVariables.ACTION_TYPE_LIKE.equals(uavo.getActionType())) {
+							vo.setHeartCheck(1);
+							logger.debug("free view like confirm bkh");
+							typeCheck = 1;
+						}
+						
+						// 조회이력없음 : 조회수++						
+						if(!FinalVariables.ACTION_TYPE_VIEWCOUNT.equals(uavo.getActionType()) && typeCheck == 0) {
+							service.updateCnt(postSeq2); // db조회시 row에 view count값이 없는 조건에 update 
+							logger.debug("free view count update check bkh during 'for'");
+							vo.setReadCnt(vo.getReadCnt()+1);
+						}
+					}
+					logger.debug("uavo 카운트 : "+uavo.getHeartCount());
+				}
+			}
+			
+			return "";
+	}
+	*/
+	
+	
+	@RequestMapping("free/view") //게시판
 	public String getFreeView(@RequestParam(value = "postSeq", required = false) String postSeq, Model model,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response) { // 자유게시판 View(글 내용)
 		
@@ -696,17 +859,20 @@ public class BoardController {
 
 			vo.setPostSeq(postSeq2);
 			vo.setUserSeq(sessionSeqForUser);
-
-			vo.setHeartCheck(service.checkHeart(vo));
-			vo.setHeartCount(service.getHeartCount(vo));
-			
-			logger.debug(vo.getHeartCheck() + ": 좋아요 체크 0 = 하트안누름");
-			logger.debug(vo.getHeartCount() + " : 좋아요 갯수 체크");
-			if (vo.getRegrSeq() != sessionSeqForUser) {
-				service.updateCnt(postSeq2);
+			vo.setTargetSeq(postSeq2);
+			/*List<UserActionVO> uaList = service.checkAction(vo); //좋아요 및 글에 접속한적 있는지 확인(최대 row 2줄)
+*/			/*if(uaList.isEmpty()) {
+				logger.debug("free view ualist is null bkh");
 			}
-			logger.debug("조회수체크 : "+vo.getReadCnt());
+			logger.debug("ualist null확인중 : "+CollectionUtils.isEmpty(uaList));
+			logger.debug("free view ualist size check : "+uaList.size());*/
 			
+			/*vo.setHeartCount(service.getHeartCount(vo));*/
+			
+			/*if (vo.getRegrSeq() != sessionSeqForUser && service.checkView(vo)==0) {
+				service.updateCnt(vo);
+			}*/
+			logger.debug("조회수체크 : "+vo.getReadCnt());
 			
 			model.addAttribute("vo", vo);
 			model.addAttribute("anlist", anlist);
@@ -747,10 +913,9 @@ public class BoardController {
 			}
 
 			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
-
-			if (vo.getRegrSeq() != sessionSeqForUser) {
-				service.updateCnt(postSeq2);
-			}
+			
+			vo.setUserSeq(sessionSeqForUser);
+			vo.setTargetSeq(postSeq2);
 			
 			logger.debug("vo.getFixStartDt() : "+vo.getFixStartDt());
 			if(vo.getFixStartDt() != null) {
@@ -811,9 +976,9 @@ public class BoardController {
 
 			int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
 
-			if (vo.getRegrSeq() != sessionSeqForUser) {
-				service.updateCnt(postSeq2);
-			}
+			vo.setUserSeq(sessionSeqForUser);
+			vo.setTargetSeq(postSeq2);
+			
 			model.addAttribute("vo", vo);
 			model.addAttribute("anlist", anlist);
 			return "board/pds/view";
@@ -830,41 +995,6 @@ public class BoardController {
 			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
 			model.addAttribute("loc", "/login/logout");
 			return "common/msg";
-		}
-	}
-	
-	@RequestMapping(value="increasingHeartProc",method=RequestMethod.GET)
-	@ResponseBody public String increasingHeartProc(BoardVO boardVO,HttpSession session,Model model,HttpServletRequest request) { // 좋아요 클릭시 갯수 증가 
-			
-			int heartCount = 0;
-		
-		try {
-									/*UserVO userVO = (UserVO)session.getAttribute("userInfovo");*/
-			BoardVO vo = service.getView(boardVO.getPostSeq());
-			
-			if(vo == null) { // Null체크 - 뒤로가기시 Null
-				 return "redirect:/board/free/list";  // db조회후 null일경우 redirect - 삭제된 글에 뒤로가기로 접근 x
-			}
-			if(session.getAttribute("sessionSeqForUser") == null) {
-				 return "redirect:/board/free/list";
-			 }
-			
-			int userSeq = (int)session.getAttribute("sessionSeqForUser");
-			
-			vo.setUserSeq(userSeq);
-			
-			service.increasingHeart(vo);
-			heartCount = service.getHeartCount(vo);
-			return ""+heartCount;			
-			
-		} catch (NullPointerException ne) {
-			logger.error("nullpointException" + ne);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			return FinalVariables.NULLPOINT_CODE;
-		} catch (Exception e) {
-			logger.error("Exception" + e);
-			logger.error(" Request URI \t:  " + request.getRequestURI());
-			return FinalVariables.EXCEPTION_CODE;
 		}
 	}
 	

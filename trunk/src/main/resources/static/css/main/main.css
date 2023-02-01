@@ -207,7 +207,6 @@ table{
 .mypage_content{
 	display:flex;
 	height:60rem;
-	justify-content:center;
 	flex-direction:column;
 }
 .profile_kind_div{
@@ -219,7 +218,6 @@ table{
 .profile_kind{
 	font-size:2rem;
 	color:#512f83;
-	width:50%;
 	margin:10px;
 }
 .img_div{
@@ -229,11 +227,6 @@ table{
 	justify-content:space-around;	
 }
 .origin_img_div{
-	width:50%;
-	height:15rem;
-}
-.new_img_div{
-	width:50%;
 	height:15rem;
 }
 .profile_img{

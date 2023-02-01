@@ -21,14 +21,15 @@ public interface BoardDAO {
 	public int getSearchCount(HashMap<String,Object> map); //글 검색 후 검색된 글의 총 갯수
 	public BoardVO getView(int postSeq); //게시글 읽기
 	public int modView(BoardVO vo); //게시글 수정
-	public void updateCnt(int postSeq); //게시글 조회수 업데이트
 	public int delView(BoardVO vo); //게시글 삭제
 	public int findUser(int postSeq); //입력받은 유저 db검색
 	public List<BoardVO> getNoticeFixedBoard(String boardType);//상단 고정된 게시글만 가져옴
 	public List<BoardVO> getAllBoardListOrderedByReadCount(@Param("startRow")int startRow,@Param("endRow")int endRow);
 	public int getAllBoardCount();
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(@Param("startRow")int startRow,@Param("endRow")int endRow);
-	public int increasingHeart(UserActionVO uavo);
-	public int checkHeart(UserActionVO uavo);
-	public int getHeartCount(UserActionVO uavo);
+	public int insertUserAction(UserActionVO uavo);
+	public int checkUserAction(UserActionVO uavo);
+	public List<UserActionVO> checkAction(BoardVO vo);
+	public int getViewCount(int postSeq);
+	public void updateCnt(int postSeq);//게시글 조회수 업데이트
 }

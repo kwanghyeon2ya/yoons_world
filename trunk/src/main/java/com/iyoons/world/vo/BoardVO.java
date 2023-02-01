@@ -50,4 +50,7 @@ public class BoardVO {
 	private int expiryMinute; // 고정 종료까지 남은 분
 	private String picture; // 글 작성자의 프로필사진
 	private String searchCheck;
+	private int targetSeq; //유저가 활동한 대상의 고유번호(검색할 때 사용)   POST_SEQ - 게시글고유 / USER_SEQ - 유저고유
+	private String targetType;
+	private String actionType;
 }

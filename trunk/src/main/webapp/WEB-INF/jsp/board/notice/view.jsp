@@ -36,7 +36,9 @@
 		$(document).ready(function(){
 			console.log("first page : "+$("#more_comments_page").val());
 			var page_post_seq = $("#post_seq").val();
+			var readCnt = ${vo.readCnt};
 			getCommentsList(page_post_seq);
+			checkViewAction(page_post_seq,readCnt); // 조회 중복 없애기 위한 활동이력 체크
 		});
 		
 		function deleteMoveAction(){

@@ -38,7 +38,10 @@
 	$(document).ready(function(){
 		console.log("first page : "+$("#more_comments_page").val());
 		var page_post_seq = $("#post_seq").val();
+		var readCnt = ${vo.readCnt};
 		getCommentsList(page_post_seq); //댓글 function ajax 호출
+		checkViewAction(page_post_seq,readCnt); // 조회 중복 없애기 위한 활동이력 체크
+		checkLikeAction(page_post_seq); // 좋아요 중복 없애기 위한 활동이력 체크
 	});
 	
 	function deleteMoveAction(){
@@ -65,6 +68,7 @@
 					<div class="board_title"><c:out escapeXml="true" value="${vo.subject}"/></div>
 
 					<div class="board_view_cnt" title="조회수">
+					<%-- <input type="hidden" id="readCnt_val" value="${vo.readCnt}"> --%>
 						<span class="view_cnt">${vo.readCnt}</span>
 					</div>
 	
@@ -109,13 +113,13 @@
 						<div style="border:1px solid #c4c4c4;opacity:0.8;">
 							<div style="margin-left:5rem;margin-right:5rem;margin-top:2rem;padding-bottom:1rem;">
 								<strong id="heart_count" style="font-size: 16px;">${vo.heartCount}</strong>
-								<c:if test="${vo.heartCheck eq 0}">
-									<img class="blankheart_icon" onclick="increasingHeart(${vo.postSeq})" title="좋아요" src="/img/board/blankheart.png">
-									<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none">
-								</c:if>
-								<c:if test="${vo.heartCheck ne 0}">
-									<img class="heart_icon" title="좋아요" src="/img/board/heart.png">
-								</c:if>
+								<div id="blankheart" style="display:inline-block;">
+									<%-- <img class="blankheart_icon" onclick="increasingHeart(${vo.postSeq})" title="좋아요" src="/img/board/blankheart.png">
+									<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none"> --%>
+								</div>	
+								<div id="heart" style="display:inline-block;">
+									<!-- <img class="heart_icon" title="좋아요" src="/img/board/heart.png"> -->
+								</div>
 							</div>
 						</div>
 					</div>

@@ -37,6 +37,7 @@ function writeCommentsCheck(post_seq){
 					break;
 				case 1:
 					alert("댓글이 작성되었습니다");
+					$("write_comments").attr("disabled",true);
 					$("#reload_div_parent").load('/board/comments ',{postSeq:post_seq});
 					break;
 				default:

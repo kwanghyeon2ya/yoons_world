@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.UserActionDAO">
+
+	<select id="checkUserAction" resultType="int">
+		select
+			count(1)
+		from
+			user_action ua
+		where
+			ua.target_seq = #{targetSeq}
+			and ua.user_seq = #{userSeq}
+			and ua.action_type = #{actionType}
+			and ua.target_type = #{targetType}
+	</select>
+	
+	<insert id="insertUserAction">
+		insert into user_action(action_seq,
+								user_seq,
+								target_type,
+								target_seq,
+								action_type,
+								first_insert_dt								
+								)
+	 					 values(user_action_seq.nextval,
+								#{userSeq},
+								#{targetType},
+								#{targetSeq},
+								#{actionType},
+								SYSDATE					
+								)
+	</insert>
+	
+	<select id="getHeartCount" resultType="int">
+		select
+			count(1)
+		from
+			user_action
+		where
+			target_seq = #{targetSeq}
+			and target_type = #{targetType}
+			and action_type = #{actionType}
+	</select>
+	
+</mapper>

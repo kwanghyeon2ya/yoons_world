@@ -18,6 +18,7 @@ public class FinalVariables {
 	public final static String TARGET_USER = "02"; // 활동 영역 - 회원에 대한 활동
 	
 	public final static String ACTION_TYPE_LIKE = "01"; // 활동 세부 내역 - 좋아요
+	public final static String ACTION_TYPE_VIEWCOUNT = "02"; // 활동 세부 내역 - 좋아요
 	
 	
 	

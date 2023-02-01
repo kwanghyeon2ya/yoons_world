@@ -52,6 +52,7 @@ function insertCocoCheck(index){
 				break;
 			case 1:
 				alert("대댓글이 작성되었습니다");
+				$("#insert_coco_"+index).attr("disabled",true);
 				$("#reload_div_parent").load('/board/comments ',{postSeq:post_seq.value});
 				break;
 			default:

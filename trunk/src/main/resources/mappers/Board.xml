@@ -168,6 +168,15 @@
 		 )
 	</select>
 	
+	<select id="getViewCount" resultType="int">
+		select
+			read_cnt
+		from
+			post_board
+		where
+			post_seq = #{postSeq}			
+	</select>
+	
 	<select id="getView" resultType="com.iyoons.world.vo.BoardVO">
 		select 
 			pb.post_seq,
@@ -185,6 +194,7 @@
 			pb.last_update_dt,
 			pb.fix_start_dt,
 			pb.fix_end_dt,
+			(select count(1) from user_action ua where ua.target_seq = pb.post_seq and ua.target_type='01' and ua.action_type='01') as heartCount,
 			(select ui.picture from user_info ui where user_seq = pb.regr_seq) as picture
 		from
 			post_board pb
@@ -335,7 +345,7 @@
 			status=1
 	</select>
 	
-	<insert id="increasingHeart">
+	<insert id="insertUserAction">
 		insert into user_action(action_seq,
 								user_seq,
 								target_type,
@@ -352,7 +362,7 @@
 								)
 	</insert>
 	
-	<select id="checkHeart" resultType="int">
+	<select id="checkUserAction" resultType="int">
 	
 		select
 			count(1)
@@ -365,17 +375,19 @@
 			and action_type = #{actionType}
 			
 	</select>
-	<select id="getHeartCount" resultType="int">
-		select
-			count(1)
-		from
-			user_action
-		where
-			target_seq = #{targetSeq}
-			and target_type = #{targetType}
-			and action_type = #{actionType}
-	</select>
 	
+	<select id="checkAction" resultType="com.iyoons.world.vo.UserActionVO">
+		select
+			ua.target_type,
+			ua.action_type
+		from
+			user_action ua
+		where
+			ua.target_seq = #{targetSeq}
+			and ua.user_seq = #{userSeq}
+			and ua.action_type = #{actionType}
+			and ua.target_type = #{targetType}
+	</select>
 	
 	
 </mapper>

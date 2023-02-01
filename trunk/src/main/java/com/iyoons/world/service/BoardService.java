@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.iyoons.world.vo.BoardVO;
 import com.iyoons.world.vo.CommentsVO;
 import com.iyoons.world.vo.PageVO;
+import com.iyoons.world.vo.UserActionVO;
 
 public interface BoardService {
 	
@@ -26,10 +27,10 @@ public interface BoardService {
 	public int getAllBoardCount()throws Exception;
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow,int endRow)throws Exception;
 	public BoardVO getListForMain()throws Exception;
-	public int increasingHeart(BoardVO vo)throws Exception;
-	public int checkHeart(BoardVO vo)throws Exception;
-	public int getHeartCount(BoardVO vo)throws Exception;
+	/*public int increasingHeart(BoardVO vo)throws Exception;*/
+	/*public int getHeartCount(BoardVO vo)throws Exception;*/
 	public int insertBoard(BoardVO vo, MultipartFile[] files, HttpServletRequest request) throws Exception;
 	public int getSearchCount(BoardVO boardVO, PageVO pageVO) throws Exception;
 	public List<BoardVO> getBoardList(BoardVO boardVO, PageVO pageVO)throws Exception;
+	/*public List<UserActionVO> checkAction(BoardVO vo);*/
 }

@@ -82,6 +82,7 @@ function WriteBoardCheck(url){ // 게시글 작성 ajax
 		 			break;
 		 		case 1:
 	 				alert("게시글이 작성되었습니다");
+	 				$("#move_action_button").attr("disabled",true);
 	 				location.href=url;
 	 				rtn = true;
 	 				break;
@@ -210,6 +211,7 @@ function modBoardCheck(url){ // 게시글 수정 ajax
 					break;
 		 		case 1:
 		 			alert("수정되었습니다");
+		 			$("#move_action_button").attr("disabled",true);
 		 			location.href=url;
 		 			break;
 		 		case 5555:
@@ -324,8 +326,9 @@ function getBoardList(){
 function increasingHeart(post_seq){
 	
 	$.ajax({
-		url : '/board/increasingHeartProc?postSeq='+post_seq,
+		url : '/board/increasingHeartProc',
 		type : 'GET',
+		data : {targetSeq : post_seq , targetType : '01' , actionType : '01'} ,
 		contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 		dateType :'json',
 		async : true,
@@ -341,3 +344,67 @@ function increasingHeart(post_seq){
 	})
 	
 };
+
+
+
+function checkLikeAction(post_seq){ //좋아요 버튼 활성화 여부를 위해 좋아요 누른 기록 조회
+	
+	$.ajax({
+		url : '/board/checkLikeAction',
+		type : 'GET',
+		data : {targetSeq : post_seq , targetType : '01' , actionType : '01'} ,
+		contentType :'application/x-www-form-urlencoded; charset=utf-8',
+		dateType :'json',
+		async : true,
+		success : function(data){
+			switch(Number(data)){
+	 		case 0:
+	 			$("#blankheart").html('<img class="blankheart_icon" onclick="increasingHeart('+post_seq+')" title="좋아요" src="/img/board/blankheart.png">'+'<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none">');
+				break;
+	 		case 1:
+	 			$("#heart").html('<img class="heart_icon" title="좋아요" src="/img/board/heart.png">');
+	 			break;
+	 		case 9999:
+	 			alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+				location.href="/login/logout";
+				break;
+	 		default:
+				break;
+			}
+		}
+		
+	})
+	
+}
+
+function checkViewAction(post_seq,readCnt){ //조회수를 업데이트할지 여부를 위해 조회 이력 체크
+	
+	$.ajax({
+		url : '/board/checkViewAction' ,
+		type : 'GET',
+		data : {targetSeq : post_seq , targetType : '01' , actionType : '02'} ,
+		contentType :'application/x-www-form-urlencoded; charset=utf-8',
+		dateType :'json',
+		async : true,
+		success : function(data){
+			switch(Number(data)){
+	 		case 0:
+	 			$(".board_view_cnt").html("<span class='view_cnt'>"+(readCnt+1)+"</span>");
+				break;
+	 		case 1:
+	 			break;
+	 		case 9999:
+	 			alert("잘못된 요청입니다. 로그인 화면으로 돌아갑니다");
+				location.href="/login/logout";
+				break;
+	 		default:
+				break;
+			}
+		}
+		
+	})
+	
+}
+
+
+

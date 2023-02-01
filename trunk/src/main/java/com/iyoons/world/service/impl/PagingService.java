@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.iyoons.world.vo.PageVO;
 
-@Service(value = "PagingService")
+@Service(value = "PagingSerive")
 public class PagingService{
 
 //	@Autowired PageVO page;
