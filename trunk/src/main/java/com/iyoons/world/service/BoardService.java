@@ -27,10 +27,13 @@ public interface BoardService {
 	public int getAllBoardCount()throws Exception;
 	public List<BoardVO> getAllBoardListOrderedByReadCountForMonth(int startRow,int endRow)throws Exception;
 	public BoardVO getListForMain()throws Exception;
-	/*public int increasingHeart(BoardVO vo)throws Exception;*/
-	/*public int getHeartCount(BoardVO vo)throws Exception;*/
 	public int insertBoard(BoardVO vo, MultipartFile[] files, HttpServletRequest request) throws Exception;
 	public int getSearchCount(BoardVO boardVO, PageVO pageVO) throws Exception;
-	public List<BoardVO> getBoardList(BoardVO boardVO, PageVO pageVO)throws Exception;
-	/*public List<UserActionVO> checkAction(BoardVO vo);*/
+	public List<BoardVO> getBoardList(BoardVO vo,PageVO pagevo) throws Exception;
+	public List<BoardVO> getMyListByLike(BoardVO boardVO,PageVO pageVO);//내가 좋아요 누른 게시글 가져오기
+	public List<BoardVO> getMyListByComments(BoardVO boardVO,PageVO pageVO);//내가 작성한 댓글의 게시글 가져오기
+	public List<BoardVO> getMyBoardList(BoardVO boardVO,PageVO pageVO);//내가 작성한 게시글 가져오기
+	public int getMyListByLikeCnt(int userSeq);
+	public int getMyListByCommentsCnt(int userSeq);
+	public int getMyBoardListCnt(int userSeq);
 }

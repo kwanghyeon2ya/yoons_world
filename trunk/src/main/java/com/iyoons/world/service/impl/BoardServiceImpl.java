@@ -39,13 +39,9 @@ import com.iyoons.world.vo.UserActionVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	/*
-	 * final String REAL_PATH=
-	 * File.separator+"home"+File.separator+"yoons"+File.separator+"files"; final
-	 * String
-	 * DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator
-	 * +"deletedfiles";
-	 */
+	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files"; 
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
+	 
 	final String REAL_PATH = "C:/yoons_world/files";
 	final String DELETED_FILE_PATH = "C:/yoons_world/deletedfiles";
 
@@ -176,19 +172,6 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 
-	@Override
-	public List<BoardVO> getBoardList( // 게시글 리스트 불러오기
-			BoardVO boardVO, PageVO pageVO) throws Exception {
-
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("search", boardVO.getSearch());
-		map.put("keyword", boardVO.getKeyword());
-		map.put("searchCheck", boardVO.getKeyword());
-		map.put("startRow", pageVO.getStartRow());
-		map.put("endRow", pageVO.getEndRow());
-		map.put("boardType", boardVO.getBoardType());
-		return dao.getBoardList(map);
-	}
 
 	@Override
 	public List<BoardVO> getBoardList( // 게시글 리스트 불러오기
@@ -467,6 +450,66 @@ public class BoardServiceImpl implements BoardService {
 		return vo;
 	}
 
+
+	@Override
+	public List<BoardVO> getBoardList( // 게시판 타입에 따른 게시글 리스트 가져오기
+			BoardVO boardVO, PageVO pageVO) throws Exception {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("search", boardVO.getSearch());
+		map.put("keyword", boardVO.getKeyword());
+		map.put("searchCheck", boardVO.getKeyword());
+		map.put("startRow", pageVO.getStartRow());
+		map.put("endRow", pageVO.getEndRow());
+		map.put("boardType", boardVO.getBoardType());
+		return dao.getBoardList(map);
+	}
+
+	@Override
+	public List<BoardVO> getMyListByLike(BoardVO boardVO,PageVO pageVO) {//내가 좋아요 누른 게시글 리스트 가져오기
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("userSeq",boardVO.getUserSeq());
+		map.put("startRow",pageVO.getStartRow());
+		map.put("endRow",pageVO.getEndRow());
+		return dao.getMyListByLike(map);
+	}
+
+	@Override
+	public List<BoardVO> getMyListByComments(BoardVO boardVO,PageVO pageVO) {//내가 작성한 댓글의 게시글 리스트 가져오기
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("userSeq",boardVO.getUserSeq());
+		map.put("startRow",pageVO.getStartRow());
+		map.put("endRow",pageVO.getEndRow());
+		return dao.getMyListByComments(map);
+	}
+
+	@Override
+	public List<BoardVO> getMyBoardList(BoardVO boardVO,PageVO pageVO) {//내가 작성한 게시글 리스트 가져오기
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("userSeq",boardVO.getUserSeq());
+		map.put("startRow",pageVO.getStartRow());
+		map.put("endRow",pageVO.getEndRow());
+		return dao.getMyBoardList(map);
+	}
+
+	@Override
+	public int getMyListByLikeCnt(int userSeq) {
+		return dao.getMyListByLikeCnt(userSeq);
+	}
+
+	@Override
+	public int getMyListByCommentsCnt(int userSeq) {
+		return dao.getMyListByCommentsCnt(userSeq);
+	}
+
+	@Override
+	public int getMyBoardListCnt(int userSeq) {
+		return dao.getMyBoardListCnt(userSeq);
+	}
+
+	
+	
+	
 	/*@Override
 	public int increasingHeart(BoardVO vo) throws Exception { // 좋아요 입력
 

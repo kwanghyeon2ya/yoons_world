@@ -32,4 +32,10 @@ public interface BoardDAO {
 	public List<UserActionVO> checkAction(BoardVO vo);
 	public int getViewCount(int postSeq);
 	public void updateCnt(int postSeq);//게시글 조회수 업데이트
+	public List<BoardVO> getMyListByLike(HashMap<String,Object> map);//내가 좋아요 누른 게시글 가져오기
+	public List<BoardVO> getMyListByComments(HashMap<String,Object> map);//내가 작성한 댓글의 게시글 가져오기
+	public List<BoardVO> getMyBoardList(HashMap<String,Object> map);//내가 작성한 게시글 가져오기
+	public int getMyListByLikeCnt(int userSeq);
+	public int getMyListByCommentsCnt(int userSeq);
+	public int getMyBoardListCnt(int userSeq);
 }

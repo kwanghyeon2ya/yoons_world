@@ -79,21 +79,6 @@ public class UserActionServiceImpl implements UserActionService {
 		return uadao.getHeartCount(uavo);
 	}
 	
-	/*
-	 * 조회 활동이력 저장
-	 * 
-	@Override
-	public int increasingHeart(UserActionVO uavo) throws Exception {
-
-		UserActionVO uavo = new UserActionVO();
-		uavo.setUserSeq(vo.getUserSeq());
-		uavo.setTargetSeq(vo.getPostSeq());
-		uavo.setTargetType(FinalVariables.TARGET_BOARD); // 활동장소 : 게시글
-		uavo.setActionType(FinalVariables.ACTION_TYPE_LIKE); // 활동내역 : 좋아요
-
-		return uadao.insertUserAction(uavo);
-	}*/
-	
 	
 	@Override
 	public int checkUserAction(UserActionVO uavo)  throws Exception{// 좋아요 버튼 활성화 여부를 위해 좋아요 누른 기록 조회

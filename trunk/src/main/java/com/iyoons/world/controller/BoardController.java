@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -359,6 +361,75 @@ public class BoardController {
 		}	
 	}
 	
+	@RequestMapping(value="getMyListByLike",method=RequestMethod.GET)
+	public String getMyListByLike(BoardVO boardVO,HttpSession session,Model model) {
+		
+		int pageSize = 5;
+		int stopBtnCheck = boardVO.getPageNum() * 5; // 더보기 버튼 활성화 여부 비교용 - 총 게시글 카운트와 비교
+		int stopList = 0; // 1 일시 더보기 버튼 없앰 
+		System.out.println("pageNym : "+boardVO.getPageNum());
+		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+		int count = service.getMyListByLikeCnt(sessionSeqForUser);
+		boardVO.setUserSeq(sessionSeqForUser);
+		
+		
+		PageVO pageVO = pageService.getPaging(pageSize, boardVO.getPageNum());  
+		List<BoardVO> myListByLike = service.getMyListByLike(boardVO,pageVO);
+		if(count <= stopBtnCheck) {
+			stopList = 1;
+		}
+		
+		model.addAttribute("myListByLike",myListByLike);
+		model.addAttribute("count", count);
+		model.addAttribute("stopList",stopList);
+		return "board/myListByLike";
+	}
+	
+	@RequestMapping(value="getMyListByComments",method=RequestMethod.GET)
+	public String getMyListByComments(BoardVO boardVO,HttpSession session,Model model) {
+		
+		int pageSize = 5;
+		int stopBtnCheck = boardVO.getPageNum() * 5; // 더보기 버튼 활성화 여부 비교용 - 총 게시글 카운트와 비교
+		int stopList = 0; // 1 일시 더보기 버튼 없앰 
+		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+		int count = service.getMyListByCommentsCnt(sessionSeqForUser);
+		boardVO.setUserSeq(sessionSeqForUser);
+		PageVO pageVO = pageService.getPaging(pageSize, boardVO.getPageNum());
+		
+		
+		List<BoardVO> myListByComments = service.getMyListByComments(boardVO, pageVO);
+		if(count <= stopBtnCheck) {
+			stopList = 1;
+		}
+		model.addAttribute("myListByComments",myListByComments);
+		model.addAttribute("count",count);
+		model.addAttribute("stopList",stopList);
+		return "board/myListByComments";
+	}
+	
+	@RequestMapping(value="getMyBoardList",method=RequestMethod.GET)
+	public String getMyBoardList(BoardVO boardVO,HttpSession session,Model model) {
+		
+		int pageSize = 5;
+		int stopBtnCheck = boardVO.getPageNum() * 5; // 더보기 버튼 활성화 여부 비교용 - 총 게시글 카운트와 비교
+		int stopList = 0; // 1 일시 더보기 버튼 없앰 
+		int sessionSeqForUser = (int) session.getAttribute("sessionSeqForUser");
+		int count = service.getMyBoardListCnt(sessionSeqForUser);
+		boardVO.setUserSeq(sessionSeqForUser);
+		PageVO pageVO = pageService.getPaging(pageSize, boardVO.getPageNum());
+
+		List<BoardVO> myBoardList = service.getMyBoardList(boardVO, pageVO);
+		if(count <= stopBtnCheck) {
+			stopList = 1;
+		}
+		model.addAttribute("myBoardList",myBoardList);
+		
+		model.addAttribute("stopList",stopList);
+		return "board/myBoardList";
+	}
+
+	
+	
 	/*@RequestMapping(value="getAllBoardListForReadCount",method=RequestMethod.GET)
 	public String getAllBoardListForReadCount(Model model) {
 		
@@ -685,7 +756,7 @@ public class BoardController {
 
 	/*
 	 * 좋아요 버튼 활성화 여부를 위해 좋아요 누른 기록 조회
-	 * */
+	 * 
 	@RequestMapping("checkLikeAction") // 
 	@ResponseBody public int checkLike(UserActionVO uavo,HttpSession session,HttpServletRequest request) {
 		int heartCheck = 1;
@@ -704,12 +775,50 @@ public class BoardController {
 		}
 		return heartCheck;
 	
+	}*/
+	
+	@RequestMapping("checkAction") // 유저활동(좋아요,조회이력) DB조회 - 조회이력없을 시 조회수 증가
+	@ResponseBody public Map<String, Integer> checkAction(UserActionVO uavo,HttpSession session,HttpServletRequest request) {
+		Map<String,Integer> map = new HashMap<>();
+		int heartCheck = 1;
+		int viewCheck = 1;
+		try {
+			int sessionSeqForUser = (int)session.getAttribute("sessionSeqForUser");
+			uavo.setUserSeq(sessionSeqForUser);
+			logger.debug("checkLikeAction postSeq check : "+uavo.getTargetSeq()); //  targetSeq - 게시글 고유번호(postSeq)
+			
+			if("01".equals(uavo.getTargetType()) && "01".equals(uavo.getActionType())) {
+				heartCheck = uaservice.checkUserAction(uavo);
+				logger.debug("heartCheck :"+heartCheck);
+			}
+			
+			if("01".equals(uavo.getTargetType()) && "02".equals(uavo.getActionType())) {
+				
+				viewCheck = uaservice.checkUserAction(uavo);
+				logger.debug("viewCheck :"+viewCheck);
+				if(viewCheck == 0) {
+					uaservice.insertUserAction(uavo);	
+					service.updateCnt(uavo.getTargetSeq()); // 페이지 조회수 업데이트  targetSeq - 게시글 고유번호(postSeq)
+					logger.debug("updateReadCnt");
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error(" Request URI \t:  " + request.getRequestURI());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
+		}
+		map.put("heartCheck",heartCheck);
+		map.put("viewCheck",viewCheck);
+		return map;
+	
 	}
 	
 	
 	/*
 	 * 조회수를 업데이트할지 여부를 위해 조회 이력 체크 ,조회이력없다면 조회수업데이트
-	 * */
+	 * 
 	@RequestMapping("checkViewAction") 
 	@ResponseBody public int checkView(UserActionVO uavo,HttpSession session,HttpServletRequest request) {
 		
@@ -734,7 +843,7 @@ public class BoardController {
 		}
 		return viewCheck;
 		
-	}
+	}*/
 	
 	/*
 	 * 좋아요 클릭시 갯수 증가 

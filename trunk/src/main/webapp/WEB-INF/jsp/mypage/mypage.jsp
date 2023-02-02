@@ -15,9 +15,9 @@
 <html>
 <head>
 	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
-	
+	<script src="/js/mypage.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/main/main.css">
-	
+	<link rel="stylesheet" type="text/css" href="/css/mypage.css">
 	
 	<c:if test="${sessionScope.sessionSeqForUser == null}">
 		<script>
@@ -133,11 +133,6 @@
 		<div id="container">
 			<div class="content">
 			<h1>Mypage</h1>
-				<div id="mypage_tap">
-					<a>프로필 변경</a>
-					<a style="margin-left:30px;margin-left:30px;">이력 관리</a>
-				</div>
-				<p style="font-size:1.5rem;margin-top: 15px;">윤스 월드 대표 프로필 사진을 수정 하실 수 있습니다.</p>
 				<div class="mypage_content">
 					<div style="margin:0 auto;">
 						<div class="profile_kind_div">
@@ -160,6 +155,28 @@
 							<input type="file" id="file" name="file" accept="image/*" onchange="return fileCheck(this.value)"/><br>
 							<button type="button" class="btn type_02 bg_purple" style="margin-top:1rem;width: 37vh;" onclick="updateMypage()">등록하기</button>
 						</form>
+				<div id="mypage_list_box">		
+					<h3>
+						좋아요 누른 게시글 
+					</h3>
+						<div id="my_list_by_like" class="my_list_border""> <!-- 내가 좋아요 누른 게시글 불러오기  -->
+						
+						</div>
+						
+					<h3>
+						댓글 작성한 게시글
+					</h3>
+						<div id="my_list_by_comments" class="my_list_border"> <!-- 내가 댓글 작성한 게시글 불러오기  -->
+						
+						</div>
+						
+					<h3>
+						내가 작성한 게시글
+					</h3>
+						<div id="my_boardList" class="my_list_border"> <!-- 내가 작성한 게시글 불러오기  -->
+						
+						</div>
+				</div>	
 				</div>
 			</div>
 		</div>

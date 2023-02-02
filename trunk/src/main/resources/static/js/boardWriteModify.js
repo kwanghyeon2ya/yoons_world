@@ -350,14 +350,16 @@ function increasingHeart(post_seq){
 function checkLikeAction(post_seq){ //좋아요 버튼 활성화 여부를 위해 좋아요 누른 기록 조회
 	
 	$.ajax({
-		url : '/board/checkLikeAction',
+		url : '/board/checkAction',
 		type : 'GET',
 		data : {targetSeq : post_seq , targetType : '01' , actionType : '01'} ,
 		contentType :'application/x-www-form-urlencoded; charset=utf-8',
 		dateType :'json',
 		async : true,
 		success : function(data){
-			switch(Number(data)){
+			console.log("LikeAction check data   :"+data);
+			console.log("LikeAction check data   :"+data.heartCheck);
+			switch(Number(data.heartCheck)){
 	 		case 0:
 	 			$("#blankheart").html('<img class="blankheart_icon" onclick="increasingHeart('+post_seq+')" title="좋아요" src="/img/board/blankheart.png">'+'<img class="heart_icon" title="좋아요" src="/img/board/heart.png" style="display:none">');
 				break;
@@ -380,14 +382,16 @@ function checkLikeAction(post_seq){ //좋아요 버튼 활성화 여부를 위�
 function checkViewAction(post_seq,readCnt){ //조회수를 업데이트할지 여부를 위해 조회 이력 체크
 	
 	$.ajax({
-		url : '/board/checkViewAction' ,
+		url : '/board/checkAction' ,
 		type : 'GET',
 		data : {targetSeq : post_seq , targetType : '01' , actionType : '02'} ,
 		contentType :'application/x-www-form-urlencoded; charset=utf-8',
 		dateType :'json',
 		async : true,
 		success : function(data){
-			switch(Number(data)){
+			console.log("ViewAction check data   :"+data);
+			console.log("ViewAction check data   :"+data.viewCheck);
+			switch(Number(data.viewCheck)){
 	 		case 0:
 	 			$(".board_view_cnt").html("<span class='view_cnt'>"+(readCnt+1)+"</span>");
 				break;

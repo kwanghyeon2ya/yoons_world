@@ -51,6 +51,8 @@ public class BoardVO {
 	private String picture; // 글 작성자의 프로필사진
 	private String searchCheck;
 	private int targetSeq; //유저가 활동한 대상의 고유번호(검색할 때 사용)   POST_SEQ - 게시글고유 / USER_SEQ - 유저고유
-	private String targetType;
-	private String actionType;
+	private List<BoardVO> myListByLike; // 내가 좋아요를 누른 게시글
+	private List<BoardVO> myListByComments; // 내가 댓글을 작성한 게시글 
+	private List<BoardVO> myBoardList; // 내가 작성한 게시글
+	private int pageNum;
 }
