@@ -39,11 +39,11 @@ import com.iyoons.world.vo.UserActionVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files"; 
-	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";*/
+	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files"; 
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";
 	 
-	final String REAL_PATH = "C:/yoons_world/files";
-	final String DELETED_FILE_PATH = "C:/yoons_world/deletedfiles";
+	/*final String REAL_PATH = "C:/yoons_world/files";
+	final String DELETED_FILE_PATH = "C:/yoons_world/deletedfiles";*/
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -73,7 +73,7 @@ public class BoardServiceImpl implements BoardService {
 				"msixbundle", "msp", "mst", "nsh", "pif", "ps1", "scr", "sct", "shb", "sys", "vb", "vbe", "vbs", "vhd",
 				"vxd", "wsc", "wsf", "wsh", "xll", "%00", "0x00" };
 		ArrayList<String> fileTypeArry = new ArrayList<>(Arrays.asList(forbidden_extension));
-		if (fileTypeArry.indexOf(fileType) == -1) { // 발견 못 할시 1 / 발견되면 0
+		if (fileTypeArry.indexOf(fileType) == -1) { // 발견 못 할시 -1 / 발견되면 0
 			result = 1;
 		}
 		logger.debug("파일타입 확인 0이면 금지파일 : " + result);

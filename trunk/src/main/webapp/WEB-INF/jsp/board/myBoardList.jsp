@@ -7,7 +7,7 @@
 
 <div id="my_board_list" class="main_board_area">
 	
-	<div class="table type_01">
+	<div id="myboard_table_chk" class="table">
 		
 		<c:if test="${empty myBoardList}">
 		<div class="non_data center">작성된 글이 없습니다.</div>

@@ -437,7 +437,7 @@
 			from
 				post_board pb
 				inner join
-					(select post_seq from comments where regr_seq = #{userSeq}) cs
+					(select distinct post_seq from comments where regr_seq = #{userSeq}) cs
 				on pb.post_seq = cs.post_seq
 			where
 				pb.status = 1)cd
@@ -483,7 +483,7 @@
 	</select>
 	<select id="getMyListByCommentsCnt" resultType="int">
 		select
-			count(1)
+			count(distinct pb.post_seq)
 		from
 			post_board pb
 			inner join

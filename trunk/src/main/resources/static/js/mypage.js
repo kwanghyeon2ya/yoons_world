@@ -21,8 +21,12 @@ function getMyListByLike(){
 	 	success : function(data){
 	 		if(page_num != 1){
 	 			$(".more_myListByLike_btn").remove();
+	 			$('#my_list_by_like').append(data); // 마이페이지 div에 붙임
+	 			$(".main_board_area").removeProp("margin-top");
+	 		}else{
+	 			$('#my_list_by_like').append(data);	
 	 		}
-			$('#my_list_by_like').append(data);
+			
 		}
 	})
 }
@@ -43,9 +47,13 @@ function getMyListByComments(){
 	 	success : function(data){
 	 		if(page_num != 1){
 	 			$(".more_mylistByComm_btn").remove();
+	 			$('#my_list_by_comments').append(data);
+	 			$(".main_board_area").removeProp("margin-top");
+	 		}else{
+	 			$('#my_list_by_comments').append(data);
 	 		}
 	 		
-			$('#my_list_by_comments').append(data);
+			
 		}
 	})
 }
@@ -65,9 +73,13 @@ function getMyBoardList(){
 	 	success : function(data){
 	 		if(page_num != 1){
 	 			$(".more_myBoardlist_btn").remove();
+	 			$('#my_boardList').append(data).find(".main_board_area").removeProp("margin-top");
+	 			$(".main_board_area").removeProp("margin-top");
+	 		}else{
+	 			$('#my_boardList').append(data);
 	 		}
 	 		
-			$('#my_boardList').append(data);
+			
 		}
 	})
 }

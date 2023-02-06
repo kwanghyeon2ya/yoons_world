@@ -7,7 +7,7 @@
 
 <div id="board_list_by_comments" class="main_board_area">
 	
-	<div class="table type_01">
+	<div class="table">
 		
 		<c:if test="${empty myListByComments}">
 		<div class="non_data center">작성된 글이 없습니다.</div>

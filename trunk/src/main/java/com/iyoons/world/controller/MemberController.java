@@ -38,14 +38,14 @@ public class MemberController {
 	@ResponseBody public String insertMypage(@RequestParam(value="file",required=false)MultipartFile file,
 			HttpServletRequest request,HttpSession session) { // 프로필 사진 수정
 
-		int result = 0;
+		String result = "0";
 		
 		try {
 			logger.debug("컨트롤러 파일 null확인  : "+file);
 			logger.debug("컨트롤러 file name : "+file.getOriginalFilename());
 			UserVO userVO = new UserVO();
 			userVO.setUserSeq((int)session.getAttribute("sessionSeqForUser"));
-			result = userService.updateMypage(userVO,file);
+			result = userService.updateMypage(userVO,file)+"";
 			session.removeAttribute("sessionPicForUser");
 			UserVO voForProfile = userService.getPicture(userVO);
 			logger.debug("userVO 확인 : "+voForProfile);
@@ -53,15 +53,27 @@ public class MemberController {
 				session.setAttribute("sessionPicForUser",File.separator+voForProfile.getPicture());
 			}
 		} catch (Exception e) {
-
-			logger.error(" Request URI \t: "+request.getRequestURI());
+			logger.debug("에러메시지(controller) : "+e.getMessage());
+			if("java.lang.Exception: forbidden_file_type".equals(e.getMessage())) {
+				result = FinalVariables.FORBIDDEN_FILE_TYPE_CODE;
+				logger.debug("FinalVariables.FORBIDDEN_FILE_TYPE_CODE");
+			}
+			if("java.lang.Exception: over_the_file_size".equals(e.getMessage())){
+				result = FinalVariables.OVER_THE_FILE_SIZE_CODE;
+				logger.debug("FinalVariables.OVER_THE_FILE_SIZE_CODE");
+			}else {
+				result = FinalVariables.EXCEPTION_CODE;
+				logger.debug("FinalVariables.EXCEPTION_CODE");
+			}
+			
+			logger.error(" Request URI \t:  " + request.getRequestURI());
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			logger.error("Exception : "+sw.toString());
-			return FinalVariables.EXCEPTION_CODE;
+			logger.error("Exception "+sw.toString());
+			logger.debug("게시글 작성 catch절 진입확인 : "+result);
 		}
 		
-		return result+"";
+		return result;
 	}
 	 /*@ExceptionHandler
 	    public ResponseEntity<String> handle(IOException ex) {

@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	/*final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"profile";
-	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedprofile";*/
-	final String REAL_PATH="C:/yoons_world/profile";
-	final String DELETED_FILE_PATH="C:/yoons_world/deletedprofile";
+	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"profile";
+	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedprofile";
+	/*final String REAL_PATH="C:/yoons_world/profile";
+	final String DELETED_FILE_PATH="C:/yoons_world/deletedprofile";*/
 	
 
 	public String getShaAlgorithm(String password , String salt_key) throws NoSuchAlgorithmException {
@@ -265,6 +265,22 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	public int updateMypage(UserVO userVO,MultipartFile multifile)throws Exception {
 		int result = 0;
+		
+		/*
+		 * 확장자 체크
+		 * */
+		int fileLength = multifile.getOriginalFilename().length();
+		int fileLastIndex = multifile.getOriginalFilename().lastIndexOf('.');
+		logger.debug("파일 타입 확인 : " + multifile.getOriginalFilename().substring(fileLastIndex + 1, fileLength));
+
+		String fileCheck = multifile.getOriginalFilename().substring(fileLastIndex + 1, fileLength).toLowerCase();// 파일
+		
+		String[] allowedFileType = {"jpg","png","gif"};
+		ArrayList<String> fileTypeArry = new ArrayList<>(Arrays.asList(allowedFileType));
+		if(fileTypeArry.indexOf(fileCheck) == -1) { // 파일 타입이 jpg,png,gif확장자가 아닐 때 타입오류 발생시킴
+			throw new Exception("forbidden_file_type");
+		}
+		
 		userVO.setUpdrSeq(userVO.getUserSeq());
 		UserVO picVO = userDAO.getPicture(userVO); // 기존 프로필사진 불러오기  
 		
@@ -277,6 +293,10 @@ public class UserServiceImpl implements UserService {
 				File df = FileUtils.getFile(DELETED_FILE_PATH+File.separator+picVO.getPicture());//삭제폴더이동
 				FileUtils.moveFile(f, df);
 			}
+		}
+		
+		if (multifile.getSize() > 1000000) {
+			throw new Exception("over_the_file_size");
 		}
 		
 		

@@ -202,78 +202,7 @@ table{
 }
 
 
-/* 마이페이지 */
 
-.mypage_content{
-	display:flex;
-	height:60rem;
-	flex-direction:column;
-}
-.profile_kind_div{
-	display:flex;
-	width:34.5rem;
-	align-items:flex-end;
-	justify-content:space-around;
-}
-.profile_kind{
-	font-size:2rem;
-	color:#512f83;
-	margin:10px;
-}
-.img_div{
-	display:flex;
-	width:34.5rem;
-	align-items:flex-end;
-	justify-content:space-around;	
-}
-.origin_img_div{
-	height:15rem;
-}
-.profile_img{
-	width:15rem;
-	height:15rem;
-	padding:10px;
-}
-.mypage_frm .upload_name{
-	display: inline-block;
-    height: 40px;
-    padding: 0 10px;
-    vertical-align: middle;
-    border: 1px solid #dddddd;
-    width: 25vh;
-    color: #999999;
-}
-.mypage_frm label{
-	display: inline-block;
-    padding: 10px 20px;
-    color: #fff;
-    vertical-align: middle;
-    background-color: #999999;
-    cursor: pointer;
-    height: 40px;
-    margin-left: 10px;
-}
-.mypage_frm input[type="file"] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-}
-.mypage_frm{
-	text-align:center;
-}
-
-#mypage_tap{
-	font-weight:600;
-	border-top:2px solid;
-	border-bottom:2px solid;
-	padding: 8px;
-}
-#mypage_tap a{
-	margin:10px;
-}
 
 /* Mobile (가로 800px 이하) */
 @media screen and (max-width: 800px) {
@@ -303,13 +232,7 @@ table{
 	.rank_area .table > div:nth-of-type(n+28):nth-of-type(-n+30) {order: 8;}
 	.rank_area .table > div:nth-of-type(n+31):nth-of-type(-n+33) {order: 10;}
 	
-	/* 마이페이지 프로필 */
-	.mypage_frm .upload_name{
-	width: 45%;
-	}
-	.mypage_frm label{
-	width:21vh;
-	}
+	
 }
 
 /* Mobile (가로 480px 이하) */
