@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iyoons.world.common.FinalVariables;
 import com.iyoons.world.common.LoginUtil;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserAutoLoginVO;
@@ -204,14 +205,14 @@ public class LoginController {
 			if (cookies != null) {
 				for (Cookie c : cookies) {
 					String cookieName = c.getName();
-					if (cookieName.equals("auth")) {
+					if (cookieName.equals(FinalVariables.ACCESS_TOKEN_COOKIE_NAME)) {
 						c.setPath("/");
 						c.setMaxAge(0);
 						response.addCookie(c);
 						userService.deleteCookie(c.getValue());
 						logger.debug("cookie value : " + c.getValue());
 					}
-					if (cookieName.equals("auth")) {
+					if (cookieName.equals(FinalVariables.REFRESH_TOKEN_COOKIE_NAME)) {
 						c.setPath("/");
 						c.setMaxAge(0);
 						response.addCookie(c);
