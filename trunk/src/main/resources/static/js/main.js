@@ -1,5 +1,7 @@
 $(document).ready(function(){
+	console.log("실행됐나요?메인1");
 	getBoardList();
+	console.log("실행됐나요?메인2");
 	
 	/*
 	var currentPosition = parseInt($(".rank_from_readcnt").css("top"));
@@ -128,6 +130,7 @@ function changePwForm(){ //메인페이지 비밀번호 변경 ajax
 
 
 function getBoardList(){
+	console.log("getBoardList 진입 확인 ");
 	
 	$.ajax({ // 3개의 리스트를 전부 가져와 jsp한페이지에 뿌려줄 ajax
 		url : '/board/getListForMain',
@@ -136,6 +139,8 @@ function getBoardList(){
 		dataType : "html",
 		async : true,
 	 	success : function(data){
+	 		console.log(data);
+	 		console.log("실행됐나요1?");
 			$('#main_board_list').html(data);
 		}
 	})
@@ -147,6 +152,7 @@ function getBoardList(){
 		dataType : "html",
 		async : true,
 	 	success : function(data){
+	 		console.log("실행됐나요2?");
 			$('#rank_board_list').append(data);
 		}
 	})

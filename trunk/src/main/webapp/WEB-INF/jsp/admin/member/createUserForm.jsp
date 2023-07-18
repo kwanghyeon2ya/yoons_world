@@ -211,7 +211,7 @@
 				$.ajax({
 					url : '/admin/member/createUser',
 					type : 'POST',
-					data : JSON.stringify(param), // 파라미터 데이터 json 문자열 변환 
+					data : insert_user_form, // 파라미터 데이터 json 문자열 변환 
 					contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
 					dataType  : "json", //리턴 데이터 타입 지정
 					async : true,

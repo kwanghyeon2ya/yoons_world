@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.UserDAO">
+
+	<select id="findUser" resultType="com.iyoons.world.vo.UserVO">
+		select 
+			user_id,
+			user_seq,
+			user_pw,
+			user_name,
+			user_type,
+			user_status,
+			first_update_pw,
+			picture,
+			picture_path
+		from
+			user_info 
+		where
+			user_id=#{userId} 
+			and user_pw=#{userPw}
+	</select>
+	<!-- 아이디 중복 확인 -->
+	<select id="checkId" resultType="int">
+		select 
+			count(1)
+		from 
+			user_info
+		where
+			user_id=#{userId}
+	</select>
+	<select id="getCountUser" resultType="int">
+		select 
+			count(1)
+		from 
+			user_info
+	</select>
+	<select id="userList" resultType="com.iyoons.world.vo.UserVO">
+		select
+			cd.*
+		from	
+			(select
+				user_id,
+				user_name,
+				user_type,
+				user_status,
+				user_seq,
+				first_insert_dt,
+				email,
+				row_number() over(order by user_status desc,first_insert_dt asc) as r
+			FROM
+				user_info
+			where
+				1=1
+			<if test="search == 'member_name'">
+				and user_name like '%${keyword}%'
+			</if>
+			<if test="search == 'member_id'">
+				and user_id like '%${keyword}%'
+			</if>
+				)cd
+			where 
+				cd.r &gt;=#{startRow} 
+				and cd.r &lt;= #{endRow}
+	</select>
+
+	<select id="getSearchedUserCount" resultType="int">
+		select
+			count(1)	
+		FROM
+			user_info
+		where
+			1=1
+		<if test="search == 'member_name'">
+			and user_name like '%${keyword}%'
+		</if>
+		<if test="search == 'member_id'">
+			and user_id like '%${keyword}%'
+		</if>
+	</select>
+
+	<select id="viewUser" resultType="com.iyoons.world.vo.UserVO">
+		SELECT
+			US.user_id,
+			US.user_name,
+			US.user_type,
+			US.user_status,
+			US.email,
+			US.hire_dt,
+			DP.dep_name
+		FROM
+			user_info US
+		LEFT JOIN 
+			dep DP 
+		ON 
+			US.user_seq = DP.user_seq
+	</select>
+
+	<!-- 회원 등록 -->
+	<insert id="insertUser"
+		parameterType="com.iyoons.world.vo.UserVO">
+		INSERT INTO user_info (
+			user_seq,
+			user_id,
+			user_pw,
+			user_name,
+			email,
+			phone,
+			extension,
+			hire_dt,
+			user_type,
+			user_status,
+			regr_seq
+		)
+		VALUES (
+			#{userSeq},
+			#{userId},
+			#{userPw},
+			#{userName},
+			#{email},
+			#{phone},
+			#{extension},
+			#{hireDt},
+			#{userType},
+			1,
+			#{regrSeq}
+		)
+		<selectKey resultType="int" keyProperty="userSeq" order="BEFORE" keyColumn="int">
+			select user_seq.nextval from dual
+		</selectKey>
+	</insert>
+	
+	<insert id="insertDepUser"
+		parameterType="com.iyoons.world.vo.DepVO">
+		insert into dep_user(
+			dep_user_seq,
+			dep_seq,
+			user_seq,
+			status,
+			regr_seq,
+			first_insert_dt
+		)
+		values(
+			dep_user_seq.nextval,
+			#{depSeq},
+			#{userSeq},
+			1,
+			#{regrSeq},
+			sysdate
+		)
+	</insert>
+	<update id="updateDepUser">
+		update
+			dep_user
+		set
+			dep_seq=#{depSeq},
+			updr_seq=#{updrSeq},
+			last_update_dt = sysdate
+		where
+			user_seq = #{userSeq}
+			and status = 1
+	</update>
+
+	<!-- 회원 수정 -->
+	<update id="updateUser"
+		parameterType="com.iyoons.world.vo.UserVO">
+		UPDATE
+			user_info
+		SET
+			user_name = #{userName},
+			user_pw = #{userPw},
+			email = #{email},
+			extension = #{extension},
+			phone = #{phone}
+		WhERE
+			user_seq = #{userSeq} <!-- 일련번호로 수정 -->
+	</update>
+	
+	<!-- 회원 상세 페이지 -->
+	<select id="userDetail" resultType="com.iyoons.world.vo.UserVO">
+		SELECT
+			ui.user_id,
+			ui.user_name,
+			ui.email,
+			ui.user_seq,
+			ui.phone,
+			ui.extension,
+			(select dep_seq from dep_user du where du.user_seq = ui.user_seq) as dep_seq
+		FROM
+			user_info ui
+		WHERE
+			user_seq = #{userSeq} <!-- 일련번호로 수정 -->
+	</select>
+
+	<!-- 회원 삭제 -->
+	<update id="deleteUser">
+		UPDATE
+			user_info
+		SET
+			user_status = 0,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		WhERE
+			user_status = 1
+			and user_seq in
+			<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+				#{userSeq} <!-- 일련번호로 수정 -->
+			</foreach>
+	</update>
+	<update id="deleteDepUser">
+		UPDATE
+			DEP_USER
+		SET
+			STATUS = 0,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		WHERE
+			status = 1
+			and user_seq in
+			<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+				#{userSeq}
+			</foreach>
+	</update>
+
+	<!-- 회원 삭제 -->
+	<update id="recoverUserStatus">
+		UPDATE
+			user_info
+		SET
+			user_status = 1,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		WhERE
+			user_status = 0
+			and user_seq IN
+		<foreach item="userSeq" collection="userSeqArray" open="(" close=")" separator=",">
+			#{userSeq} <!-- 일련번호로 수정 -->
+		</foreach>
+	</update>
+	<update id="recoverDepUserStatus">
+		UPDATE
+			dep_user
+		set
+			status = 1,
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq}
+		where
+			user_seq=#{userSeq}
+			and status = 0
+	</update>
+	
+	<insert id="insertAutoLoginInfo" parameterType="com.iyoons.world.vo.UserAutoLoginVO">
+		 insert into user_auto_login(cookie_key,
+									 user_seq,
+									 user_ip,
+									 user_browser,
+									 cookie_status,
+									 reg_dt,
+									 expiry_dt
+										)
+							  values(#{cookieKey},
+							  		 #{userSeq},
+							  		 #{userIp},
+							  		 #{userBrowser},
+							  		 1,
+							  		 sysdate,
+							  		 (sysdate+30)
+										)
+	</insert>
+	
+	<select id="getCookieInfo" parameterType="String" resultType="com.iyoons.world.vo.UserAutoLoginVO">
+		select
+			ua.user_seq,
+			ua.user_browser,
+			ua.reg_dt,
+			(select user_name from user_info ui where ua.user_seq = ui.user_seq) as user_name,
+			(select user_type from user_info ui where ua.user_seq = ui.user_seq and user_type = 1) as admin_type,
+			(select user_id from user_info ui where ua.user_seq = ui.user_seq) as user_id
+		from
+			user_auto_login ua
+		where
+			ua.cookie_key = #{cookieKey}
+			and sysdate between	reg_dt and expiry_dt
+			and cookie_status = 1	
+	</select>
+	
+	<update id="deleteCookie">
+		update 
+			user_auto_login
+		set
+			cookie_status = 0
+		where
+			cookie_key = #{cookieKey}
+	</update>
+	<update id="deleteCookieWhenLogin" parameterType="com.iyoons.world.vo.UserAutoLoginVO">
+		update
+			user_auto_login
+		set
+			cookie_status = 0
+		where 
+			user_seq = #{userSeq}
+			and user_browser = #{userBrowser}
+	</update>
+	
+	<select id="getUserInfoList" resultType="com.iyoons.world.vo.UserVO">
+		select
+			ui.user_name,
+			ui.email,
+			ui.phone,
+			ui.extension,
+            du.dep_name
+		from
+			user_info ui
+	        inner join
+	            (select
+	            	d.dep_name,
+	            	de.user_seq
+	            from
+	            	dep d 
+	            	inner join 
+	            		dep_user de on d.dep_seq = de.dep_seq
+	        )du on ui.user_seq = du.user_seq
+		where
+      	    ui.user_status = 1
+      	    <if test='search != null and "user_name".equals(search)'>
+   		    and ui.user_name like '%${keyword}%'
+   		    </if>
+   		    <if test='search != null and "dep".equals(search)'>
+   		    and du.dep_name like '%${keyword}%'
+   		    </if>
+	</select>
+	
+	<update id="updateLoginDt">
+		update 
+			user_info
+		set
+			last_login_dt = sysdate
+		where
+			user_seq = #{userSeq}
+	</update>
+	<select id="checkPw" resultType="int">
+		select 
+			count(user_seq)
+		from
+			user_info
+		where
+			user_seq = #{userSeq}
+			and user_pw = #{userPw}
+	</select>
+	
+	<update id="changePw">
+		update
+			user_info
+		set
+			user_pw = #{userPw},
+			first_update_pw = 1
+		where
+			user_status = 1
+			and user_seq = #{userSeq}
+	</update>
+	<select id="getPwConfirmNum" resultType="int">
+		select
+			first_update_pw
+		from
+			user_info
+		where
+			user_seq = #{userSeq}
+	</select>
+	<select id="getPicture" resultType="com.iyoons.world.vo.UserVO">
+		select
+			picture,
+			picture_path
+		from
+			user_info
+		where 
+			user_seq = #{userSeq}
+	</select>
+	<update id="updateMypage">
+		update
+			user_info
+		set 
+			picture = #{picture,jdbcType=VARCHAR},
+			picture_path = #{picturePath,jdbcType=VARCHAR},
+			last_update_dt = sysdate,
+			updr_seq = #{updrSeq} 
+		where
+			user_seq = #{userSeq}
+			and user_status = 1
+	</update>
+	
+</mapper>

@@ -1,0 +1,149 @@
+@charset "UTF-8";
+
+.main_page_parent div{ /* 페이지 전체 */
+	word-break: break-all;/* 글자 겹침방지 */
+	vertical-align: middle; /* 수직정렬 */
+	/* width : 1920px;
+	height : 1080px; */
+}
+
+.main_page{ /* 페이지에서 첫번째로 큰 div */
+/* padding은 부모에서 주는것인듯 margin은 자식에서 잘 쓰이는듯-물론 부모div에서도 사용가능  */
+	display : flex;
+	flex-direction : column;
+	justify-content : space-around;
+	width : 1200px;
+    height : 90%;
+	/* align-items : center; */
+    /* flex-wrap : nowrap; */ 
+    margin : 0 auto; /* 가운데 정렬 */
+/*     margin-top: 36px; */
+    padding : 10px;
+   	flex : 1 1 auto; 
+}
+
+.main_page_Sorting{ /* 게시판 + 로그인,랭킹 가로정렬 */
+	display: flex;
+	justify-content: center;
+}
+
+.left_main_page{ /* 게시판 세로 정렬 */
+	display : flex;
+	flex-direction : column;
+	padding: 10px;
+	text-align: center;
+}
+
+/* .left_main_page h1{ 
+	position : relative; 
+	top: -0.2%;
+    left: 46.5%;
+} */ 						/* 제목 h1 정렬이지만, 한 메서드로 가져오고 있기 때문에 필요없을듯 */
+
+.rank_from_readcnt h1{
+	position: relative;
+    top: -8%;
+    left: 40.5%;
+    white-space: nowrap;
+    margin-right: -27%;
+}
+
+.main_page_board_list{
+	width: 642px;
+	background-color : #f2f4f7;
+	margin-bottom : 30px;
+	text-align : center;
+}
+
+.board_title_color{
+	color : rgb(154, 124, 197);
+}
+
+.get_all_board_list_for_month{
+	width: 136%;
+    height: 40%;
+    margin-left: 5%;
+}
+
+.board_list .title{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.login_box span{
+	margin-top : 50px;
+	margin-bottom : 25px;
+}
+
+.login_box a{
+margin-bottom : 50px; 
+padding: 10px;
+}
+
+.login_span_div{
+	display : flex;
+}
+
+.login_box{
+	border : 3px solid #ccc; 	
+	width : 404px;
+	margin-top: 13%;
+	height: 207px;
+}
+.right_main_page{
+	display : flex;
+	flex-direction : column;
+}
+
+.login_button{
+	display : flex;
+	flex-direction : column;
+	justify-content : center;
+	align-items : center;
+	margin : 0 auto;
+}
+
+.login_button button{ /* 버튼위치 */
+	width : 250px;
+	height : 50px;
+	background-color : #5b3c88; /* 버튼 색상 */
+	color : #ffffff; /* 글씨 색상 */
+	/* margin : 5px; 선택자의 바깥의 여백 설정 */
+	/* padding : 5px; */ /* 선택자 내부여백(자식을 바탕으로 여백을 줌) */ 
+	border-top-left-radius : 5px;
+	border-bottom-left-radius : 5px;
+	font-weight : bold;
+	margin : 0 auto;
+}
+
+
+.rank_from_readcnt{ /* 조회수 랭킹 div */
+	display : flex;
+	background-color: #ddd;
+	margin-bottom : 30px;
+	border-top : 3px solid #B2EBF2;
+	padding : 10px;
+	margin-top: 50px;
+	width: 382px;
+	text-align: center;
+	border: 3px solid #ccc;
+	position:sticky; 
+}
+
+.logout_icon{
+	position: absolute;
+    left: 108%;
+    top: 14%;
+}
+
+.logout_icon:hover { /* hover 마우스 올려두면 작동 */
+     filter: invert(16%) sepia(89%) saturate(6054%) hue-rotate(358deg) brightness(97%) contrast(113%);
+}
+
+ */
+
+
+
+
+

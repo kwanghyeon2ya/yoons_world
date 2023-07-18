@@ -38,6 +38,12 @@ public class MainController {
 	public String callMain(HttpServletRequest request,HttpSession session,Model model) { // 메인페이지 진입
 		
 		logger.debug("메인 세션확인입니다 : "+String.valueOf(session.getAttribute("sessionSeqForUser")));
+		logger.debug("메인 세션확인입니다 : "+session.getAttribute("sessionSeqForUser"));
+		if(session.getAttribute("sessionSeqForUser") != null) {
+			logger.debug("메인 세션확인입니다1 : "+session.getAttribute("sessionSeqForUser"));
+		}else {
+			logger.debug("메인 세션확인입니다2 : "+session.getAttribute("sessionSeqForUser"));
+		}
 		try {
 		
 		if(session.getAttribute("sessionSeqForUser") != null) {

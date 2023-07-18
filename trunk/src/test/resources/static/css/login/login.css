@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+.login_content {
+	position: relative;
+	display: flex;
+    align-items: center;
+	max-width: 120rem;
+	min-height: 60rem;
+	width: 100%;
+	height: calc(100vh - 8rem);
+	max-height: 100rem;
+	padding: 6rem 4rem;
+	margin: 0 auto;
+	font-size: 0;
+}
+
+.login_area {
+	position: relative;
+	width: 100%;
+    max-width: 32rem;
+    margin: 0 auto;
+    padding: 6rem 4rem;
+    background-color: #fff;
+    box-shadow: 0 0 0.5rem rgb(0 0 0 / 20%);
+}
+
+.login_area h1 {
+	text-align: center;
+}
+
+.login_area p {
+	margin-top: 3rem;
+	text-align: center;
+	font-size: 1.6rem;
+	line-height: 1;
+}
+
+.login_info {
+	position: relative;
+	width: 100%;
+	margin-top: 3rem;
+	margin-bottom: 2rem;
+}
+
+.login_info input:nth-child(2) {
+	margin-top: 2rem;
+}
+
+.login_area button {
+	margin-top: 2rem;
+}
+
+/* Mobile (가로 800px 이하) */
+@media screen and (max-width: 800px) {
+	
+}
+
+/* Mobile (가로 480px 이하) */
+@media screen and (max-width: 480px) {
+	.login_content {
+		padding: 6rem 2rem;
+	}
+}

@@ -8,6 +8,7 @@ class WorldApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("여기는 되는데?");
 	}
 
 }

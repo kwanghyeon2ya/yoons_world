@@ -336,14 +336,17 @@ public class BoardController {
 	public String getListForMain(Model model,HttpServletRequest request) {// 각 게시판을 가져옴 
 		
 		try {
+			logger.debug("getListForMain ---- in :");
 			
 			BoardVO vo = service.getListForMain(); //vo에 각 게시판에 대한 List 객체를 만들어서
 													//Hash map타입의 매개변수를 넣어 호출후 vo안의 List객체에 대입
+			
+			logger.debug("vo toString : "+vo.toString());
 			model.addAttribute("freeBoardList",vo.getFreeBoardList());
 			model.addAttribute("fixedBoardList",vo.getFixedBoardList());
 			model.addAttribute("noticeBoardList",vo.getNoticeBoardList());
 			model.addAttribute("pdsBoardList",vo.getPdsBoardList());
-			
+			logger.debug("getListForMain ---- out :");
 			return "board/boardListForMain";
 			
 		} catch (NullPointerException ne) {
@@ -700,7 +703,7 @@ public class BoardController {
 	
 			int existCount = cservice.getExistCommentsCount(vo.getPostSeq()); // 존재하는 댓글의 카운트-status가 1인글
 	
-			List<CommentsVO> clist = cservice.getCommentsList(cvo);
+			List<CommentsVO> clist = cservice.getCommentsList(cvo);//본댓글 10개씩 가져오기
 			for (CommentsVO comm : clist) {
 				if (comm.getNestedCommentsCnt() >= 1) {// 대댓글 갯수
 					comm.setCocoList(cservice.getNestedCommentsList(comm));// 대댓글을 List로 담음

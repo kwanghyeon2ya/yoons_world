@@ -1,0 +1,41 @@
+spring:
+  mvc:
+    view:
+        prefix: /WEB-INF/jsp/
+        suffix: .jsp
+  devtools:
+    livereload:
+      enabled: true
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.52.52.30)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=SOAF)))
+    username: rookie
+    password: "best3289@#"
+  servlet:
+    multipart:
+      enabled: true
+      location: C:/yoons_world/files
+      max-file-size: 10MB
+      max-request-size: 30MB
+              
+ 
+    
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations:
+  - classpath:mappers/*.xml
+  
+  
+server:
+  servlet:
+    session:
+      timeout: 180m
+
+    encoding:
+      charset: UTF-8
+      force: true
+      
+  error:
+    path: /error 
+

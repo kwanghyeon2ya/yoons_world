@@ -1,6 +1,7 @@
 package com.iyoons.world.interceptor;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import io.jsonwebtoken.Jwts;
 //import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.iyoons.world.common.FinalVariables;
+import com.iyoons.world.common.LoginUtil;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserAutoLoginVO;
 
@@ -26,21 +30,20 @@ public class CommonInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	LoginUtil loginutil;
+	
 //	catch
 //	로그정보 : requestURL, Exception
 // 리다이렉트 처리 (로그아웃, 오류메세지 출력, ...)
-
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { // controller전에
 																											// 실행되며
-																											// false 일 때
-																											// controller를
-																											// 실행하지 않는다.
 		Model model = null;
 
 		Boolean returnValue = false;
-
+		
 		try {
 
 			if (logger.isDebugEnabled()) { // 디버그 레벨인지 아닌지 확인 - 디버그 레벨이면 메세지 출력
@@ -65,18 +68,48 @@ public class CommonInterceptor implements HandlerInterceptor {
 				returnValue = true;
 				logger.info("첫 세션을 통해 진입성공");
 			} else {
-
+				
+				Cookie cookieAccess = loginutil.getCookieByName(request, FinalVariables.ACCESS_TOKEN_COOKIE_NAME);
+	            Cookie cookieRefresh = loginutil.getCookieByName(request, FinalVariables.REFRESH_TOKEN_COOKIE_NAME);
+	            
+	            if (cookieAccess == null || cookieRefresh == null) {
+	                throw new Exception("token cookie is null");
+	            }
+	            
+	            String accessToken = loginutil.getValueFromCookie(cookieAccess);
+	            String refreshToken = loginutil.getValueFromCookie(cookieAccess);
+	            
+	            
+	            boolean checkAccessToken = loginutil.validateToken(accessToken);
+	            
+	            if(!checkAccessToken) {
+	            	boolean checkRefreshToken = loginutil.validateToken(refreshToken);
+	            	if(!checkRefreshToken) {
+	            		throw new Exception("token cookie is null");
+	            	}else{
+	            		loginutil.reGenerateByRefToken(response,session,refreshToken);
+	            	}
+	            }
+	            
+	            
+	            
+	            
 				Cookie[] cookies = request.getCookies();
+				
 				logger.debug("쿠키확인 :" + cookies);
 
 				if (cookies != null) {
-
+					
 					for (Cookie c : cookies) {
 						String cookieName = c.getName();
+						logger.debug("쿠키 이름 : "+c.getName());
+						logger.debug("쿠키 해독 전 : "+c.getValue());
+						String decJwt = URLDecoder.decode(c.getValue(), "UTF-8");
+						logger.debug("쿠키 내용 확인 : "+URLDecoder.decode(c.getValue(), "UTF-8"));
 						if (cookieName.equals("auth")) {
 							logger.debug("cookie value :" + c.getValue());
 							UserAutoLoginVO alvo = userService.getCookieInfo(c.getValue());
-
+							
 							if (alvo != null) {
 								session.setAttribute("sessionSeqForUser", alvo.getUserSeq());
 								session.setAttribute("sessionIdForUser", alvo.getUserId());
@@ -97,18 +130,27 @@ public class CommonInterceptor implements HandlerInterceptor {
 				}
 
 			}
-			if (!returnValue) {
-
-				response.sendRedirect(request.getContextPath() + "/login/loginView"); // 프로젝트 이름만 가져온 후 uri더해줌
-
-			}
+			
+			
+			
 			logger.info("쿠키를 통해 진입성공");
-		} catch (IOException e) {
+			
+			/*throw new Exception("오류가 나긴 했읍니다만?");*/
+			
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.debug("exception " + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			
 		}
+		
+		if (!returnValue) {
+
+			response.sendRedirect(request.getContextPath() + "/login/loginView"); // 프로젝트 이름만 가져온 후 uri더해줌
+
+		}
+		
 		return returnValue;
 
 	}

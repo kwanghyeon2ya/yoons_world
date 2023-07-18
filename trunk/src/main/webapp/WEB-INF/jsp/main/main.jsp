@@ -62,12 +62,6 @@
 		
 		</c:if>
 		
-		function modal_close(){ // 모달창 닫기
-			document.body.style.overflow = 'auto';
-			/*window.close();*/
-			$(".background").removeClass('show');
-		}
-		
 		$("#search_frm").submit(function(){
 			
 			if ($("#search_text").val().trim().length == 0) {
@@ -88,6 +82,12 @@
 			background.toggleClass('show');
 		</c:if>
 	});
+	
+	function modal_close(){ // 모달창 닫기
+		document.body.style.overflow = 'auto';
+		/*window.close();*/
+		$(".background").removeClass('show');
+	}
 	</script>
 	
 </head>

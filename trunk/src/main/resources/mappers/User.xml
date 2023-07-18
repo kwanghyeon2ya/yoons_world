@@ -390,4 +390,18 @@
 			and user_status = 1
 	</update>
 	
+	<select id="getUserInfoByRefToken" resultType="com.iyoons.world.vo.UserVO">
+		select
+			user_id,
+			user_name,
+			picture,
+			first_update_pw,
+			user_type
+		from 
+			user_info
+		where
+			user_id = #{userId}
+			and user_seq = #{userSeq}
+	</select>
+	
 </mapper>

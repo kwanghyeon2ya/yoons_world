@@ -57,4 +57,6 @@ public interface UserService {
 	
 	public UserVO getPicture(UserVO userVO);
 	
+	public UserVO getUserInfoByRefToken(UserVO userVO);
+	
 }

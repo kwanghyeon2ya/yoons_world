@@ -33,6 +33,21 @@ public class FinalVariables {
 	public final static String OVER_THE_FILE_SIZE_CODE = "6666"; // 금지된 파일 타입 예외 코드
 	public final static String EXCEPTION_CODE = "9999"; // 최상위 익셉션 코드
 	
+	/*
+	 * JWT token cookie name
+	 * */
+	public final static String ACCESS_TOKEN_COOKIE_NAME = "auth";//cookie에 들어갈 access token명
+	public final static String REFRESH_TOKEN_COOKIE_NAME = "authRe";//cookie에 들어갈 refresh token명 
 	
+	/*
+	 * JWT token 유지 시간
+	 * */
+	protected final static int EXPIRATION_ACCESS = 1000 * 60 * 60 * 120;//2시간(date()타입의 생성자로 들어갈 long type)
+	protected final static int EXPIRATION_REFRESH = 1000 * 60 * 60 * 60 * 24 * 14;//2주(date()타입의 생성자로 들어갈 long type)
+	
+	/*
+	 * Session 만료시간
+	 * */
+	public final static int EXPIRATION_SESSION = 60 * 60 * 120;
 	
 }

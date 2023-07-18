@@ -14,8 +14,6 @@ spring:
       location: C:/yoons_world/files
       max-file-size: 10MB
       max-request-size: 30MB
-              
- 
     
 mybatis:
   configuration:
@@ -35,4 +33,17 @@ server:
       
   error:
     path: /error 
-
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+realpath: \home\yoons\files
+deletedpath: \home\yoons\deletedfiles
+---
+spring:
+  config:
+    activate:
+      on-profile: loc
+realpath: C:/yoons_world/files
+deletedpath: C:/yoons_world/deletedfiles

@@ -98,9 +98,15 @@ public class UserServiceImpl implements UserService {
 		return userDAO.findUser(userVO);
 	}
 	
+	/**
+     * 회원 등록
+     *
+     * @param userName,userId,userPw,emailPart1,emailPart2,hireDt,phone1,phone2,phone3,extension,depSeq
+     * @return 성공여부
+     */
 	@Override
 	@Transactional(rollbackFor = {Exception.class})
-	public int insertUser(UserVO userVO) throws Exception {
+	public int insertUser(UserVO userVO) throws Exception { //
 		DepVO depVO = new DepVO();
 		
 		if("self_writing".equals(userVO.getEmailPart2())) {
@@ -112,7 +118,6 @@ public class UserServiceImpl implements UserService {
 		userVO.setPhone(userVO.getPhone1()+"-"+userVO.getPhone2()+"-"+userVO.getPhone3());
 		logger.debug("userVO 번호확인 : "+userVO.getPhone());
 		userVO.setUserPw(getHashPw(userVO));
-		
 		int result = userDAO.insertUser(userVO);
 		logger.debug("transactional 실험중(에러 전)");
 		depVO.setDepSeq(userVO.getDepSeq());
@@ -351,6 +356,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO getPicture(UserVO userVO) {
 		return userDAO.getPicture(userVO);
+	}
+
+	@Override
+	public UserVO getUserInfoByRefToken(UserVO userVO) {
+		return userDAO.getUserInfoByRefToken(userVO);
 	}
 	
 }

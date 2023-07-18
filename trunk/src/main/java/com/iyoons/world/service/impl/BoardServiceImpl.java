@@ -20,6 +20,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,8 +40,15 @@ import com.iyoons.world.vo.UserActionVO;
 @Service(value = "BoardService")
 public class BoardServiceImpl implements BoardService {
 
-	final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files"; 
-	final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";
+	@Value("${realpath}")
+	String REAL_PATH;
+	
+	@Value("${deletedpath}")
+	String DELETED_FILE_PATH;
+	
+	
+	//final String REAL_PATH= File.separator+"home"+File.separator+"yoons"+File.separator+"files"; 
+	//final String DELETED_FILE_PATH=File.separator+"home"+File.separator+"yoons"+File.separator+"deletedfiles";
 	 
 	/*final String REAL_PATH = "C:/yoons_world/files";
 	final String DELETED_FILE_PATH = "C:/yoons_world/deletedfiles";*/
@@ -132,7 +140,7 @@ public class BoardServiceImpl implements BoardService {
 					}
 
 					String savePath = REAL_PATH + uploadFileName;
-
+					logger.debug("savePath : "+savePath);
 					File saveFile = new File(savePath);
 
 					f.transferTo(saveFile);

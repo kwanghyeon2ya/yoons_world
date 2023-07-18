@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.BoardDAO">
+
+<resultMap id="BoardList" type="com.iyoons.world.vo.BoardVO">
+	<result property="postNum" column="POST_NUM"/>
+	<result property="postSeq" column="POST_SEQ" />
+	<result property="writerName" column="WRITER_NAME" />
+	<result property="subject" column="SUBJECT" />
+	<result property="content" column="CONTENT" />
+	<result property="status" column="STATUS" />
+	<result property="readCnt" column="READ_CNT" />
+	<result property="boardType" column="BOARD_TYPE" />
+	<result property="fileAttachYn" column="FILE_ATTACH_YN" />
+	<result property="boardFixYn" column="BOARD_FIX_YN" />
+	<result property="regrSeq" column="REGR_SEQ" />
+	<result property="firstInsertDt" column="FIRST_INSERT_DT" />
+	<result property="updrSeq" column="UPDR_SEQ" />
+	<result property="lastUpdateDt" column="LAST_UPDATE_DT" />
+</resultMap>
+
+	<insert id="insertBoard">
+			insert into post_board( post_seq,
+									writer_name,
+									subject,
+									content,
+									status,
+									read_cnt,
+									board_type,			
+									file_attach_yn,
+									board_fix_yn,
+									regr_seq,
+									first_insert_dt,
+									updr_seq,
+									last_update_dt,
+									fix_start_dt,
+									fix_end_dt
+									)
+				 			values( #{postSeq},
+									#{writerName},
+									#{subject},
+									#{content},
+									1,	
+									0,
+									#{boardType},
+									#{fileAttachYn},
+									#{boardFixYn},
+									#{regrSeq},
+									sysdate,
+									0,
+									sysdate,
+									TO_DATE(#{fixStartDt,jdbcType=VARCHAR},'YYYY/MM/DD'),
+									TO_DATE(#{fixEndDt,jdbcType=VARCHAR},'YYYY/MM/DD')
+									)
+		<selectKey  resultType="int" keyProperty="postSeq" order="BEFORE" keyColumn="int">
+			select post_seq.nextval from dual
+		</selectKey>
+	</insert>
+	
+	<select id="getBoardList" resultMap="BoardList">
+		select cd.* from(
+			select
+	            pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.board_fix_yn,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt,
+	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
+	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
+	            <if test="search != null and search.equals('attach_file')">
+	            ba.file_name,
+	            ba.file_type,
+	            </if>
+	            row_number() over(order by pb.first_insert_dt desc) as r,
+	            row_number() over(order by pb.first_insert_dt asc) as post_num
+	        from
+				post_board pb
+				<if test="search != null and search.equals('comments')">
+				inner join 
+					(select DISTINCT
+					c1.post_seq from comments c1 
+				where 
+					c1.comm_content like '%${keyword}%' and c1.status = 1)ic 
+						on pb.post_seq = ic.post_seq
+				</if>
+				<if test="search != null and search.equals('attach_file')">
+				inner join (
+					select 
+		    			post_seq,
+		    			file_name,
+		    			file_type
+		    		from 
+	    				board_attach
+		    		where 
+	    				file_name like '%${keyword}%' and status = 1
+	    			group by 
+	    				post_seq,
+	    				file_name,
+	    				file_type
+	    				)ba on pb.post_seq = ba.post_seq
+				</if>
+			where 
+				pb.status=1
+				and pb.board_type=#{boardType} 
+			<if test="searchCheck != null">
+				<if test="search != null and search.equals('subject_content')">
+				and (pb.subject like '%${keyword}%' or 
+				pb.content like '%${keyword}%') 
+				</if>
+			</if>
+				)cd
+			where 
+				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
+		</select>
+		
+	<select id="getBoardCount" resultType="int">
+		select 
+			count(post_seq) 
+		from 
+			post_board
+		where 
+			board_type=#{boardType} 
+			and status=1
+	</select>
+	
+	<select id="getSearchCount" resultType="int">
+		select 
+			count(post_seq) 
+		from (select 
+				pb.post_seq
+			  from 
+				post_board pb
+		 <if test="searchCheck != null and search.equals('comments')">
+		inner join (
+			select DISTINCT
+			  	c1.post_seq 
+			from 
+			 	comments c1
+			where 
+				c1.comm_content like '%${keyword}%')ic		 
+		 	on 
+		 	  pb.post_seq = ic.post_seq</if>
+		 <if test="searchCheck != null and search.equals('attach_file')">
+		 inner join (
+			select DISTINCT
+			  	ba.post_seq
+			from 
+			 	board_attach ba
+			where 
+				ba.file_name like '%${keyword}%')ic		 
+		 	on 
+		 	  pb.post_seq = ic.post_seq
+		 </if>	   
+		 where pb.status = 1 and pb.board_type=#{boardType}
+		 <if test="searchCheck != null and search != null and search.equals('subject_content')">
+			and (pb.subject like '%${keyword}%' 
+				or pb.content like '%${keyword}%') 		 
+		 </if>
+		 )
+	</select>
+	
+	<select id="getViewCount" resultType="int">
+		select
+			read_cnt
+		from
+			post_board
+		where
+			post_seq = #{postSeq}			
+	</select>
+	
+	<select id="getView" resultType="com.iyoons.world.vo.BoardVO">
+		select 
+			pb.post_seq,
+			pb.writer_name,
+			pb.subject,
+			pb.content,
+			pb.read_cnt,
+			pb.board_type,
+			pb.file_attach_yn,
+			pb.board_fix_yn,
+			pb.regr_seq,
+			pb.status,
+			pb.first_insert_dt,
+			pb.updr_seq,
+			pb.last_update_dt,
+			pb.fix_start_dt,
+			pb.fix_end_dt,
+			(select count(1) from user_action ua where ua.target_seq = pb.post_seq and ua.target_type='01' and ua.action_type='01') as heartCount,
+			(select ui.picture from user_info ui where user_seq = pb.regr_seq) as picture
+		from
+			post_board pb
+		where 
+			pb.post_seq = #{postSeq} 
+			and status = 1
+	</select>
+	
+	<!-- <select id="getProfile" -->
+	
+	<update id="modView">
+		update 
+			post_board 
+		set 
+			subject = #{subject} ,
+			content = #{content} ,
+			board_fix_yn = #{boardFixYn},
+			last_update_dt = SYSDATE,
+			updr_seq = #{updrSeq},
+			file_attach_yn = #{fileAttachYn}
+			<if test='boardFixYn.equals("Y")'>
+				,fix_start_dt = nvl(TO_DATE(#{fixStartDt},'YYYY/MM/DD'),SYSDATE),
+				fix_end_dt = nvl(TO_DATE(#{fixEndDt},'YYYY/MM/DD'),TO_DATE('2070/12/31','YYYY/MM/DD'))
+			</if>
+		where
+			post_seq=#{postSeq} 
+			and status = 1
+	</update>
+	
+	<update id="updateCnt">
+		update
+			post_board
+		set
+			read_cnt = read_cnt + 1
+		where
+			post_seq = #{postSeq}
+	</update>
+	
+	<update id="delView">
+		update
+			post_board
+		set
+			status = 0,
+			updr_seq = #{updrSeq},
+			last_update_dt = sysdate
+		where
+			post_seq = #{postSeq} 
+			and regr_seq = #{regrSeq}
+	</update>
+	
+	<select id="findUser" resultType="int">
+		select 
+			regr_seq
+		from
+			post_board
+		where
+			post_seq = #{postSeq}
+			and status = 1
+	</select>
+	
+	<select id="getNoticeFixedBoard" resultType="com.iyoons.world.vo.BoardVO">
+		select
+			pb.post_seq,
+            pb.writer_name,
+            pb.subject,
+            pb.content,
+            pb.status,
+            pb.read_cnt,
+            pb.board_type,
+            pb.board_fix_yn,
+            pb.first_insert_dt,
+            pb.last_update_dt,
+			(select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt
+        from
+        	post_board pb
+        where 
+        	board_type=#{boardType}
+        	and status=1
+        	and board_fix_yn ='Y'
+        	and SYSDATE between fix_start_dt and fix_end_dt
+        order by
+        	first_insert_dt desc
+	</select>
+	
+	<select id="getAllBoardListOrderedByReadCount" resultType="com.iyoons.world.vo.BoardVO">
+		select cd.* from(
+			select
+	            pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.board_fix_yn,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt,
+	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
+	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
+	            row_number()over(order by pb.read_cnt desc) as r,
+	            row_number()over(order by pb.read_cnt desc) as post_num
+	        from
+				post_board pb
+			where 
+				pb.status=1
+				and pb.board_fix_yn ='N'
+				)cd
+			where 
+				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
+	</select>
+	
+	<select id="getAllBoardListOrderedByReadCountForMonth" resultType="com.iyoons.world.vo.BoardVO">
+		select cd.* from(
+			select
+	            pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.board_fix_yn,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt,
+	            (select count(1) from board_attach t1 where pb.post_seq = t1.post_seq and status = 1) as attach_cnt,
+	            (select (file_name || '.' || file_type) from board_attach t2 where pb.post_seq = t2.post_seq and rownum =1 and status = 1) as full_file_name,
+	            row_number()over(order by pb.read_cnt desc) as r,
+	            row_number()over(order by pb.read_cnt desc) as post_num
+	        from
+				post_board pb
+			where 
+				pb.status=1
+				and pb.board_fix_yn ='N'
+				and first_insert_dt &gt;= (SYSDATE-30)
+				)cd
+			where 
+				cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
+	</select>
+	
+	<select id="getAllBoardCount" resultType="int">
+		select 
+			count(post_seq) 
+		from 
+			post_board
+		where 
+			status=1
+	</select>
+	
+	<insert id="insertUserAction">
+		insert into user_action(action_seq,
+								user_seq,
+								target_type,
+								target_seq,
+								action_type,
+								first_insert_dt								
+								)
+	 					 values(user_action_seq.nextval,
+								#{userSeq},
+								#{targetType},
+								#{targetSeq},
+								#{actionType},
+								SYSDATE					
+								)
+	</insert>
+	
+	<select id="checkUserAction" resultType="int">
+	
+		select
+			count(1)
+		from
+			user_action
+		where
+			user_seq in #{userSeq}
+			and target_seq = #{targetSeq}
+			and target_type = #{targetType}
+			and action_type = #{actionType}
+			
+	</select>
+	
+	<select id="checkAction" resultType="com.iyoons.world.vo.UserActionVO">
+		select
+			ua.target_type,
+			ua.action_type
+		from
+			user_action ua
+		where
+			ua.target_seq = #{targetSeq}
+			and ua.user_seq = #{userSeq}
+			and ua.action_type = #{actionType}
+			and ua.target_type = #{targetType}
+	</select>
+	
+	<select id="getMyListByLike" resultType="com.iyoons.world.vo.BoardVO">
+		select
+			 cd.*
+		from		
+			(select
+				pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.board_fix_yn,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            row_number() over(order by pb.first_insert_dt desc) as r
+			from
+				post_board pb
+			inner join
+				(select target_seq from user_action where target_type = '01' and action_type = '01' and user_seq = #{userSeq}) ua	 			
+			on
+				pb.post_seq = ua.target_seq  	 		
+			where
+				pb.status = 1)cd
+		where 
+			cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
+	</select>
+	
+	<select id="getMyListByComments" resultType="com.iyoons.world.vo.BoardVO">
+		select 
+			cd.*
+		from	
+			(select
+				pb.post_seq,
+	            pb.writer_name,
+	            pb.subject,
+	            pb.content,
+	            pb.status,
+	            pb.read_cnt,
+	            pb.board_type,
+	            pb.board_fix_yn,
+	            pb.first_insert_dt,
+	            pb.last_update_dt,
+	            (select count(1) from comments c1 where pb.post_seq = c1.post_seq and status = 1) as comments_cnt,
+	            row_number() over(order by pb.first_insert_dt desc) as r
+			from
+				post_board pb
+				inner join
+					(select distinct post_seq from comments where regr_seq = #{userSeq}) cs
+				on pb.post_seq = cs.post_seq
+			where
+				pb.status = 1)cd
+		where 
+			cd.r &gt;= #{startRow} and cd.r &lt;= #{endRow}
+	</select>
+	
+	<select id="getMyBoardList" resultType="com.iyoons.world.vo.BoardVO">
+		select 
+			pb.*
+		from	
+			(select
+				post_seq,
+	            writer_name,
+	            subject,
+	            content,
+	            status,
+	            read_cnt,
+	            board_type,
+	            board_fix_yn,
+	            first_insert_dt,
+	            last_update_dt,
+	            row_number() over(order by first_insert_dt desc) as r
+			from
+				post_board
+			where 
+				regr_seq = #{userSeq}
+				and status = 1) pb
+		where
+			pb.r &gt;= #{startRow} and pb.r &lt;= #{endRow}
+	</select>
+	<select id="getMyListByLikeCnt" resultType="int">
+		select
+			count(1)
+		from
+			post_board pb
+		inner join
+			(select target_seq from user_action where target_type = '01' and action_type = '01' and user_seq = #{userSeq}) ua	 			
+		on
+			pb.post_seq = ua.target_seq  	 		
+		where
+			pb.status = 1
+	</select>
+	<select id="getMyListByCommentsCnt" resultType="int">
+		select
+			count(distinct pb.post_seq)
+		from
+			post_board pb
+			inner join
+				(select post_seq from comments where regr_seq = #{userSeq}) cs
+			on pb.post_seq = cs.post_seq
+		where
+			pb.status = 1
+	</select>
+	<select id="getMyBoardListCnt" resultType="int">
+		select
+			count(1)
+		from
+			post_board
+		where 
+			regr_seq = #{userSeq}
+			and status = 1
+	</select>
+	
+	
+</mapper>

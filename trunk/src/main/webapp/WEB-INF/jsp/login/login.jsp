@@ -106,6 +106,9 @@
 							</label>
 						</div>
 						<button type="button" id="login_btn" class="btn type_01 size_full bg_purple" value="Login">Login</button>
+						<div>
+							<span style="font-size:1.5rem;display:flex;justify-content: flex-end;"><a href="/member/signUp">회원가입</a></span>
+						</div>
 					</form>
 				</div>
 			</div>

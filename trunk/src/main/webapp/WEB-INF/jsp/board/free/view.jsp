@@ -106,7 +106,8 @@
 					
 				<div class="board_content_area">
 					<!-- 게시글 본문 영역 -->
-					${fn:replace(fn:replace(fn:escapeXml(vo.content), CRLF, '<br/>'), LF, '<br/>')}
+					${fn:replace(fn:replace(fn:escapeXml(vo.content),LF,'<br>'),' ','&nbsp;')}
+					<%-- ${fn:replace(fn:replace(fn:escapeXml(vo.content), CRLF, '<br/>'), LF, '<br/>')} --%>
 					
 					<!--  좋아요 DIV  -->
 					<div class="heart_img_div" style="display: flex; justify-content: center; align-items: flex-end; margin-top: 1rem;min-height: 18rem;">

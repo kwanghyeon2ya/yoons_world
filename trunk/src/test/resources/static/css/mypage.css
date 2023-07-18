@@ -1,0 +1,136 @@
+@charset "UTF-8";
+
+/* 마이페이지 */
+
+
+.main_wrappper {
+	position: relative;
+	display: flex;
+	flex-flow: row-reverse;
+	margin: 0;
+	font-size: 0;
+	vertical-align: top;
+}
+
+.main_board_area .table {
+	grid-template-columns: 4fr 1fr;
+}
+
+.main_board_area .table > div{
+	border-bottom: 0.1rem solid #ccc;
+}
+		
+	
+.main_wrappper > div:nth-of-type(1) {
+	width: 32%;
+	margin-left: 4%;
+}
+.main_wrappper > div:nth-of-type(2) {
+	width: 64%;
+}
+
+.my_list_border{
+	margin-bottom:7rem;
+}
+
+.profileImg{
+	background-size : cover;
+	border-radius: 50%;
+}
+.profile_img {
+	background-size : cover;
+	border-radius: 50%;
+}
+.mypage_content{
+	display:flex;
+	height:60rem;
+	flex-direction:column;
+}
+.profile_kind_div{
+	display:flex;
+	width:34.5rem;
+	align-items:flex-end;
+	justify-content:space-around;
+}
+.profile_kind{
+	font-size:2rem;
+	color:#512f83;
+	margin:10px;
+}
+.img_div{
+	display:flex;
+	width:34.5rem;
+	align-items:flex-end;
+	justify-content:space-around;	
+}
+.profile_img{
+	width:15rem;
+	height:15rem;
+	padding:10px;
+}
+.mypage_frm .upload_name{
+	display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 25vh;
+    color: #999999;
+}
+.mypage_frm label{
+	display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+}
+.mypage_frm input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+.mypage_frm{
+	text-align:center;
+}
+.new_img_div{
+	display:none;
+}
+
+#mypage_tap{
+	font-weight:600;
+	border-top:2px solid;
+	border-bottom:2px solid;
+	padding: 8px;
+}
+#mypage_tap a{
+	margin:10px;
+}
+#profile_undo{/* 프로필사진 선택 취소  */
+	position: absolute;
+    filter: opacity(1) drop-shadow(0 0 0 #228B23);
+    top: 36%;
+    left: 55%;
+    transform: translate(-50%,-50%);
+    display:none;
+}
+
+/* Mobile (가로 800px 이하) */
+@media screen and (max-width: 800px) {
+	/* 마이페이지 프로필 */
+	.mypage_frm .upload_name{
+	width: 45%;
+	}
+	.mypage_frm label{
+	width:21vh;
+	}
+}
+
+/* Mobile (가로 480px 이하) */
+@media screen and (max-width: 480px) {
+}

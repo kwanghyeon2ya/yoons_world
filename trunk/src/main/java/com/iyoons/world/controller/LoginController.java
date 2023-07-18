@@ -16,11 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.iyoons.world.common.LoginUtil;
 import com.iyoons.world.service.UserService;
 import com.iyoons.world.vo.UserAutoLoginVO;
 import com.iyoons.world.vo.UserVO;
@@ -35,6 +39,15 @@ public class LoginController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	LoginUtil loginutil;
+	
+	@Value("${realpath}")
+	String REAL_PATH;
+	
+	@Value("${deletedpath}")
+	String DELETED_FILE_PATH;
+	
 	private int testSessionTime = 60;
 	private int testCookieTime = 60 * 60;
 	private int localSessTime = 60 * 60 * 60 * 24 * 7; // 개발서버
@@ -42,39 +55,11 @@ public class LoginController {
 	private final String secretKey = "secretKey";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public String createJWT(String userId, int userSeq) { // 토큰 생성 메서드
-
-		String userSeqForToken = Integer.toString(userSeq);
-
-		Map<String, Object> headers = new HashMap<>();
-		headers.put("typ", "JWT");
-		headers.put("alg", "HS256");
-		headers.put("regDate", System.currentTimeMillis());
-
-		Map<String, Object> payloads = new HashMap<>();
-		payloads.put("userId", userId);
-		payloads.put("userSeq", userSeqForToken);
-
-		Long expiredTime = 1000 * 60L * 60L * 2L; // 토큰 유효시간 2시간
-
-		Date ext = new Date();
-		ext.setTime(ext.getTime() + expiredTime);
-
-		// 토큰 빌더
-		String jwt = Jwts.builder().setHeader(headers) // 헤더설정
-				.setClaims(payloads) // Claims 설정
-				.setSubject("user") // 토큰의 용도
-				.setIssuedAt(new Date()) // 토근 생성일
-				.setExpiration(ext) // 토큰 만료 시간
-				.signWith(SignatureAlgorithm.HS256, secretKey.getBytes()) // HS256과 secretKey로 서명정보 추가
-				// 해당 토큰이 조작되었거나 변경되지 않았음을 확인하는 용도 - 서버 측에서 관리하는 비밀키가 유출되지 않는 이상 복호화할 수 없음
-				.compact(); // 토큰생성
-
-		return jwt;
-	}
 
 	@RequestMapping("/loginView")
 	public String loginView(HttpSession session) { // 로그인 페이지 진입
+		logger.debug("저장 폴더 경로 : "+REAL_PATH);
+		logger.debug("삭제 폴더 경로 : "+DELETED_FILE_PATH);
 		return "login/login";
 	}
 
@@ -87,8 +72,9 @@ public class LoginController {
 			userInfovo = userService.findUser(userVO);
 				// TODO Auto-generated catch block
 			logger.debug("login시 vo 정보 " + userInfovo);
-	
+
 			if (userInfovo != null) {
+				logger.debug("UserStatus : "+userInfovo.getUserStatus());
 				if (userInfovo.getUserStatus() == 1) {
 					
 					if (userVO.getCheckTokenYn() != null && "Y".equals(userVO.getCheckTokenYn())) {
@@ -140,8 +126,9 @@ public class LoginController {
 						alvo.setUserIp(userIp);
 						userService.deleteCookieWhenLogin(alvo); // 유저 고유번호+브라우저 정보로 db기존 데이터 status 0
 																	// 만료
-	
-						String token = createJWT(userInfovo.getUserId(), userInfovo.getUserSeq());
+						
+						String token = loginutil.generateAccessToken(response, userVO);//access token생성	
+						loginutil.generateRefreshToken(response, userVO);//refresh token 생성
 						logger.debug("bkh 토큰 확인 : " + token);
 	
 						Cookie cookie = new Cookie("auth", token);
@@ -156,7 +143,6 @@ public class LoginController {
 						logger.info("bkh 로그인 vo 정보  : " + alvo);
 	
 					}
-	
 					userService.updateLoginDt(userInfovo.getUserSeq());
 					
 					session.setAttribute("userInfovo", userInfovo);
@@ -167,7 +153,7 @@ public class LoginController {
 					session.setAttribute("sessionPwCheck",userInfovo.getFirstUpdatePw());
 	
 					session.setMaxInactiveInterval(serverSessTime);
-	
+
 					if (userInfovo.getUserType() == 1) {
 						session.setAttribute("sessionSeqForAdmin", userInfovo.getUserSeq());
 						session.setMaxInactiveInterval(serverSessTime);
@@ -211,12 +197,20 @@ public class LoginController {
 	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response,Model model) { // 로그아웃 - 쿠키 만료 및  세션 무효화
 
 		session.invalidate();
-
+		//loginutil.removeAllTokens(response);
+		
 		try {
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie c : cookies) {
 					String cookieName = c.getName();
+					if (cookieName.equals("auth")) {
+						c.setPath("/");
+						c.setMaxAge(0);
+						response.addCookie(c);
+						userService.deleteCookie(c.getValue());
+						logger.debug("cookie value : " + c.getValue());
+					}
 					if (cookieName.equals("auth")) {
 						c.setPath("/");
 						c.setMaxAge(0);

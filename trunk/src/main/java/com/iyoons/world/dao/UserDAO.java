@@ -66,4 +66,6 @@ public interface UserDAO {
 	public int updateMypage(UserVO userVO);
 	
 	public UserVO getPicture(UserVO userVO);
+
+	public UserVO getUserInfoByRefToken(UserVO userVO);
 }

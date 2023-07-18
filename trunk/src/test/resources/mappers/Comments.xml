@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iyoons.world.dao.CommentsDAO">
+
+	<select id="getCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
+		select
+			cd.*
+		from
+			(select
+					c.comm_seq,
+					c.comm_content,
+					c.comm_group,
+					c.comm_level,
+					c.post_seq,
+					c.regr_seq,
+					(select user_name from user_info ui where c.regr_seq = ui.user_seq) as comm_name,
+					c.first_insert_dt,
+					c.updr_seq,
+					c.last_update_dt,
+					c.status,
+					c.comm_id,
+					(select count(1) from comments ac where c.comm_seq = ac.comm_group and comm_level = 1) nested_comments_cnt,
+					rownum r 
+				from
+					(select * from comments order by comm_group desc,first_insert_dt asc)c
+				where 
+					c.post_seq = #{postSeq} 
+					and c.status in (0,1) 
+					and comm_level = 0
+					)cd
+						where cd.r &gt;= #{startIndex}
+						and cd.r &lt;= #{endIndex}
+	</select>
+	<select id="getNestedCommentsList" resultType="com.iyoons.world.vo.CommentsVO">
+		select
+				c.comm_seq,
+				c.comm_content,
+				c.comm_group,
+				c.comm_level,
+				c.post_seq,
+				(select user_name from user_info ui where c.regr_seq = ui.user_seq) as comm_name,
+				c.regr_seq,
+				c.first_insert_dt,
+				c.updr_seq,
+				c.last_update_dt,
+				c.status,
+				c.comm_id
+			from
+				(select * from comments order by comm_group desc,first_insert_dt asc)c
+			where 
+				c.post_seq = #{postSeq} 
+				and c.status in (0,1) 
+				and c.comm_level = 1
+				and c.comm_group = #{commGroup}
+	</select>
+	<insert id="insertComments">
+			insert into comments(comm_seq,
+								 comm_content,
+								 comm_group,
+								 comm_level,
+								 post_seq,
+								 regr_seq,
+								 first_insert_dt,
+								 updr_seq,
+								 last_update_dt,
+								 status,
+								 comm_id
+								 	)
+				 		  values(#{commSeq},
+				 		  		 #{commContent},
+	  						 <choose>
+			 		  		 	<when test="commGroup == 0">
+			 		  		 	#{commSeq},
+			 		  		 	</when>
+			 		  		 	<otherwise>
+			 		  		 	#{commGroup},
+			 		  		 	</otherwise>
+			 		  		 </choose>
+			 		  		 	 #{commLevel},
+				 		  		 #{postSeq},
+				 		  		 #{regrSeq},
+				 		  		 sysdate,
+				 		  		 0,
+				 		  		 sysdate,
+				 		  		 1,
+				 		  		 #{commId}
+				 					)
+		<selectKey resultType="int" keyProperty="commSeq" order="BEFORE">
+			select comm_seq.nextval from dual	
+		</selectKey>
+		</insert>
+	<select id="getExistCommentsCount" resultType="int">
+		select count(comm_seq) from comments where post_seq = #{postSeq} and status = 1
+	</select>
+	<select id="getALLCommentsCount" resultType="int">
+		select
+			count(comm_seq) 
+		from 
+			comments 
+		where 
+			post_seq = #{postSeq}
+			and comm_level = 0
+	</select>
+	<select id="getComment" resultType="com.iyoons.world.vo.CommentsVO">
+		select
+			comm_content,
+			comm_seq,
+			regr_seq,
+			post_seq,
+			comm_level,
+			comm_group
+		from
+			comments
+		where
+			comm_seq = #{commSeq} 
+			and post_seq = #{postSeq}
+	</select>
+	<update id="delComment">
+		update
+			comments
+		set
+			status = 0,
+			updr_seq = #{updrSeq},
+			last_update_dt = sysdate
+		where
+			comm_seq = #{commSeq}
+			and regr_seq = #{regrSeq}
+			and status = 1
+	</update>
+	<update id="delAllCommentsByPostSeq">
+		update
+			comments
+		set
+			status = 0,
+			updr_seq = #{updrSeq},
+			last_update_dt = sysdate
+		where
+			post_seq = #{postSeq}
+			and status = 1
+	</update>
+	<update id="modComment">
+	update
+		comments 
+	set 
+		comm_content = #{commContent},
+		last_update_dt = sysdate,
+		updr_seq = #{updrSeq}
+	where 
+		post_seq = #{postSeq}
+		and comm_seq = #{commSeq}
+		and status = 1
+	</update>
+</mapper>
