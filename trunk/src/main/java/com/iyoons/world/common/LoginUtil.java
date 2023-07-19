@@ -75,12 +75,10 @@ public class LoginUtil {
 	}
 	
 	/**
-	 * @param JWT token
+	 * @param JWT token,session
 	 * @discription Access token을 통해 세션을 재생성한다
 	 * @return JWT token
 	 * */
-	
-
 	public void reGenerateSession(String token,HttpSession session) {
 		session.setAttribute("sessionPicForUser",getValueFromToken(token,"picture"));
 		session.setAttribute("sessionIdForUser", getValueFromToken(token,"userId"));

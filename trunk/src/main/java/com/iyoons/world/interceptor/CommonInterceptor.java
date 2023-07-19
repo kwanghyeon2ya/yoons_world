@@ -69,8 +69,8 @@ public class CommonInterceptor implements HandlerInterceptor {
 				logger.info("첫 세션을 통해 진입성공");
 			} else {
 				
-				Cookie cookieAccess = loginutil.getCookieByName(request, FinalVariables.ACCESS_TOKEN_COOKIE_NAME);
-	            Cookie cookieRefresh = loginutil.getCookieByName(request, FinalVariables.REFRESH_TOKEN_COOKIE_NAME);
+				Cookie cookieAccess = loginutil.getCookieByName(request, FinalVariables.ACCESS_TOKEN_COOKIE_NAME);//access토큰 key이름으로 쿠키 검색
+	            Cookie cookieRefresh = loginutil.getCookieByName(request, FinalVariables.REFRESH_TOKEN_COOKIE_NAME);//refresh토큰 key이름으로 쿠키 검색
 	            logger.debug("cookieAccess == null : "+(cookieAccess == null));
 	            logger.debug("cookieRefresh == null : "+(cookieRefresh == null));
 	            if (cookieRefresh== null) {
@@ -90,11 +90,11 @@ public class CommonInterceptor implements HandlerInterceptor {
 	            	if(!checkRefreshToken) {
 	            		throw new Exception("token cookie is null");
 	            	}else{
-	            		loginutil.reGenerateByRefToken(response,session,refreshToken);
+	            		loginutil.reGenerateByRefToken(response,session,refreshToken);//refresh토큰으로 access토큰 및 세션 재생성
 	            		returnValue = true; 
 	            	}
 	            }else{
-	            	loginutil.reGenerateSession(accessToken,session);//세션 재생성
+	            	loginutil.reGenerateSession(accessToken,session);//access토큰으로 세션 재생성
 	            	returnValue = true;
 	            }
 	            
