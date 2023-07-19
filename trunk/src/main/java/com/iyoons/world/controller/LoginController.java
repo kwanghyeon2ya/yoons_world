@@ -132,11 +132,11 @@ public class LoginController {
 						loginutil.generateRefreshToken(response, userVO);//refresh token 생성
 						logger.debug("bkh 토큰 확인 : " + token);
 	
-						Cookie cookie = new Cookie("auth", token);
+						/*Cookie cookie = new Cookie("auth", token);
 						cookie.setPath("/");
 						cookie.setMaxAge(60 * 60 * 60 * 24 * 30); // 한달
 						cookie.setHttpOnly(true);
-						response.addCookie(cookie);
+						response.addCookie(cookie);*/
 	
 						alvo.setCookieKey(token);
 	
