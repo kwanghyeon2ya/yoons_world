@@ -52,8 +52,8 @@ public class LoginController {
 	private int testSessionTime = 60;
 	private int testCookieTime = 60 * 60;
 	private int localSessTime = 60 * 60 * 60 * 24 * 7; // 개발서버
-	private int serverSessTime = 60 * 60 * 60 * 24;// 배포
-	private final String secretKey = "secretKey";
+	private int serverSessTime = 60 * 60 * 60;// 배포
+	private final String secretKey = "rhkdgusWkd";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
@@ -128,8 +128,8 @@ public class LoginController {
 						userService.deleteCookieWhenLogin(alvo); // 유저 고유번호+브라우저 정보로 db기존 데이터 status 0
 																	// 만료
 						
-						String token = loginutil.generateAccessToken(response, userVO);//access token생성	
-						loginutil.generateRefreshToken(response, userVO);//refresh token 생성
+						String token = loginutil.generateAccessToken(response, userInfovo);//access token생성	
+						loginutil.generateRefreshToken(response, userInfovo);//refresh token 생성
 						logger.debug("bkh 토큰 확인 : " + token);
 	
 						/*Cookie cookie = new Cookie("auth", token);
@@ -152,6 +152,7 @@ public class LoginController {
 					session.setAttribute("sessionNameForUser", userInfovo.getUserName());
 					session.setAttribute("sessionSeqForUser", userInfovo.getUserSeq());
 					session.setAttribute("sessionPwCheck",userInfovo.getFirstUpdatePw());
+					session.setAttribute("sessionUserType",userInfovo.getUserType());
 	
 					session.setMaxInactiveInterval(serverSessTime);
 

@@ -392,6 +392,7 @@
 	
 	<select id="getUserInfoByRefToken" resultType="com.iyoons.world.vo.UserVO">
 		select
+			user_seq,
 			user_id,
 			user_name,
 			picture,

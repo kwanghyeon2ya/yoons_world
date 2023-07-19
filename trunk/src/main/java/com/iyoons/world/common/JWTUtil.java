@@ -74,8 +74,10 @@ public class JWTUtil {
             Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
             return true;
         } catch (ExpiredJwtException e) { // 토큰이 만료되었을 경우
+        	System.out.println("ExpiredJwtException발생");
             return false;
         } catch (Exception e) { // 나머지 에러의 경우
+        	System.out.println("Exception발생");
             return false;
         }
     }
@@ -124,6 +126,7 @@ public class JWTUtil {
 		payloads.put("userName", userVO.getUserName());
 		payloads.put("firstUpdatePw", userVO.getFirstUpdatePw());
 		payloads.put("picture",userVO.getPicture());
+		payloads.put("userType",userVO.getUserType());
 		return payloads; 
 	}
 	

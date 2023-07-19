@@ -71,16 +71,19 @@ public class CommonInterceptor implements HandlerInterceptor {
 				
 				Cookie cookieAccess = loginutil.getCookieByName(request, FinalVariables.ACCESS_TOKEN_COOKIE_NAME);
 	            Cookie cookieRefresh = loginutil.getCookieByName(request, FinalVariables.REFRESH_TOKEN_COOKIE_NAME);
-	            
-	            if (cookieAccess == null || cookieRefresh == null) {
+	            logger.debug("cookieAccess == null : "+(cookieAccess == null));
+	            logger.debug("cookieRefresh == null : "+(cookieRefresh == null));
+	            if (cookieRefresh== null) {
 	                throw new Exception("token cookie is null");
 	            }
-	            
-	            String accessToken = loginutil.getValueFromCookie(cookieAccess);
-	            String refreshToken = loginutil.getValueFromCookie(cookieAccess);
-	            
-	            
-	            boolean checkAccessToken = loginutil.validateToken(accessToken);
+	            boolean checkAccessToken = false;
+	            String accessToken = null;
+	            if(cookieAccess != null) { 
+	            	accessToken = loginutil.getValueFromCookie(cookieAccess);//쿠키에서 암호화된 토큰값 가져오기
+	            	checkAccessToken = loginutil.validateToken(accessToken);//암호화된 토큰값으로 유효확인
+	            	logger.debug("checkAccessToken : "+checkAccessToken);
+	            }
+	            String refreshToken = loginutil.getValueFromCookie(cookieRefresh);
 	            
 	            if(!checkAccessToken) {
 	            	boolean checkRefreshToken = loginutil.validateToken(refreshToken);
@@ -88,13 +91,17 @@ public class CommonInterceptor implements HandlerInterceptor {
 	            		throw new Exception("token cookie is null");
 	            	}else{
 	            		loginutil.reGenerateByRefToken(response,session,refreshToken);
+	            		returnValue = true; 
 	            	}
+	            }else{
+	            	loginutil.reGenerateSession(accessToken,session);//세션 재생성
+	            	returnValue = true;
 	            }
 	            
 	            
 	            
 	            
-				Cookie[] cookies = request.getCookies();
+				/*Cookie[] cookies = request.getCookies();
 				
 				logger.debug("쿠키확인 :" + cookies);
 
@@ -127,7 +134,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 
 						}
 					}
-				}
+				}*/
 
 			}
 			
@@ -142,7 +149,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 			e.printStackTrace();
 			logger.debug("exception " + e);
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
-			
+			returnValue = false;
 		}
 		
 		if (!returnValue) {

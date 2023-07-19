@@ -42,8 +42,8 @@ public class FinalVariables {
 	/*
 	 * JWT token 유지 시간
 	 * */
-	protected final static int EXPIRATION_ACCESS = 1000 * 60 * 60 * 120;//2시간(date()타입의 생성자로 들어갈 long type)
-	protected final static int EXPIRATION_REFRESH = 1000 * 60 * 60 * 60 * 24 * 14;//2주(date()타입의 생성자로 들어갈 long type)
+	public final static int EXPIRATION_ACCESS = 60 * 60 * 120;//2시간(date()타입의 생성자로 들어갈 long type)
+	public final static int EXPIRATION_REFRESH = 60 * 60 * 60 * 24 * 14;//2주(date()타입의 생성자로 들어갈 long type)
 	
 	/*
 	 * Session 만료시간

@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,9 +40,9 @@ public class LoginUtil {
 	@Autowired
 	UserService userService;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	
-	/*
+	/**
 	 * @param Response,UserVO
 	 * @discription 엑세스 토큰 발급
 	 * @return JWT Access token
@@ -49,28 +52,44 @@ public class LoginUtil {
 		String jwt = jwtutil.generateAccessToken(userVO);
 		Cookie cookie = new Cookie(FinalVariables.ACCESS_TOKEN_COOKIE_NAME, jwt);
 		cookie.setPath("/");
-		cookie.setMaxAge(FinalVariables.EXPIRATION_ACCESS); // 2시간
+		cookie.setMaxAge(5); // 2시간
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
 		return jwt;
 	}
 
-	/*
+	/**
 	 * @param Response,UserVO
 	 * @discription 리프레쉬 토큰 발급
 	 * @return JWT Refresh token
 	 * */
 	public String generateRefreshToken(HttpServletResponse response,UserVO userVO) {
 		
-		String jwt = jwtutil.generateAccessToken(userVO);
+		String jwt = jwtutil.generateRefreshToken(userVO);
 		Cookie cookie = new Cookie(FinalVariables.REFRESH_TOKEN_COOKIE_NAME, jwt);
 		cookie.setPath("/");
-		cookie.setMaxAge(FinalVariables.EXPIRATION_REFRESH); // 2시간
+		cookie.setMaxAge(FinalVariables.EXPIRATION_REFRESH/1000); // 2시간
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
 		return jwt;
 	}
+	
+	/**
+	 * @param JWT token
+	 * @discription Access token을 통해 세션을 재생성한다
+	 * @return JWT token
+	 * */
+	
 
+	public void reGenerateSession(String token,HttpSession session) {
+		session.setAttribute("sessionPicForUser",getValueFromToken(token,"picture"));
+		session.setAttribute("sessionIdForUser", getValueFromToken(token,"userId"));
+		session.setAttribute("sessionNameForUser", getValueFromToken(token,"userName"));
+		session.setAttribute("sessionSeqForUser", getValueFromToken(token,"userSeq"));
+		session.setAttribute("sessionPwCheck",getValueFromToken(token,"firstUpdatePw"));
+		session.setAttribute("sessionUserType",getValueFromToken(token,"userType"));
+	}
+	
 	/**
      * 쿠키 가져오기
      *
@@ -100,6 +119,7 @@ public class LoginUtil {
      * @return 유효결과값 boolean
      * */
     public boolean validateToken(String token) {
+    	logger.debug("validateToken 진입");
     	return jwtutil.validateToken(token);
     }
     
@@ -114,7 +134,9 @@ public class LoginUtil {
 		
 		userVO.setUserSeq(userSeq);
 		userVO.setUserId(userId);
+		logger.debug("userVO : "+userVO);
 		UserVO userinfovo = userService.getUserInfoByRefToken(userVO);
+		logger.debug("userinfovo : "+userinfovo);
 		
 		String token = jwtutil.generateAccessToken(userinfovo);
 		
@@ -126,6 +148,7 @@ public class LoginUtil {
 		session.setAttribute("sessionNameForUser", userinfovo.getUserName());
 		session.setAttribute("sessionSeqForUser", userinfovo.getUserSeq());
 		session.setAttribute("sessionPwCheck",userinfovo.getFirstUpdatePw());
+		session.setAttribute("sessionUserType",userinfovo.getUserType());
 		
 		session.setMaxInactiveInterval(FinalVariables.EXPIRATION_SESSION);
 		
@@ -133,6 +156,7 @@ public class LoginUtil {
 		cookie.setPath("/");
 		cookie.setMaxAge(FinalVariables.EXPIRATION_ACCESS * 2);
 		response.addCookie(cookie);
+		logger.debug("쿠키 재생성 진입 확인");
 	}
 	
 	/*
