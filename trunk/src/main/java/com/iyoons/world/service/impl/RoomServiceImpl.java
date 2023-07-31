@@ -46,10 +46,57 @@ public class RoomServiceImpl implements RoomService {
 	@Autowired
 	RoomDAO dao;
 	
+	/**@author qus46
+	 * @param roomVO(roomSubject,roomContent,startDt,endDt)
+	 * @discription 회의 예약 insert
+	 * @return insert 성공여부(0/1)
+	 * */
 	@Override
 	public int makeReservation(RoomVO roomVO) {
 		return dao.makeReservation(roomVO);
 	}
+
+	/**@author qus46
+	 * @param 회의예약 시작시간(startDt)
+	 * @discription 회의 예약 시작 시간 중복 확인
+	 * @return count값(1 중복/0 중복없음)
+	 * */
+	@Override
+	public int checkIsAvailableStartDT(String startDt) {
+		return dao.checkIsAvailableStartDT(startDt);
+	}
+
+	/**@author qus46
+	 * @param 회의예약 종료시간(endDt)
+	 * @discription 회의 예약 종료 시간 중복 확인
+	 * @return count값(1 중복/0 중복없음)
+	 * */
+	@Override
+	public int checkIsAvailableEndDT(String endDt) {
+		return dao.checkIsAvailableEndDT(endDt);
+	}
+
+	/**@author qus46
+	 * @param 캘린더 일정List 가져오기
+	 * @discription 캘린더 페이지 진입시 회의실 예약 db조회
+	 * @return 
+	 * */
+	@Override
+	public List<RoomVO> getReservation() {
+		return dao.getReservation();
+	}
+
+	
+	/**@author qus46
+	 * @param 캘린더 일정List 가져오기
+	 * @discription 캘린더 페이지 진입시 회의실 예약 db조회
+	 * @return 
+	 * */
+	@Override
+	public RoomVO readReservation(int reserveSeq) {
+		return dao.readReservation(reserveSeq);
+	}
+	
 	
 	
 

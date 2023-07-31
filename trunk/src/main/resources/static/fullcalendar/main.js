@@ -8982,9 +8982,11 @@ var FullCalendar = (function (exports) {
         return StandardEvent;
     }(BaseComponent));
     function renderInnerContent(innerProps) {
+    	console.log("innerProps");
+    	console.log(innerProps);
         return (createElement(Fragment, null,
             innerProps.timeText &&
-                createElement("div", { className: 'fc-event-time' }, innerProps.timeText),
+                createElement("div", { className: 'fc-event-start-time' }, innerProps.timeText),
             createElement("div", { className: 'fc-event-title-frame' },
                 createElement("div", { className: 'fc-event-title fc-sticky' }, innerProps.event.title || createElement(Fragment, null, "\u00A0")))));
     }
@@ -11574,10 +11576,12 @@ var FullCalendar = (function (exports) {
         return TableListItemEvent;
     }(BaseComponent));
     function renderInnerContent$2(innerProps) {
+    	console.log("innerProps.event.id");
+    	console.log(innerProps.event.id);
         return (createElement(Fragment, null,
-            createElement("div", { className: 'fc-daygrid-event-dot', style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
+            createElement("div", { className: 'fc-daygrid-event-dot',id : innerProps.event.id,style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
             innerProps.timeText &&
-                createElement("div", { className: 'fc-event-time' }, innerProps.timeText),
+                createElement("div", { className: 'fc-event-start-time' }, innerProps.timeText),
             createElement("div", { className: 'fc-event-title' }, innerProps.event.title || createElement(Fragment, null, "\u00A0"))));
     }
     function getSegAnchorAttrs$1(seg) {
@@ -13706,6 +13710,8 @@ var FullCalendar = (function (exports) {
     }(BaseComponent));
     function renderEventInnerContent(props) {
         var event = props.event;
+        console.log("event");
+        console.log(event);
         var url = event.url;
         var anchorAttrs = url ? { href: url } : {};
         return (createElement("a", __assign({}, anchorAttrs), event.title));

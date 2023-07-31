@@ -31,7 +31,8 @@ public class FinalVariables {
 	public final static String SQL_CODE = "4444"; // SQL 예외 코드
 	public final static String FORBIDDEN_FILE_TYPE_CODE = "5555"; // 금지된 파일 타입 예외 코드
 	public final static String OVER_THE_FILE_SIZE_CODE = "6666"; // 금지된 파일 타입 예외 코드
-	public final static String FAIL_DUPLICATED_CODE = "8888"; // 이미 존재하는 글/예약에 insert시 예외 코드
+	public final static String STARTDT_DUPLICATED_CODE = "7777"; // 이미 존재하는 글/예약에 insert시 예외 코드
+	public final static String ENDDT_DUPLICATED_CODE = "8888"; // 이미 존재하는 글/예약에 insert시 예외 코드
 	public final static String EXCEPTION_CODE = "9999"; // 최상위 익셉션 코드
 	
 	/*

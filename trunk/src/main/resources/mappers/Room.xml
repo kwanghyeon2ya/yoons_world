@@ -3,9 +3,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.iyoons.world.dao.BoardDAO">
+<mapper namespace="com.iyoons.world.dao.RoomDAO">
 
-	<insert id="makeReservation">
+	<insert id="makeReservation" parameterType="com.iyoons.world.vo.RoomVO">
 		insert into room_reservation(reserve_seq,
 									 room_subject,
 									 room_content,
@@ -19,20 +19,61 @@
 									reserve_seq.nextval,
 									#{roomSubject},
 									#{roomContent},
-									#{roomStatus},
-									TO_DATE(#{startDt},'YYYYMMDDHH24MISS'),
-									TO_DATE(#{endDt},'YYYYMMDDHH24MISS'),
+									1,
+									TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
+									TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
 									SYSDATE,
-									#{userSeq}
+									#{rgtrId}
 									)
 	</insert>
 
 
-	<select id="checkIsAvailable" resultType="int">
+	<select id="checkIsAvailableStartDT" parameterType="String" resultType="int">
 		SELECT 
 			COUNT(*)
 		FROM 
 			ROOM_RESERVATION
+		where 
+			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+	</select>
+	
+	<select id="checkIsAvailableEndDT" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			ROOM_RESERVATION
+		where 
+			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+	</select>
+	
+	<select id="getReservation" resultType="com.iyoons.world.vo.RoomVO">
+		select 
+			reserve_seq as "id",
+			room_subject as "title",
+			to_char(start_dt,'YYYY-MM-DD HH24:MI:SS') as "start",
+			to_char(end_dt,'YYYY-MM-DD HH24:MI:SS') as "end"
+		from
+			room_reservation
+		where 
+			room_status = 1
+			and to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate-30),'yyyy-MM-dd')
+			or to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate+30),'yyyy-MM-dd')
+			
+	</select>
+	
+	<select id="readReservation" resultType="com.iyoons.world.vo.RoomVO">
+		select 
+			room_content,
+			room_subject,
+			to_char(start_dt,'YYYY-MM-DD HH24:MI:SS') as start_dt,
+			to_char(end_dt,'YYYY-MM-DD HH24:MI:SS') as end_dt ,
+			to_char(reg_dt,'YYYY-MM-DD HH24:MI:SS') as reg_dt,
+			rgtr_id
+		from
+			room_reservation
+		where
+			room_status = 1
+			and reserve_seq = #{roomdSeq}
 	</select>
 	
 </mapper>
