@@ -58,7 +58,7 @@
 			room_status = 1
 			and to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate-30),'yyyy-MM-dd')
 			or to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate+30),'yyyy-MM-dd')
-			
+			and del_yn != 'Y'
 	</select>
 	
 	<select id="readReservation" resultType="com.iyoons.world.vo.RoomVO">
@@ -74,6 +74,36 @@
 		where
 			room_status = 1
 			and reserve_seq = #{roomdSeq}
+			and del_yn != 'Y'
 	</select>
+	
+	<select id="checkIfSameDep" resultType="int">
+		select
+			*
+		from
+			room_reservation rr
+		where
+			(select dep_seq from dep_user where user_seq = #{mdfrId})
+			(select dep_seq from dep_user )
+		inner join
+			dep_user du
+				on du.rgtr_id = rr.user_seq	
+	</select>
+	
+	<update id="updateReservation">
+		update
+			room_reservation
+		set
+			room_subject = #{roomSubject},
+			room_content = #{roomContent},
+			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
+			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
+			mdfr_id = #{mdfrId},
+			mdfcn_dt = sysdate
+		where
+			reserve_seq = #{reserveSeq}
+			and room_status = 1
+			and del_yn != 'Y'
+	</update>
 	
 </mapper>

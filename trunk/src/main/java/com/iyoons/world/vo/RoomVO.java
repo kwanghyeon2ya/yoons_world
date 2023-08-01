@@ -28,5 +28,6 @@ public class RoomVO {//회의실 예약 VO Class
 	private String title;//캘린더에 뿌릴 회의 제목
 	private String start;//캘린더에 뿌릴 회의 시작시간
 	private String end;//캘린더에 뿌릴 회의 종료시간
+	private int sameDep;//같은 부서 확인(0 같은부서아님/1 같은부서임)
 	
 }

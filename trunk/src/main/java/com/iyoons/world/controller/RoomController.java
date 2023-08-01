@@ -79,24 +79,24 @@ public class RoomController {
 			logger.debug("seq확인 : "+String.valueOf(session.getAttribute("sessionSeqForUser")));
 			roomVO.setRgtrId(String.valueOf(session.getAttribute("sessionSeqForUser")));
 			logger.debug("seq String변환 : "+roomVO.getRgtrId());
-	
+			
 			int startDtChk = service.checkIsAvailableStartDT(roomVO.getStartDt());//시작시간 중복확인
 			int endDtChk = service.checkIsAvailableEndDT(roomVO.getStartDt());//종료시간 중복확인
 			if(startDtChk >= 1) {
-				throw new Exception("startDt is no available");
+				throw new Exception("startDt is not available");
 			}
 			if(endDtChk >= 1) {
-				throw new Exception("endDt is no available");
+				throw new Exception("endDt is not available");
 			}
 			
 			result = service.makeReservation(roomVO);//예약정보 insert
 			
 		}catch(Exception e){
-			if("startDt is no available".equals(e.getMessage())) {
+			if("startDt is not available".equals(e.getMessage())) {
 				logger.error("start e message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
 			}
-			if("endDt is no available".equals(e.getMessage())) {
+			if("endDt is not available".equals(e.getMessage())) {
 				logger.error("end e message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
 			}		
@@ -107,6 +107,53 @@ public class RoomController {
 
 		
 		
+		return result;
+	}
+	
+	/** @discription 예약 날짜 예약 update
+	 *  @param RoomVO
+	 *  @return 예약 성공 여부
+	 * */
+	@RequestMapping(value="/updateReservation",method=RequestMethod.POST)
+	@ResponseBody 
+	public int updateReservation(@RequestBody RoomVO roomVO,HttpServletRequest request,HttpSession session) {
+		logger.info("---------- updateReservation get in ---------");
+		
+		logger.debug("roomVO toString ---- "+roomVO);
+		
+		int result = 0;//update성공 결과 담을 변수
+		
+		try {
+			
+			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
+			logger.debug("seq확인 : "+seqStr);
+			roomVO.setMdfrId(seqStr);
+			
+			int startDtChk = service.checkIsAvailableStartDT(roomVO.getStartDt());//시작시간 중복확인
+			int endDtChk = service.checkIsAvailableEndDT(roomVO.getStartDt());//종료시간 중복확인
+			if(startDtChk >= 1) {
+				throw new Exception("startDt is not available");
+			}
+			if(endDtChk >= 1) {
+				throw new Exception("endDt is not available");
+			}
+			
+			result = service.updateReservation(roomVO);//예약정보 insert
+			
+		}catch(Exception e){
+			if("startDt is not available".equals(e.getMessage())) {
+				logger.error("start e message : "+e.getMessage());
+				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
+			}
+			if("endDt is not available".equals(e.getMessage())) {
+				logger.error("end e message : "+e.getMessage());
+				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
+			}		
+			logger.error("Exception : " + e.getMessage());
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			return result;
+		}
+
 		return result;
 	}
 

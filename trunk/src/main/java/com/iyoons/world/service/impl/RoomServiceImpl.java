@@ -47,7 +47,7 @@ public class RoomServiceImpl implements RoomService {
 	RoomDAO dao;
 	
 	/**@author qus46
-	 * @param roomVO(roomSubject,roomContent,startDt,endDt)
+	 * @param roomVO(roomSubject,roomContent,startDt,endDt,rgtr_id)
 	 * @discription 회의 예약 insert
 	 * @return insert 성공여부(0/1)
 	 * */
@@ -77,7 +77,7 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	/**@author qus46
-	 * @param 캘린더 일정List 가져오기
+	 * @param 
 	 * @discription 캘린더 페이지 진입시 회의실 예약 db조회
 	 * @return 
 	 * */
@@ -95,6 +95,16 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public RoomVO readReservation(int reserveSeq) {
 		return dao.readReservation(reserveSeq);
+	}
+
+	/**@author qus46
+	 * @param roomVO(roomSubject,roomContent,startDt,endDt,rgtr_id) 
+	 * @discription 회의실 예약 내용 update
+	 * @return update 성공여부 (0/1)
+	 * */
+	@Override
+	public int updateReservation(RoomVO roomVO) {
+		return dao.updateReservation(roomVO);
 	}
 	
 	

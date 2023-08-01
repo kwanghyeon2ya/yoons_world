@@ -301,7 +301,65 @@
 	    }
 	    
 	    
-	    function updateReservation(){//예약 업데이트
+	    function updateReservation(node){//회의실 예약 내용 업데이트
+	    	
+	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
+	    	var room_content = document.querySelector("#room_content");//회의 내용 node
+	    	console.log(document.querySelector("#start_dt"));
+	    	var start_dt_val = document.querySelector("#start_dt").value;//시작 시간 값
+	    	var end_dt_val = document.querySelector("#end_dt").value;//종료시간 값
+	    	
+	    	if(room_content.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
+	    		alert("회의 내용을 입력해주세요");
+	    		room_content.value = "";
+	    		room_content.focus();
+	    		return false;
+	    	}
+	    	
+	    	if(room_content.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
+	    		alert("회의 내용은 2000자를 초과할 수 없습니다.");
+	    		return false;
+	    	}
+	    	//content_cnt 콘텐츠 글자 수
+	    	var param = {roomSubject : room_subject.value,
+	    				 roomContent : room_content.value,
+	    				 startDt : start_dt_val,
+	    				 endDt : end_dt_val,
+	    				 reserveSeq : node
+	    				 };
+	    	
+	    	console.log(JSON.stringify(param));
+	    	
+	    	$.ajax({
+	    		url : '/makeReservation',
+	    		type : 'POST',
+				contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
+				dataType  : "json", //리턴 데이터 타입 지정
+	    		data : JSON.stringify(param),
+	    		async : false,
+	    	success : function(data){
+	    		console.log("data : "+data);
+	    		switch(Number(data)){
+	    		case 0:
+	    			alert("예약되지 않았습니다.");
+	    			break;
+	    		case 1: 
+	    			alert("성공적으로 예약되었습니다");
+	    			location.reload(true);
+	    			break;
+	    		case 7777:
+	    			alert("이미 예약이 존재합니다. 시작시간을 변경해주세요.");
+	    			break;
+	    		case 8888:
+	    			alert("이미 예약이 존재합니다. 종료시간을 변경해주세요.");
+	    			break;
+	    		case 9999:
+	    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
+	    			location.href="/login/logout";
+	    		}
+	    		
+	    	}
+	    	});
 	    	
 	    }
 	    
@@ -329,8 +387,7 @@
 	    	var param = {roomSubject : room_subject.value,
 	    				 roomContent : room_content.value,
 	    				 startDt : start_dt_val,
-	    				 endDt : end_dt_val,
-	    				 reserveSeq : node
+	    				 endDt : end_dt_val
 	    				 };
 	    	
 	    	console.log(JSON.stringify(param));
