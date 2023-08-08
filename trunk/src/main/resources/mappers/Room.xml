@@ -28,6 +28,28 @@
 	</insert>
 
 
+	<select id="checkIsAvailableStartUPD" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			ROOM_RESERVATION
+		where 
+			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+			AND ROOM_STATUS = 1
+			AND RESERVE_SEQ != #{reserveSeq}
+	</select>
+	
+	<select id="checkIsAvailableEndUPD" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			ROOM_RESERVATION
+		where 
+			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+			AND ROOM_STATUS = 1
+			AND RESERVE_SEQ != #{reserveSeq}
+	</select>
+	
 	<select id="checkIsAvailableStartDT" parameterType="String" resultType="int">
 		SELECT 
 			COUNT(*)
@@ -35,6 +57,7 @@
 			ROOM_RESERVATION
 		where 
 			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+			AND ROOM_STATUS = 1
 	</select>
 	
 	<select id="checkIsAvailableEndDT" parameterType="String" resultType="int">
@@ -44,66 +67,79 @@
 			ROOM_RESERVATION
 		where 
 			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
+			AND ROOM_STATUS = 1
 	</select>
 	
 	<select id="getReservation" resultType="com.iyoons.world.vo.RoomVO">
-		select 
-			reserve_seq as "id",
-			room_subject as "title",
-			to_char(start_dt,'YYYY-MM-DD HH24:MI:SS') as "start",
-			to_char(end_dt,'YYYY-MM-DD HH24:MI:SS') as "end"
-		from
-			room_reservation
-		where 
-			room_status = 1
-			and to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate-30),'yyyy-MM-dd')
-			or to_char(reg_dt,'yyyy-MM-dd') >= to_char((sysdate+30),'yyyy-MM-dd')
-			and del_yn != 'Y'
+		SELECT 
+			RESERVE_SEQ AS "ID",
+			ROOM_SUBJECT AS "TITLE",
+			TO_CHAR(START_DT,'YYYY-MM-DD HH24:MI:SS') AS "START",
+			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS "END"
+		FROM
+			ROOM_RESERVATION
+		WHERE 
+			ROOM_STATUS = 1
+			AND DEL_YN != 'Y'
 	</select>
 	
 	<select id="readReservation" resultType="com.iyoons.world.vo.RoomVO">
-		select 
-			room_content,
-			room_subject,
-			to_char(start_dt,'YYYY-MM-DD HH24:MI:SS') as start_dt,
-			to_char(end_dt,'YYYY-MM-DD HH24:MI:SS') as end_dt ,
-			to_char(reg_dt,'YYYY-MM-DD HH24:MI:SS') as reg_dt,
-			rgtr_id
-		from
-			room_reservation
-		where
-			room_status = 1
-			and reserve_seq = #{roomdSeq}
-			and del_yn != 'Y'
+		SELECT 
+			ROOM_CONTENT,
+			ROOM_SUBJECT,
+			TO_CHAR(START_DT,'YYYY-MM-DD HH24:MI:SS') AS START_DT,
+			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS END_DT ,
+			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+			(SELECT USER_NAME FROM ROOM_RESERVATION RR INNER JOIN USER_INFO UI ON to_number(REPLACE(NVL(RR.RGTR_ID,'0'),'SYSTEM',1)) = UI.USER_SEQ WHERE RR.RESERVE_SEQ = #{reserveSeq}) AS "RGTR_NAME",
+			TO_CHAR(MDFCN_DT,'YYYY-MM-DD HH24:MI:SS') AS MDFCN_DT,
+			(SELECT USER_NAME FROM ROOM_RESERVATION RR INNER JOIN USER_INFO UI ON to_number(REPLACE(NVL(RR.MDFR_ID,'0'),'SYSTEM',1)) = UI.USER_SEQ WHERE RR.RESERVE_SEQ = #{reserveSeq}) AS "MDFR_NAME"
+		FROM
+			ROOM_RESERVATION
+		WHERE
+			ROOM_STATUS = 1
+			AND RESERVE_SEQ = #{reserveSeq}
+			AND DEL_YN != 'Y'
 	</select>
 	
-	<select id="checkIfSameDep" resultType="int">
-		select
-			*
-		from
-			room_reservation rr
-		where
-			(select dep_seq from dep_user where user_seq = #{mdfrId})
-			(select dep_seq from dep_user )
-		inner join
-			dep_user du
-				on du.rgtr_id = rr.user_seq	
+	<select id="getDepName" resultType="com.iyoons.world.vo.RoomVO">
+		SELECT DISTINCT
+			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON DU.DEP_SEQ = D.DEP_SEQ WHERE DU.USER_SEQ = #{userSeq}) AS "MDFR_DEP_NAME",
+			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON D.DEP_SEQ = DU.DEP_SEQ
+			INNER JOIN ROOM_RESERVATION RR ON RR.RGTR_ID = DU.USER_SEQ 
+			WHERE RR.RESERVE_SEQ = #{reserveSeq}) as "rgtr_dep_name"
+		FROM
+			ROOM_RESERVATION
 	</select>
 	
 	<update id="updateReservation">
-		update
-			room_reservation
-		set
-			room_subject = #{roomSubject},
-			room_content = #{roomContent},
-			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
-			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
-			mdfr_id = #{mdfrId},
-			mdfcn_dt = sysdate
-		where
-			reserve_seq = #{reserveSeq}
-			and room_status = 1
-			and del_yn != 'Y'
+		UPDATE
+			ROOM_RESERVATION
+		SET
+			ROOM_SUBJECT = #{roomSubject},
+			ROOM_CONTENT = #{roomContent},
+			START_DT = TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
+			END_DT = TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
+			MDFR_ID = #{mdfrId},
+			MDFCN_DT = SYSDATE
+		WHERE
+			RESERVE_SEQ = #{reserveSeq}
+			AND ROOM_STATUS = 1
+			AND DEL_YN != 'Y'
 	</update>
+	
+	<update id="cancelReservation" parameterType="com.iyoons.world.vo.RoomVO">
+		UPDATE
+			ROOM_RESERVATION
+		SET
+			ROOM_STATUS = 0,
+			MDFR_ID = #{mdfrId},
+			MDFCN_DT = SYSDATE
+		WHERE
+			RESERVE_SEQ = #{reserveSeq}
+			AND ROOM_STATUS = 1
+			AND DEL_YN != 'Y'
+	</update>
+	
+	
 	
 </mapper>

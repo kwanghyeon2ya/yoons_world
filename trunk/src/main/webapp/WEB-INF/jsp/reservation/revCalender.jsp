@@ -38,8 +38,13 @@
 		  height: 100%;
 		}
 		
+		.historyNode{
+			margin-bottom:-9%;
+		}
+		
 		.popup {
 		  display:flex;
+		  flex-wrap: wrap;
 		  align-items:center;
 		  position: absolute;
 		  top: 50%;
@@ -57,9 +62,14 @@
 		  /* /* 초기에 약간 아래에 배치 */
 		  transform: translate(-50%, -40%);
 		}
+		.popup > *{
+			margin-left:1rem;
+		}
 		span{
 			line-height:1.5;
 		}
+		
+		
 	</style>
 <meta charset="UTF-8">
 <title>회의실 예약</title>
@@ -131,9 +141,9 @@
 			    	}
 			    	console.log(start_dt);
 			    	console.log(end_dt);
-			    	var cancel_btn = document.querySelector("#cancel_btn");
-			    	console.log(cancel_btn);
-			    	cancel_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
+			    	var close_btn = document.querySelector("#close_btn");
+			    	console.log(close_btn);
+			    	close_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
 			  },
 		      droppable: true, // this allows things to be dropped onto the calendar
 			  events: JSON.parse(JSON.stringify(all_events)),//요구되는 데이터 타입은 json - ajax로 받을 때 dataType:json명시해야함
@@ -167,7 +177,7 @@
 					}			
 					
 				}
-				var cancel_btn = document.querySelector("#cancel_btn");
+				var close_btn = document.querySelector("#close_btn");
 		        // is the "remove after drop" checkbox checked?
 		        if (checkbox.checked) {
 		          // if so, remove the element from the "Draggable Events" list
@@ -249,6 +259,19 @@
 	    function readReservation(node){//캘린더에 예약되어있는 내역을 클릭해 modal popup 활성화
 	    	console.log("node : "+node);
 	    
+	    	var background = document.querySelector(".background");
+	    	background.classList.add("show");
+	    	
+	    	var close_btn = document.querySelector("#close_btn");
+	    	console.log(close_btn);
+	    	close_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
+	    	var reserv_btn = document.getElementById("reserv_btn");
+	    	reserv_btn.style.display = "none";
+	    	const updatebutton = document.createElement('span');
+	    	updatebutton.innerHTML = '<button id="cancel_btn" onClick="cancelReservation('+node+')">예약취소</button>';
+	    	updatebutton.innerHTML += '<button id="update_btn" onClick="updateReservation('+node+')">수정하기</button>';
+	    	document.querySelector('#btn_div').prepend(updatebutton);
+	    
 	    	$.ajax({
 	    		url : '/readReservation?reserveSeq='+node,
 	    		type : 'GET',
@@ -257,9 +280,11 @@
 		    	success : function(data){
 		    		console.log("data : "+data);
 		    			
+		    		document.getElementById("history_div").style.display = "block";//과거 내역 block
+		    		
 		    		var start_dt = document.querySelector("#start_dt");//시작 시간 값
 			    	var end_dt = document.querySelector("#end_dt");//종료시간 값
-			    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 가공 (예시)2023-07-11 17:30:00
+			    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 가공 (예시)17:30:00 >> 2023-07-11 17:30:00
 			    		start_dt.options[i].value = data.startDt.split(" ")[0]+" "+start_dt.options[i].value; 
 			    		end_dt.options[i].value = data.endDt.split(" ")[0]+" "+end_dt.options[i].value;	
 			    		if(start_dt.options[i].value == data.startDt){//시작값과 일치한다면 selected
@@ -277,37 +302,91 @@
 			    			room_subject.options[i].selected = true;
 			    		}	
 			    	}
+			    	if(data.rgtrDepName != data.mdfrDepName){//만약 부서가 같지 않다면
+						document.getElementById("update_btn").remove();//수정하기 버튼은 보이지 않음
+						document.getElementById("cancel_btn").remove();//예약취소 버튼은 보이지 않음
+			    	}
 			    	
+			    	///예약 히스토리 입력
+			    	document.getElementById("rgtr_name").innerHTML = '등록자 : '+data.rgtrName+'('+data.rgtrDepName+')';//등록자이름
+			    	document.getElementById("reg_dt").innerHTML = '등록일 : '+data.regDt;//등록날짜
+			    	console.log("null 확인 실험");
+			    	console.log(typeof null);
+			    	console.log(data.mdfrName != null);
+			    	console.log(data.mdfrName !== null);
+			    	if(data.mdfrName !== null){
+			    		document.getElementById("mdfr_name").innerHTML = '수정자 : '+data.mdfrName+'('+data.mdfrDepName+')';//수정자이름
+			    		document.getElementById("mdfcn_dt").innerHTML = '수정일 : '+data.mdfcnDt;//수정날짜
+			    	}
 			    	
+			    	console.log(data.rgtrDepName);//등록자 부서명
+			    	console.log(data.mdfrDepName);//수정자 부서명
+			    	console.log(data.rgtrName);//등록자 이름
+			    	console.log(data.mdfrName);//수정자 이름
 			    	room_content.value = data.roomContent;//회의내용 넣기
 			    	
-	    			console.log(data.regDt);//수정날짜 처리필요
-	    			console.log(data.rgtrId);//수정자 처리필요
+	    			console.log(data.regDt);//등록날짜 
+	    			console.log(data.mdfcnDt);//수정 날짜
 		    	}
 	    	});
-	    
-	    
-	    	var background = document.querySelector(".background");
-	    	background.classList.add("show");
-	    	
-	    	var cancel_btn = document.querySelector("#cancel_btn");
-	    	console.log(cancel_btn);
-	    	cancel_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
-	    	var reserv_btn = document.getElementById("reserv_btn");
-	    	reserv_btn.style.display = "none";
-	    	const updatebutton = document.createElement('button');
-	    	updatebutton.innerHTML = '<button id="update_btn" onClick="updateReservation('+node+')">수정하기</button>';//매개변수 넣어주면 좋을것같은데..
-	    	document.querySelector('#btn_div').prepend(updatebutton);
 	    }
 	    
-	    
-	    function updateReservation(node){//회의실 예약 내용 업데이트
+	    function cancelReservation(node){//회의실 예약 취소
 	    	
+	    	console.log("node : "+node);
 	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
 	    	var room_content = document.querySelector("#room_content");//회의 내용 node
 	    	console.log(document.querySelector("#start_dt"));
 	    	var start_dt_val = document.querySelector("#start_dt").value;//시작 시간 값
 	    	var end_dt_val = document.querySelector("#end_dt").value;//종료시간 값
+	    	
+	    	$.ajax({
+	    		url : '/cancelReservation?reserveSeq='+node,
+	    		type : 'GET',
+				contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
+				dataType  : "json", //리턴 데이터 타입 지정
+	    		async : false,
+		    	success : function(data){
+		    		console.log("data : "+data);
+		    		switch(Number(data)){
+		    		case 0:
+		    			alert("예약이 취소되지 않았습니다.");
+		    			break;
+		    		case 1: 
+		    			alert("성공적으로 예약이 취소되었습니다");
+		    			location.reload(true);
+		    			break;
+		    		case 9999:
+		    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
+		    			location.href="/login/logout";
+		    			break;
+		    		}
+		    		
+	    		}
+	    		
+	    	});
+	    }
+	    
+	    
+	    function updateReservation(node){//회의실 예약 내용 업데이트
+	    	
+	    	console.log("node : "+node);
+	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
+	    	var room_content = document.querySelector("#room_content");//회의 내용 node
+	    	
+	    	var start_dt = document.querySelector("#start_dt");//시작 시간 값
+	    	var start_dt_val = start_dt.options[start_dt.selectedIndex].value;
+	    	var end_dt = document.querySelector("#end_dt");
+	    	var end_dt_val = end_dt.options[end_dt.selectedIndex].value;//종료시간 값
+	    	var start_hour = Number(start_dt_val.split(" ")[1].split(":")[0]);//시작 시간 (예)2023-07-11 17:30:00 >>17:30:00>>17 
+	    	var start_minuet = Number(start_dt_val.split(" ")[1].split(":")[1]);//시작 분 
+	    	var end_hour = Number(end_dt_val.split(" ")[1].split(":")[0]);//종료 시간
+	    	var end_minuet = Number(end_dt_val.split(" ")[1].split(":")[1]);//종료 분
+	    	
+	    	
+	    	console.log("업데이트 시작시간 : "+start_dt_val);
+	    	console.log("업데이트 종료시간 : "+end_dt_val);
+	    	
 	    	
 	    	if(room_content.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
 	    		alert("회의 내용을 입력해주세요");
@@ -315,11 +394,24 @@
 	    		room_content.focus();
 	    		return false;
 	    	}
-	    	
+	    	console.log("start_dt_val : "+start_dt_val);
 	    	if(room_content.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
 	    		alert("회의 내용은 2000자를 초과할 수 없습니다.");
 	    		return false;
 	    	}
+	    	
+	    	if(start_dt_val == end_dt_val){
+	    		alert("시작시간과 종료시간은 같을 수 없습니다.");
+	    		return false;
+	    	}
+	    	
+	    	if(start_hour >= end_hour){//시작 시간과 종료시간이 같거나 종료시간이 큰 경우
+	    		if(start_hour > end_hour||start_minuet > end_minuet){
+	    			alert("시작시간보다 종료시간이 이전일 수 없습니다.");
+		    		return false;	
+	    		}
+	    	}
+	    	
 	    	//content_cnt 콘텐츠 글자 수
 	    	var param = {roomSubject : room_subject.value,
 	    				 roomContent : room_content.value,
@@ -331,34 +423,38 @@
 	    	console.log(JSON.stringify(param));
 	    	
 	    	$.ajax({
-	    		url : '/makeReservation',
+	    		url : '/updateReservation',
 	    		type : 'POST',
 				contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
 				dataType  : "json", //리턴 데이터 타입 지정
 	    		data : JSON.stringify(param),
 	    		async : false,
-	    	success : function(data){
-	    		console.log("data : "+data);
-	    		switch(Number(data)){
-	    		case 0:
-	    			alert("예약되지 않았습니다.");
-	    			break;
-	    		case 1: 
-	    			alert("성공적으로 예약되었습니다");
-	    			location.reload(true);
-	    			break;
-	    		case 7777:
-	    			alert("이미 예약이 존재합니다. 시작시간을 변경해주세요.");
-	    			break;
-	    		case 8888:
-	    			alert("이미 예약이 존재합니다. 종료시간을 변경해주세요.");
-	    			break;
-	    		case 9999:
-	    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
-	    			location.href="/login/logout";
+		    	success : function(data){
+		    		console.log("data : "+data);
+		    		switch(Number(data)){
+		    		case 0:
+		    			alert("예약이 변경되지 않았습니다.");
+		    			break;
+		    		case 1: 
+		    			alert("성공적으로 예약이 변경되었습니다");
+		    			location.reload(true);
+		    			break;
+		    		case 7777:
+		    			alert("이미 예약이 존재합니다. 시작시간을 변경해주세요.");
+		    			break;
+		    		case 8888:
+		    			alert("이미 예약이 존재합니다. 종료시간을 변경해주세요.");
+		    			break;
+		    		case 9999:
+		    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
+		    			location.href="/login/logout";
+		    		case 0000:
+	    				alert("같은 부서 팀원만 수정할 수 있습니다.");
+	    				break;
+		    		}
+		    		
 	    		}
 	    		
-	    	}
 	    	});
 	    	
 	    }
@@ -368,9 +464,20 @@
 	    	
 	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
 	    	var room_content = document.querySelector("#room_content");//회의 내용 node
-	    	console.log(document.querySelector("#start_dt"));
-	    	var start_dt_val = document.querySelector("#start_dt").value;//시작 시간 값
-	    	var end_dt_val = document.querySelector("#end_dt").value;//종료시간 값
+	    	
+	    	
+	    	var start_dt = document.querySelector("#start_dt");//시작 시간 값
+	    	var start_dt_val = start_dt.options[start_dt.selectedIndex].value;//시작 시간 selected 값
+	    	var end_dt = document.querySelector("#end_dt");//종료 시간 값
+	    	var end_dt_val = end_dt.options[end_dt.selectedIndex].value;//종료시간 selected 값
+	    	var start_hour = Number(start_dt_val.split(" ")[1].split(":")[0]);//시작 시간 (예)2023-07-11 17:30:00 >> 17:30:00 >> 17
+	    	var start_minuet = Number(start_dt_val.split(" ")[1].split(":")[1]);//시작 분 (예)2023-07-11 17:30:00 >> 17:30:00 >> 30
+	    	var end_hour = Number(end_dt_val.split(" ")[1].split(":")[0]);//종료 시간
+	    	var end_minuet = Number(end_dt_val.split(" ")[1].split(":")[1]);//종료 분
+	    	
+	    	console.log("업데이트 시작시간 : "+start_dt_val);
+	    	console.log("업데이트 종료시간 : "+end_dt_val);
+	    	
 	    	
 	    	if(room_content.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
 	    		alert("회의 내용을 입력해주세요");
@@ -382,6 +489,17 @@
 	    	if(room_content.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
 	    		alert("회의 내용은 2000자를 초과할 수 없습니다.");
 	    		return false;
+	    	}
+	    	if(start_dt_val == end_dt_val){
+	    		alert("시작시간과 종료시간은 같을 수 없습니다.");
+	    		return false;
+	    	}
+	    	
+	    	if(start_hour >= end_hour){//시작 시간과 종료시간이 같거나 종료시간이 큰 경우
+	    		if(start_hour > end_hour||start_minuet > end_minuet){
+	    			alert("시작시간보다 종료시간이 이전일 수 없습니다.");
+		    		return false;	
+	    		}
 	    	}
 	    	//content_cnt 콘텐츠 글자 수
 	    	var param = {roomSubject : room_subject.value,
@@ -426,19 +544,48 @@
 		}
 		
 		function modal_close(){//취소 버튼을 눌렀을 때  -- 아직 보류중
-			var background = document.querySelector(".background");
-			background.classList.remove("show");//모달팝업 삭제
-			var room_content = document.querySelector("#room_content");
-			var frame1 = document.querySelector(".fc-event-title-frame");
-			var frame = document.getElementsByClassName("fc-event-title-frame");
-			var cancel_btn = document.querySelector("#cancel_btn");
-	    	console.log(cancel_btn);
-			if(cancel_btn.value != 1){
-				var frameParent = frame1.parentNode.parentNode.parentNode;
-				frameParent.removeChild(frame1.parentNode.parentNode);
+			
+			var start_dt = document.querySelector("#start_dt");//시작 시간 값
+	    	var end_dt = document.querySelector("#end_dt");//종료시간 값
+	    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 삭제 (예시)2023-07-11 17:30:00 >>17:30:00 
+	    		start_dt.options[i].value = start_dt.options[i].value.split(" ")[1]; 
+	    		end_dt.options[i].value = end_dt.options[i].value.split(" ")[1];	
+	    	}
+			
+			var background = document.querySelector(".background");//팝업창 배경(팝업이 뜨는지 유무를 background에서 처리)
+			var room_content = document.querySelector("#room_content");//회의 내용 node
+			var frame = document.querySelector(".fc-event-title-frame");//예약되어있는 목록들 node
+			var reserv_btn = document.getElementById("reserv_btn");//예약 버튼 element
+			var close_btn = document.querySelector("#close_btn");//모달 팝업 닫기 버튼 node
+			
+			var btn_div = document.getElementById("btn_div");//버튼div element선택
+			
+			background.classList.remove("show");//모달팝업 안보이게			
+			room_content.value="";//글내용 초기화
+			start_dt.options[0].selected = true;//시작시간 초기화
+	    	end_dt.options[0].selected = true;//종료시간 초기화
+	    	if(reserv_btn){//예
+	    		reserv_btn.style.display = "block";//예약버튼 보이게
+	    	}
+	    	
+	    	console.log(btn_div.childNodes);
+	    	
+	    	
+	    	if(btn_div.childNodes[0].nodeName == "SPAN"){
+	    		btn_div.childNodes[0].remove();
+	    	}
+	    	
+	    	console.log(close_btn);
+			if(close_btn.value != 1){//드래그 해온 일정라벨 삭제(미완..) - 드래그 해서 라벨을 가져왔으나 팝업취소할 경우
+				var frameParent = frame.parentNode.parentNode.parentNode;//상위 부모노드 찾아서
+				frameParent.removeChild(frame.parentNode.parentNode);//자녀노드 전부 삭제
 			}
-			document.getElementById("update_btn").remove();
-			cancel_btn.value = 0;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
+			if(document.getElementById("update_btn")){//update버튼이 있다면
+				document.getElementById("update_btn").remove();//예약 수정버튼 삭제
+				document.getElementById("cancel_btn").remove();//예약 취소버튼 삭제
+			}
+			document.getElementById("history_div").style.display = "none";//과거 내역 none
+			close_btn.value = 0;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
 			/* frame[0].remove(); */
 		}
 		
@@ -520,12 +667,14 @@
 				</table>
 				<div id="btn_div">
 					<button id="reserv_btn" onClick="reservationChk()">예약하기</button>
-					<button id="cancel_btn" value="0" onClick="modal_close()">취소</button>
+					<button id="close_btn" value="0" onClick="modal_close()">닫기</button>
 				</div>
 				</div>
 				<div id="history_div" style="display:none">
-					<span id="userId">등록자 : </span><br>
-					<span id="regDay">등록날짜 : </span>
+					<p class="historyNode" id="rgtr_name"></p>
+					<p class="historyNode" id="reg_dt"></p>
+					<p class="historyNode" id="mdfr_name"></p>
+					<p class="historyNode" id="mdfcn_dt"></p>
 				</div>
 			</div>		
 		</div>

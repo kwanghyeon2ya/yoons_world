@@ -11578,6 +11578,7 @@ var FullCalendar = (function (exports) {
     function renderInnerContent$2(innerProps) {
     	console.log("innerProps.event.id");
     	console.log(innerProps.event.id);
+    	console.log(innerProps.event);
         return (createElement(Fragment, null,
             createElement("div", { className: 'fc-daygrid-event-dot',id : innerProps.event.id,style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
             innerProps.timeText &&

@@ -18,7 +18,7 @@ public class RoomVO {//회의실 예약 VO Class
 	private String endDt;//사용자에게 입력받는 예약 종료 시간
 	private String regDt;//등록일자
 	private String rgtrId;//등록자
-	private String mdfrDt;//수정일자
+	private String mdfcnDt;//수정일자MDFCN_DT
 	private String mdfrId;//수정자
 	private char delYn;//삭제여부(Y/N)
 	private String roomName;//회의실 이름
@@ -28,6 +28,9 @@ public class RoomVO {//회의실 예약 VO Class
 	private String title;//캘린더에 뿌릴 회의 제목
 	private String start;//캘린더에 뿌릴 회의 시작시간
 	private String end;//캘린더에 뿌릴 회의 종료시간
-	private int sameDep;//같은 부서 확인(0 같은부서아님/1 같은부서임)
+	private String rgtrDepName;//db조회후 가져올 본글 작성자의 부서 고유번호
+	private String mdfrDepName;//db조회후 가져올 수정자의 부서 고유번호
+	private String rgtrName;//db에서 받아오는 등록자 이름
+	private String mdfrName;//db에서 받아오는 수정자 이름
 	
 }

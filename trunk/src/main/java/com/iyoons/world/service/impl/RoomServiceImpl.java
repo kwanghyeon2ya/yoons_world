@@ -75,6 +75,26 @@ public class RoomServiceImpl implements RoomService {
 	public int checkIsAvailableEndDT(String endDt) {
 		return dao.checkIsAvailableEndDT(endDt);
 	}
+	
+	/**@author qus46
+	 * @param roomVO(startDt,reserveSeq(자기자신과는 비교하지 않기위한 파라미터))
+	 * @discription update전 회의 예약 시작 시간 중복 확인
+	 * @return count값(1 중복/0 중복없음)
+	 * */
+	@Override
+	public int checkIsAvailableStartUPD(RoomVO roomVO) {
+		return dao.checkIsAvailableStartUPD(roomVO);
+	}
+
+	/**@author qus46
+	 * @param roomVO(endDt,reserveSeq(자기자신과는 비교하지 않기위한 파라미터))
+	 * @discription update전 회의 예약 종료 시간 중복 확인
+	 * @return count값(1 중복/0 중복없음)
+	 * */
+	@Override
+	public int checkIsAvailableEndUPD(RoomVO roomVO) {
+		return dao.checkIsAvailableEndUPD(roomVO);
+	}
 
 	/**@author qus46
 	 * @param 
@@ -105,6 +125,26 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public int updateReservation(RoomVO roomVO) {
 		return dao.updateReservation(roomVO);
+	}
+	
+	/**@author qus46
+	 * @param roomVO(reserveSeq(회의실 고유번호),mdfrId(수정자 id)) 
+	 * @discription 같은 부서의 사람이 update메서드에 접근한 것인지 확인
+	 * @return roomVO(rgtrDepSeq,mdfrDepSeq)
+	 * */
+	@Override
+	public RoomVO getDepName(RoomVO roomVO) {
+		return dao.getDepName(roomVO);
+	}
+
+	/**@author qus46
+	 * @param roomVO(reserveSeq(회의실 고유번호),mdfrId(수정자 id)) 
+	 * @discription 예약취소 update
+	 * @return 
+	 * */
+	@Override
+	public int cancelReservation(RoomVO roomVO) {
+		return dao.cancelReservation(roomVO);
 	}
 	
 	

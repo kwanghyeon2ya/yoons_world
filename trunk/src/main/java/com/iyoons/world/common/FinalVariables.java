@@ -34,6 +34,7 @@ public class FinalVariables {
 	public final static String STARTDT_DUPLICATED_CODE = "7777"; // 이미 존재하는 글/예약에 insert시 예외 코드
 	public final static String ENDDT_DUPLICATED_CODE = "8888"; // 이미 존재하는 글/예약에 insert시 예외 코드
 	public final static String EXCEPTION_CODE = "9999"; // 최상위 익셉션 코드
+	public final static String DUPLICATED_CODE = "0000"; // db조회 중복 오류코드
 	
 	/*
 	 * JWT token cookie name
