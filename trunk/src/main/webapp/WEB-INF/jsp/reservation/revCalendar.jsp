@@ -9,6 +9,9 @@
 	<script src='/fullcalendar/locales/ko.js'></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
+	
 	
 	<style>
 		.fc-event{
@@ -69,6 +72,13 @@
 			line-height:1.5;
 		}
 		
+		.fc-day-sun *{
+    		color:#FF0000;
+		}
+		.fc-day-sat *{
+			color:#0000FF;
+		}
+		
 		
 	</style>
 <meta charset="UTF-8">
@@ -84,14 +94,14 @@
 		    var containerEl = document.getElementById('external-events');
 		    var calendarEl = document.getElementById('calendar');
 		    var checkbox = document.getElementById('drop-remove');
-		    var calinfo = null;
 		    var all_events = null;
 			all_events = loadingEvents();
 			console.log(all_events);
+			
 		    // initialize the external events
 		    // -----------------------------------------------------------------
 
-		    new Draggable(containerEl, {
+		    new Draggable(containerEl, {//드래그 이벤트
 		      itemSelector: '.fc-event',
 		      eventData: function(eventEl) {
 		        return {
@@ -107,7 +117,7 @@
 		      headerToolbar: {
 		        left: 'prev,next today',
 		        center: 'title',
-		        right: 'gd'
+		        right: ''
 		      },
 			  initialView: 'dayGridMonth',
 		      locale : 'ko',
@@ -122,8 +132,13 @@
 		          });
 		          calendar.unselect();
 	          },
-		      dateClick: function (info) {
-		    	  calinfo = info;
+	          /* dayMaxEventRows: true, // for all non-TimeGrid views
+	          views: {
+	            timeGrid: {
+	              dayMaxEventRows: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+	            }
+	          }, */
+		      dateClick: function (info) {//날짜 공간 클릭시 event 작동
 		    	  console.log(info);
 		    	  console.log(info.view);
 		    	  var background = document.querySelector(".background");
@@ -147,9 +162,40 @@
 			  },
 		      droppable: true, // this allows things to be dropped onto the calendar
 			  events: JSON.parse(JSON.stringify(all_events)),//요구되는 데이터 타입은 json - ajax로 받을 때 dataType:json명시해야함
+			  eventDidMount: function(info) {
+				  var startStr = info.event.startStr;
+				  var endStr = info.event.endStr;
+				  console.log(startStr,endStr); 
+				  console.log(info);
+				  console.log(info.event);
+				  /* const firstIconElements = document.querySelectorAll(
+				    '.event-icon.first');
+				  const secondIconElements = document.querySelectorAll(
+				    '.event-icon.second'
+				  );
+
+				  // Element를 하나씩 for문으로 돌려서 이벤트를 걸어준다.
+				  firstIconElements.forEach((element, key, parent) => {
+				    element.addEventListener('click', firstIconClickHandler);
+				  });
+				  secondIconElements.forEach((element, key, parent) => {
+				    element.addEventListener('click', secondIconClickHandler);
+				  }); */
+				  console.log(info.event.id);
+				  var roomContent = "";
+				  for (var i = 0; i < all_events.length; i++) {
+					  if(all_events[i].id== info.event.id){
+						  roomContent = all_events[i].roomContent;
+					  }
+					  console.log(all_events[i]);
+					} 
+				  console.log(all_events);
+				  tippy(info.el, {
+				      content: roomContent//회의 내용을 툴팁으로 가져옴.
+				      });
+				  },
 		      drop: function(info) {//태그를 날짜에 drop하는 순간 작동
 		    	  console.log(info.view);
-		    	  calinfo = info;
 		    	console.log(info);
 		        console.log("drop됨");
 		    	var background = document.querySelector(".background");
@@ -167,8 +213,6 @@
 		    		start_dt.options[i].value = info.dateStr+" "+start_dt.options[i].value; 
 		    		end_dt.options[i].value = info.dateStr+" "+end_dt.options[i].value;
 		    	}
-		    	console.log(start_dt);
-		    	console.log(end_dt);
 		    	
 				for(var i = 0;i<room_subject.options.length;i++){//드래그한 회의 주제를 popup창에서 selected되도록
 					
@@ -186,7 +230,9 @@
 		      }
 		    });
 		    
-		    calendar.render();
+		    
+		    
+		    calendar.render();//캘린더 렌더링
 		    /* var items = document.querySelectorAll('.fc-event');
 		    console.log(items);
 		    items.forEach(function(item){
@@ -202,7 +248,6 @@
 		    var dayEl = document.getElementsByClassName("fc-daygrid-event-harness");
 		    console.log(dayEl);
 		    console.log(all_events);
-		    console.log(calinfo);
 		    all_events.forEach(function(event){
 		    	console.log(event);
 		    	console.log("all_events 진입");
@@ -568,19 +613,15 @@
 	    		reserv_btn.style.display = "block";//예약버튼 보이게
 	    	}
 	    	
-	    	console.log(btn_div.childNodes);
-	    	
-	    	
-	    	if(btn_div.childNodes[0].nodeName == "SPAN"){
-	    		btn_div.childNodes[0].remove();
+	    	if(btn_div.childNodes[0].nodeName == "SPAN"){//btn_div의 0번째 노드의 이룸이 "SPAN"일 때만 - 예약된 회의 클릭시만 작동
+	    		btn_div.childNodes[0].remove();//<span>태그 삭제
 	    	}
 	    	
-	    	console.log(close_btn);
 			if(close_btn.value != 1){//드래그 해온 일정라벨 삭제(미완..) - 드래그 해서 라벨을 가져왔으나 팝업취소할 경우
 				var frameParent = frame.parentNode.parentNode.parentNode;//상위 부모노드 찾아서
 				frameParent.removeChild(frame.parentNode.parentNode);//자녀노드 전부 삭제
 			}
-			if(document.getElementById("update_btn")){//update버튼이 있다면
+			if(document.getElementById("update_btn")){//update버튼이 있다면  -- 위의 span태그 삭제하면 없어지긴 하는데 일단 방치
 				document.getElementById("update_btn").remove();//예약 수정버튼 삭제
 				document.getElementById("cancel_btn").remove();//예약 취소버튼 삭제
 			}

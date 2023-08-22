@@ -21,8 +21,29 @@
 	<c:redirect url="/login/loginView" />
 </c:if>
 
+<style>
+	.show{
+		display:block;
+	}
+</style>
+
 <script>
 	$(function() {
+		
+		
+		function changeList(){//select box 변경시
+			var select = document.getElementById("selectList");
+			var selectVal = select.options[select.selectedIndex].value;
+			
+			if(selectVal == '회원 리스트'){
+				
+			}
+			if(selectVal == '회의실 예약 현황'){
+				
+			}
+			
+		}
+		
 		$("#chkAll").click(function() {
 			console.log("yeah!");
 			if ($("#chkAll").is(":checked"))
@@ -137,133 +158,281 @@
 		<div id="container">
 			<div class="content">
 
-				<h2>회원리스트</h2>
+				<select id="selectList" onchange="changeList()">
+					<option selected="selected">회원 리스트</option>
+					<option>회의실 예약 현황</option>				
+				</select>
 
-				<div class="search_area right">
-					<form action="/admin/member/list" method="get">
-						<select name="search">
-							<option value="member_name"
-								${page.search == 'member_name'?'selected="selected"':''}>이름</option>
-							<option value="member_id"
-								${page.search == 'member_id'?'selected="selected"':''}>아이디</option>
-						</select> <input type="text" name="keyword"></input>
-						<button type="submit" id="submit_button"
-							class="btn type_02 size_s bg_purple">검색</button>
 
-						<div class="area-button-chk" style="margin-top: 2rem;">
+				<div id="memberDiv" class="show">
+				
+						<div class="search_area right">
+							<form action="/admin/member/list" method="get">
+								<select name="search">
+									<option value="member_name"
+										${page.search == 'member_name'?'selected="selected"':''}>이름</option>
+									<option value="member_id"
+										${page.search == 'member_id'?'selected="selected"':''}>아이디</option>
+								</select> <input type="text" name="keyword"></input>
+								<button type="submit" id="submit_button"
+									class="btn type_02 size_s bg_purple">검색</button>
+		
+								<div class="area-button-chk" style="margin-top: 2rem;">
+									<c:if test="${count > 0}">
+										<button type="button" class="btn type_02 size_s bg_purple" id="deleteButton">중단</button>
+										<button type="button" class="btn type_02 size_s bg_purple" id="modifyStatus">활동</button>
+									</c:if>
+								</div>
+							</form>
+						</div>
+		
+						<c:if test="${count eq 0}">
+							<c:if test="${search ne ''}">
+								<h1>검색하신 회원은 존재하지 않습니다..</h1>
+								<a href="/admin/member/list">되돌아가기</a>
+							</c:if>
+							<c:if test="${search eq ''}">
+								<h1>회원이 존재하지 않습니다..</h1>
+							</c:if>
+						</c:if>
+				
+					
+					
+						<div class="list_area">
+							<div class="member_list_brd table type_03">
+								<div class="th">번호</div>
+								<div class="th">이름</div>
+								<div class="th">ID</div>
+								<div class="th">이메일</div>
+								<!-- <div class="mem-dep">부서</div> -->
+								<div class="th">회원상태</div>
+								<div class="th">권한</div>
+								<div class="th">
+									<input type="checkbox" id="chkAll" />
+									<label for="chkAll"> 
+									</label>
+								</div>
+								
+							<c:if test="${count == 0}">
+								<div class="non_data">회원이 존재하지 않습니다.</div>
+							</c:if>
+	
 							<c:if test="${count > 0}">
-								<button type="button" class="btn type_02 size_s bg_purple" id="deleteButton">중단</button>
-								<button type="button" class="btn type_02 size_s bg_purple" id="modifyStatus">활동</button>
+		
+							<c:forEach var="list" items="${userList}" varStatus="loop">
+									<div>${list.userSeq}</div>
+									<div>
+										<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userName}</a>
+									</div>
+									<div>
+										<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userId}</a>
+									</div>
+									<div>${list.email}</div>
+									<%-- <div class="mem-dep">${list.depName}</div> --%>
+									<div>${list.userStatus eq 0?'정지':'활동중'}</div>
+	
+									<div>${list.userType eq 0?'일반회원':'관리자'}</div>
+									<div>
+										<input type="checkbox" id="chkMember_${loop.index}" name="chkMember" value="${list.userSeq}" />
+										 
+										<label for="chkMember_${loop.index}"> 
+											
+										</label>
+										
+									</div>
+							</c:forEach>
 							</c:if>
 						</div>
-					</form>
-				</div>
-
-				<c:if test="${count eq 0}">
-					<c:if test="${search ne ''}">
-						<h1>검색하신 회원은 존재하지 않습니다..</h1>
-						<a href="/admin/member/list">되돌아가기</a>
-					</c:if>
-					<c:if test="${search eq ''}">
-						<h1>회원이 존재하지 않습니다..</h1>
-					</c:if>
-				</c:if>
-
-					<div class="list_area">
-						<div class="member_list_brd table type_03">
-							<div class="th">번호</div>
-							<div class="th">이름</div>
-							<div class="th">ID</div>
-							<div class="th">이메일</div>
-							<!-- <div class="mem-dep">부서</div> -->
-							<div class="th">회원상태</div>
-							<div class="th">권한</div>
-							<div class="th">
-								<input type="checkbox" id="chkAll" />
-								<label for="chkAll"> 
-								</label>
-							</div>
-							
-						<c:if test="${count == 0}">
-							<div class="non_data">회원이 존재하지 않습니다.</div>
+					
+					</div>
+					
+					<div class="btn_area right">
+						<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
+							<button class="btn type_02 size_s bg_purple"
+								onclick="location.href='/admin/member/createUserForm'">회원등록</button>
 						</c:if>
-
-						<c:if test="${count > 0}">
+					</div>
 	
-						<c:forEach var="list" items="${userList}" varStatus="loop">
-								<div>${list.userSeq}</div>
-								<div>
-									<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userName}</a>
-								</div>
-								<div>
-									<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userId}</a>
-								</div>
-								<div>${list.email}</div>
-								<%-- <div class="mem-dep">${list.depName}</div> --%>
-								<div>${list.userStatus eq 0?'정지':'활동중'}</div>
-
-								<div>${list.userType eq 0?'일반회원':'관리자'}</div>
-								<div>
-									<input type="checkbox" id="chkMember_${loop.index}" name="chkMember" value="${list.userSeq}" />
-									 
-									<label for="chkMember_${loop.index}"> 
-										
-									</label>
-									
-								</div>
-						</c:forEach>
+					<div class="paging_area">
+	
+						<c:if test="${count > 0}">
+							<c:set var="pageCount"
+								value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}" />
+							<fmt:parseNumber var="result" value="${((page.currentPage-1)/10)}"
+								integerOnly="true"/>
+							<fmt:parseNumber var="pageCount" value="${pageCount}"
+								integerOnly="true" />	
+							<c:set var="startPage" value="${result*10+1}" />
+							<c:set var="pageBlock" value="${10}" />
+							<c:set var="endPage" value="${startPage + pageBlock -1}" />
+							
+							<c:if test="${endPage > pageCount}">
+								<c:set var="endPage" value="${pageCount}" />
+							</c:if>
+	
+							<c:if test="${startPage > 10}">
+								<a
+									href="/admin/member/list?pageNum=${startPage - 10}&search=${page.search}&keyword=${page.keyword}">
+									&lt; </a>
+							</c:if>
+							<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+								<c:if test="${page.currentPage eq i}">
+									<a class="bg_purple txt_white"
+										href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+								</c:if>
+								<c:if test="${page.currentPage ne i}">
+									<a
+										href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+								</c:if>
+							</c:forEach>
+	
+							<c:if test="${endPage < pageCount}">
+								<a
+									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${startPage + 10}">
+									&gt; </a>
+							</c:if>
 						</c:if>
 					</div>
 				
-				</div>
+				</div><!-- 멤버div -->
 				
-				<div class="btn_area right">
-					<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
-						<button class="btn type_02 size_s bg_purple"
-							onclick="location.href='/admin/member/createUserForm'">회원등록</button>
+				<div id="reservationDiv" style="display:none;">
+				
+					<div class="search_area right">
+						<form action="/admin/member/list" method="get">
+							<select name="search">
+								<option value="member_name"
+									${page.search == 'member_name'?'selected="selected"':''}>이름</option>
+								<option value="member_id"
+									${page.search == 'member_id'?'selected="selected"':''}>아이디</option>
+							</select> <input type="text" name="keyword"></input>
+							<button type="submit" id="submit_button"
+								class="btn type_02 size_s bg_purple">검색</button>
+	
+							<div class="area-button-chk" style="margin-top: 2rem;">
+								<c:if test="${count > 0}">
+									<button type="button" class="btn type_02 size_s bg_purple" id="deleteButton">중단</button>
+									<button type="button" class="btn type_02 size_s bg_purple" id="modifyStatus">활동</button>
+								</c:if>
+							</div>
+						</form>
+					</div>
+	
+					<c:if test="${count eq 0}">
+						<c:if test="${search ne ''}">
+							<h1>검색하신 회원은 존재하지 않습니다..</h1>
+							<a href="/admin/member/list">되돌아가기</a>
+						</c:if>
+						<c:if test="${search eq ''}">
+							<h1>회원이 존재하지 않습니다..</h1>
+						</c:if>
 					</c:if>
-				</div>
-
-				<div class="paging_area">
-
-					<c:if test="${count > 0}">
-						<c:set var="pageCount"
-							value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}" />
-						<fmt:parseNumber var="result" value="${((page.currentPage-1)/10)}"
-							integerOnly="true"/>
-						<fmt:parseNumber var="pageCount" value="${pageCount}"
-							integerOnly="true" />	
-						<c:set var="startPage" value="${result*10+1}" />
-						<c:set var="pageBlock" value="${10}" />
-						<c:set var="endPage" value="${startPage + pageBlock -1}" />
-						
-						<c:if test="${endPage > pageCount}">
-							<c:set var="endPage" value="${pageCount}" />
-						</c:if>
-
-						<c:if test="${startPage > 10}">
-							<a
-								href="/admin/member/list?pageNum=${startPage - 10}&search=${page.search}&keyword=${page.keyword}">
-								&lt; </a>
-						</c:if>
-						<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-							<c:if test="${page.currentPage eq i}">
-								<a class="bg_purple txt_white"
-									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+				
+					<div class="list_area">
+							<div class="reservation_list_brd table type_03">
+								<div class="th">예약자</div>
+								<div class="th">부서명</div>
+								<div class="th">층수</div>
+								<div class="th">회의실명</div>
+								<div class="th">회의시작일자</div>
+								<div class="th">회의시작시각</div>
+								<div class="th">회의종료일자</div>
+								<div class="th">회의종료시각</div>
+								<div class="th">반복여부코드</div>
+								<div class="th">예약상태</div>
+								<div class="th">등록일</div>
+								<div class="th">수정자</div>
+								<div class="th">수정일</div>
+								<div class="th">
+									<input type="checkbox" id="chkrevAll" />
+									<label for="chkrevAll"> 
+									</label>
+								</div>
+								
+							<c:if test="${revCount == 0}">
+								<div class="non_data">회의실 예약 정보가 없습니다.</div>
 							</c:if>
-							<c:if test="${page.currentPage ne i}">
+	
+							<c:if test="${revCount > 0}">
+		
+							<c:forEach var="list" items="${userList}" varStatus="loop">
+									<div>${list.userSeq}</div>
+									<div>
+										<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userName}</a>
+									</div>
+									<div>
+										<a href="/admin/member/modifyUserForm?userSeq=${list.userSeq}&userId=${list.userId}">${list.userId}</a>
+									</div>
+									<div>${list.email}</div>
+									<%-- <div class="mem-dep">${list.depName}</div> --%>
+									<div>${list.userStatus eq 0?'정지':'활동중'}</div>
+	
+									<div>${list.userType eq 0?'일반회원':'관리자'}</div>
+									<div>
+										<input type="checkbox" id="chkMember_${loop.index}" name="chkMember" value="${list.userSeq}" />
+										 
+										<label for="chkMember_${loop.index}"> 
+											
+										</label>
+										
+									</div>
+							</c:forEach>
+							</c:if>
+						</div>
+					
+					</div>
+					
+					<div class="btn_area right">
+						<c:if test="${sessionScope.sessionSeqForAdmin ne null}">
+							<button class="btn type_02 size_s bg_purple"
+								onclick="location.href='/admin/member/createUserForm'">회원등록</button>
+						</c:if>
+					</div>
+	
+					<div class="paging_area">
+	
+						<c:if test="${count > 0}">
+							<c:set var="pageCount"
+								value="${count / page.pageSize + (count % page.pageSize == 0 ? 0 : 1)}" />
+							<fmt:parseNumber var="result" value="${((page.currentPage-1)/10)}"
+								integerOnly="true"/>
+							<fmt:parseNumber var="pageCount" value="${pageCount}"
+								integerOnly="true" />	
+							<c:set var="startPage" value="${result*10+1}" />
+							<c:set var="pageBlock" value="${10}" />
+							<c:set var="endPage" value="${startPage + pageBlock -1}" />
+							
+							<c:if test="${endPage > pageCount}">
+								<c:set var="endPage" value="${pageCount}" />
+							</c:if>
+	
+							<c:if test="${startPage > 10}">
 								<a
-									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+									href="/admin/member/list?pageNum=${startPage - 10}&search=${page.search}&keyword=${page.keyword}">
+									&lt; </a>
 							</c:if>
-						</c:forEach>
-
-						<c:if test="${endPage < pageCount}">
-							<a
-								href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${startPage + 10}">
-								&gt; </a>
+							<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+								<c:if test="${page.currentPage eq i}">
+									<a class="bg_purple txt_white"
+										href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+								</c:if>
+								<c:if test="${page.currentPage ne i}">
+									<a
+										href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${i}&">${i}</a>
+								</c:if>
+							</c:forEach>
+	
+							<c:if test="${endPage < pageCount}">
+								<a
+									href="/admin/member/list?search=${page.search}&keyword=${page.keyword}&pageNum=${startPage + 10}">
+									&gt; </a>
+							</c:if>
 						</c:if>
-					</c:if>
-				</div>
+					</div>
+				
+				</div><!-- reservation div -->
+				
+				
 			</div>
 		</div>
 

@@ -496,7 +496,7 @@
 .tooltip:hover .tooltip-content { visibility: visible; }
 
 
-/* 회원관리 */
+/* 어드민 페이지 - 회원관리 */
 .member_list_brd {grid-template-columns: auto auto auto auto auto auto auto;}
 .member_list_brd > div:nth-of-type(7n-6) {text-align: center;}
 .member_list_brd > div:nth-of-type(7n-5) {text-align: center;}
@@ -519,6 +519,39 @@
 }
 .member_list_brd > div > a > span:nth-child(1) {padding-right: 0.5rem;}
 .member_list_brd > div > a > span:nth-child(2) {width: 5rem;}
+
+
+/* 어드민 페이지 - 회의실 예약 관리 */
+.reservationDiv {grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto;}
+.reservationDiv > div:nth-of-type(14n-13) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-12) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-11) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-10) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-9) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-8) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-7) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-6) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-5) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-4) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-3) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-2) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n-1) {text-align: center;}
+.reservationDiv > div:nth-of-type(14n) {text-align: center;}
+.reservationDiv > div.non_data {text-align: center;}
+
+.reservationDiv > div > a {
+	position: relative;
+	display: inline-flex;
+	max-width: 100%;
+}
+.reservationDiv > div > a > span {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.reservationDiv > div > a > span:nth-child(1) {padding-right: 0.5rem;}
+.reservationDiv > div > a > span:nth-child(2) {width: 5rem;}
+
 
 
 .heart_icon{

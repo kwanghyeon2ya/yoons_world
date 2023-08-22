@@ -24,7 +24,7 @@
 			<a href="/board/notice/list" >공지사항 </a>
 			<a href="/board/free/list">자유게시판</a>
 			<a href="/board/pds/list">자료실</a>
-			<a href="javascript:window.location.href='revCalender'">회의실 예약</a>
+			<a href="javascript:window.location.href='revCalendar'">회의실 예약</a>
 		</nav>
 		
 		<c:if test="${sessionScope.sessionSeqForUser != null}">

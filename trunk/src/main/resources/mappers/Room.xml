@@ -75,7 +75,8 @@
 			RESERVE_SEQ AS "ID",
 			ROOM_SUBJECT AS "TITLE",
 			TO_CHAR(START_DT,'YYYY-MM-DD HH24:MI:SS') AS "START",
-			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS "END"
+			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS "END",
+			room_content
 		FROM
 			ROOM_RESERVATION
 		WHERE 
@@ -109,6 +110,8 @@
 			WHERE RR.RESERVE_SEQ = #{reserveSeq}) as "rgtr_dep_name"
 		FROM
 			ROOM_RESERVATION
+		WHERE
+			ROOM_STATUS = 1
 	</select>
 	
 	<update id="updateReservation">

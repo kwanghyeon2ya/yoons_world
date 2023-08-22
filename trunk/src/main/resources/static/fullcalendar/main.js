@@ -8984,9 +8984,15 @@ var FullCalendar = (function (exports) {
     function renderInnerContent(innerProps) {
     	console.log("innerProps");
     	console.log(innerProps);
+    	
+    	var startStr = innerProps.event.startStr;
+    	var endStr = innerProps.event.endStr;
+    	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
+    	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
+    	
         return (createElement(Fragment, null,
             innerProps.timeText &&
-                createElement("div", { className: 'fc-event-start-time' }, innerProps.timeText),
+                createElement("div", { className: 'fc-event-time' }, startStr+"~"+endStr),
             createElement("div", { className: 'fc-event-title-frame' },
                 createElement("div", { className: 'fc-event-title fc-sticky' }, innerProps.event.title || createElement(Fragment, null, "\u00A0")))));
     }
@@ -11578,11 +11584,18 @@ var FullCalendar = (function (exports) {
     function renderInnerContent$2(innerProps) {
     	console.log("innerProps.event.id");
     	console.log(innerProps.event.id);
-    	console.log(innerProps.event);
+    	console.log(innerProps);
+    	console.log(innerProps.view.currentStart);
+    	console.log(innerProps.view.currentEnd);
+    	
+    	var startStr = innerProps.event.startStr;
+    	var endStr = innerProps.event.endStr;
+    	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
+    	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
         return (createElement(Fragment, null,
             createElement("div", { className: 'fc-daygrid-event-dot',id : innerProps.event.id,style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
             innerProps.timeText &&
-                createElement("div", { className: 'fc-event-start-time' }, innerProps.timeText),
+            createElement("div", { className: 'fc-event-time' }, startStr+"~"+endStr),
             createElement("div", { className: 'fc-event-title' }, innerProps.event.title || createElement(Fragment, null, "\u00A0"))));
     }
     function getSegAnchorAttrs$1(seg) {

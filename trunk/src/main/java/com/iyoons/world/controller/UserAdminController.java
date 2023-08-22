@@ -90,6 +90,47 @@ public class UserAdminController {
  		return "admin/member/createUserForm";
  	}
 	
+	@RequestMapping(value = "/reservation/list", method = RequestMethod.GET)
+	public String reservationList(PageVO pagevo,Model model,HttpServletRequest request) { // 회원 리스트 페이지 
+		//pagevo는 검색어,pageNum 받아오는 용도
+		
+		try {
+			int count = userService.getCountUser();
+			int pageSize = 10;
+			PageVO page2 = pageService.getPaging(pageSize,pagevo.getPageNum());
+			//service를 통해 jsp에서 사용할 pageSize,currentPage,startRow,endRow 세팅
+			
+			pagevo.setStartRow(page2.getStartRow());
+			pagevo.setEndRow(page2.getEndRow());
+			pagevo.setPageSize(pageSize);
+			pagevo.setCurrentPage(page2.getCurrentPage());
+			
+			if(!pagevo.getSearch().equals("")) {
+				count = userService.getSearchedUserCount(pagevo);
+			}
+			
+			List<UserVO> userList = userService.userList(pagevo);
+			model.addAttribute("userList",userList);
+			model.addAttribute("page",pagevo); //페이징용 page객체
+			model.addAttribute("count",count);
+			
+			return "admin/member/list";
+		
+		} catch (NullPointerException e) {
+			logger.error("NullPointerException "+e);
+			logger.error("Request URL :"+request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		} catch (Exception e) {
+			logger.error("Exception" + e);
+			logger.debug(" Request URI \t:  " + request.getRequestURI());
+			model.addAttribute("msg", "잘못된 요청입니다. 로그인 화면으로 돌아갑니다.");
+			model.addAttribute("loc", "/login/logout");
+			return "common/msg";
+		}
+	}
+	
 	@RequestMapping(value = "/member/duplicatedIdCheck", method = RequestMethod.GET)
 	@ResponseBody public String checkDuplicatedId(UserVO vo,Model model,HttpServletRequest request){ //아이디 중복 체크
 		

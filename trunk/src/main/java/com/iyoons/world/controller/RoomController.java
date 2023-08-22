@@ -31,9 +31,9 @@ public class RoomController {
 	/** @discription 캘린더 진입
 	 *  @param
 	 * */
-	@RequestMapping(value="/revCalender",method=RequestMethod.GET)
-	public String revCalender() {
-		return "reservation/revCalender";
+	@RequestMapping(value="/revCalendar",method=RequestMethod.GET)
+	public String revCalendar() {
+		return "reservation/revCalendar";
 	}
 	
 	/** @discription 캘린더 페이지 진입시 회의실 예약 db조회
@@ -105,11 +105,11 @@ public class RoomController {
 			
 		}catch(Exception e){
 			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start e message : "+e.getMessage());
+				logger.error("start time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
 			}
 			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end e message : "+e.getMessage());
+				logger.error("end time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
 			}		
 			logger.error("Exception : " + e.getMessage());
@@ -161,15 +161,15 @@ public class RoomController {
 			
 		}catch(Exception e){
 			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start e message : "+e.getMessage());
+				logger.error("start time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
 			}
 			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end e message : "+e.getMessage());
+				logger.error("end time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
-			}		
+			}			
 			if("not same dep".equals(e.getMessage())) {
-				logger.error("end e message : "+e.getMessage());
+				logger.error("dep error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.DUPLICATED_CODE);
 			}
 			logger.error("Exception : " + e.getMessage());
@@ -214,6 +214,7 @@ public class RoomController {
 			logger.debug("start 확인 : "+roomVO.getStartDt());
 			logger.debug("end 확인 : "+roomVO.getEndDt());
 			logger.debug("mdfrid 확인 : "+roomVO.getMdfrId());
+			
 			int startDtChk = service.checkIsAvailableStartUPD(roomVO);
 			int endDtChk = service.checkIsAvailableEndUPD(roomVO);
 			
@@ -232,15 +233,15 @@ public class RoomController {
 			
 		}catch(Exception e){
 			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start e message : "+e.getMessage());
+				logger.error("start time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
 			}
 			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end e message : "+e.getMessage());
+				logger.error("end time error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
-			}		
+			}			
 			if("not same dep".equals(e.getMessage())) {
-				logger.error("end e message : "+e.getMessage());
+				logger.error("dep error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.DUPLICATED_CODE);
 			}
 			logger.error("Exception : " + e.getMessage());
