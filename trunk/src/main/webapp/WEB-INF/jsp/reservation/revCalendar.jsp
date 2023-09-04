@@ -252,7 +252,6 @@
 		    	console.log(event);
 		    	console.log("all_events 진입");
 		    	console.log(event.allDay);
-		    	console.log("gdgd?");
 		    	console.log(event.id);
 		    })
 		    dayevents.forEach(function(dayevent){
@@ -676,7 +675,7 @@
 	    		use_bgng_tm.options[i].value = use_bgng_tm.options[i].value.split(" ")[1];
 	    		use_end_tm.options[i].value = use_end_tm.options[i].value.split(" ")[1];	
 	    	} */
-			
+			document.querySelector("#mgt_nm").options[0].selected = true;
 			var background = document.querySelector(".background");//팝업창 배경(팝업이 뜨는지 유무를 background에서 처리)
 			var mgt_cn = document.querySelector("#mgt_cn");//회의 내용 node
 			var frame = document.querySelector(".fc-event-title-frame");//예약되어있는 목록들 node
