@@ -11,59 +11,58 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
 	<script src="https://unpkg.com/tippy.js@6"></script>
-	
+	<jsp:include page="/WEB-INF/jsp/inc/import.jsp" flush="false" />
+	<link rel="stylesheet" type="text/css" href="/css/board/board.css">
 	
 	<style>
 		.fc-event{
 			margin-top:2px;
-			cursor:move;
+			cursor:pointer;
 		}
 		.background {
-		  position: fixed;
-		  top: 0;
-		  left: 0;
-		  width: 100%;
-		  height: 100vh;
-		  background-color: rgba(0, 0, 0, 0.3);
-		  z-index: -1;
-		  display:none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+			background-color: rgba(0, 0, 0, 0.3);
+			z-index: -1;
+			display:none;
 		}
 		
 		.show {
-		  display:block;
-		  z-index: 1000;
-		  transition: all 1s;
-		}
-		
+			display:block;
+			z-index: 1000;
+			transition: all 1s;
+		}		
 		.window {
-		  position: relative;
-		  width: 100%;
-		  height: 100%;
+			position: relative;
+			width: 100%;
+			height: 100%;
 		}
 		
 		.historyNode{
 			margin-bottom:-9%;
 		}
-		
 		.popup {
-		  display:flex;
-		  flex-wrap: wrap;
-		  align-items:center;
-		  position: absolute;
-		  top: 50%;
-		  left: 50%;
-		  transform: translate(-50%, -50%);
-		  background-color: #ffffff;
-		  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-		  border:2px solid rgb(92, 53, 148);
-		  border-radius:0.2rem;
-		transition: all 1s;
-		  /* 임시 지정 */
-		    width: 40rem;
-		    height: 27rem;
-		
-		  /* /* 초기에 약간 아래에 배치 */
-		  transform: translate(-50%, -40%);
+			display:flex;
+			flex-wrap: wrap;
+			align-items:center;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #ffffff;
+			box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+			border:2px solid rgb(92, 53, 148);
+			border-radius:0.2rem;
+	       	transition: all 1s;
+			/* 임시 지정 */
+		    width: 600px;
+		    height: 440px;
+			
+			/* /* 초기에 약간 아래에 배치 */
+			transform: translate(-50%, -40%);
 		}
 		.popup > *{
 			margin-left:1rem;
@@ -77,6 +76,15 @@
 		}
 		.fc-day-sat *{
 			color:#0000FF;
+		}
+		#history_div{
+			display: none;
+		    white-space: break-spaces;
+	    	width: 100%;
+	    	margin-bottom: 100px;
+		}
+		.fc-daygrid-event-harness-abs .fc-daygrid-event-dot{fc-daygrid-event-dot
+			display: none;
 		}
 		
 		
@@ -119,9 +127,10 @@
 		        center: 'title',
 		        right: ''
 		      },
+		      contentHeight:"auto",
 			  initialView: 'dayGridMonth',
 		      locale : 'ko',
-		      editable: true,
+		      editable: false,
 		      select: function(selectionInfo) {
 		    	  console.log("selectionInfo");
 		    	  console.log(selectionInfo);
@@ -139,23 +148,18 @@
 	            }
 	          }, */
 		      dateClick: function (info) {//날짜 공간 클릭시 event 작동
-		    	  console.log(info);
-		    	  console.log(info.view);
-		    	  var background = document.querySelector(".background");
+		    	  
+		    	    console.log(info);
+		    	    var background = document.querySelector(".background");
 					background.classList.add("show");
-					var room_subject = document.querySelector("#room_subject");
+					var mgt_nm = document.querySelector("#mgt_nm");
 					
-					console.log(room_subject.options);
-					console.log(room_subject.options[0].value);
+					document.getElementById("use_bgng_ymd").value = info.dateStr;//시작 날짜 클릭 해당 날짜 초기 세팅
+			   		document.getElementById("use_end_ymd").value = info.dateStr;//종료 날짜 클릭 해당 날짜 초기 세팅
+
+			   		console.log("use_bgng_ymd"+document.getElementById("use_bgng_ymd").value);
+					console.log(""+document.getElementById("use_end_ymd").value);
 					
-					var start_dt = document.querySelector("#start_dt");//시작 시간 값
-			    	var end_dt = document.querySelector("#end_dt");//종료시간 값
-			    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 가공 (예시)2023-07-11 17:30:00
-			    		start_dt.options[i].value = info.dateStr+" "+start_dt.options[i].value; 
-			    		end_dt.options[i].value = info.dateStr+" "+end_dt.options[i].value;
-			    	}
-			    	console.log(start_dt);
-			    	console.log(end_dt);
 			    	var close_btn = document.querySelector("#close_btn");
 			    	console.log(close_btn);
 			    	close_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
@@ -182,16 +186,16 @@
 				    element.addEventListener('click', secondIconClickHandler);
 				  }); */
 				  console.log(info.event.id);
-				  var roomContent = "";
+				  var mgt_cn = "";
 				  for (var i = 0; i < all_events.length; i++) {
-					  if(all_events[i].id== info.event.id){
-						  roomContent = all_events[i].roomContent;
+					  if(all_events[i].id== info.event.id){//db에서 가져온 id와 캘린더에 가공해서 넣은 id값이 일치할 때
+						  mgt_cn = all_events[i].mgtCn;//db에서 가져온 회의 내용을 변수 대입
 					  }
 					  console.log(all_events[i]);
 					} 
 				  console.log(all_events);
 				  tippy(info.el, {
-				      content: roomContent//회의 내용을 툴팁으로 가져옴.
+				      content: mgt_cn//회의 내용을 툴팁으로 넣음.
 				      });
 				  },
 		      drop: function(info) {//태그를 날짜에 drop하는 순간 작동
@@ -201,23 +205,19 @@
 		    	var background = document.querySelector(".background");
 				background.classList.add("show");
 				var infoInnerText = info.draggedEl.innerText; 
-				var room_subject = document.querySelector("#room_subject");
+				var mgt_nm = document.querySelector("#mgt_nm");
 				
-				console.log(room_subject.options);
+				console.log(mgt_nm.options);
 				console.log(infoInnerText);
-				console.log(room_subject.options[0].value);
+				console.log(mgt_nm.options[0].value);
 				
-				var start_dt = document.querySelector("#start_dt");//시작 시간 값
-		    	var end_dt = document.querySelector("#end_dt");//종료시간 값
-		    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 가공 (예시)2023-07-11 17:30:00
-		    		start_dt.options[i].value = info.dateStr+" "+start_dt.options[i].value; 
-		    		end_dt.options[i].value = info.dateStr+" "+end_dt.options[i].value;
-		    	}
+				document.getElementById("use_bgng_ymd").value = info.dateStr;//시작 날짜 클릭 해당 날짜 초기 세팅
+		   		document.getElementById("use_end_ymd").value = info.dateStr;//종료 날짜 클릭 해당 날짜 초기 세팅
 		    	
-				for(var i = 0;i<room_subject.options.length;i++){//드래그한 회의 주제를 popup창에서 selected되도록
+				for(var i = 0;i<mgt_nm.options.length;i++){//드래그한 회의 주제를 popup창에서 selected되도록
 					
-					if(room_subject.options[i].value == infoInnerText){
-						room_subject.options[i].selected = true;
+					if(mgt_nm.options[i].value == infoInnerText){
+						mgt_nm.options[i].selected = true;
 					}			
 					
 				}
@@ -251,12 +251,13 @@
 		    all_events.forEach(function(event){
 		    	console.log(event);
 		    	console.log("all_events 진입");
+		    	console.log(event.allDay);
+		    	console.log("gdgd?");
 		    	console.log(event.id);
 		    	console.log(event.location);
 		    })
 		    dayevents.forEach(function(dayevent){
 		    	console.log(dayevent);
-		    	console.log(dayevent.querySelector('.fc-daygrid-event-dot').id);
 		    	console.log('');
 		    	dayevent.addEventListener('click',function(){readReservation(dayevent.querySelector('.fc-daygrid-event-dot').id)});	
 		    });
@@ -281,9 +282,9 @@
 			}
 			return false;
 	    } */
-	    /* new Date().toISOString().substring(0, 10); */
+	    
 	    function loadingEvents(){//db에서 데이터 가져오기
-	    	
+	    	console.log("loadingEvents 진입확인");
 	    	var result_data = null;
 	    	
 	    	$.ajax({
@@ -302,54 +303,79 @@
 	    }
 	    
 	    function readReservation(node){//캘린더에 예약되어있는 내역을 클릭해 modal popup 활성화
-	    	console.log("node : "+node);
-	    
+				    
 	    	var background = document.querySelector(".background");
 	    	background.classList.add("show");
+	    	
+	    	console.log("readReservation  :  "+node);
 	    	
 	    	var close_btn = document.querySelector("#close_btn");
 	    	console.log(close_btn);
 	    	close_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
 	    	var reserv_btn = document.getElementById("reserv_btn");
 	    	reserv_btn.style.display = "none";
+	    	
+	    	var nodePrt1 = node.split("-")[0];
+	    	var nodePrt2 = node.split("-")[1];
+	    	var nodePrt3 = node.split("-")[2];
+	    	var nodes = [String(nodePrt1),nodePrt2,nodePrt3];
+	    	
+	    	var node12 = nodes[1]+"-"+nodes[2]
+	    	
+	    	var noStr = "211f";
+	    	var noNum = 32;
+	    	
 	    	const updatebutton = document.createElement('span');
-	    	updatebutton.innerHTML = '<button id="cancel_btn" onClick="cancelReservation('+node+')">예약취소</button>';
-	    	updatebutton.innerHTML += '<button id="update_btn" onClick="updateReservation('+node+')">수정하기</button>';
+	    	updatebutton.innerHTML = "<button id='cancel_btn' onClick='cancelReservation(\""+node+"\")'>예약취소</button>";
+	    	updatebutton.innerHTML += "<button id='update_btn' onClick='updateReservation(\""+node+"\")'>수정하기</button>";
 	    	document.querySelector('#btn_div').prepend(updatebutton);
-	    
+	    	console.log(document.querySelector("#update_btn"));
+	    	console.log(document.querySelector("#cancel_btn"));
 	    	$.ajax({
-	    		url : '/readReservation?reserveSeq='+node,
+	    		url : '/readReservation?id='+node,
 	    		type : 'GET',
 				dataType  : "json", //리턴 데이터 타입 지정
 	    		async : false,
 		    	success : function(data){
-		    		console.log("data : "+data);
 		    			
 		    		document.getElementById("history_div").style.display = "block";//과거 내역 block
 		    		
-		    		var start_dt = document.querySelector("#start_dt");//시작 시간 값
-			    	var end_dt = document.querySelector("#end_dt");//종료시간 값
-			    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 가공 (예시)17:30:00 >> 2023-07-11 17:30:00
-			    		start_dt.options[i].value = data.startDt.split(" ")[0]+" "+start_dt.options[i].value; 
-			    		end_dt.options[i].value = data.endDt.split(" ")[0]+" "+end_dt.options[i].value;	
-			    		if(start_dt.options[i].value == data.startDt){//시작값과 일치한다면 selected
-			    			start_dt.options[i].selected = true;
+		    		var use_bgng_ymd = document.querySelector("#use_bgng_ymd");// 시간일자 2023-08-24
+		    		var use_bgng_tm = document.querySelector("#use_bgng_ymd");// 종료일자 2023-08-27
+		    		var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 값 예시) 090000
+			    	var use_end_tm = document.querySelector("#use_end_tm");//종료시각 값 예시) 100000
+	
+			    	var use_se_code = document.querySelector("#use_se_code");//연속예약 여부확인 체크박스
+			    	
+			    	use_bgng_ymd.value = data.useBgngYmd;//시작일자 date타입에 값 입력
+			    	use_end_ymd.value = data.useEndYmd;//종료일자 date타입에 값 입력
+			    	
+			    	for(var i=0;i<use_bgng_tm.length;i++){//팝업창 열었을 때 DB에서 가져온 날짜,시간 selected
+			    		if(use_bgng_tm.options[i].value == data.useBgngTm){//시작값과 일치한다면 selected
+			    			use_bgng_tm.options[i].selected = true;
 			    		}
-			    		if(end_dt.options[i].value == data.endDt){//종료값과 일치한다면 selected
-			    			end_dt.options[i].selected = true;
+			    		if(use_end_tm.options[i].value == data.useEndTm){//종료값과 일치한다면 selected
+			    			use_end_tm.options[i].selected = true;
 			    		}
-			    	}
-			    	var room_content = document.querySelector("#room_content");
-			    	var room_subject = document.querySelector("#room_subject");
-			    	console.log(room_content);
-			    	for(var i = 0;room_subject.length>i;i++){
-			    		if(room_subject.options[i].value == data.roomSubject){
-			    			room_subject.options[i].selected = true;
+			    	} 
+			    	
+			    	var mgt_cn = document.querySelector("#mgt_cn");
+			    	var mgt_nm = document.querySelector("#mgt_nm");
+			    	console.log(mgt_cn);
+			    	for(var i = 0;mgt_nm.length>i;i++){
+			    		if(mgt_nm.options[i].value == data.mgtNm){
+			    			mgt_nm.options[i].selected = true;
 			    		}	
 			    	}
 			    	if(data.rgtrDepName != data.mdfrDepName){//만약 부서가 같지 않다면
 						document.getElementById("update_btn").remove();//수정하기 버튼은 보이지 않음
 						document.getElementById("cancel_btn").remove();//예약취소 버튼은 보이지 않음
+			    	}
+			    	
+			    	console.log(data.useSeCode);
+			    	
+			    	if(data.mgtRoomUseSeCode == "02"){
+			    		use_se_code.checked = true;		    		
 			    	}
 			    	
 			    	///예약 히스토리 입력
@@ -368,7 +394,7 @@
 			    	console.log(data.mdfrDepName);//수정자 부서명
 			    	console.log(data.rgtrName);//등록자 이름
 			    	console.log(data.mdfrName);//수정자 이름
-			    	room_content.value = data.roomContent;//회의내용 넣기
+			    	mgt_cn.value = data.mgtCn;//회의내용 넣기
 			    	
 	    			console.log(data.regDt);//등록날짜 
 	    			console.log(data.mdfcnDt);//수정 날짜
@@ -379,14 +405,14 @@
 	    function cancelReservation(node){//회의실 예약 취소
 	    	
 	    	console.log("node : "+node);
-	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
-	    	var room_content = document.querySelector("#room_content");//회의 내용 node
-	    	console.log(document.querySelector("#start_dt"));
-	    	var start_dt_val = document.querySelector("#start_dt").value;//시작 시간 값
-	    	var end_dt_val = document.querySelector("#end_dt").value;//종료시간 값
+	    	var mgt_nm = document.querySelector("#mgt_nm");//회의주제 select box node
+	    	var mgt_cn = document.querySelector("#mgt_cn");//회의 내용 node
+	    	console.log(document.querySelector("#use_bgng_tm"));
+	    	var use_bgng_tm_val = document.querySelector("#use_bgng_tm").value;//시작 시간 값
+	    	var use_end_tm_val = document.querySelector("#use_end_tm").value;//종료시간 값
 	    	
 	    	$.ajax({
-	    		url : '/cancelReservation?reserveSeq='+node,
+	    		url : '/cancelReservation?id='+node,
 	    		type : 'GET',
 				contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
 				dataType  : "json", //리턴 데이터 타입 지정
@@ -412,57 +438,98 @@
 	    	});
 	    }
 	    
+	   	function isContinueChk(){//회의실 반복사용,연속사용 여부
+	   		
+	   		
+	   		
+	   		var use_se_code = document.getElementById("use_se_code");//반복,연속사용 여부 체크 박스
+	   	
+	   		if(typeof document.getElementById("use_bgng_ymd").value == "undefined"||typeof document.getElementById("use_end_ymd").value == "undefined"){
+	   			alert("날짜를 선택해주시기 바랍니다.");
+				use_se_code.checked = false;	   			
+	   		}
+	   		
+	   		if(document.getElementById("use_bgng_ymd").value == document.getElementById("use_end_ymd").value){
+	   			alert("동일한 날짜에 연속예약을 할 수 없습니다.");
+				use_se_code.checked = false;	   			
+	   		}
+	   		
+	   		var use_code_is_checked = use_se_code.checked;//체크 박스 체크 여부
+	   		var use_bgng_ymd_val = document.getElementById("use_bgng_ymd").value;
+	   		var use_end_ymd_val = document.getElementById("use_end_ymd").value;
+	   		
+	   		if(use_code_is_checked){//체크박스에 체크했다면
+	   			if(confirm("회의실을 이어서 사용하시겠습니까?")){
+	   				 alert(use_bgng_ymd_val+"부터 "+use_end_ymd_val+"까지 이어서 회의실을 사용합니다.");
+	   			}else{
+	   				alert(use_bgng_ymd_val+"부터 "+use_end_ymd_val+"까지 매일 같은 시간에 회의실을 사용합니다.");
+	   				use_se_code.checked = false;
+	   			}
+	   		}
+	   	}
 	    
-	    function updateReservation(node){//회의실 예약 내용 업데이트
+	    function updateReservation(node){//회의실 예약 내용 업데이트 // node - 회의실 고유 번호
+	    	console.log("updateReservation");
+	    	var mgt_nm = document.querySelector("#mgt_nm");//회의주제 select box node
+	    	var mgt_cn = document.querySelector("#mgt_cn");//회의 내용 node
 	    	
-	    	console.log("node : "+node);
-	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
-	    	var room_content = document.querySelector("#room_content");//회의 내용 node
+	    	var use_bgng_ymd_val = document.querySelector("#use_bgng_ymd").value;//예약 시작 일자 node
+	    	console.log("use_bgng_ymd_val : "+use_bgng_ymd_val);
+	    	var use_end_ymd_val = document.querySelector("#use_end_ymd").value;//예약 종료 일자 node
+	    	console.log("use_end_ymd_val : "+use_end_ymd_val);
 	    	
-	    	var start_dt = document.querySelector("#start_dt");//시작 시간 값
-	    	var start_dt_val = start_dt.options[start_dt.selectedIndex].value;
-	    	var end_dt = document.querySelector("#end_dt");
-	    	var end_dt_val = end_dt.options[end_dt.selectedIndex].value;//종료시간 값
-	    	var start_hour = Number(start_dt_val.split(" ")[1].split(":")[0]);//시작 시간 (예)2023-07-11 17:30:00 >>17:30:00>>17 
-	    	var start_minuet = Number(start_dt_val.split(" ")[1].split(":")[1]);//시작 분 
-	    	var end_hour = Number(end_dt_val.split(" ")[1].split(":")[0]);//종료 시간
-	    	var end_minuet = Number(end_dt_val.split(" ")[1].split(":")[1]);//종료 분
+	    	var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시간 값
+	    	var use_bgng_tm_val = use_bgng_tm.options[use_bgng_tm.selectedIndex].value;
+	    	var use_end_tm = document.querySelector("#use_end_tm");
+	    	var use_end_tm_val = use_end_tm.options[use_end_tm.selectedIndex].value;//종료시간 값
+	    	
+	    	var use_se_code_chk = document.querySelector("#use_se_code").checked;//반복사용여부 체크 boolean type return
+	    	var use_se_code_val = "";
+	    	
+	    	if(use_se_code_chk){
+	    		var use_se_code_val = document.querySelector("#use_se_code").value;
+	    	}
+	    	
+	    	use_bgng_ymd_val = use_bgng_ymd_val.split("-")[0]+use_bgng_ymd_val.split("-")[1]+use_bgng_ymd_val.split("-")[2];  
+	    	use_end_ymd_val = use_end_ymd_val.split("-")[0]+use_end_ymd_val.split("-")[1]+use_end_ymd_val.split("-")[2];
+	    	
+	    	console.log("업데이트 시작시간 : "+use_bgng_tm_val);
+	    	console.log("업데이트 종료시간 : "+use_end_tm_val);
 	    	
 	    	
-	    	console.log("업데이트 시작시간 : "+start_dt_val);
-	    	console.log("업데이트 종료시간 : "+end_dt_val);
-	    	
-	    	
-	    	if(room_content.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
+	    	if(mgt_cn.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
 	    		alert("회의 내용을 입력해주세요");
-	    		room_content.value = "";
-	    		room_content.focus();
+	    		mgt_cn.value = "";
+	    		mgt_cn.focus();
 	    		return false;
 	    	}
-	    	console.log("start_dt_val : "+start_dt_val);
-	    	if(room_content.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
+	    	console.log("use_bgng_tm_val : "+use_bgng_tm_val);
+	    	if(mgt_cn.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
 	    		alert("회의 내용은 2000자를 초과할 수 없습니다.");
 	    		return false;
 	    	}
 	    	
-	    	if(start_dt_val == end_dt_val){
+	    	if(use_bgng_tm_val == use_end_tm_val){
 	    		alert("시작시간과 종료시간은 같을 수 없습니다.");
 	    		return false;
 	    	}
 	    	
-	    	if(start_hour >= end_hour){//시작 시간과 종료시간이 같거나 종료시간이 큰 경우
-	    		if(start_hour > end_hour||start_minuet > end_minuet){
+	    	if(use_bgng_tm_val >= use_end_tm_val){//시작 시간과 종료시간이 같거나 종료시간이 큰 경우
+	    		if(use_bgng_tm_val > use_end_tm_val||start_minuet > end_minuet){
 	    			alert("시작시간보다 종료시간이 이전일 수 없습니다.");
 		    		return false;	
 	    		}
 	    	}
 	    	
 	    	//content_cnt 콘텐츠 글자 수
-	    	var param = {roomSubject : room_subject.value,
-	    				 roomContent : room_content.value,
-	    				 startDt : start_dt_val,
-	    				 endDt : end_dt_val,
-	    				 reserveSeq : node
+	    	var param = {mgtNm : mgt_nm.value,
+	    				 mgtCn : mgt_cn.value,
+	    				 useBgngYmd : use_bgng_ymd_val,
+		   				 useBgngTm : use_bgng_tm_val,
+		   				 useEndYmd : use_end_ymd_val,
+		   				 useEndTm : use_end_tm_val,
+		   				 mgtRoomUseSeCode : use_se_code_val,
+	    				 id : node
 	    				 };
 	    	
 	    	console.log(JSON.stringify(param));
@@ -485,10 +552,7 @@
 		    			location.reload(true);
 		    			break;
 		    		case 7777:
-		    			alert("이미 예약이 존재합니다. 시작시간을 변경해주세요.");
-		    			break;
-		    		case 8888:
-		    			alert("이미 예약이 존재합니다. 종료시간을 변경해주세요.");
+		    			alert("원하시는 시간에 이미 예약이 존재합니다.");
 		    			break;
 		    		case 9999:
 		    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
@@ -505,52 +569,73 @@
 	    }
 	    
 	    
-		function reservationChk(){//예약하기 버튼을 눌렀을 떄
+		function reservationChk(){//예약하기 버튼을 눌렀을 때 - Insert
 	    	
-	    	var room_subject = document.querySelector("#room_subject");//회의주제 select box node
-	    	var room_content = document.querySelector("#room_content");//회의 내용 node
+	    	var mgt_nm_val = document.querySelector("#mgt_nm").value;//회의주제 select box value
+	    	var mgt_cn_val = document.querySelector("#mgt_cn").value;//회의 내용 node
 	    	
+	    	var use_bgng_ymd_val = document.querySelector("#use_bgng_ymd").value;//예약 시작 일자 node
+	    	var use_end_ymd_val = document.querySelector("#use_end_ymd").value;//예약 종료 일자 node
 	    	
-	    	var start_dt = document.querySelector("#start_dt");//시작 시간 값
-	    	var start_dt_val = start_dt.options[start_dt.selectedIndex].value;//시작 시간 selected 값
-	    	var end_dt = document.querySelector("#end_dt");//종료 시간 값
-	    	var end_dt_val = end_dt.options[end_dt.selectedIndex].value;//종료시간 selected 값
-	    	var start_hour = Number(start_dt_val.split(" ")[1].split(":")[0]);//시작 시간 (예)2023-07-11 17:30:00 >> 17:30:00 >> 17
-	    	var start_minuet = Number(start_dt_val.split(" ")[1].split(":")[1]);//시작 분 (예)2023-07-11 17:30:00 >> 17:30:00 >> 30
-	    	var end_hour = Number(end_dt_val.split(" ")[1].split(":")[0]);//종료 시간
-	    	var end_minuet = Number(end_dt_val.split(" ")[1].split(":")[1]);//종료 분
+	    	var use_bgng_tm = document.querySelector("#use_bgng_tm");//예약 시작 시각 node
+	    	var use_bgng_tm_val = use_bgng_tm.options[use_bgng_tm.selectedIndex].value;//시작 시각 selected 값
+	    	var use_end_tm = document.querySelector("#use_end_tm");//종료 시각 node
+	    	var use_end_tm_val = use_end_tm.options[use_end_tm.selectedIndex].value;//종료시각 selected 값
 	    	
-	    	console.log("업데이트 시작시간 : "+start_dt_val);
-	    	console.log("업데이트 종료시간 : "+end_dt_val);
+	    	use_bgng_ymd_val = use_bgng_ymd_val.split("-")[0]+use_bgng_ymd_val.split("-")[1]+use_bgng_ymd_val.split("-")[2];  
+	    	use_end_ymd_val = use_end_ymd_val.split("-")[0]+use_end_ymd_val.split("-")[1]+use_end_ymd_val.split("-")[2];
 	    	
+	    	var use_se_code_chk = document.querySelector("#use_se_code").checked;//반복사용여부 체크 boolean type return
+	    	var use_se_code_val = "";
 	    	
-	    	if(room_content.value.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
+	    	if(use_se_code_chk){
+	    		var use_se_code_val = document.querySelector("#use_se_code").value;
+	    	}
+	    	
+	    	console.log("업데이트 시작시간 : "+use_bgng_tm_val);
+	    	console.log("업데이트 종료시간 : "+use_end_tm_val);
+
+	    	if(mgt_cn_val.trim().length == 0){//띄어쓰기만으로 작성할 수 없음
 	    		alert("회의 내용을 입력해주세요");
-	    		room_content.value = "";
-	    		room_content.focus();
+	    		mgt_cn.value = "";
+	    		mgt_cn.focus();
 	    		return false;
 	    	}
 	    	
-	    	if(room_content.value.length>2000){//회의 내용은 2000자를 넘길 수 없음
+	    	if(mgt_cn_val.length > 1000){//회의 내용은 1000자를 넘길 수 없음
 	    		alert("회의 내용은 2000자를 초과할 수 없습니다.");
 	    		return false;
 	    	}
-	    	if(start_dt_val == end_dt_val){
-	    		alert("시작시간과 종료시간은 같을 수 없습니다.");
+	    	
+	    	if(use_bgng_ymd_val > use_end_ymd_val){//종료일자가 시작일자보다 과거일 때
+	    		alert("종료일자가 시작일자보다 과거일 수 없습니다.");
 	    		return false;
 	    	}
 	    	
-	    	if(start_hour >= end_hour){//시작 시간과 종료시간이 같거나 종료시간이 큰 경우
-	    		if(start_hour > end_hour||start_minuet > end_minuet){
-	    			alert("시작시간보다 종료시간이 이전일 수 없습니다.");
-		    		return false;	
-	    		}
+	    	if(!use_se_code_chk){//연속사용 체크박스에 체크가 되어있지 않다면
+	    		
+	    		if(use_bgng_tm_val == use_end_tm_val){//시작시각과 종료시각이 같은 경우
+		    		alert("시작시각과 종료시각은 같을 수 없습니다.");
+		    		return false;
+		    	}
+	    	
+	    		if(use_bgng_tm_val > use_end_tm_val){//종료시각이 시작시각보다 큰 경우
+		    		if(use_bgng_tm_val > use_end_tm_val){
+		    			alert("시작시간보다 종료시간이 이전일 수 없습니다.");
+			    		return false;	
+		    		}
+		    	}
+	    		
 	    	}
+	    	
 	    	//content_cnt 콘텐츠 글자 수
-	    	var param = {roomSubject : room_subject.value,
-	    				 roomContent : room_content.value,
-	    				 startDt : start_dt_val,
-	    				 endDt : end_dt_val
+	    	var param = {mgtNm : mgt_nm_val,
+	    				 mgtCn : mgt_cn_val,
+	    				 useBgngYmd : use_bgng_ymd_val,
+	    				 useBgngTm : use_bgng_tm_val,
+	    				 useEndYmd : use_end_ymd_val,
+	    				 useEndTm : use_end_tm_val,
+	    				 mgtRoomUseSeCode : use_se_code_val
 	    				 };
 	    	
 	    	console.log(JSON.stringify(param));
@@ -573,10 +658,7 @@
 	    			location.reload(true);
 	    			break;
 	    		case 7777:
-	    			alert("이미 예약이 존재합니다. 시작시간을 변경해주세요.");
-	    			break;
-	    		case 8888:
-	    			alert("이미 예약이 존재합니다. 종료시간을 변경해주세요.");
+	    			alert("원하시는 시간에 이미 예약이 존재합니다.");
 	    			break;
 	    		case 9999:
 	    			alert("예상치 못 한 오류가 발생했습니다. 로그인 페이지로 이동합니다.");
@@ -590,15 +672,15 @@
 		
 		function modal_close(){//취소 버튼을 눌렀을 때  -- 아직 보류중
 			
-			var start_dt = document.querySelector("#start_dt");//시작 시간 값
-	    	var end_dt = document.querySelector("#end_dt");//종료시간 값
-	    	for(var i=0;i<start_dt.length;i++){//날짜+시작or종료 시간 삭제 (예시)2023-07-11 17:30:00 >>17:30:00 
-	    		start_dt.options[i].value = start_dt.options[i].value.split(" ")[1]; 
-	    		end_dt.options[i].value = end_dt.options[i].value.split(" ")[1];	
-	    	}
+			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시간 값
+	    	var use_end_tm = document.querySelector("#use_end_tm");//종료시간 값
+	    	/* for(var i=0;i<use_bgng_tm.length;i++){//날짜+시작or종료 시간 삭제 (예시)2023-07-11 17:30:00 >>17:30:00 
+	    		use_bgng_tm.options[i].value = use_bgng_tm.options[i].value.split(" ")[1];
+	    		use_end_tm.options[i].value = use_end_tm.options[i].value.split(" ")[1];	
+	    	} */
 			
 			var background = document.querySelector(".background");//팝업창 배경(팝업이 뜨는지 유무를 background에서 처리)
-			var room_content = document.querySelector("#room_content");//회의 내용 node
+			var mgt_cn = document.querySelector("#mgt_cn");//회의 내용 node
 			var frame = document.querySelector(".fc-event-title-frame");//예약되어있는 목록들 node
 			var reserv_btn = document.getElementById("reserv_btn");//예약 버튼 element
 			var close_btn = document.querySelector("#close_btn");//모달 팝업 닫기 버튼 node
@@ -606,9 +688,9 @@
 			var btn_div = document.getElementById("btn_div");//버튼div element선택
 			
 			background.classList.remove("show");//모달팝업 안보이게			
-			room_content.value="";//글내용 초기화
-			start_dt.options[0].selected = true;//시작시간 초기화
-	    	end_dt.options[0].selected = true;//종료시간 초기화
+			mgt_cn.value="";//글내용 초기화
+			use_bgng_tm.options[0].selected = true;//시작시간 초기화
+	    	use_end_tm.options[0].selected = true;//종료시간 초기화
 	    	if(reserv_btn){//예
 	    		reserv_btn.style.display = "block";//예약버튼 보이게
 	    	}
@@ -626,6 +708,9 @@
 				document.getElementById("cancel_btn").remove();//예약 취소버튼 삭제
 			}
 			document.getElementById("history_div").style.display = "none";//과거 내역 none
+			document.getElementById("mdfr_name").innerHTML = "";
+			document.getElementById("mdfcn_dt").innerHTML = "";
+			document.getElementById("use_se_code").checked = false;
 			close_btn.value = 0;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
 			/* frame[0].remove(); */
 		}
@@ -636,7 +721,8 @@
 
 <body>
 
-	<div class="background">
+	
+<div class="background">
 		<div class="window">
 			<div class="popup">
 				<div>
@@ -645,7 +731,7 @@
 						<tr style="margin-bottom:50px;">
 							<th><span style="font-size:1.5rem;">회의 주제 : </span></th>
 							<td>
-								<select id="room_subject">
+								<select id="mgt_nm">
 									<option value="일간 회의">일간 회의</option>
 									<option value="주간 회의">주간 회의</option>
 									<option value="공부">공부</option>
@@ -655,52 +741,96 @@
 						</tr>
 						<tr>
 							<th><span style="font-size:1.5rem;">회의 내용 : </span></th>
-							<td><textArea id="room_content" placeholder="회의 내용을 적어주세요"></textArea></td>
+							<td><textArea id="mgt_cn" placeholder="회의 내용을 적어주세요"></textArea></td>
 							<td><span id="content_cnt" style="font-size:0.5rem;"></span></td>
+						</tr>
+						<tr>
+							<th><label for="use_bgng_ymd"><span style="font-size:1.5rem;">시작일자 : </span></label></th>
+							<td><input id="use_bgng_ymd" type="date"/></td>
+							<th><label for="use_end_ymd" ><span style="font-size:1.5rem;">종료일자 : </span></label></th>
+							<td><input id="use_end_ymd" type="date"/></td>
+							<th><label style="font-size:0.9rem;padding-left:3px;margin-left:5px;"><a title="연속사용이란? &#10;시작일시부터 종료일시까지 해당 회의실을 계속 사용하는 것을 의미합니다." style="cursor: help;">연속사용*</a></label></th>
+							<td style="vertical-align: middle;">
+								<input type="checkbox" id="use_se_code" style="display:block;" onchange="isContinueChk()" value="02"/>
+							</td>
 						</tr>
 						<tr>
 							<th><span style="font-size:1.5rem;">시작 시간 : </span></th>
 							<td>
-								<select id="start_dt">
-									<option value="09:00:00">9:00</option>
-									<option value="09:30:00">9:30</option>
-									<option value="10:00:00">10:00</option>
-									<option value="10:30:00">10:30</option>
-									<option value="11:00:00">11:00</option>
-									<option value="11:30:00">11:30</option>
-									<option value="12:00:00">12:00</option>
-									<option value="12:30:00">12:30</option>
-									<option value="13:00:00">13:00</option>
-									<option value="13:30:00">13:30</option>
-									<option value="14:00:00">14:00</option>
-									<option value="14:30:00">14:30</option>
-									<option value="15:00:00">15:00</option>
-									<option value="15:30:00">15:30</option>
-									<option value="16:00:00">16:00</option>
-									<option value="16:30:00">16:30</option>
-									<option value="17:00:00">17:00</option>
+								<select id="use_bgng_tm">
+									<option value="090000">9:00</option>
+									<option value="091500">9:15</option>
+									<option value="093000">9:30</option>
+									<option value="094500">9:45</option>
+									<option value="100000">10:00</option>
+									<option value="101500">10:15</option>
+									<option value="103000">10:30</option>
+									<option value="104500">10:45</option>
+									<option value="110000">11:00</option>
+									<option value="111500">11:15</option>
+									<option value="113000">11:30</option>
+									<option value="114500">11:45</option>
+									<option value="120000">12:00</option>
+									<option value="121500">12:15</option>
+									<option value="123000">12:30</option>
+									<option value="124500">12:45</option>
+									<option value="130000">13:00</option>
+									<option value="131500">13:15</option>
+									<option value="133000">13:30</option>
+									<option value="134500">13:45</option>
+									<option value="140000">14:00</option>
+									<option value="141500">14:15</option>
+									<option value="143000">14:30</option>
+									<option value="145600">14:45</option>
+									<option value="150000">15:00</option>
+									<option value="151500">15:15</option>
+									<option value="153000">15:30</option>
+									<option value="154500">15:45</option>
+									<option value="160000">16:00</option>
+									<option value="161500">16:15</option>
+									<option value="163000">16:30</option>
+									<option value="164500">16:45</option>
+									<option value="170000">17:00</option>
+									<option value="171500">17:15</option>
 								</select>
 							</td>
 							<th><span style="font-size:1.5rem;">종료 시간 : </span></th>
 							<td>
-								<select id="end_dt">
-									<option value="09:30:00">9:30</option>
-									<option value="10:00:00">10:00</option>
-									<option value="10:30:00">10:30</option>
-									<option value="11:00:00">11:00</option>
-									<option value="11:30:00">11:30</option>
-									<option value="12:00:00">12:00</option>
-									<option value="12:30:00">12:30</option>
-									<option value="13:00:00">13:00</option>
-									<option value="13:30:00">13:30</option>
-									<option value="14:00:00">14:00</option>
-									<option value="14:30:00">14:30</option>
-									<option value="15:00:00">15:00</option>
-									<option value="15:30:00">15:30</option>
-									<option value="16:00:00">16:00</option>
-									<option value="16:30:00">16:30</option>
-									<option value="17:00:00">17:00</option>
-									<option value="17:30:00">17:30</option>
+								<select id="use_end_tm">
+									<option value="091500">9:15</option>
+									<option value="093000">9:30</option>
+									<option value="094500">9:45</option>
+									<option value="100000">10:00</option>
+									<option value="101500">10:15</option>
+									<option value="103000">10:30</option>
+									<option value="104500">10:45</option>
+									<option value="110000">11:00</option>
+									<option value="111500">11:15</option>
+									<option value="113000">11:30</option>
+									<option value="114500">11:45</option>
+									<option value="120000">12:00</option>
+									<option value="121500">12:15</option>
+									<option value="123000">12:30</option>
+									<option value="124500">12:45</option>
+									<option value="130000">13:00</option>
+									<option value="131500">13:15</option>
+									<option value="133000">13:30</option>
+									<option value="134500">13:45</option>
+									<option value="140000">14:00</option>
+									<option value="141500">14:15</option>
+									<option value="143000">14:30</option>
+									<option value="145600">14:45</option>
+									<option value="150000">15:00</option>
+									<option value="151500">15:15</option>
+									<option value="153000">15:30</option>
+									<option value="154500">15:45</option>
+									<option value="160000">16:00</option>
+									<option value="161500">16:15</option>
+									<option value="163000">16:30</option>
+									<option value="164500">16:45</option>
+									<option value="170000">17:00</option>
+									<option value="171500">17:15</option>
+									<option value="173000">17:30</option>
 								</select>
 							</td>
 						</tr>
@@ -711,7 +841,7 @@
 					<button id="close_btn" value="0" onClick="modal_close()">닫기</button>
 				</div>
 				</div>
-				<div id="history_div" style="display:none">
+				<div id="history_div">
 					<p class="historyNode" id="rgtr_name"></p>
 					<p class="historyNode" id="reg_dt"></p>
 					<p class="historyNode" id="mdfr_name"></p>
@@ -721,8 +851,17 @@
 		</div>
 	</div>
 
+<div id="page-wrapper">
+		<!-- Header -->
+		<jsp:include page="/WEB-INF/jsp/common/header2.jsp" flush="false" />
 
-  <div id='external-events' style="float:left;width:10%;padding-right:30px;padding-left:20px;margin-top:110px;">
+		<div id="container">
+			<div class="content">
+
+
+
+
+  <div id='external-events' style="float:left;width:20%;padding-right:30px;padding-left:20px;padding-top:11%">
   
 	<p>
 		<strong>회의를 원하는 날짜에 드래그하여 예약하세요.</strong>
@@ -746,9 +885,13 @@
     </p>
   </div>
 
-	<div style="float:left;width:80%">
+	<div style="float:left;width:80%;margin-bottom:110px;">
 		<div style="text-align:center;height:30px;font-size:35px;font-weight:bold;margin-bottom:30px;">회의실 예약 달력표</div>
 		<div id='calendar' ></div>
+	</div>
+	
+	</div>
+	</div>
 	</div>
 </body>
 </html>

@@ -8987,13 +8987,20 @@ var FullCalendar = (function (exports) {
     	
     	var startStr = innerProps.event.startStr;
     	var endStr = innerProps.event.endStr;
+    	
+    	console.log("startStr : "+startStr);
+    	console.log("endStr : "+endStr);
+    	
     	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
     	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
+    	console.log("가공된 startStr :"+startStr);
+    	console.log("가공된 endStr :"+endStr);
     	
         return (createElement(Fragment, null,
             innerProps.timeText &&
                 createElement("div", { className: 'fc-event-time' }, startStr+"~"+endStr),
-            createElement("div", { className: 'fc-event-title-frame' },
+                createElement("div",{className: 'fc-daygrid-event-dot',id : innerProps.event.id}),
+            createElement("div", { className: 'fc-event-title-frame'},
                 createElement("div", { className: 'fc-event-title fc-sticky' }, innerProps.event.title || createElement(Fragment, null, "\u00A0")))));
     }
     function getSegAnchorAttrs(seg) {
@@ -11587,11 +11594,22 @@ var FullCalendar = (function (exports) {
     	console.log(innerProps);
     	console.log(innerProps.view.currentStart);
     	console.log(innerProps.view.currentEnd);
+    	console.log();
+    	console.log();
     	
+    		
     	var startStr = innerProps.event.startStr;
     	var endStr = innerProps.event.endStr;
+    	
+    	console.log("startStr : "+startStr);
+    	console.log("endStr : "+endStr);
+    	
     	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
     	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
+    	console.log("가공된 startStr :"+startStr);
+    	console.log("가공된 endStr :"+endStr);
+	    	
+    	
         return (createElement(Fragment, null,
             createElement("div", { className: 'fc-daygrid-event-dot',id : innerProps.event.id,style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
             innerProps.timeText &&

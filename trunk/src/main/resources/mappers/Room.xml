@@ -6,22 +6,32 @@
 <mapper namespace="com.iyoons.world.dao.RoomDAO">
 
 	<insert id="makeReservation" parameterType="com.iyoons.world.vo.RoomVO">
-		insert into room_reservation(reserve_seq,
-									 room_subject,
-									 room_content,
-									 room_status,
-									 start_dt,
-									 end_dt,
-									 reg_dt,
-									 rgtr_id
+		insert into MGT_ROOM_RSVT(MGT_ROOM_ID,
+									 USE_BGNG_YMD,
+									 USE_BGNG_TM,
+									 RSVT_STATUS_CODE,
+									 USE_END_YMD,
+									 USE_END_TM,
+									 MGT_NM,
+									 MGT_CN,
+									 USER_SEQ,
+									 RSVT_DTM,
+									 MGT_ROOM_USE_SE_CODE,
+									 REG_DT,
+									 RGTR_ID
 									)
 								values(
-									reserve_seq.nextval,
-									#{roomSubject},
-									#{roomContent},
-									1,
-									TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
-									TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
+									'6F01',
+									#{useBgngYmd},
+									#{useBgngTm},
+									'01',
+									#{useEndYmd},
+									#{useEndTm},
+									#{mgtNm},
+									#{mgtCn},
+									#{userSeq},
+									SYSDATE,
+									#{mgtRoomUseSeCode},
 									SYSDATE,
 									#{rgtrId}
 									)
@@ -32,10 +42,10 @@
 		SELECT 
 			COUNT(*)
 		FROM 
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		where 
 			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
-			AND ROOM_STATUS = 1
+			AND RSVT_STATUS_CODE = '01'
 			AND RESERVE_SEQ != #{reserveSeq}
 	</select>
 	
@@ -43,104 +53,161 @@
 		SELECT 
 			COUNT(*)
 		FROM 
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		where 
 			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
-			AND ROOM_STATUS = 1
+			AND RSVT_STATUS_CODE = '01'
 			AND RESERVE_SEQ != #{reserveSeq}
 	</select>
 	
-	<select id="checkIsAvailableStartDT" parameterType="String" resultType="int">
+	<select id="checkIsAvailableStartDT" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
 		SELECT 
 			COUNT(*)
 		FROM 
-			ROOM_RESERVATION
-		where 
-			TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
-			AND ROOM_STATUS = 1
+			MGT_ROOM_RSVT
+		where
+			1=1
+			AND RSVT_STATUS_CODE = '01'
 	</select>
 	
-	<select id="checkIsAvailableEndDT" parameterType="String" resultType="int">
+	<select id="checkIsAvailableEndDT" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
 		SELECT 
 			COUNT(*)
 		FROM 
-			ROOM_RESERVATION
+			mgt_room_rsvt
 		where 
+			1=1 and 		
 			TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS') BETWEEN START_DT AND END_DT
-			AND ROOM_STATUS = 1
+			AND RSVT_STATUS_CODE = '01'
+	</select>
+	
+	<select id="checkIsAvailableUDP" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
+		select count(*) from
+			(select * from MGT_ROOM_RSVT
+			WHERE (
+				TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt;= TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') AND TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE(use_end_ymd || use_end_tm, 'yyyymmddhh24miss')
+				OR (TO_DATE (use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE(#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss') AND TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE ( use_end_ymd || use_end_tm, 'yyyymmddhh24miss'))
+				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') &lt;= TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') AND TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE (#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss'))
+				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') &lt; TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') AND TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') &lt;= TO_DATE (#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss'))
+			)
+			AND MGT_ROOM_USE_SE_CODE = '02'
+			union all
+			select * from MGT_ROOM_RSVT
+			where (
+				(#{useBgngYmd} between use_bgng_ymd and use_end_ymd or #{useEndYmd} between use_bgng_ymd and use_end_ymd) or (use_bgng_ymd between #{useBgngYmd} and #{useEndYmd} or use_end_ymd between #{useBgngYmd} and #{useEndYmd}))
+				and ((#{useBgngTm} &gt;= use_bgng_tm and #{useBgngTm} &lt; use_end_tm or #{useEndTm} &gt; use_bgng_tm and #{useEndTm} &lt;= use_end_tm) or (use_bgng_tm &gt;= #{useBgngTm} and use_bgng_tm &lt; #{useEndTm} or use_end_tm &gt; #{useBgngTm} and use_end_tm &lt;= #{useEndTm}))
+			AND MGT_ROOM_USE_SE_CODE = '01')
+	</select>
+	
+	<select id="checkIsAvailable" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
+		select count(*) from
+			(select * from MGT_ROOM_RSVT
+			WHERE (
+				TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt;= TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE(use_end_ymd || use_end_tm, 'yyyymmddhh24miss')
+				OR (TO_DATE (use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE ( use_end_ymd || use_end_tm, 'yyyymmddhh24miss'))
+				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') AND TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE (#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS'))
+				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') AND TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') &lt;= TO_DATE (#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS'))
+			)
+			AND MGT_ROOM_USE_SE_CODE = '02'
+			union all
+			select * from MGT_ROOM_RSVT
+			where (
+				(#{useBgngYmd} between use_bgng_ymd and use_end_ymd or #{useEndYmd} between use_bgng_ymd and use_end_ymd) or (use_bgng_ymd between #{useBgngYmd} and #{useEndYmd} or use_end_ymd between #{useBgngYmd} and #{useEndYmd}))
+				and ((#{useBgngTm} &gt;= use_bgng_tm and #{useBgngTm} &lt; use_end_tm or #{useEndTm} &gt; use_bgng_tm and #{useEndTm} &lt;= use_end_tm) or (use_bgng_tm &gt;= #{useBgngTm} and use_bgng_tm &lt; #{useEndTm} or use_end_tm &gt; #{useBgngTm} and use_end_tm &lt;= #{useEndTm}))
+			AND MGT_ROOM_USE_SE_CODE = '01')
+			WHERE 1=1
+			<choose>
+				<when test="id neq null and id neq ''">
+				and (MGT_ROOM_ID != #{mgtRoomId} AND USE_BGNG_YMD != #{useBgngYmd} AND USE_BGNG_TM != #{useBgngTm})				
+				</when>
+			</choose>
 	</select>
 	
 	<select id="getReservation" resultType="com.iyoons.world.vo.RoomVO">
 		SELECT 
-			RESERVE_SEQ AS "ID",
-			ROOM_SUBJECT AS "TITLE",
-			TO_CHAR(START_DT,'YYYY-MM-DD HH24:MI:SS') AS "START",
-			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS "END",
-			room_content
+			MGT_ROOM_ID,
+			USE_BGNG_YMD,
+			USE_BGNG_TM,
+			USE_END_YMD,
+			MGT_NM AS "TITLE",
+			MGT_ROOM_USE_SE_CODE,
+			CASE WHEN USE_BGNG_YMD != USE_END_YMD AND MGT_ROOM_USE_SE_CODE = '01' THEN TO_CHAR(TO_DATE(USE_END_YMD||USE_END_TM,'YYYY-MM-DD HH24:MI:SS')+1,'YYYY-MM-DD HH24:MI:SS')
+			ELSE TO_CHAR(TO_DATE(USE_END_YMD||USE_END_TM,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')
+			END AS "END",
+			TO_CHAR(TO_DATE(USE_BGNG_YMD||USE_BGNG_TM,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') AS "START",
+			MGT_CN
 		FROM
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		WHERE 
-			ROOM_STATUS = 1
-			AND DEL_YN != 'Y'
+			RSVT_STATUS_CODE = '01'
+			AND DEL_YN = 'N'
 	</select>
 	
-	<select id="readReservation" resultType="com.iyoons.world.vo.RoomVO">
+	<select id="readReservation" parameterType="com.iyoons.world.vo.RoomVO" resultType="com.iyoons.world.vo.RoomVO">
 		SELECT 
-			ROOM_CONTENT,
-			ROOM_SUBJECT,
-			TO_CHAR(START_DT,'YYYY-MM-DD HH24:MI:SS') AS START_DT,
-			TO_CHAR(END_DT,'YYYY-MM-DD HH24:MI:SS') AS END_DT ,
+			MGT_CN,
+			MGT_NM,
+			TO_CHAR(TO_DATE(USE_BGNG_YMD,'YYYY-MM-DD'),'YYYY-MM-DD') AS USE_BGNG_YMD,
+			USE_BGNG_TM,
+			TO_CHAR(TO_DATE(USE_END_YMD,'YYYY-MM-DD'),'YYYY-MM-DD') AS USE_END_YMD,
+			USE_END_TM,
 			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
-			(SELECT USER_NAME FROM ROOM_RESERVATION RR INNER JOIN USER_INFO UI ON to_number(REPLACE(NVL(RR.RGTR_ID,'0'),'SYSTEM',1)) = UI.USER_SEQ WHERE RR.RESERVE_SEQ = #{reserveSeq}) AS "RGTR_NAME",
+			(SELECT USER_NAME FROM MGT_ROOM_RSVT MRR INNER JOIN USER_INFO UI ON MRR.USER_SEQ = UI.USER_SEQ WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} AND MRR.USE_BGNG_YMD = #{useBgngYmd} AND MRR.USE_BGNG_TM = #{useBgngTm} AND MRR.RSVT_STATUS_CODE = '01') AS "RGTR_NAME",
 			TO_CHAR(MDFCN_DT,'YYYY-MM-DD HH24:MI:SS') AS MDFCN_DT,
-			(SELECT USER_NAME FROM ROOM_RESERVATION RR INNER JOIN USER_INFO UI ON to_number(REPLACE(NVL(RR.MDFR_ID,'0'),'SYSTEM',1)) = UI.USER_SEQ WHERE RR.RESERVE_SEQ = #{reserveSeq}) AS "MDFR_NAME"
+			CASE WHEN MDFR_ID != 'SYSTEM' THEN 
+			(SELECT USER_NAME FROM MGT_ROOM_RSVT MRR INNER JOIN USER_INFO UI ON MRR.MDFR_ID = UI.USER_SEQ WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} AND MRR.USE_BGNG_YMD = #{useBgngYmd} AND MRR.USE_BGNG_TM = #{useBgngTm} AND MRR.RSVT_STATUS_CODE = '01')
+			ELSE '' END AS "MDFR_NAME",
+			MGT_ROOM_USE_SE_CODE
 		FROM
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		WHERE
-			ROOM_STATUS = 1
-			AND RESERVE_SEQ = #{reserveSeq}
-			AND DEL_YN != 'Y'
+			RSVT_STATUS_CODE = '01'
+			AND MGT_ROOM_ID = #{mgtRoomId} AND USE_BGNG_YMD = #{useBgngYmd} AND USE_BGNG_TM = #{useBgngTm}
+			AND DEL_YN = 'N'
 	</select>
 	
 	<select id="getDepName" resultType="com.iyoons.world.vo.RoomVO">
 		SELECT DISTINCT
-			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON DU.DEP_SEQ = D.DEP_SEQ WHERE DU.USER_SEQ = #{userSeq}) AS "MDFR_DEP_NAME",
+			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON DU.DEP_SEQ = D.DEP_SEQ WHERE DU.USER_SEQ = #{userSeq} AND DU.STATUS = 1) AS "MDFR_DEP_NAME",
 			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON D.DEP_SEQ = DU.DEP_SEQ
-			INNER JOIN ROOM_RESERVATION RR ON RR.RGTR_ID = DU.USER_SEQ 
-			WHERE RR.RESERVE_SEQ = #{reserveSeq}) as "rgtr_dep_name"
+			INNER JOIN MGT_ROOM_RSVT MRR ON MRR.RGTR_ID = DU.USER_SEQ 
+			WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} and MRR.USE_BGNG_YMD = #{useBgngYmd} and MRR.USE_BGNG_TM = #{useBgngTm} and MRR.RSVT_STATUS_code = '01') as "RGTR_DEP_NAME"
 		FROM
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		WHERE
-			ROOM_STATUS = 1
+			RSVT_STATUS_CODE = '01'
 	</select>
 	
 	<update id="updateReservation">
 		UPDATE
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		SET
-			ROOM_SUBJECT = #{roomSubject},
-			ROOM_CONTENT = #{roomContent},
-			START_DT = TO_DATE(#{startDt},'YYYY-MM-DD HH24:MI:SS'),
-			END_DT = TO_DATE(#{endDt},'YYYY-MM-DD HH24:MI:SS'),
+			MGT_NM = #{mgtNm},
+			MGT_CN = #{mgtCn},
+			USE_BGNG_YMD = #{useBgngYmd},
+			USE_BGNG_TM = #{useBgngTm},
+			USE_END_YMD = #{useEndYmd},
+			USE_END_TM = #{useEndTm},
 			MDFR_ID = #{mdfrId},
-			MDFCN_DT = SYSDATE
+			MDFCN_DT = SYSDATE,
+			MGT_ROOM_USE_SE_CODE = #{mgtRoomUseSeCode}
 		WHERE
-			RESERVE_SEQ = #{reserveSeq}
-			AND ROOM_STATUS = 1
-			AND DEL_YN != 'Y'
+			MGT_ROOM_ID = #{mgtRoomId} AND USE_BGNG_YMD = #{useBgngYmd} AND USE_BGNG_TM = #{useBgngTm}
+			AND RSVT_STATUS_CODE = '01'
+			AND DEL_YN = 'N'
 	</update>
 	
 	<update id="cancelReservation" parameterType="com.iyoons.world.vo.RoomVO">
 		UPDATE
-			ROOM_RESERVATION
+			MGT_ROOM_RSVT
 		SET
-			ROOM_STATUS = 0,
+			RSVT_STATUS_CODE = '02',
 			MDFR_ID = #{mdfrId},
 			MDFCN_DT = SYSDATE
 		WHERE
-			RESERVE_SEQ = #{reserveSeq}
-			AND ROOM_STATUS = 1
-			AND DEL_YN != 'Y'
+			MGT_ROOM_ID = #{mgtRoomId} AND USE_BGNG_YMD = #{useBgngYmd} AND USE_BGNG_TM = #{useBgngTm}
+			AND RSVT_STATUS_CODE = '01'
+			AND DEL_YN = 'N'
 	</update>
 	
 	

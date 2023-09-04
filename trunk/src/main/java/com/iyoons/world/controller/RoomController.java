@@ -1,5 +1,8 @@
 package com.iyoons.world.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,31 +46,59 @@ public class RoomController {
 	 * */
 	@RequestMapping(value="/getReservation",method=RequestMethod.GET)
 	@ResponseBody public List<RoomVO> getReservation() {
+		
+		logger.debug("-------- Request URI : /getReservation --------");
+		
 		List<RoomVO> resultList = service.getReservation();
+		for(RoomVO list:resultList) {
+			
+			list.setId(list.getMgtRoomId()+"-"+list.getUseBgngYmd()+"-"+list.getUseBgngTm());
+			if("01".equals(list.getMgtRoomUseSeCode())) {
+				if(!list.getUseBgngYmd().equals(list.getUseEndYmd())) {//사용구분이 반복사용일시
+					list.setStartRecur(list.getStart().split(" ")[0]);
+					list.setEndRecur(list.getEnd().split(" ")[0]);
+					list.setStartTime(list.getStart().split(" ")[1]);
+					list.setEndTime(list.getEnd().split(" ")[1]);
+					logger.debug("list recur"+list.toString());
+				}
+			}
+		}
 		logger.debug("list 내용 : "+resultList);
 		return resultList;
 	}
 	
 	
 	/** @discription 캘린더에서 예약 상세 내용 읽기
-	 *  @param 
+	 *  @param id(mgtRoomID-useBgngYmd-useBgngTm 형식의 파라미터)
 	 *  @return 예약 내역(시간,회의주제,회의상세내용)
 	 * */
 	@RequestMapping(value="/readReservation",method=RequestMethod.GET)
-	@ResponseBody public RoomVO readReservation(@RequestParam(value = "reserveSeq", required = false) String reserveSeq,HttpSession session) {
+	@ResponseBody public RoomVO readReservation(@RequestParam(value = "id", required = false) String id,HttpSession session) {
 		
-		RoomVO depChkVO = new RoomVO();
+		logger.debug("-------------/readReservation----------- id : "+id);
+		
+		RoomVO chkVO = new RoomVO();//부서 확인, 팝업창 누른 일정 정보 확인용 파라미터
+		chkVO.setMgtRoomId(id.split("-")[0]);
+		chkVO.setUseBgngYmd(id.split("-")[1]);
+		chkVO.setUseBgngTm(id.split("-")[2]);
+		
+		logger.debug("chkVO chk1 : "+chkVO);
 		
 		int seq = Integer.parseInt(String.valueOf(session.getAttribute("sessionSeqForUser")));
 		logger.debug("seq확인 : "+seq);
-		depChkVO.setUserSeq(seq);//팝업창에 진입한 유저의 고유번호 Set
-		depChkVO.setReserveSeq(Integer.parseInt(reserveSeq));//예약 고유 번호 Set
-		depChkVO = service.getDepName(depChkVO);
+		chkVO.setUserSeq(seq);//팝업창에 진입한 유저의 고유번호 Set
 		
-		logger.debug("reserveSeq : "+reserveSeq);
-		RoomVO roomVO = service.readReservation(Integer.parseInt(reserveSeq));
-		roomVO.setRgtrDepName(depChkVO.getRgtrDepName());
-		roomVO.setMdfrDepName(depChkVO.getMdfrDepName());
+		chkVO = service.getDepName(chkVO);
+		chkVO.setMgtRoomId(id.split("-")[0]);
+		chkVO.setUseBgngYmd(id.split("-")[1]);
+		chkVO.setUseBgngTm(id.split("-")[2]);
+		
+		logger.debug("chkVO chk2 : "+chkVO);
+		
+		logger.debug("id : "+id);
+		RoomVO roomVO = service.readReservation(chkVO);
+		roomVO.setRgtrDepName(chkVO.getRgtrDepName());
+		roomVO.setMdfrDepName(chkVO.getMdfrDepName());
 		logger.debug("roomVO 내용 : "+roomVO);
 		return roomVO;
 	}
@@ -85,33 +117,32 @@ public class RoomController {
 		
 		int result = 0;//insert성공 결과 담을 변수
 		
+		String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
+		
+		if(StringUtils.isEmpty(roomVO.getMgtRoomUseSeCode())) {
+			roomVO.setMgtRoomUseSeCode("01");
+		}
+		
+		roomVO.setRgtrId(seqStr);
+		roomVO.setUserSeq(Integer.parseInt(seqStr));
+		
 		try {
 			
-			
-			logger.debug("seq확인 : "+String.valueOf(session.getAttribute("sessionSeqForUser")));
-			roomVO.setRgtrId(String.valueOf(session.getAttribute("sessionSeqForUser")));
 			logger.debug("seq String변환 : "+roomVO.getRgtrId());
 			
-			int startDtChk = service.checkIsAvailableStartDT(roomVO.getStartDt());//시작시간 중복확인
-			int endDtChk = service.checkIsAvailableEndDT(roomVO.getStartDt());//종료시간 중복확인
-			if(startDtChk >= 1) {
-				throw new Exception("startDt is not available");
-			}
-			if(endDtChk >= 1) {
-				throw new Exception("endDt is not available");
+			int reserveChk = service.checkIsAvailable(roomVO);//예약 가능 확인
+			
+			if(reserveChk >= 1) {
+				throw new Exception("it is not available");
 			}
 			
 			result = service.makeReservation(roomVO);//예약정보 insert
 			
 		}catch(Exception e){
-			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
+			if("it is not available".equals(e.getMessage())) {
+				logger.error("reservation error message : "+e.getMessage());
+				return Integer.parseInt(FinalVariables.NOT_AVAILABLE);
 			}
-			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
-			}		
 			logger.error("Exception : " + e.getMessage());
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			return result;
@@ -129,7 +160,7 @@ public class RoomController {
 	 * */
 	@RequestMapping(value="/cancelReservation",method=RequestMethod.GET)
 	@ResponseBody 
-	public int cancelReservation(@RequestParam(value = "reserveSeq",required = false) String reserveSeq,HttpServletRequest request,HttpSession session) {
+	public int cancelReservation(@RequestParam(value = "id",required = false) String id,HttpServletRequest request,HttpSession session) {
 		logger.info("---------- updateReservation get in ---------");
 		
 		int result = 0;//예약 취소 성공 결과 담을 변수
@@ -140,9 +171,14 @@ public class RoomController {
 			logger.debug("seq확인 : "+seqStr);
 			
 			RoomVO roomVO = new RoomVO();
+			
+			roomVO.setMgtRoomId(id.split("-")[0]);
+			roomVO.setUseBgngYmd(id.split("-")[1]);
+			roomVO.setUseBgngTm(id.split("-")[2]);
+			
 			roomVO.setUserSeq(Integer.parseInt(seqStr));//userSeq 넣었는데 왜 null?
 			roomVO.setMdfrId(seqStr);
-			roomVO.setReserveSeq(Integer.parseInt(reserveSeq));
+			/*roomVO.setReserveSeq(Integer.parseInt(reserveSeq));*/
 			RoomVO depChkVO = service.getDepName(roomVO);//같은 부서의 사람이 update메서드에 접근한 것인지 확인
 			logger.debug("depChkVO 확인 : "+depChkVO);
 			if(depChkVO != null) {
@@ -151,23 +187,12 @@ public class RoomController {
 				}
 			}
 			
-			logger.debug("reserveSeq 확인 : "+roomVO.getReserveSeq());
-			logger.debug("start 확인 : "+roomVO.getStartDt());
-			logger.debug("end 확인 : "+roomVO.getEndDt());
 			logger.debug("mdfrid 확인 : "+roomVO.getMdfrId());
 			
 			result = service.cancelReservation(roomVO);//예약정보 update
 			logger.debug("update result : "+result);
 			
 		}catch(Exception e){
-			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
-			}
-			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
-			}			
 			if("not same dep".equals(e.getMessage())) {
 				logger.error("dep error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.DUPLICATED_CODE);
@@ -197,6 +222,12 @@ public class RoomController {
 		
 		try {
 			
+			if(StringUtils.isEmpty(roomVO.getMgtRoomUseSeCode())) {
+				roomVO.setMgtRoomUseSeCode("01");
+			}
+			
+			roomVO.setMgtRoomId(roomVO.getId().split("-")[0]);
+			
 			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
 			logger.debug("seq확인 : "+seqStr);
 			
@@ -210,35 +241,22 @@ public class RoomController {
 				}
 			}
 			
-			logger.debug("reserveSeq 확인 : "+roomVO.getReserveSeq());
-			logger.debug("start 확인 : "+roomVO.getStartDt());
-			logger.debug("end 확인 : "+roomVO.getEndDt());
 			logger.debug("mdfrid 확인 : "+roomVO.getMdfrId());
 			
-			int startDtChk = service.checkIsAvailableStartUPD(roomVO);
-			int endDtChk = service.checkIsAvailableEndUPD(roomVO);
+			int reserveChk = service.checkIsAvailable(roomVO);//예약 가능 확인
 			
-			logger.debug("startDtChk : "+startDtChk);
-			logger.debug("endDtChk : "+endDtChk);
+			if(reserveChk >= 1) {
+				throw new Exception("it is not available");
+			}
 			
-			if(startDtChk >= 1) {
-				throw new Exception("startDt is not available");
-			}
-			if(endDtChk >= 1) {
-				throw new Exception("endDt is not available");
-			}
 			logger.debug("update직전 roomVO : "+roomVO);
 			result = service.updateReservation(roomVO);//예약정보 update
 			logger.debug("update result : "+result);
 			
 		}catch(Exception e){
-			if("startDt is not available".equals(e.getMessage())) {
-				logger.error("start time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.STARTDT_DUPLICATED_CODE);
-			}
-			if("endDt is not available".equals(e.getMessage())) {
-				logger.error("end time error message : "+e.getMessage());
-				return Integer.parseInt(FinalVariables.ENDDT_DUPLICATED_CODE);
+			if("it is not available".equals(e.getMessage())) {
+				logger.error("reservation error message : "+e.getMessage());
+				return Integer.parseInt(FinalVariables.NOT_AVAILABLE);
 			}			
 			if("not same dep".equals(e.getMessage())) {
 				logger.error("dep error message : "+e.getMessage());

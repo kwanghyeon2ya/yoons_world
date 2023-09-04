@@ -62,8 +62,8 @@ public class RoomServiceImpl implements RoomService {
 	 * @return count값(1 중복/0 중복없음)
 	 * */
 	@Override
-	public int checkIsAvailableStartDT(String startDt) {
-		return dao.checkIsAvailableStartDT(startDt);
+	public int checkIsAvailableStartDT(RoomVO roomVO) {
+		return dao.checkIsAvailableStartDT(roomVO);
 	}
 
 	/**@author qus46
@@ -72,8 +72,8 @@ public class RoomServiceImpl implements RoomService {
 	 * @return count값(1 중복/0 중복없음)
 	 * */
 	@Override
-	public int checkIsAvailableEndDT(String endDt) {
-		return dao.checkIsAvailableEndDT(endDt);
+	public int checkIsAvailableEndDT(RoomVO roomVO) {
+		return dao.checkIsAvailableEndDT(roomVO);
 	}
 	
 	/**@author qus46
@@ -113,8 +113,8 @@ public class RoomServiceImpl implements RoomService {
 	 * @return 
 	 * */
 	@Override
-	public RoomVO readReservation(int reserveSeq) {
-		return dao.readReservation(reserveSeq);
+	public RoomVO readReservation(RoomVO roomVO) {
+		return dao.readReservation(roomVO);
 	}
 
 	/**@author qus46
@@ -145,6 +145,12 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public int cancelReservation(RoomVO roomVO) {
 		return dao.cancelReservation(roomVO);
+	}
+
+	@Override
+	public int checkIsAvailable(RoomVO roomVO) {
+		// TODO Auto-generated method stub
+		return dao.checkIsAvailable(roomVO);
 	}
 	
 	
