@@ -83,7 +83,7 @@
 	    	width: 100%;
 	    	margin-bottom: 100px;
 		}
-		.fc-daygrid-event-harness-abs .fc-daygrid-event-dot{fc-daygrid-event-dot
+		.fc-daygrid-event-harness-abs .fc-daygrid-event-dot{
 			display: none;
 		}
 		
@@ -254,11 +254,9 @@
 		    	console.log(event.allDay);
 		    	console.log("gdgd?");
 		    	console.log(event.id);
-		    	console.log(event.location);
 		    })
 		    dayevents.forEach(function(dayevent){
 		    	console.log(dayevent);
-		    	console.log('');
 		    	dayevent.addEventListener('click',function(){readReservation(dayevent.querySelector('.fc-daygrid-event-dot').id)});	
 		    });
 		  });
