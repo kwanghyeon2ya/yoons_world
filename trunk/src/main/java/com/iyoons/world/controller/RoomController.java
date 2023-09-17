@@ -36,7 +36,11 @@ public class RoomController {
 	 *  @param
 	 * */
 	@RequestMapping(value="/revCalendar",method=RequestMethod.GET)
-	public String revCalendar() {
+	public String revCalendar(@RequestParam(value = "mgtRoomId", required = false) String mgtRoomId,Model model) {
+		if(mgtRoomId == null) {
+			mgtRoomId = "B101";
+		}
+		model.addAttribute("mgtRoomId",mgtRoomId);
 		return "reservation/revCalendar";
 	}
 	
@@ -45,11 +49,11 @@ public class RoomController {
 	 *  @return 예약 List
 	 * */
 	@RequestMapping(value="/getReservation",method=RequestMethod.GET)
-	@ResponseBody public List<RoomVO> getReservation() {
+	@ResponseBody public List<RoomVO> getReservation(@RequestParam(value="mgtRoomId") String mgtRoomId) {
 		
-		logger.debug("-------- Request URI : /getReservation --------");
+		logger.debug("-------- Request URI : /getReservation -------- mgtRoomId : "+mgtRoomId);
 		
-		List<RoomVO> resultList = service.getReservation();
+		List<RoomVO> resultList = service.getReservation(mgtRoomId);
 		for(RoomVO list:resultList) {
 			
 			list.setId(list.getMgtRoomId()+"-"+list.getUseBgngYmd()+"-"+list.getUseBgngTm());
@@ -66,6 +70,18 @@ public class RoomController {
 		logger.debug("list 내용 : "+resultList);
 		return resultList;
 	}
+	
+	@RequestMapping(value="/getRoomInfo",method=RequestMethod.GET)
+	@ResponseBody public List<RoomVO> getRoomInfo() {
+		
+		logger.debug("-------- Request URI : /getRoomInfo --------");
+		
+		List<RoomVO> roomList = service.getRoomInfo();
+		
+		logger.debug("list 내용 : "+roomList);
+		return roomList;
+	}
+	
 	
 	
 	/** @discription 캘린더에서 예약 상세 내용 읽기
@@ -118,6 +134,12 @@ public class RoomController {
 		int result = 0;//insert성공 결과 담을 변수
 		
 		String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
+		
+		if(roomVO.getMgtRoomUseSeCode() == null||roomVO.getMgtRoomUseSeCode() == "") {
+			logger.debug("se code null chk");
+		}else {
+			logger.debug("se code : "+roomVO.getMgtRoomUseSeCode());
+		}
 		
 		if(StringUtils.isEmpty(roomVO.getMgtRoomUseSeCode())) {
 			roomVO.setMgtRoomUseSeCode("01");

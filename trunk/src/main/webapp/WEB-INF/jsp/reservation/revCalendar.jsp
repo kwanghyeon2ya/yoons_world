@@ -86,8 +86,45 @@
 		.fc-daygrid-event-harness-abs .fc-daygrid-event-dot{
 			display: none;
 		}
+		#step_list li{
+			width: 18%;
+		    float: none;
+		    height: 40px;
+		    font-size: 11px;
+		    padding: 5px 10px 5px 33px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+		#step_list{
+			display: flex;
+		    flex-wrap: wrap;
+		    margin-bottom: 20px;
+		    justify-content: space-around;
+		}
 		
+		.not_selected{
+			display:none;
+		}
 		
+		.cal_active{
+			visibility:visible; /* invisible로 해야함 */
+		}
+		
+		.selected_room{
+			border:1px;
+			background-color:#A49D91;
+			
+		}
+		
+		#mgt_room_list{
+			padding-top:2px;
+			padding-left:2px;
+			padding-right:2px;
+			border-left:0.2px solid #c4c4c4;
+			border-right:0.2px solid #c4c4c4;
+			border-top:0.2px solid #c4c4c4;
+		}
 	</style>
 <meta charset="UTF-8">
 <title>회의실 예약</title>
@@ -103,7 +140,12 @@
 		    var calendarEl = document.getElementById('calendar');
 		    var checkbox = document.getElementById('drop-remove');
 		    var all_events = null;
-			all_events = loadingEvents();
+		    
+		    var mgt_room_id = "${mgtRoomId}";//서버에서 받아온 회의실 고유 id값
+		    
+		    console.log("mgt_room_id : "+mgt_room_id);
+		    getRoomInfo(mgt_room_id);
+			all_events = loadingEvents(mgt_room_id);
 			console.log(all_events);
 			
 		    // initialize the external events
@@ -141,6 +183,21 @@
 		          });
 		          calendar.unselect();
 	          },
+	         /*  customButtons: {
+	        	  customPrev: {
+	        	      icon: 'fc-icon-chevron-left',
+	        	      click: function() {
+	        	        alert('clicked left custom button!');
+	        	      }
+	        	    },
+		          customNext: {
+	        	      icon: 'fc-icon-chevron-right',
+	        	      click: function() {
+	        	        alert('clicked right custom button!');
+	        	      }
+	        	    }
+        	  }, */
+	          
 	          /* dayMaxEventRows: true, // for all non-TimeGrid views
 	          views: {
 	            timeGrid: {
@@ -166,12 +223,13 @@
 			  },
 		      droppable: true, // this allows things to be dropped onto the calendar
 			  events: JSON.parse(JSON.stringify(all_events)),//요구되는 데이터 타입은 json - ajax로 받을 때 dataType:json명시해야함
+			  eventClick: function(info) {
+				  console.log("eventClick info");
+				  readReservation(info.event._def.publicId);
+			  },
 			  eventDidMount: function(info) {
 				  var startStr = info.event.startStr;
 				  var endStr = info.event.endStr;
-				  console.log(startStr,endStr); 
-				  console.log(info);
-				  console.log(info.event);
 				  /* const firstIconElements = document.querySelectorAll(
 				    '.event-icon.first');
 				  const secondIconElements = document.querySelectorAll(
@@ -185,31 +243,22 @@
 				  secondIconElements.forEach((element, key, parent) => {
 				    element.addEventListener('click', secondIconClickHandler);
 				  }); */
-				  console.log(info.event.id);
 				  var mgt_cn = "";
 				  for (var i = 0; i < all_events.length; i++) {
 					  if(all_events[i].id== info.event.id){//db에서 가져온 id와 캘린더에 가공해서 넣은 id값이 일치할 때
 						  mgt_cn = all_events[i].mgtCn;//db에서 가져온 회의 내용을 변수 대입
 					  }
-					  console.log(all_events[i]);
 					} 
-				  console.log(all_events);
 				  tippy(info.el, {
 				      content: mgt_cn//회의 내용을 툴팁으로 넣음.
 				      });
 				  },
 		      drop: function(info) {//태그를 날짜에 drop하는 순간 작동
 		    	  console.log(info.view);
-		    	console.log(info);
-		        console.log("drop됨");
 		    	var background = document.querySelector(".background");
 				background.classList.add("show");
 				var infoInnerText = info.draggedEl.innerText; 
 				var mgt_nm = document.querySelector("#mgt_nm");
-				
-				console.log(mgt_nm.options);
-				console.log(infoInnerText);
-				console.log(mgt_nm.options[0].value);
 				
 				document.getElementById("use_bgng_ymd").value = info.dateStr;//시작 날짜 클릭 해당 날짜 초기 세팅
 		   		document.getElementById("use_end_ymd").value = info.dateStr;//종료 날짜 클릭 해당 날짜 초기 세팅
@@ -245,19 +294,20 @@
 		    }); */
 		    var dayevents = document.querySelectorAll('.fc-daygrid-event-harness');
 		    
-		    var dayEl = document.getElementsByClassName("fc-daygrid-event-harness");
-		    console.log(dayEl);
-		    console.log(all_events);
-		    all_events.forEach(function(event){
+		    /* var tr_select1 = document.querySelector("#calendar > div.fc-view-harness.fc-view-harness-passive > div > table > tbody > tr > td > div > div > div > table > tbody > tr:nth-child(1)");
+		    console.log("tr_select1");
+		    console.log(tr_select1); */
+		    
+		    /* all_events.forEach(function(event){//파라미터 로그용
 		    	console.log(event);
 		    	console.log("all_events 진입");
 		    	console.log(event.allDay);
 		    	console.log(event.id);
-		    })
-		    dayevents.forEach(function(dayevent){
+		    }) */
+		    /* dayevents.forEach(function(dayevent){//각 일정 클릭시 팝업창 여는 readReservation() function호출
 		    	console.log(dayevent);
 		    	dayevent.addEventListener('click',function(){readReservation(dayevent.querySelector('.fc-daygrid-event-dot').id)});	
-		    });
+		    }); */
 		  });
 	  
 	  
@@ -280,23 +330,31 @@
 			return false;
 	    } */
 	    
-	    function loadingEvents(){//db에서 데이터 가져오기
+	    function loadingEvents(mgtRoomId){//db에서 데이터 가져오기
 	    	console.log("loadingEvents 진입확인");
 	    	var result_data = null;
 	    	
 	    	$.ajax({
-	    		url : '/getReservation',
+	    		url : '/getReservation?mgtRoomId='+mgtRoomId,
 	    		type : 'GET',
 				dataType  : "json", //리턴 데이터 타입 지정
-	    		data : {},
 	    		async : false,
 	    		success : function(data){
 	    			result_data = data;
+	    			console.log(data);
 	    		}
 	    		
 	    	});
 	    	
 	    	return result_data;
+	    }
+	    
+	    function calendarPaging(){//달력 페이징(현재 달 기전 전달,다음달 정보까지만 가져온다)
+	    	$.ajax({
+	    		
+	    		
+	    		
+	    	})
 	    }
 	    
 	    function readReservation(node){//캘린더에 예약되어있는 내역을 클릭해 modal popup 활성화
@@ -311,16 +369,6 @@
 	    	close_btn.value = 1;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
 	    	var reserv_btn = document.getElementById("reserv_btn");
 	    	reserv_btn.style.display = "none";
-	    	
-	    	var nodePrt1 = node.split("-")[0];
-	    	var nodePrt2 = node.split("-")[1];
-	    	var nodePrt3 = node.split("-")[2];
-	    	var nodes = [String(nodePrt1),nodePrt2,nodePrt3];
-	    	
-	    	var node12 = nodes[1]+"-"+nodes[2]
-	    	
-	    	var noStr = "211f";
-	    	var noNum = 32;
 	    	
 	    	const updatebutton = document.createElement('span');
 	    	updatebutton.innerHTML = "<button id='cancel_btn' onClick='cancelReservation(\""+node+"\")'>예약취소</button>";
@@ -436,8 +484,6 @@
 	    }
 	    
 	   	function isContinueChk(){//회의실 반복사용,연속사용 여부
-	   		
-	   		
 	   		
 	   		var use_se_code = document.getElementById("use_se_code");//반복,연속사용 여부 체크 박스
 	   	
@@ -566,7 +612,7 @@
 	    }
 	    
 	    
-		function reservationChk(){//예약하기 버튼을 눌렀을 때 - Insert
+		function reservationChk(mgtRoomId){//예약하기 버튼을 눌렀을 때 - Insert
 	    	
 	    	var mgt_nm_val = document.querySelector("#mgt_nm").value;//회의주제 select box value
 	    	var mgt_cn_val = document.querySelector("#mgt_cn").value;//회의 내용 node
@@ -626,7 +672,8 @@
 	    	}
 	    	
 	    	//content_cnt 콘텐츠 글자 수
-	    	var param = {mgtNm : mgt_nm_val,
+	    	var param = {mgtRoomId : mgtRoomId,
+	    				 mgtNm : mgt_nm_val,
 	    				 mgtCn : mgt_cn_val,
 	    				 useBgngYmd : use_bgng_ymd_val,
 	    				 useBgngTm : use_bgng_tm_val,
@@ -667,6 +714,133 @@
 	    	
 		}
 		
+		function beginMgtRoomChk(node){//캘린더 페이지 입장시 층,회의실 선택 체크
+
+			var select_room_div = document.getElementById("select_room_div");
+			var begin_mgt_room_nofl = document.getElementById("begin_mgt_room_nofl");//층 선택 selectbox
+			var begin_mgt_room_not_selected = document.getElementById("begin_mgt_room_not_selected");
+			var begin_mgt_room = document.getElementById("begin_mgt_room_"+node);
+			var begin_mgt_room_class = document.getElementsByClassName("begin_mgt_room");
+			var not_selected = document.getElementsByClassName("not_selected");
+			
+			var begin_mgt_room_nofl_val = begin_mgt_room_nofl.options[begin_mgt_room_nofl.selectedIndex].value;//층 선택된 option값
+
+			begin_mgt_room.classList.remove("not_selected");
+			
+			console.log("begin_mgt_room : "+begin_mgt_room.id);
+			
+			console.log("begin_mgt_room_nofl_val : "+begin_mgt_room_nofl_val);
+			
+			
+			if(begin_mgt_room_nofl_val != "not_selected"){
+				document.getElementById("begin_mgt_room_not_selected").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "B1"){
+				document.querySelector("#begin_mgt_room_B1").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "1F"){
+				document.querySelector("#begin_mgt_room_1F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "2F"){
+				document.getElementById("begin_mgt_room_2F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "5F"){
+				document.getElementById("begin_mgt_room_5F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "6F"){
+				document.getElementById("begin_mgt_room_6F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "7F"){
+				document.getElementById("begin_mgt_room_7F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "8F"){
+				document.getElementById("begin_mgt_room_8F").classList.add("not_selected");
+			}
+			if(begin_mgt_room_nofl_val != "9F"){
+				document.getElementById("begin_mgt_room_9F").classList.add("not_selected");
+			}
+			
+			
+			//#select_room_div 시작 셀렉트박스 관련 전체 div id
+			//#begin_mgt_room_nofl 층정보 id 예시)B1 1F 
+			//#begin_mgt_room_not_selected 아무 회의실도 선택되지 않은 셀렉트박스 id
+			//#begin_mgt_room_(Number) 각 층의 회의실 번호 id
+			//.begin_mgt_room 시작 전체 셀렉트박스 묶는 class
+			//.not_selected 시작 셀렉트 display none 효과 class
+			
+			
+			
+		}	
+		
+		function getRoomInfo(mgtRoomInfo){//회의실 층,이름 정보 가져오기
+			
+	    	$.ajax({
+	    		url : '/getRoomInfo',
+	    		type : 'GET',
+				contentType: 'application/json; charset=utf-8', // 파라미터 데이터 타입 지정
+				dataType  : "json", //리턴 데이터 타입 지정
+	    		async : false,
+	    	success : function(data){
+	    		console.log("getRoomInfo");
+	    		
+	    		console.log("data length : "+data.length);
+	    		
+	    		
+	    		var mgt_room_list = document.getElementById("mgt_room_list");
+	    		
+	    		var mgt_room_list_ul = document.getElementById("mgt_room_list_ul");
+	    		
+	    		data.forEach(function (item) {//층,이름 정보 li태그에 입력
+	    			if(item.mgtRoomNofl == "B1"){
+	    				item.mgtRoomNofl = "지하1"
+	    			}
+	    			const li_tag = document.createElement("li");//li태그 생성
+	    			
+	    			li_tag.innerHTML = "<a href='/revCalendar?mgtRoomId="+item.mgtRoomId+"' id='"+item.mgtRoomId+"'>"+item.mgtRoomNofl+"층 "+item.mgtRoomNm+"</\a>";
+	    			
+	    			mgt_room_list_ul.append(li_tag);
+	    			
+	    			if(mgtRoomInfo !== null){
+	    				if(mgtRoomInfo == item.mgtRoomId){
+	    					document.getElementById(item.mgtRoomId).classList.add("selected_room");	
+	    				}
+	    			}
+					
+	    			
+	    			/* 
+					const li_tag = document.createElement("li");//li태그 생성
+	    			
+	    			li_tag.innerHTML = "<p class='"+item.mgtRoomId+"'>"+item.mgtRoomNofl+"층 </p>";
+	    			
+	    			mgt_room_list_ul.append(li_tag);
+	    			
+	    			var mgt_room_div = document.createElement("div");
+	    			var mgt_room_div_ul = document.createElement("ul");
+	    			mgt_room_div.append(mgt_room_div_ul);
+	    			
+	    			mgt_room_div.innerHTML = "<a href='/revCalendar?mgtRoomId="+item.mgtRoomId+"' class='"+item.mgtRoomId+"'>"+item.mgtRoomNm+"</\a>";
+	    			
+	    			
+	    			 */
+	    			//classList.add();
+	    			
+	    			
+	    			/* mgt_room_list
+	    			item.mgt_room_list */
+	    			
+	    		});
+	    		
+	    		
+	    		
+	
+	    		/* data.mgtRoomId//회의실 id
+	    		data.mgtRoomNm//회의실 이름
+	    		data.mgtRoomNofl//회의실 층 */
+	    	}
+	    	});
+	    }
+		
+		
 		function modal_close(){//취소 버튼을 눌렀을 때  -- 아직 보류중
 			
 			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시간 값
@@ -692,9 +866,20 @@
 	    		reserv_btn.style.display = "block";//예약버튼 보이게
 	    	}
 	    	
-	    	if(btn_div.childNodes[0].nodeName == "SPAN"){//btn_div의 0번째 노드의 이룸이 "SPAN"일 때만 - 예약된 회의 클릭시만 작동
-	    		btn_div.childNodes[0].remove();//<span>태그 삭제
+	    	/* if(btn_div.childNodes[0].nodeName == "SPAN"){//btn_div의 0번째 노드의 이룸이 "SPAN"일 때만 - 예약된 회의 클릭시만 작동
+	    		console.log("btn_div.childNodes");
+	    		console.log(btn_div);
+	    		console.log(btn_div.childNodes["span"]);
+	    		console.log(btn_div.getElementsByTagName("span"));
+	    		console.log(btn_div.childNodes);
+	    		btn_div.removeChild(btn_div.getElementsByTagName("span"));//<span>태그 삭제
+	    	} */
+	    	
+	    	while (btn_div.childNodes[0].nodeName == "SPAN")
+	    	{
+	    		btn_div.removeChild(btn_div.firstChild);       
 	    	}
+	    	
 	    	
 			if(close_btn.value != 1){//드래그 해온 일정라벨 삭제(미완..) - 드래그 해서 라벨을 가져왔으나 팝업취소할 경우
 				var frameParent = frame.parentNode.parentNode.parentNode;//상위 부모노드 찾아서
@@ -729,10 +914,11 @@
 							<th><span style="font-size:1.5rem;">회의 주제 : </span></th>
 							<td>
 								<select id="mgt_nm">
-									<option value="일간 회의">일간 회의</option>
-									<option value="주간 회의">주간 회의</option>
-									<option value="공부">공부</option>
-									<option value="기타">기타</option>
+									<option value="01">일회성회의</option>
+									<option value="02">정기회의-일간</option><!-- 날짜로 받은 기간 동안 되풀이 -->
+									<option value="03">정기회의-주간</option><!-- 주마다 특정 일에 되풀이 -->
+									<option value="04">정기회의-월간</option><!-- 달에 하루 몇개월치 예약 -->
+									<option value="05">특정기간 전체사용</option>
 								</select>
 							</td>
 						</tr>
@@ -834,7 +1020,7 @@
 					</tbody>
 				</table>
 				<div id="btn_div">
-					<button id="reserv_btn" onClick="reservationChk()">예약하기</button>
+					<button id="reserv_btn" onClick="reservationChk('${mgtRoomId}')">예약하기</button>
 					<button id="close_btn" value="0" onClick="modal_close()">닫기</button>
 				</div>
 				</div>
@@ -854,40 +1040,95 @@
 
 		<div id="container">
 			<div class="content">
-
-
-
-
-  <div id='external-events' style="float:left;width:20%;padding-right:30px;padding-left:20px;padding-top:11%">
-  
-	<p>
-		<strong>회의를 원하는 날짜에 드래그하여 예약하세요.</strong>
-	</p>
-
-    <div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>일간 회의</div>
-    </div>
-    <div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>주간 회의</div>
-    </div>
-    <div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>공부</div>
-    </div>
-    <div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>기타</div>
-    </div>
-    <p>
-      <input type='checkbox' id='drop-remove' />
-      <label for='drop-remove'>드래그앤드롭 후 제거</label>
-    </p>
-  </div>
-
-	<div style="float:left;width:80%;margin-bottom:110px;">
-		<div style="text-align:center;height:30px;font-size:35px;font-weight:bold;margin-bottom:30px;">회의실 예약 달력표</div>
-		<div id='calendar' ></div>
+			
+		<div id='external-events' style="float:left;width:20%;padding-right:30px;padding-left:20px;padding-top:11%">
+	  	
+	  		<div id="mgt_room_list" style="padding-top:2px;padding-left:2px;padding-right:2px;border-left:0.2px solid #c4c4c4;border-right:0.2px solid #c4c4c4;"><!-- script로 회의실 리스트 추가 -->
+	  			<h3 style="text-align:center;">회의실 목록</h3>
+	  			<ul id="mgt_room_list_ul" style="text-align:center;">
+	  			</ul>
+	  		</div>
+	  		
+	  		<!-- <div id="mgt_room_nofl_depth">
+				<div id="mgt_room_B1" style="display:none;">
+					<ul>
+						<li value="01">대강당</li>
+					</ul>
+				</div>
+				<div id="mgt_room_1">
+					<ul>
+						<li value="01">대회의실</li>
+						<li value="02">소희의실1</li>
+						<li value="03">소희의실2</li>
+						<li value="04">소희의실3</li>
+						<li value="05">소희의실4</li>
+					</ul>
+				</div>
+				<div id="mgt_room_2">
+					<ul>
+						<li value="01">회의실</li>
+					</ul>
+				</div>
+				<div id="mgt_room_5">
+					<ul>
+						<li value="01">총무팀회의실</li>
+						<li value="02">인사팀회의실</li>
+					</ul>
+				</div>
+				<div id="mgt_room_6">
+					<ul>
+						<li value="01">기술본부회의실</li>
+					</ul>
+				</div>
+				<div id="mgt_room_7">
+					<ul>
+						<li value="01">사업지원회의실</li>
+						<li value="02">영업사업회의실</li>
+					</ul>
+				</div>		
+				<div id="mgt_room_8">
+					<ul>
+						<li value="01">컨텐츠회의실</li>
+						<li value="02">경영기획회의실</li>
+					</ul>
+				</div>
+				<div id="mgt_room_9">
+					<ul>
+						<li value="01">연구본부회의실</li>
+					</ul>
+				</div>
+		</div> -->
+		
+			<div style="padding:0.2px;border:2px solid #c4c4c4;">	  
+				<p>
+					<strong>회의를 원하는 날짜에 드래그하여 예약하세요.</strong>
+				</p>
+			
+				<div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+				  <div class='fc-event-main'>일간 회의</div>
+				</div>
+				<div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+				  <div class='fc-event-main'>주간 회의</div>
+				</div>
+				<div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+				  <div class='fc-event-main'>공부</div>
+				</div>
+				<div draggable = "true" class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+				  <div class='fc-event-main'>기타</div>
+				</div>
+			    <p>
+			      <input type='checkbox' id='drop-remove' />
+			      <label for='drop-remove'>드래그앤드롭 후 제거</label>
+			    </p>
+		    </div>
+		</div>
+	
+		<div style="float:left;width:80%;margin-bottom:110px;background-color:#fff">
+			<div style="text-align:center;height:30px;font-size:35px;font-weight:bold;margin-bottom:30px;">회의실 예약 달력표</div>
+			<div id='calendar' ></div><!-- fullcalendar 달력 div -->
+		</div>
 	</div>
 	
-	</div>
 	</div>
 	</div>
 </body>

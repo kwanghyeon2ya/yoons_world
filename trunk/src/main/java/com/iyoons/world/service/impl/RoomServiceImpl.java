@@ -102,8 +102,8 @@ public class RoomServiceImpl implements RoomService {
 	 * @return 
 	 * */
 	@Override
-	public List<RoomVO> getReservation() {
-		return dao.getReservation();
+	public List<RoomVO> getReservation(String mgtRoomId) {
+		return dao.getReservation(mgtRoomId);
 	}
 
 	
@@ -147,14 +147,25 @@ public class RoomServiceImpl implements RoomService {
 		return dao.cancelReservation(roomVO);
 	}
 
+	/**@author qus46
+	 * @param roomVO 
+	 * @discription 회의실 예약 가능 여부 확인
+	 * @return 
+	 * */
 	@Override
 	public int checkIsAvailable(RoomVO roomVO) {
 		// TODO Auto-generated method stub
 		return dao.checkIsAvailable(roomVO);
 	}
-	
-	
-	
 
+	/**@author qus46
+	 * @param  
+	 * @discription 회의실 전체 층,이름 정보 가져오기
+	 * @return RoomVO(MGT_ROOM_ID,MGT_ROOM_NM,MGT_ROOM_NOFL)
+	 * */
+	@Override
+	public List<RoomVO> getRoomInfo() {
+		return dao.getRoomInfo();
+	}
 	
 }

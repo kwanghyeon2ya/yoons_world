@@ -8981,20 +8981,15 @@ var FullCalendar = (function (exports) {
         };
         return StandardEvent;
     }(BaseComponent));
-    function renderInnerContent(innerProps) {
+    function renderInnerContent(innerProps) {//바 형태 일정 설정
     	console.log("innerProps");
     	console.log(innerProps);
     	
     	var startStr = innerProps.event.startStr;
     	var endStr = innerProps.event.endStr;
     	
-    	console.log("startStr : "+startStr);
-    	console.log("endStr : "+endStr);
-    	
     	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
     	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
-    	console.log("가공된 startStr :"+startStr);
-    	console.log("가공된 endStr :"+endStr);
     	
         return (createElement(Fragment, null,
             innerProps.timeText &&
@@ -11589,25 +11584,12 @@ var FullCalendar = (function (exports) {
         return TableListItemEvent;
     }(BaseComponent));
     function renderInnerContent$2(innerProps) {
-    	console.log("innerProps.event.id");
-    	console.log(innerProps.event.id);
-    	console.log(innerProps);
-    	console.log(innerProps.view.currentStart);
-    	console.log(innerProps.view.currentEnd);
-    	console.log();
-    	console.log();
-    	
     		
     	var startStr = innerProps.event.startStr;
     	var endStr = innerProps.event.endStr;
     	
-    	console.log("startStr : "+startStr);
-    	console.log("endStr : "+endStr);
-    	
     	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
     	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
-    	console.log("가공된 startStr :"+startStr);
-    	console.log("가공된 endStr :"+endStr);
 	    	
     	
         return (createElement(Fragment, null,
@@ -11889,6 +11871,7 @@ var FullCalendar = (function (exports) {
         TableRow.prototype.render = function () {
             var _this = this;
             var _a = this, props = _a.props, state = _a.state, context = _a.context;
+           
             var colCnt = props.cells.length;
             var businessHoursByCol = splitSegsByFirstCol(props.businessHourSegs, colCnt);
             var bgEventSegsByCol = splitSegsByFirstCol(props.bgEventSegs, colCnt);
@@ -12274,6 +12257,7 @@ var FullCalendar = (function (exports) {
             var eventResizeByRow = this.splitEventResize(props.eventResize, rowCnt);
             var buildMoreLinkText = this.buildBuildMoreLinkText(this.context.options.moreLinkText);
             var limitViaBalanced = dayMaxEvents === true || dayMaxEventRows === true;
+            
             // if rows can't expand to fill fixed height, can't do balanced-height event limit
             // TODO: best place to normalize these options?
             if (limitViaBalanced && !expandRows) {

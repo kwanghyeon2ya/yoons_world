@@ -21,7 +21,7 @@
 									 RGTR_ID
 									)
 								values(
-									'6F01',
+									#{mgtRoomId},
 									#{useBgngYmd},
 									#{useBgngTm},
 									'01',
@@ -81,24 +81,6 @@
 			AND RSVT_STATUS_CODE = '01'
 	</select>
 	
-	<select id="checkIsAvailableUDP" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
-		select count(*) from
-			(select * from MGT_ROOM_RSVT
-			WHERE (
-				TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt;= TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') AND TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE(use_end_ymd || use_end_tm, 'yyyymmddhh24miss')
-				OR (TO_DATE (use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE(#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss') AND TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE ( use_end_ymd || use_end_tm, 'yyyymmddhh24miss'))
-				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') &lt;= TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') AND TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE (#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss'))
-				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'yyyymmddhh24miss') &lt; TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') AND TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') &lt;= TO_DATE (#{useEndYmd} || #{useEndTm}, 'yyyymmddhh24miss'))
-			)
-			AND MGT_ROOM_USE_SE_CODE = '02'
-			union all
-			select * from MGT_ROOM_RSVT
-			where (
-				(#{useBgngYmd} between use_bgng_ymd and use_end_ymd or #{useEndYmd} between use_bgng_ymd and use_end_ymd) or (use_bgng_ymd between #{useBgngYmd} and #{useEndYmd} or use_end_ymd between #{useBgngYmd} and #{useEndYmd}))
-				and ((#{useBgngTm} &gt;= use_bgng_tm and #{useBgngTm} &lt; use_end_tm or #{useEndTm} &gt; use_bgng_tm and #{useEndTm} &lt;= use_end_tm) or (use_bgng_tm &gt;= #{useBgngTm} and use_bgng_tm &lt; #{useEndTm} or use_end_tm &gt; #{useBgngTm} and use_end_tm &lt;= #{useEndTm}))
-			AND MGT_ROOM_USE_SE_CODE = '01')
-	</select>
-	
 	<select id="checkIsAvailable" parameterType="com.iyoons.world.vo.RoomVO" resultType="int">
 		select count(*) from
 			(select * from MGT_ROOM_RSVT
@@ -116,6 +98,8 @@
 				and ((#{useBgngTm} &gt;= use_bgng_tm and #{useBgngTm} &lt; use_end_tm or #{useEndTm} &gt; use_bgng_tm and #{useEndTm} &lt;= use_end_tm) or (use_bgng_tm &gt;= #{useBgngTm} and use_bgng_tm &lt; #{useEndTm} or use_end_tm &gt; #{useBgngTm} and use_end_tm &lt;= #{useEndTm}))
 			AND MGT_ROOM_USE_SE_CODE = '01')
 			WHERE 1=1
+			AND MGT_ROOM_ID = #{mgtRoomId}
+			AND RSVT_STATUS_CODE = '01'
 			<choose>
 				<when test="id neq null and id neq ''">
 				and (MGT_ROOM_ID != #{mgtRoomId} AND USE_BGNG_YMD != #{useBgngYmd} AND USE_BGNG_TM != #{useBgngTm})				
@@ -141,6 +125,16 @@
 		WHERE 
 			RSVT_STATUS_CODE = '01'
 			AND DEL_YN = 'N'
+			AND MGT_ROOM_ID = #{mgtRoomId}
+	</select>
+	
+	<select id="getRoomInfo" resultType="com.iyoons.world.vo.RoomVO">
+		SELECT
+		    MGT_ROOM_ID,
+		    MGT_ROOM_NM,
+		    MGT_ROOM_NOFL
+		FROM
+    		MGT_ROOM_INFO
 	</select>
 	
 	<select id="readReservation" parameterType="com.iyoons.world.vo.RoomVO" resultType="com.iyoons.world.vo.RoomVO">
