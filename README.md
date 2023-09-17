@@ -15,7 +15,7 @@
 **개발 환경**<br/>
 * Oracle
 * JDK 1.7
-* APACHE 2.4.29 | TOMCAT 8.5
+* APACHE 2.4.29 | TOMCAT 9.0
 * STS 3.9.6
 * Maven
 * Spring 3.2
