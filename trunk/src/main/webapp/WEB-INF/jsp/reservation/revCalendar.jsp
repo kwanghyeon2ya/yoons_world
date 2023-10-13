@@ -476,56 +476,12 @@ td{
 		    });
 		    
 		    
-		    
 		    calendar.render();//캘린더 렌더링
-		    /* var items = document.querySelectorAll('.fc-event');
-		    console.log(items);
-		    items.forEach(function(item){
-		    	alert("안녕?");
-				item.addEventListener('dragstart', handleDragStart);
-				item.addEventListener('dragover', handleDragOver);
-				item.addEventListener('drop', handleDrop);
-		    	console.log(item);
-		    	console.log(this);
-		    }); */
-		    var dayevents = document.querySelectorAll('.fc-daygrid-event-harness');
 		    
-		    /* var tr_select1 = document.querySelector("#calendar > div.fc-view-harness.fc-view-harness-passive > div > table > tbody > tr > td > div > div > div > table > tbody > tr:nth-child(1)");
-		    console.log("tr_select1");
-		    console.log(tr_select1); */
 		    
-		    /* all_events.forEach(function(event){//파라미터 로그용
-		    	console.log(event);
-		    	console.log("all_events 진입");
-		    	console.log(event.allDay);
-		    	console.log(event.id);
-		    }) */
-		    /* dayevents.forEach(function(dayevent){//각 일정 클릭시 팝업창 여는 readReservation() function호출
-		    	console.log(dayevent);
-		    	dayevent.addEventListener('click',function(){readReservation(dayevent.querySelector('.fc-daygrid-event-dot').id)});	
-		    }); */
 		  });
 	  
 	  
-	  /* function handleDrop(e){//회의 주제를 날짜에 놓았을 때 발생
-		  e.stopPropagation();//브라우저 리다이렉트 방지
-		  alert("작동중?");
-		  var background = document.querySelector(".background");
-		  background.classList.add("show");
-	  }
-	  
-	  function handleDragStart(e) {
-			console.log("dragStart");
-			this.style.opacity = '0.4';
-	  }
-
-		function handleDragOver(e) {
-			if (e.preventDefault) {
-			  e.preventDefault();//링크와 같은 것을 드래그할 경우 해당 링크로 이동하는 브라우저의 기본 동작을 방지
-			}
-			return false;
-	    } */
-	    
 	    function loadingEvents(mgtRoomId){//db에서 데이터 가져오기
 	    	console.log("loadingEvents 진입확인");
 	    	var result_data = null;
@@ -554,11 +510,6 @@ td{
 				node.style.height=document.querySelector('#'+node.id).scrollHeight+8+"px";
 			} 
 	    }
-	    
-	    /* function calendarPaging(){//달력 페이징(현재 달 기전 전달,다음달 정보까지만 가져온다)
-	    	$.ajax({
-	    	})
-	    } */
 	    
 	    function readReservation(node){//캘린더에 예약되어있는 내역을 클릭해 modal popup 활성화// 파라미터 node = id값
 				    
@@ -593,8 +544,6 @@ td{
 	    		async : false,
 		    	success : function(data){
 		    			
-		    		/* document.getElementById("history_div").style.display = "block";//과거 내역 block */
-		    		
 		    		var use_bgng_ymd = document.querySelector("#use_bgng_ymd");// 시간일자 2023-08-24
 		    		var use_bgng_tm = document.querySelector("#use_bgng_ymd");// 종료일자 2023-08-27
 		    		var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 값 예시) 090000
@@ -624,14 +573,20 @@ td{
 			    	var mgt_nm = document.querySelector("#mgt_nm");//회의제목
 			    	var mgt_cn = document.querySelector("#mgt_cn");//회의내용
 			    	
-			    	console.log(mgt_cn);
 			    	for(var i = 0;mgt_type_code.length>i;i++){
-			    		if(mgt_type_code.options[i].value == data.mgtTypeCode){
-			    			mgt_type_code.options[i].selected = true;
-			    			if(mgt_type_code.options[i].value == "03"){
+			    		if(mgt_type_code.options[i].value == data.mgtTypeCode){//회의종류 확인
+			    			mgt_type_code.options[i].selected = true;//일치할 시 selected
+			    			if(mgt_type_code.options[i].value == "01"){//일회성 회의일경우
+			    				use_bgng_ymd.readOnly = true;
+			    		    	use_end_ymd.readOnly = true;	
+			    			}
+			    			
+			    			if(mgt_type_code.options[i].value == "03"){//정기회의 주간 일 경우
 			    				select_day_box.style.display = "block";
 			    		    	select_day_label.style.display = "block";
 			    		    	select_day_box.disabled = true;
+			    		    	use_bgng_ymd.readOnly = true;
+			    		    	use_end_ymd.readOnly = true;
 			    			}
 			    		}	
 			    	}
@@ -673,24 +628,6 @@ td{
 			    	
 			    	reserve_table.children[1].append(reserve_tr);//tr태그 추가
 			    	
-			    	/* document.getElementById("rgtr_name").innerHTML = '예약자 : '+data.rgtrName+'('+data.rgtrDepName+')';//등록자이름 */
-			    	
-			    	
-			    	/* document.getElementById("reg_dt").innerHTML = '등록일 : '+data.regDt;//등록날짜 */
-			    	
-			    	/* console.log(data.mdfrName != null);
-			    	console.log(data.mdfrName !== null);
-			    	
-			    	if(data.mdfrName !== null){
-			    		document.getElementById("mdfr_name").innerHTML = '수정자 : '+data.mdfrName+'('+data.mdfrDepName+')';//수정자이름
-			    		document.getElementById("mdfcn_dt").innerHTML = '수정일 : '+data.mdfcnDt;//수정날짜
-			    	} */
-			    	
-			    	console.log(data.rgtrDepName);//등록자 부서명
-			    	console.log(data.mdfrDepName);//수정자 부서명
-			    	console.log(data.rgtrName);//등록자 이름
-			    	console.log(data.mdfrName);//수정자 이름
-			    	
 			    	mgt_nm.value = data.mgtNm;//회의 제목 값 입력
 			    	mgt_nm.style.height='auto';
 			    	
@@ -710,10 +647,6 @@ td{
 					}else{
 						mgt_cn.style.height=mgt_cn.scrollHeight+8+"px";				
 					}
-			    	
-			    	
-	    			console.log(data.regDt);//등록날짜 
-	    			console.log(data.mdfcnDt);//수정 날짜
 		    	}
 	    	});
 	    }
@@ -1585,8 +1518,15 @@ td{
 				}
 			} 
 			
-			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시간 값
-	    	var use_end_tm = document.querySelector("#use_end_tm");//종료시간 값
+			var use_bgng_ymd = document.querySelector("#use_bgng_ymd");//시작 일자 노드
+			var use_bgng_ymd = document.querySelector("#use_end_ymd");//시작 일자 노드
+			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 노드
+	    	var use_end_tm = document.querySelector("#use_end_tm");//종료 시각 노드
+	    	
+	    	use_bgng_ymd.readOnly = false;//시작 일자 readOnly 해제
+	    	use_end_ymd.readOnly = false;//종료 일자 readOnly 해제
+	    	use_bgng_tm.disabled = false;//시작 시각 dabled 해제
+	    	use_end_tm.disabled = false;//종료 시각 dabled 해제
 	    	
 	    	var mgt_type_code = document.querySelector("#mgt_type_code");
 	    	mgt_type_code.disabled = false;//팝업창 닫기시 disabled 사라짐
@@ -1625,34 +1565,16 @@ td{
 	    	if(reserv_btn){//예
 	    		reserv_btn.style.display = "inline";//예약버튼 보이게
 	    	}
-	    	
-	    	/* if(btn_div.childNodes[0].nodeName == "SPAN"){//btn_div의 0번째 노드의 이룸이 "SPAN"일 때만 - 예약된 회의 클릭시만 작동
-	    		console.log("btn_div.childNodes");
-	    		console.log(btn_div);
-	    		console.log(btn_div.childNodes["span"]);
-	    		console.log(btn_div.getElementsByTagName("span"));
-	    		console.log(btn_div.childNodes);
-	    		btn_div.removeChild(btn_div.getElementsByTagName("span"));//<span>태그 삭제
-	    	} */
-	    	
 	    	while (btn_div.childNodes[0].nodeName == "SPAN")//버튼 모아둔 DIV에 SPAN태그(예약취소를 담고있는 태그)삭제
 	    	{
 	    		btn_div.removeChild(btn_div.firstChild);       
 	    	}
 	    	
-			/* if(close_btn.value != 1){//드래그 해온 일정라벨 삭제(미완..) - 드래그 해서 라벨을 가져왔으나 팝업취소할 경우
-				var frameParent = frame.parentNode.parentNode.parentNode;//상위 부모노드 찾아서
-				frameParent.removeChild(frame.parentNode.parentNode);//자녀노드 전부 삭제
-			} */
 			if(document.getElementById("update_btn")){//update버튼이 있다면  -- 위의 span태그 삭제하면 없어지긴 하는데 일단 방치
 				document.getElementById("update_btn").remove();//예약 수정버튼 삭제
 				document.getElementById("cancel_btn").remove();//예약 취소버튼 삭제
 			}
-			/* document.getElementById("history_div").style.display = "none";//과거 내역 none
-			document.getElementById("mdfr_name").innerHTML = "";
-			document.getElementById("mdfcn_dt").innerHTML = ""; */
 			close_btn.value = 0;//팝업이 닫힌상태인지 구별용  0닫힘/1열림
-			/* frame[0].remove(); */
 		}
 		
   </script>
