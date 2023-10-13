@@ -1,5 +1,7 @@
 package com.iyoons.world.controller;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +34,8 @@ public class RoomController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	/** @discription 캘린더 진입
+	/** @author qus46
+	 *  @discription 캘린더 진입
 	 *  @param
 	 * */
 	@RequestMapping(value="/revCalendar",method=RequestMethod.GET)
@@ -44,7 +47,8 @@ public class RoomController {
 		return "reservation/revCalendar";
 	}
 	
-	/** @discription 캘린더 페이지 진입시 회의실 예약 db조회
+	/** @author qus46
+	 *  @discription 캘린더 페이지 진입시 회의실 예약 db조회
 	 *  @param 
 	 *  @return 예약 List
 	 * */
@@ -56,7 +60,7 @@ public class RoomController {
 		List<RoomVO> resultList = service.getReservation(mgtRoomId);
 		for(RoomVO list:resultList) {
 			
-			list.setId(list.getMgtRoomId()+"-"+list.getUseBgngYmd()+"-"+list.getUseBgngTm());
+			list.setId(list.getMgtRoomId()+"-"+list.getUseBgngYmd()+"-"+list.getUseBgngTm()+"-"+list.getMgtTypeCode());//id값
 			if("01".equals(list.getMgtRoomUseSeCode())) {
 				if(!list.getUseBgngYmd().equals(list.getUseEndYmd())) {//사용구분이 반복사용일시
 					list.setStartRecur(list.getStart().split(" ")[0]);
@@ -66,11 +70,19 @@ public class RoomController {
 					logger.debug("list recur"+list.toString());
 				}
 			}
+			if("02".equals(list.getMgtRoomUseSeCode())) {
+				
+			}
 		}
 		logger.debug("list 내용 : "+resultList);
 		return resultList;
 	}
 	
+	/**@author qus46
+	 * @param  
+	 * @discription 회의실 전체 층,이름 정보 가져오기
+	 * @return RoomVO(MGT_ROOM_ID,MGT_ROOM_NM,MGT_ROOM_NOFL)
+	 * */
 	@RequestMapping(value="/getRoomInfo",method=RequestMethod.GET)
 	@ResponseBody public List<RoomVO> getRoomInfo() {
 		
@@ -83,8 +95,28 @@ public class RoomController {
 	}
 	
 	
+	/** @author qus46 
+	 *  @discription 회의 유형 List형식으로 가져오기
+	 *  @param 
+	 *  @return 회의유형 List
+	 * */
+	@RequestMapping(value="getRsvtType",method=RequestMethod.GET)
+	@ResponseBody public List<RoomVO> getRsvtType(){
+			
+		List<RoomVO> roomList = null;
+		
+		try {
+			roomList = service.getRsvtType();	
+		}catch(Exception e) {
+			logger.debug("e messege error message : "+e.getMessage());
+		}
+		return roomList;
+	}
 	
-	/** @discription 캘린더에서 예약 상세 내용 읽기
+	
+	
+	/** @author qus46
+	 *  @discription 캘린더에서 예약 상세 내용 읽기
 	 *  @param id(mgtRoomID-useBgngYmd-useBgngTm 형식의 파라미터)
 	 *  @return 예약 내역(시간,회의주제,회의상세내용)
 	 * */
@@ -97,6 +129,8 @@ public class RoomController {
 		chkVO.setMgtRoomId(id.split("-")[0]);
 		chkVO.setUseBgngYmd(id.split("-")[1]);
 		chkVO.setUseBgngTm(id.split("-")[2]);
+		chkVO.setPrevUseBgngYmd(id.split("-")[1]);
+		chkVO.setPrevUseBgngTm(id.split("-")[2]);
 		
 		logger.debug("chkVO chk1 : "+chkVO);
 		
@@ -108,6 +142,8 @@ public class RoomController {
 		chkVO.setMgtRoomId(id.split("-")[0]);
 		chkVO.setUseBgngYmd(id.split("-")[1]);
 		chkVO.setUseBgngTm(id.split("-")[2]);
+		chkVO.setPrevUseBgngYmd(id.split("-")[1]);
+		chkVO.setPrevUseBgngTm(id.split("-")[2]);
 		
 		logger.debug("chkVO chk2 : "+chkVO);
 		
@@ -120,7 +156,8 @@ public class RoomController {
 	}
 	
 	
-	/** @discription 예약 날짜 예약 insert
+	/** @author qus46
+	 *  @discription 예약 날짜 예약 insert
 	 *  @param RoomVO
 	 *  @return 예약 성공 여부
 	 * */
@@ -133,32 +170,39 @@ public class RoomController {
 		
 		int result = 0;//insert성공 결과 담을 변수
 		
-		String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
-		
-		if(roomVO.getMgtRoomUseSeCode() == null||roomVO.getMgtRoomUseSeCode() == "") {
-			logger.debug("se code null chk");
-		}else {
-			logger.debug("se code : "+roomVO.getMgtRoomUseSeCode());
-		}
-		
-		if(StringUtils.isEmpty(roomVO.getMgtRoomUseSeCode())) {
-			roomVO.setMgtRoomUseSeCode("01");
-		}
-		
-		roomVO.setRgtrId(seqStr);
-		roomVO.setUserSeq(Integer.parseInt(seqStr));
 		
 		try {
+			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
+			
+			if("01".equals(roomVO.getMgtTypeCode())) {
+				roomVO.setMgtRoomUseSeCode("03");//일회성 예약 코드 
+			}
+			if("02".equals(roomVO.getMgtTypeCode())||"03".equals(roomVO.getMgtTypeCode())) {
+				roomVO.setMgtRoomUseSeCode("01");//반복 예약 코드
+			}
+			if("04".equals(roomVO.getMgtTypeCode())) {
+				roomVO.setMgtRoomUseSeCode("02");//특정기간 전체예약 코드
+			}
+			
+			if(roomVO.getMgtRoomUseSeCode() == null||roomVO.getMgtRoomUseSeCode() == "") {
+				logger.debug("se code null chk");
+			}else {
+				logger.debug("se code : "+roomVO.getMgtRoomUseSeCode());
+			}
+			
+			roomVO.setRgtrId(seqStr);
+			roomVO.setUserSeq(Integer.parseInt(seqStr));
 			
 			logger.debug("seq String변환 : "+roomVO.getRgtrId());
 			
-			int reserveChk = service.checkIsAvailable(roomVO);//예약 가능 확인
+			/*int reserveChk = service.checkIsAvailable(roomVO);//예약 가능 확인
 			
 			if(reserveChk >= 1) {
 				throw new Exception("it is not available");
-			}
+			}*/
 			
 			result = service.makeReservation(roomVO);//예약정보 insert
+			logger.debug("result : "+result);
 			
 		}catch(Exception e){
 			if("it is not available".equals(e.getMessage())) {
@@ -169,21 +213,20 @@ public class RoomController {
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			return result;
 		}
-
-		
 		
 		return result;
 	}
 	
 	
-	/** @discription 예약 취소 update
+	/** @author qus46
+	 *  @discription 예약 취소 update
 	 *  @param RoomVO
 	 *  @return 예약 성공 여부
 	 * */
 	@RequestMapping(value="/cancelReservation",method=RequestMethod.GET)
 	@ResponseBody 
 	public int cancelReservation(@RequestParam(value = "id",required = false) String id,HttpServletRequest request,HttpSession session) {
-		logger.info("---------- updateReservation get in ---------");
+		logger.info("---------- cancelReservation get in ---------");
 		
 		int result = 0;//예약 취소 성공 결과 담을 변수
 		
@@ -195,8 +238,10 @@ public class RoomController {
 			RoomVO roomVO = new RoomVO();
 			
 			roomVO.setMgtRoomId(id.split("-")[0]);
-			roomVO.setUseBgngYmd(id.split("-")[1]);
-			roomVO.setUseBgngTm(id.split("-")[2]);
+			roomVO.setPrevUseBgngYmd(id.split("-")[1]);//부서확인용 파라미터 set
+			roomVO.setUseBgngYmd(id.split("-")[1]);//예약취소용 파라미터 set
+			roomVO.setPrevUseBgngTm(id.split("-")[2]);//부서확인용 파라미터 set
+			roomVO.setUseBgngTm(id.split("-")[2]);//예약취소용 파라미터 set
 			
 			roomVO.setUserSeq(Integer.parseInt(seqStr));//userSeq 넣었는데 왜 null?
 			roomVO.setMdfrId(seqStr);
@@ -229,7 +274,8 @@ public class RoomController {
 	
 	
 	
-	/** @discription 예약 날짜 예약 update
+	/** @author qus46
+	 *  @discription 예약 날짜 예약 update
 	 *  @param RoomVO
 	 *  @return 예약 성공 여부
 	 * */
@@ -243,12 +289,9 @@ public class RoomController {
 		int result = 0;//update성공 결과 담을 변수
 		
 		try {
-			
-			if(StringUtils.isEmpty(roomVO.getMgtRoomUseSeCode())) {
-				roomVO.setMgtRoomUseSeCode("01");
-			}
-			
 			roomVO.setMgtRoomId(roomVO.getId().split("-")[0]);
+			roomVO.setPrevUseBgngYmd(roomVO.getId().split("-")[1]);//부서확인용 set
+			roomVO.setPrevUseBgngTm(roomVO.getId().split("-")[2]);//부서확인용 set
 			
 			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
 			logger.debug("seq확인 : "+seqStr);
@@ -284,7 +327,9 @@ public class RoomController {
 				logger.error("dep error message : "+e.getMessage());
 				return Integer.parseInt(FinalVariables.DUPLICATED_CODE);
 			}
-			logger.error("Exception : " + e.getMessage());
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("Exception "+sw.toString());
 			logger.debug(" Request URI \t:  " + request.getRequestURI());
 			return result;
 		}

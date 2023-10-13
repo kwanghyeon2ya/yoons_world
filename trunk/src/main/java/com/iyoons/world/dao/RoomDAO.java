@@ -23,4 +23,5 @@ public interface RoomDAO {
 	public int cancelReservation(RoomVO roomVO);//예약 취소 update
 	public int checkIsAvailable(RoomVO roomVO);//예약 가능 확인
 	public List<RoomVO> getRoomInfo();//회의실,층 정보
+	public List<RoomVO> getRsvtType();//회의유형목록 가져오기
 }

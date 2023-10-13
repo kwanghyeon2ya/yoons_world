@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.iyoons.world.common.FinalVariables;
@@ -46,14 +47,50 @@ public class RoomServiceImpl implements RoomService {
 	@Autowired
 	RoomDAO dao;
 	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	/**@author qus46
 	 * @param roomVO(roomSubject,roomContent,startDt,endDt,rgtr_id)
 	 * @discription 회의 예약 insert
 	 * @return insert 성공여부(0/1)
+	 * @throws Exception 
 	 * */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int makeReservation(RoomVO roomVO) {
-		return dao.makeReservation(roomVO);
+	public int makeReservation(RoomVO roomVO) throws Exception {
+		
+		int result = 0;//return할 결과값을 담을 변수 
+		int reserveChk = 0;//중복 체크 값을 담을 변수
+		try {
+			if(!StringUtils.isEmpty(roomVO.getDateArr())) {
+				logger.debug("for문전 insert roomVO"+roomVO.toString());
+				for(String date : roomVO.getDateArr()){
+					roomVO.setUseBgngYmd(date);
+					roomVO.setUseEndYmd(date);
+					reserveChk = dao.checkIsAvailable(roomVO);//예약 가능 확인
+					if(reserveChk >= 1) {
+						throw new Exception("it is not available");
+					}
+					dao.makeReservation(roomVO);//insert
+				}
+				result = 1;
+			}else {
+				reserveChk = dao.checkIsAvailable(roomVO);//예약 가능 확인
+				if(reserveChk >= 1) {
+					throw new Exception("it is not available");
+				}
+				logger.debug("단일 insert roomVO"+roomVO.toString());
+				result = dao.makeReservation(roomVO);//insert	
+			}
+			
+			
+		}catch(Exception e) {
+			logger.debug("makeReservation serviceImpl 오류 발생 : "+e.getMessage());
+			throw new Exception(e.getMessage());
+		}
+		
+		return result;
+		
 	}
 
 	/**@author qus46
@@ -166,6 +203,16 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public List<RoomVO> getRoomInfo() {
 		return dao.getRoomInfo();
+	}
+
+	
+	/** @discription 회의 유형 List형식으로 가져오기
+	 *  @param 
+	 *  @return 회의유형 List
+	 * */
+	@Override
+	public List<RoomVO> getRsvtType() {
+		return dao.getRsvtType();
 	}
 	
 }

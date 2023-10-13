@@ -10,6 +10,7 @@
 									 USE_BGNG_YMD,
 									 USE_BGNG_TM,
 									 RSVT_STATUS_CODE,
+									 MGT_TYPE_CODE,
 									 USE_END_YMD,
 									 USE_END_TM,
 									 MGT_NM,
@@ -25,6 +26,7 @@
 									#{useBgngYmd},
 									#{useBgngTm},
 									'01',
+									#{mgtTypeCode},
 									#{useEndYmd},
 									#{useEndTm},
 									#{mgtNm},
@@ -85,8 +87,8 @@
 		select count(*) from
 			(select * from MGT_ROOM_RSVT
 			WHERE (
-				TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt;= TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE(use_end_ymd || use_end_tm, 'yyyymmddhh24miss')
-				OR (TO_DATE (use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE ( use_end_ymd || use_end_tm, 'yyyymmddhh24miss'))
+				TO_DATE(use_bgng_ymd || use_bgng_tm, 'YYYYMMDDHH24MISS') &lt;= TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE(use_end_ymd || use_end_tm, 'yyyymmddhh24miss')
+				OR (TO_DATE (use_bgng_ymd || use_bgng_tm, 'YYYYMMDDHH24MISS') &lt; TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') AND TO_DATE(#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE ( use_end_ymd || use_end_tm, 'yyyymmddhh24miss'))
 				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt;= TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') AND TO_DATE(use_bgng_ymd || use_bgng_tm, 'yyyymmddhh24miss') &lt; TO_DATE (#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS'))
 				OR (TO_DATE (#{useBgngYmd} || #{useBgngTm}, 'YYYYMMDDHH24MISS') &lt; TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') AND TO_DATE (use_end_ymd || use_end_tm, 'yyyymmddhh24miss') &lt;= TO_DATE (#{useEndYmd} || #{useEndTm}, 'YYYYMMDDHH24MISS'))
 			)
@@ -96,13 +98,13 @@
 			where (
 				(#{useBgngYmd} between use_bgng_ymd and use_end_ymd or #{useEndYmd} between use_bgng_ymd and use_end_ymd) or (use_bgng_ymd between #{useBgngYmd} and #{useEndYmd} or use_end_ymd between #{useBgngYmd} and #{useEndYmd}))
 				and ((#{useBgngTm} &gt;= use_bgng_tm and #{useBgngTm} &lt; use_end_tm or #{useEndTm} &gt; use_bgng_tm and #{useEndTm} &lt;= use_end_tm) or (use_bgng_tm &gt;= #{useBgngTm} and use_bgng_tm &lt; #{useEndTm} or use_end_tm &gt; #{useBgngTm} and use_end_tm &lt;= #{useEndTm}))
-			AND MGT_ROOM_USE_SE_CODE = '01')
+			AND MGT_ROOM_USE_SE_CODE IN ('01','03'))
 			WHERE 1=1
 			AND MGT_ROOM_ID = #{mgtRoomId}
 			AND RSVT_STATUS_CODE = '01'
 			<choose>
 				<when test="id neq null and id neq ''">
-				and (MGT_ROOM_ID != #{mgtRoomId} AND USE_BGNG_YMD != #{useBgngYmd} AND USE_BGNG_TM != #{useBgngTm})				
+				and (USE_BGNG_YMD != #{prevUseBgngYmd} AND USE_BGNG_TM != #{prevUseBgngTm})				
 				</when>
 			</choose>
 	</select>
@@ -119,7 +121,8 @@
 			ELSE TO_CHAR(TO_DATE(USE_END_YMD||USE_END_TM,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')
 			END AS "END",
 			TO_CHAR(TO_DATE(USE_BGNG_YMD||USE_BGNG_TM,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') AS "START",
-			MGT_CN
+			MGT_CN,
+			MGT_TYPE_CODE
 		FROM
 			MGT_ROOM_RSVT
 		WHERE 
@@ -151,7 +154,8 @@
 			CASE WHEN MDFR_ID != 'SYSTEM' THEN 
 			(SELECT USER_NAME FROM MGT_ROOM_RSVT MRR INNER JOIN USER_INFO UI ON MRR.MDFR_ID = UI.USER_SEQ WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} AND MRR.USE_BGNG_YMD = #{useBgngYmd} AND MRR.USE_BGNG_TM = #{useBgngTm} AND MRR.RSVT_STATUS_CODE = '01')
 			ELSE '' END AS "MDFR_NAME",
-			MGT_ROOM_USE_SE_CODE
+			MGT_ROOM_USE_SE_CODE,
+			MGT_TYPE_CODE
 		FROM
 			MGT_ROOM_RSVT
 		WHERE
@@ -165,7 +169,7 @@
 			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON DU.DEP_SEQ = D.DEP_SEQ WHERE DU.USER_SEQ = #{userSeq} AND DU.STATUS = 1) AS "MDFR_DEP_NAME",
 			(SELECT D.DEP_NAME FROM DEP D INNER JOIN DEP_USER DU ON D.DEP_SEQ = DU.DEP_SEQ
 			INNER JOIN MGT_ROOM_RSVT MRR ON MRR.RGTR_ID = DU.USER_SEQ 
-			WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} and MRR.USE_BGNG_YMD = #{useBgngYmd} and MRR.USE_BGNG_TM = #{useBgngTm} and MRR.RSVT_STATUS_code = '01') as "RGTR_DEP_NAME"
+			WHERE MRR.MGT_ROOM_ID = #{mgtRoomId} and MRR.USE_BGNG_YMD = #{prevUseBgngYmd} and MRR.USE_BGNG_TM = #{prevUseBgngTm} and MRR.RSVT_STATUS_CODE = '01') as "RGTR_DEP_NAME"
 		FROM
 			MGT_ROOM_RSVT
 		WHERE
@@ -179,14 +183,13 @@
 			MGT_NM = #{mgtNm},
 			MGT_CN = #{mgtCn},
 			USE_BGNG_YMD = #{useBgngYmd},
-			USE_BGNG_TM = #{useBgngTm},
 			USE_END_YMD = #{useEndYmd},
+			USE_BGNG_TM = #{useBgngTm},
 			USE_END_TM = #{useEndTm},
 			MDFR_ID = #{mdfrId},
-			MDFCN_DT = SYSDATE,
-			MGT_ROOM_USE_SE_CODE = #{mgtRoomUseSeCode}
+			MDFCN_DT = SYSDATE
 		WHERE
-			MGT_ROOM_ID = #{mgtRoomId} AND USE_BGNG_YMD = #{useBgngYmd} AND USE_BGNG_TM = #{useBgngTm}
+			MGT_ROOM_ID = #{mgtRoomId} AND USE_BGNG_YMD = #{prevUseBgngYmd} AND USE_BGNG_TM = #{prevUseBgngTm}
 			AND RSVT_STATUS_CODE = '01'
 			AND DEL_YN = 'N'
 	</update>
@@ -204,6 +207,15 @@
 			AND DEL_YN = 'N'
 	</update>
 	
-	
+	<select id="getRsvtType" resultType="com.iyoons.world.vo.RoomVO">
+		SELECT 
+			WCV.CODE,
+			WCV.VALUE
+		FROM 
+			WYE_COMMON_KIND WCK
+         		INNER JOIN WYE_COMMON_VALUE WCV ON WCK.COMMON_KIND_NO = WCV.COMMON_KIND_NO
+		WHERE WCK.COMMON_KIND_NO = 47000
+		ORDER BY VALUE_ORDER ASC
+	</select>
 	
 </mapper>

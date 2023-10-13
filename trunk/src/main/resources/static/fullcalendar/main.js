@@ -5751,17 +5751,19 @@ var FullCalendar = (function (exports) {
                     customContentInfo.contentVal = innerContent[customContentInfo.contentKey];
                 }
                 else if (typeof innerContent === 'object') {
+                	if(innerContent != null){
                     // look for a prop that would indicate a custom content handler is needed
-                    for (var contentKey in contentTypeHandlers) {
-                        if (innerContent[contentKey] !== undefined) {
-                            customContentInfo = this.customContentInfo = {
-                                contentKey: contentKey,
-                                contentVal: innerContent[contentKey],
-                                handler: contentTypeHandlers[contentKey]()
-                            };
-                            break;
-                        }
-                    }
+	                    for (var contentKey in contentTypeHandlers) {
+		                        if (innerContent[contentKey] !== undefined) {
+		                            customContentInfo = this.customContentInfo = {
+		                                contentKey: contentKey,
+		                                contentVal: innerContent[contentKey],
+		                                handler: contentTypeHandlers[contentKey]()
+		                            };
+		                            break;
+		                        }
+	                    }
+                	}
                 }
                 if (customContentInfo) {
                     innerContentVDom = []; // signal that something was specified
@@ -7867,6 +7869,7 @@ var FullCalendar = (function (exports) {
         renders INSIDE of an outer div
         */
         CalendarContent.prototype.render = function () {
+        	
             var props = this.props;
             var toolbarConfig = props.toolbarConfig, options = props.options;
             var toolbarProps = this.buildToolbarProps(props.viewSpec, props.dateProfile, props.dateProfileGenerator, props.currentDate, getNow(props.options.now, props.dateEnv), // TODO: use NowTimer????
@@ -8982,21 +8985,18 @@ var FullCalendar = (function (exports) {
         return StandardEvent;
     }(BaseComponent));
     function renderInnerContent(innerProps) {//바 형태 일정 설정
-    	console.log("innerProps");
-    	console.log(innerProps);
     	
-    	var startStr = innerProps.event.startStr;
-    	var endStr = innerProps.event.endStr;
-    	
-    	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
-    	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
+    	if(innerProps.timeText == ""){
+	    	return null;
+    	}else{
     	
         return (createElement(Fragment, null,
             innerProps.timeText &&
-                createElement("div", { className: 'fc-event-time' }, startStr+"~"+endStr),
+                createElement("div", { className: 'fc-event-time' },),
                 createElement("div",{className: 'fc-daygrid-event-dot',id : innerProps.event.id}),
             createElement("div", { className: 'fc-event-title-frame'},
                 createElement("div", { className: 'fc-event-title fc-sticky' }, innerProps.event.title || createElement(Fragment, null, "\u00A0")))));
+    	}
     }
     function getSegAnchorAttrs(seg) {
         var url = seg.eventRange.def.url;
@@ -11584,13 +11584,12 @@ var FullCalendar = (function (exports) {
         return TableListItemEvent;
     }(BaseComponent));
     function renderInnerContent$2(innerProps) {
-    		
+    	
     	var startStr = innerProps.event.startStr;
     	var endStr = innerProps.event.endStr;
     	
     	startStr = startStr.split('T')[1].split(":")[0]+":"+startStr.split('T')[1].split(":")[1];
     	endStr = endStr.split('T')[1].split(":")[0]+":"+endStr.split('T')[1].split(":")[1];
-	    	
     	
         return (createElement(Fragment, null,
             createElement("div", { className: 'fc-daygrid-event-dot',id : innerProps.event.id,style: { borderColor: innerProps.borderColor || innerProps.backgroundColor } }),
@@ -13726,8 +13725,6 @@ var FullCalendar = (function (exports) {
     }(BaseComponent));
     function renderEventInnerContent(props) {
         var event = props.event;
-        console.log("event");
-        console.log(event);
         var url = event.url;
         var anchorAttrs = url ? { href: url } : {};
         return (createElement("a", __assign({}, anchorAttrs), event.title));
