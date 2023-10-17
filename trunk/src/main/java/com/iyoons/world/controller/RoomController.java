@@ -283,9 +283,12 @@ public class RoomController {
 		int result = 0;//update성공 결과 담을 변수
 		
 		try {
-			roomVO.setMgtRoomId(roomVO.getId().split("-")[0]);
-			roomVO.setPrevUseBgngYmd(roomVO.getId().split("-")[1]);//부서확인용 set
-			roomVO.setPrevUseBgngTm(roomVO.getId().split("-")[2]);//시간(부서확인용
+			
+			roomVO.setMgtRoomId(roomVO.getId().split("-")[0]);//예시)B101
+			roomVO.setPrevUseBgngYmd(roomVO.getId().split("-")[1]);//예시)231017
+			roomVO.setPrevUseBgngTm(roomVO.getId().split("-")[2]);//예시)090000
+			
+			logger.debug("roomVO.getId() : "+roomVO.getId());
 			
 			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
 			logger.debug("seq확인 : "+seqStr);
