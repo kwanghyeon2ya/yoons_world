@@ -163,9 +163,6 @@ li a{
 }
 
 #mgt_list{
-	position: absolute;
-    top: 265px;
-    left: 270px;
     width: 100px;
     height: 534px;
 }
@@ -208,9 +205,9 @@ td{
 }
 
 #external-events{
-	float: left;
-    padding-right: 30px;
-    padding-top: 11.2%;
+    position: absolute;
+    top: 186px;
+    left: -70px;
 }
 
 .mgt_room_list_ul{
@@ -264,6 +261,7 @@ td{
 		        center: 'title',
 		        right: ''
 		      },
+		      handleWindowResize : false,
 		      contentHeight:"auto",
 			  initialView: 'dayGridMonth',
 		      locale : 'ko',
@@ -1734,28 +1732,27 @@ td{
 					</div> -->
 				
 
-				<div style="float: left; width: 100%; margin-bottom: 110px; background-color: #fff">
+				<div style="width: 100%; margin-bottom: 110px; background-color: #fff">
 					<div style="text-align: center; height: 30px; font-size: 35px; font-weight: bold; margin-bottom: 30px;">회의실 예약 달력표</div>
 					<div id='calendar'></div>
 					<!-- fullcalendar 달력 div -->
 				</div>
+				<div id='external-events'>
+					<div id="mgt_list">
+						<div id="mgt_floor_list">
+							<!-- script로 회의실 리스트 추가 -->
+							<h3 style="text-align:center;margin-top:10px;margin-bottom:20px;">층 선택</h3>
+							<ul id="mgt_floor_list_ul" style="text-align: center;">
+							</ul>
+						</div>
+						<div class="mgt_room_list">
+							<ul id="mgt_floor_list_ul" style="text-align: center;">
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 
-		</div>
-		
-		<div id='external-events'>
-			<div id="mgt_list">
-				<div id="mgt_floor_list">
-					<!-- script로 회의실 리스트 추가 -->
-					<h3 style="text-align:center;margin-top:10px;margin-bottom:20px;">층 선택</h3>
-					<ul id="mgt_floor_list_ul" style="text-align: center;">
-					</ul>
-				</div>
-				<div class="mgt_room_list">
-					<ul id="mgt_floor_list_ul" style="text-align: center;">
-					</ul>
-				</div>
-			</div>
 		</div>
 		
 	</div>
