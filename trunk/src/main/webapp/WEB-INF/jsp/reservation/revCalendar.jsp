@@ -164,7 +164,7 @@ li a{
 
 #mgt_list{
     width: 100px;
-    height: 534px;
+    height: 541px;
 }
 
 #mgt_floor_list {
@@ -174,7 +174,7 @@ li a{
 	padding-left: 2px;
 	padding-right: 2px;
 	border: 0.2px solid #c4c4c4;
- 	height: 523px; 
+ 	height: 541px; 
 	background-color:#fff;
 }
 
