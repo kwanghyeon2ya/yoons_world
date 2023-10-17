@@ -206,7 +206,7 @@ td{
 
 #external-events{
     position: absolute;
-    top: 186px;
+    top: 185px;
     left: -70px;
 }
 
@@ -367,53 +367,6 @@ td{
 					}			
 				}
 		   		
-				/* var barNodes = document.getElementsByClassName("fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-start fc-event-end");
-				
-				console.log(barNodes);
-				console.log(barNodes.length);
-				console.log(document.getElementsByClassName("fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-start fc-event-end").length);
-				console.log(barNodes[0]);
-				console.log(barNodes[1]);
-				console.log(barNodes[2]);
-				
-				console.log(typeof barNodes[0]);
-				console.log(typeof barNodes[1]);
-				console.log(typeof barNodes[2]); */
-				
-				/* console.log(typeof barNodes[0].innerText);
-				console.log(typeof barNodes[1].innerText);
-				console.log(typeof barNodes[2].innerText);
-				console.log(barNodes[0].innerText);
-				console.log(barNodes[1].innerText);
-				console.log(barNodes[2].innerText); */
-				
-				/* console.log("barNodes.length : "+barNodes.length);
-				for(var i=0;i<barNodes.length;i++){
-					
-					if(typeof barNodes[i] == "undefined"){
-						console.log("undefined");
-					}
-					if(typeof barNodes[i] != "undefined"){
-						
-						if(barNodes[i].children[0].children.length == 0){
-							barNodes[i].parentNode.style.display = "none";
-						}
-						
-						console.log("not undefined");
-						console.log(barNodes[i]);
-						console.log(barNodes[i].children[0].children.length);
-						console.log(barNodes[i].childNodes[0].childNodes[0]);
-						console.log(barNodes[i].childNodes[0].childNodes[0]);
-						console.log(barNodes[i].attributes);
-					}
-				} */ 
-				
-				/* barNodes.forEach(function(barNode){
-					console.log(barNode.innerText);
-				}) */
-				
-		   		console.log(info);
-		   		console.log(info.draggedEl);
 				var close_btn = document.querySelector("#close_btn");
 		        // is the "remove after drop" checkbox checked?
 		          // if so, remove the element from the "Draggable Events" list
@@ -522,12 +475,7 @@ td{
 			    	for(var i = 0;mgt_type_code.length>i;i++){
 			    		if(mgt_type_code.options[i].value == data.mgtTypeCode){//회의종류 확인
 			    			mgt_type_code.options[i].selected = true;//일치할 시 selected
-			    			if(mgt_type_code.options[i].value == "01"){//일회성 회의일경우
-			    				use_bgng_ymd.readOnly = true;
-			    		    	use_end_ymd.readOnly = true;	
-			    			}
-			    			
-			    			if(mgt_type_code.options[i].value == "03"){//정기회의 주간 일 경우
+			    			if(mgt_type_code.options[i].value == "03"){//정기회의-주간 일 경우
 			    				select_day_box.style.display = "block";
 			    		    	select_day_label.style.display = "block";
 			    		    	select_day_box.disabled = true;
@@ -1434,7 +1382,7 @@ td{
 			var barNodes = document.getElementsByClassName("fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-start fc-event-end");
 			
 			var use_bgng_ymd = document.querySelector("#use_bgng_ymd");//시작 일자 노드
-			var use_bgng_ymd = document.querySelector("#use_end_ymd");//시작 일자 노드
+			var use_end_ymd = document.querySelector("#use_end_ymd");//시작 일자 노드
 			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 노드
 	    	var use_end_tm = document.querySelector("#use_end_tm");//종료 시각 노드
 	    	
