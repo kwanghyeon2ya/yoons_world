@@ -207,47 +207,6 @@ td{
     background-color: #6f6b6b;
 }
 
-
-/* #mgt_room_1F:hover {
-    #mgt_room_B1{display:block;}
-}
-
-#floor_1F:hover{
-    background-color: black;
-}
-
-#floor_2F:hover{
-    background-color: black;
-}
-
-#floor_3F:hover{
-    background-color: black;
-}
-
-#floor_4F:hover{
-    background-color: black;
-}
-
-#floor_5F:hover{
-    background-color: black;
-}
-
-#floor_6F:hover{
-    background-color: black;
-}
-
-#floor_7F:hover{
-    background-color: black;
-}
-
-#floor_8F:hover{
-    background-color: black;
-}
-
-#floor_9F:hover{
-    background-color: black;
-} */
-
 #external-events{
 	float: left;
     padding-right: 30px;
@@ -257,17 +216,6 @@ td{
 .mgt_room_list_ul{
 	text-align:center;
 }
-
-/* .fc-event-time{
-	float:left;
-}
-.fc-event-title{
-	float:left;
-}
-.fc-daygrid-event-dot{
-	margin-top: 7px;
-    float: left;
-} */
 
 
 </style>
@@ -291,7 +239,7 @@ td{
 		    
 		    getRsvtType();//회의실 유형 데이터 가져와 select box에 option으로 추가 하기  - 일회성,정기 회의 명
 		    
-		    getRoomInfo(mgt_room_id);
+		    getRoomInfo(mgt_room_id);//예)6F01 형식 
 			all_events = loadingEvents(mgt_room_id);
 			console.log(all_events);
 			
@@ -545,7 +493,7 @@ td{
 		    	success : function(data){
 		    			
 		    		var use_bgng_ymd = document.querySelector("#use_bgng_ymd");// 시간일자 2023-08-24
-		    		var use_bgng_tm = document.querySelector("#use_bgng_ymd");// 종료일자 2023-08-27
+		    		var use_end_ymd = document.querySelector("#use_end_ymd");// 종료일자 2023-08-27
 		    		var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 값 예시) 090000
 			    	var use_end_tm = document.querySelector("#use_end_tm");//종료시각 값 예시) 100000
 	
@@ -810,10 +758,6 @@ td{
 	    		
 	    	}
 
-	    	if(mgtTypeCode == "01"){//특정기간 전체사용일 경우
-	    		
-	    	}
-	    	
 	    	if(mgtTypeCode == "04"){//특정기간 전체사용일 경우
 	    		if(use_bgng_ymd_val == use_end_ymd_val){//하루일경우 - 바 형태가 아닌, 9시~17시30분까지의 예약으로 됨
 	    			use_bgng_tm_val = "090000";
@@ -1360,7 +1304,7 @@ td{
 						var option = document.createElement("option");
 						option.text = item.value;
 						option.value = "0"+item.code;
-						mgt_type_code.options.add(option);
+						mgt_type_code.options.add(option);//회의종류 select box의 option 동적생성
 					})
 		    	}
 			})
@@ -1382,7 +1326,7 @@ td{
 			document.querySelector("#floor_"+last).style.backgroundColor = "";
 		}
 		
-		function getRoomInfo(mgtRoomInfo){//회의실 층,이름 정보 가져오기
+		function getRoomInfo(mgtRoomInfo){//회의실 층,이름 정보 가져오기 //파라미터 - 회의 id
 			
 	    	$.ajax({
 	    		url : '/getRoomInfo',
@@ -1393,8 +1337,6 @@ td{
 	    	success : function(data){
 	    		console.log("getRoomInfo");
 	    		console.log(String(mgtRoomInfo));
-	    		
-	    		console.log("data length : "+data.length);
 	    		
 	    		var mgt_floor_list = document.getElementById("mgt_floor_list");
 	    		
@@ -1416,7 +1358,7 @@ td{
 	    			floor_li_tag.classList.add("floor");
 	    			floor_li_tag.id = "floor_"+floorId;
 	    			
-	    			floor_li_tag.innerHTML = "<a href='#' id='"+floorId+"'>"+floor+"</\a>";	    			
+	    			floor_li_tag.innerHTML = "<a href='#' id='"+floorId+"'>"+floor+"</\a>";//층선택 li태그 생성	    			
 	    			mgt_floor_list_ul.append(floor_li_tag);
 	    			
  	    			floor_li_tag.onmouseenter=function(){mouseEnter(floor_li_tag.id)};//마우스 올리기 이벤트 추가
@@ -1459,7 +1401,7 @@ td{
 	    			mgt_room_ul.append(room_li_tag);
 	    			
 	    			if(mgtRoomInfo !== null){
-	    				if(mgtRoomInfo == item.mgtRoomId){
+	    				if(mgtRoomInfo == item.mgtRoomId){//선택한 회의실 id값과 db에서 가져온 값이 같다면 class 부여
 	    					document.getElementById(item.mgtRoomId).classList.add("selected_room");	
 	    				}
 	    			}
@@ -1493,31 +1435,6 @@ td{
 			
 			var barNodes = document.getElementsByClassName("fc-daygrid-event fc-daygrid-block-event fc-h-event fc-event fc-event-start fc-event-end");
 			
-			/* console.log(typeof barNodes[0].innerText);
-			console.log(typeof barNodes[1].innerText);
-			console.log(typeof barNodes[2].innerText);
-			console.log(barNodes[0].innerText);
-			console.log(barNodes[1].innerText);
-			console.log(barNodes[2].innerText); */
-			
-			console.log("barNodes.length : "+barNodes.length);
-			for(var i=0;i<=barNodes.length;i++){
-				
-				if(typeof barNodes[i] == "undefined"){
-					console.log("undefined");
-				}
-				if(typeof barNodes[i] != "undefined"){
-					
-					if(barNodes[i].children[0].children.length == 0){
-						console.log("barNodes[i].parentNode");
-						console.log(barNodes[i].parentNode);
-						barNodes[i].parentNode.style.display = "none";
-						barNodes[i].style.display = "none";
-						barNodes[i].parentNode.remove();
-					}
-				}
-			} 
-			
 			var use_bgng_ymd = document.querySelector("#use_bgng_ymd");//시작 일자 노드
 			var use_bgng_ymd = document.querySelector("#use_end_ymd");//시작 일자 노드
 			var use_bgng_tm = document.querySelector("#use_bgng_tm");//시작 시각 노드
@@ -1525,6 +1442,8 @@ td{
 	    	
 	    	use_bgng_ymd.readOnly = false;//시작 일자 readOnly 해제
 	    	use_end_ymd.readOnly = false;//종료 일자 readOnly 해제
+	    	use_bgng_tm.readOnly = false;//시작 시간 readOnly 해제
+	    	use_end_tm.readOnly = false;//종료 시각 readOnly 해제
 	    	use_bgng_tm.disabled = false;//시작 시각 dabled 해제
 	    	use_end_tm.disabled = false;//종료 시각 dabled 해제
 	    	
@@ -1536,9 +1455,9 @@ td{
 	    	
 	    	var select_day_box = document.querySelector("#select_day");//요일선택 select box 태그
 			var select_day_label = document.querySelector("#select_day_label");
-	    	select_day_box.style.display = "none";
-	    	select_day_label.style.display = "none";
-	    	select_day_box.disabled = false;
+	    	select_day_box.style.display = "none";//요일 셀렉 박스 안보이게
+	    	select_day_label.style.display = "none";//요일 셀렉 박스 안보이게
+	    	select_day_box.disabled = false;//요일 셀렉 박스 disabled
 			document.querySelector("#mgt_type_code").options[0].selected = true;
 			var background = document.querySelector(".background");//팝업창 배경(팝업이 뜨는지 유무를 background에서 처리)
 			var mgt_nm = document.querySelector("#mgt_nm");//회의 주제 node
@@ -1550,12 +1469,12 @@ td{
 			var btn_div = document.getElementById("btn_div");//버튼div element선택
 			
 			var reserve_tr = document.querySelector("#reserve_tr");
-			if(reserve_tr){//reserve_tr의 엘리먼트가 있다면
+			if(reserve_tr){//reserve_tr의 엘리먼트가 있다면(예약자에 대한 tr 태그가 있다면)
 				reserve_tr.remove();
 			}
 			
-			mgt_nm.style.height='auto';
-			mgt_cn.style.height='auto';
+			mgt_nm.style.height='auto';//회의 주제 크기 원래대로
+			mgt_cn.style.height='auto';//회의 주제 크기 원래대로
 			
 			background.classList.remove("show");//모달팝업 안보이게
 			mgt_nm.value="";//회의 주제 초기화 

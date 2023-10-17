@@ -195,12 +195,6 @@ public class RoomController {
 			
 			logger.debug("seq String변환 : "+roomVO.getRgtrId());
 			
-			/*int reserveChk = service.checkIsAvailable(roomVO);//예약 가능 확인
-			
-			if(reserveChk >= 1) {
-				throw new Exception("it is not available");
-			}*/
-			
 			result = service.makeReservation(roomVO);//예약정보 insert
 			logger.debug("result : "+result);
 			
@@ -291,7 +285,7 @@ public class RoomController {
 		try {
 			roomVO.setMgtRoomId(roomVO.getId().split("-")[0]);
 			roomVO.setPrevUseBgngYmd(roomVO.getId().split("-")[1]);//부서확인용 set
-			roomVO.setPrevUseBgngTm(roomVO.getId().split("-")[2]);//부서확인용 set
+			roomVO.setPrevUseBgngTm(roomVO.getId().split("-")[2]);//시간(부서확인용
 			
 			String seqStr = String.valueOf(session.getAttribute("sessionSeqForUser"));
 			logger.debug("seq확인 : "+seqStr);
