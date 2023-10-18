@@ -578,6 +578,21 @@ td{
 	    		
 	    	});
 	    }
+
+	    window.onload = function(){
+	    
+	    	var cal_dives = document.querySelector(".fc-scrollgrid-sync-table");//달력 크기에 맞게 회의실 선택 탭 높이 변경 
+		    
+	    	var observer = new ResizeObserver(function(entries) {
+	    	    entries.forEach(function(entry) {
+	    	    	/* console.log("entry");
+	    	    	console.log(entry); */
+	    	      document.querySelector("#mgt_floor_list").style.height = 32+Number(entry.contentRect.height)+"px";
+	    	      document.querySelector(".mgt_room_list").style.height = 32+Number(entry.contentRect.height)+"px";
+	    	    });
+	    	  });
+	    	  observer.observe(cal_dives);
+	    }
 	    
  	   	function selectMgtType(node){//회의종류 select box 선택시 , node : this(select객체)
 
